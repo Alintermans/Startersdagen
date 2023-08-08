@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Startersdagen - Informatie</title>
+	<link rel="icon" type="image/x-icon" href="{{url_for('static', filename='favicon.ico')}}">
+	<!-- <script src="{{url_for('static', filename='min_js/chart.min.js')}}"></script>
+	<script src="{{url_for('static', filename='min_js/d3.v7.min.js')}}"></script> -->
+	
+	
+	<link rel="stylesheet" href="{{url_for('static', filename='min_css/font_awesome_all.min.css')}}" />
+	<link rel="stylesheet" href="{{url_for('static', filename='main.css')}}" />
+</head>
+<body>
+	<div class="header">
+		<h1>Startersdagen - Informatie</h1> 
+		<button class="button button-usb" onclick="led_switch()"><i class="fas fa-undo"></i> Reset USB</button>
+	</div>
+	<script src="{{url_for('static', filename='main.js')}}"></script>
+  </body>
+</html>
