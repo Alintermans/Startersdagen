@@ -1,4 +1,10 @@
-body {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
     margin: 0;
     padding: 0;
     display: flex;
@@ -63,8 +69,6 @@ body {
     border-radius: 5px;
     margin: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow: auto; 
-    text-align: justify;
   }
   
   .buttons {
@@ -88,55 +92,20 @@ body {
   .button:hover {
     background-color: #ff8f8f;
   }
-
-.disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
-
-.disabled:hover {
-    background-color: #cccccc;
-}
-
-#reset-button {
-    margin: 10px;
-    padding: 10px;
-    background-color: #c8d6e5;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    color: #636363;
-    
-}
-
-#reset-button:hover {
-    background-color: #dfe4ea;
-}
-
-#intro-div {
-    padding: 10px 80px 10px 80px;
-}
-
-#intro-div .button {
-    font-size: large;
-    font-weight: bold;
-}
-
-.code-container {
-    border: 1px solid #ddd;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 20px;
-    font-size: 14px;
-    line-height: 1.2;
-}
-
-.hljs {
-    display: block;
-    overflow-x: auto;
-    padding: 0.5em;
-    color: #333;
-    background: white;
-}
+</style>
+</head>
+<body>
+  <div class="header">Cool School Tutorial</div>
+  <div class="container">
+    <div class="box-header">Let's Learn Together</div>
+    <div class="columns">
+      <div class="column">Column 1 - Exciting Content</div>
+      <div class="column">Column 2 - Engaging Content</div>
+    </div>
+  </div>
+  <div class="buttons">
+    <button class="button">Start Learning</button>
+    <button class="button">Try It Out</button>
+  </div>
+</body>
+</html>

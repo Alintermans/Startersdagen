@@ -3,12 +3,18 @@ from flask import Flask, render_template, jsonify, Response, request
 import serial 
 import time 
 
-################################# Global Variables #############################################
+################################# Global Variables ######################################
+current_state = 0
+current_choice = 'None' # 'None', 'beginner', 'advanced'
+current_page = 'home' # 'home', 'game', 'settings'
+
+nb_steps_advanced = 1
+nb_steps_beginner = 1
 
 
 ################################# Arduino #############################################
 
-arduino = serial.Serial(port='/dev/cu.usbmodem141101',   baudrate=230400, timeout=0.01)
+arduino = serial.Serial(port='/dev/cu.usbmodem142101',   baudrate=230400, timeout=0.01)
 
 
 def write_read(x):
@@ -32,18 +38,127 @@ def run_server():
 # Flask route to display device data
 @app.route('/')
 def index():
-    global values
-    return render_template('index.html')
+    return render_template('index.html', data= {'current_state': current_state, 'current_choice': current_choice})
+
+@app.route('/get_data')
+def get_data():
+    return jsonify({'page': current_page, 'state': current_state, 'choice': current_choice, 'nb_steps_advanced': str(nb_steps_advanced), 'nb_steps_beginner': str(nb_steps_beginner)})
+
+
+@app.route('/home')
+def home():
+    return render_template('home.html')
+
 
 @app.route('/turn_on')  
 def turn_on():
-    write_read('0\n')
+    write_read('L1\n')
     return jsonify({'status': 'on'})
 
 @app.route('/turn_off')  
 def turn_off():
-    write_read('1\n')
+
+    write_read('L0\n')
     return jsonify({'status': 'off  '})
+
+@app.route('/next')
+def next():
+    global current_state
+    global current_page
+
+    current_state += 1
+    if current_choice == 'beginner' and current_state > nb_steps_beginner:
+        current_state = nb_steps_beginner
+
+    return jsonify({'status': 'next'})
+
+@app.route('/back')
+def back():
+    global current_state
+    global current_choice
+    global current_page
+    current_state -= 1
+    if current_state == 0:
+        current_choice = 'None'
+        current_page = 'home'
+    else:
+        current_page = current_choice + '-' + str(current_state)
+    return jsonify({'status': 'previous'})
+
+
+@app.route('/reset')
+def reset():
+    global current_choice
+    global current_page
+    global current_state
+    current_state = 0
+    current_choice = 'None'
+    current_page = 'home'
+    return jsonify({'status': 'reset'})
+
+@app.route('/beginner')
+def beginner():
+    global current_choice
+    global current_page
+    global current_state
+    current_choice = 'beginner'
+    current_page = 'beginner-1'
+    current_state = 1
+    return jsonify({'status': '1'})
+
+@app.route('/advanced')
+def advanced():
+    global current_choice
+    global current_page
+    global current_state
+    current_choice = 'advanced'
+    current_page = 'advanced-1'
+    current_state = 1
+    return jsonify({'status': '1'})
+
+@app.route('/beginner-1')
+def beginner_1():
+    return render_template('beginner-1.html')
+
+@app.route('/beginner-2')
+def beginner_2():
+    return render_template('beginner-2.html')
+
+@app.route('/beginner-3')
+def beginner_3():
+    return render_template('beginner-3.html')
+
+@app.route('/beginner-4')
+def beginner_4():
+    return render_template('beginner-4.html')
+
+@app.route('/beginner-5')
+def beginner_5():
+    return render_template('beginner-5.html')
+
+@app.route('/advanced-1')
+def advanced_1():
+    return render_template('advanced-1.html')
+
+@app.route('/advanced-2')
+def advanced_2():
+    return render_template('advanced-2.html')
+
+@app.route('/advanced-3')
+def advanced_3():
+    return render_template('advanced-3.html')
+
+@app.route('/advanced-4')
+def advanced_4():
+    return render_template('advanced-4.html')
+
+@app.route('/advanced-5')
+def advanced_5():
+    return render_template('advanced-5.html')
+
+
+
+
 
 
 
