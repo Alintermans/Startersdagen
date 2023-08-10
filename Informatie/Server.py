@@ -14,6 +14,7 @@ nb_steps_beginner = 5
 retries = 0 
 
 
+
 ################################# Arduino #############################################
 
 arduino = serial.Serial(port='/dev/cu.usbmodem141101',   baudrate=230400, timeout=0.01)
@@ -21,10 +22,16 @@ arduino = serial.Serial(port='/dev/cu.usbmodem141101',   baudrate=230400, timeou
 
 def write_read(x):
     global retries
+    arduino.flush()
     arduino.write(bytes(x,   'utf-8'))
     print("Wrote: " + x)
     time.sleep(0.05)
     data = arduino.readline()
+    if len(data.decode('utf-8').split('/')) >1:
+        if retries > 5:
+            retries = 0
+            return "ERROR"
+        return write_read(x)
     print("Read: " + data.decode('utf-8'))
     if(int(data.decode('utf-8')) == len(x)):
         retries = 0
