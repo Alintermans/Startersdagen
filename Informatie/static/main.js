@@ -1,5 +1,6 @@
 //------------------------------------------- Settings -------------------------------------------//
 var state = 0;
+var choice = 'None';
 var nb_steps_advanced = 1;
 var nb_steps_beginner = 1;
 
@@ -59,6 +60,52 @@ function back() {
         loadContent();
     });}
 
+//------------------------------------------- RGB-SLIDER -------------------------------------------//
+
+function initializeSlider() {
+    const redSlider = document.getElementById('redSlider');
+    const greenSlider = document.getElementById('greenSlider');
+    const blueSlider = document.getElementById('blueSlider');
+    redSlider.addEventListener('input', updateColor);
+    greenSlider.addEventListener('input', updateColor);
+    blueSlider.addEventListener('input', updateColor);
+
+    updateColor(); // Initialize color box
+}
+
+
+function updateColor() {
+    const redSlider = document.getElementById('redSlider');
+    const greenSlider = document.getElementById('greenSlider');
+    const blueSlider = document.getElementById('blueSlider');
+    const colorBox = document.getElementById('colorBox');
+    const redValueElement = document.getElementById('redValue');
+    const greenValueElement = document.getElementById('greenValue');
+    const blueValueElement = document.getElementById('blueValue');
+    const redValue = redSlider.value;
+    const greenValue = greenSlider.value;
+    const blueValue = blueSlider.value;
+
+    redValueElement.textContent = redValue;
+    greenValueElement.textContent = greenValue;
+    blueValueElement.textContent = blueValue;
+
+    const color = `rgb(${redValue},${greenValue},${blueValue})`;
+    colorBox.style.backgroundColor = color;
+    updateRGBLED(redValue, greenValue, blueValue);
+}
+
+function updateRGBLED(red, green, blue) {
+    fetch('/rgb-led?red-value=' + red + '&green-value=' + green + '&blue-value=' + blue)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+}
+
+
+
+
 
 //------------------------------------------- Page Loading -------------------------------------------//
 
@@ -68,6 +115,11 @@ function loadPage(pageUrl) {
         .then(html => {
             document.getElementById('content').innerHTML = html;
             hljs.highlightAll();
+
+            if (choice === 'beginner' && state == 3) {
+                initializeSlider();
+            }
+
         })
         .catch(error => {
             console.error('Error loading page:', error);
@@ -78,6 +130,7 @@ function loadContent() {
     fetch('/get_data').then(response => response.json()).then(data => {
         
         state = data.state;
+        choice = data.choice;
 
         nb_steps_advanced = data.nb_steps_advanced;
         nb_steps_beginner = data.nb_steps_beginner;
@@ -106,9 +159,12 @@ function loadContent() {
             document.getElementById("next_button").disabled = false;
         }
 
+        
 
 
         loadPage(data.page);
+
+        
     });
 
 
