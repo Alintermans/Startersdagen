@@ -9,7 +9,7 @@ current_choice = 'None' # 'None', 'beginner', 'advanced'
 current_page = 'home' # 'home', 'game', 'settings'
 
 nb_steps_advanced = 1
-nb_steps_beginner = 1
+nb_steps_beginner = 2
 
 retries = 0 
 
@@ -177,6 +177,12 @@ def rgb_led():
     blue_value = int(request.args.get('blue-value'))
     response = write_read(rgb_int_to_string_of_9_charachters(red_value, green_value, blue_value))
     return jsonify({'status': 'rgb-led'})
+
+@app.route('/led')
+def led():
+    write_read('OL\n')
+    return jsonify({'status': 'led'})
+
 
 
 
