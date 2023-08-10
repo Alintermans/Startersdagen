@@ -169,7 +169,7 @@ def advanced_5():
     return render_template('advanced-5.html')
 
 @app.route('/advanced-6')
-def advanced_5():
+def advanced_6():
     return render_template('advanced-6.html')
 
 
