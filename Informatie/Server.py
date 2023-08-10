@@ -14,7 +14,7 @@ nb_steps_beginner = 1
 
 ################################# Arduino #############################################
 
-arduino = serial.Serial(port='/dev/cu.usbmodem142101',   baudrate=230400, timeout=0.01)
+arduino = serial.Serial(port='/dev/cu.usbmodem141101',   baudrate=230400, timeout=0.01)
 
 
 def write_read(x):
@@ -69,6 +69,8 @@ def next():
     current_state += 1
     if current_choice == 'beginner' and current_state > nb_steps_beginner:
         current_state = nb_steps_beginner
+    else:
+        current_page = current_choice + '-' + str(current_state)
 
     return jsonify({'status': 'next'})
 
