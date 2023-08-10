@@ -11,6 +11,8 @@ current_page = 'home' # 'home', 'game', 'settings'
 nb_steps_advanced = 1
 nb_steps_beginner = 1
 
+retries = 0 
+
 
 ################################# Arduino #############################################
 
@@ -23,7 +25,15 @@ def write_read(x):
     time.sleep(0.05)
     data = arduino.readline()
     print("Read: " + data.decode('utf-8'))
-    return   data
+    if(int(data.decode('utf-8')) == len(x)):
+        return "OK"
+    else:
+        global retries
+        retries += 1
+        if retries > 5:
+            retries = 0
+            return "ERROR"
+        write_read(x)
 
 
 
@@ -159,11 +169,33 @@ def advanced_5():
     return render_template('advanced-5.html')
 
 
+##Arduino commands
+@app.route('/rgb-led')
+def rgb_led():
+    red_value = int(request.args.get('red-value'))
+    green_value = int(request.args.get('green-value'))
+    blue_value = int(request.args.get('blue-value'))
+    response = write_read(rgb_int_to_string_of_9_charachters(red_value, green_value, blue_value))
+    return jsonify({'status': 'rgb-led'})
 
 
 
 
 
+
+################################# Helper Functions #############################################
+def rgb_int_to_string_of_9_charachters(red, green, blue):
+    red = str(red)
+    green = str(green)
+    blue = str(blue)
+    while len(red) < 3:
+        red = '0' + red
+    while len(green) < 3:
+        green = '0' + green
+    while len(blue) < 3:
+        blue = '0' + blue
+    return 'L' + red + green + blue + '\n'
+    
 
 
 ################################# Main #############################################
