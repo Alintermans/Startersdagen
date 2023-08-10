@@ -1,21 +1,50 @@
-<div class="box-header">Opdracht 1: RGB Led</div>
+<div class="box-header">Opdracht 2: RGB Led</div>
     <div class="columns">
       <div class="column">
         <div id="intro-div">
+          <h3>RGB-LED</h3>
+        <p>
+          Een RGB-LED is een LED die drie kleuren kan weergeven: rood, groen en blauw. Door de intensiteit van deze kleuren te veranderen kan je alle kleuren van de regenboog maken.
+        </p>
 
+        <p>
+          Elke kleur in een RGB-led wordt vertegenwoordigd door een specifieke RGB-waarde, uitgedrukt als getallen tussen 0 en 255 voor rood, groen en blauw. Door deze waarden aan te passen, kunnen diverse kleuren en tinten worden gecreëerd. Dit geeft gebruikers de mogelijkheid om nauwkeurig hun gewenste kleur te bereiken, waardoor RGB-leds zeer veelzijdig zijn voor verlichting, visuele effecten en artistieke toepassingen.
+        </p>
+
+        <p>
+          Op het breadboard dat verbonden is aan de Arduino, zien jullie een RGB-led. Download script en upload het naar de arduino. 
+          De led zou nu rood licht moeten geven.  
+        </p>
+        <h3>
+          Opdracht 2.1
+        </h3>
+        <p>
+            Maak de led groen door de RGB-waarden van dit stuk code aan te passen. 
+            Upload je code opnieuw naar de arduino en test of het ledje groen licht geeft.
+        </p>
+        <pre>
+          <code class="language-arduino code-container">
+            void loop() {
+              //Pas hier de RGB waarden aan om verschillende kleuren te bekomen
+              analogWrite(pin_rood, 255);
+              analogWrite(pin_groen, 0);
+              analogWrite(pin_blauw, 0);
+            }
+            </code> 
+        </pre>
+
+        <h3>
+          Opdracht 2.2
+        </h3>
           <p>
-            Script rgb led downloaden. Uploaden naar arduino. Rode led zal branden. 
+            Maak de led wit door de juiste RGB-waarden in te vullen.
           </p>
+          <h3>
+            Opdracht 2.3
+          </h3>
           <p>
-            Opdracht 1.1: maak de led blauw
+            Maak de led oranje door de juiste RGB-waarden in te vullen. 
           </p>
-          <p>
-            Opdracht 1.2: zoek de rgb waarden van wit op en zorg ervoor dat de led wit licht geeft
-          </p>
-          <p>
-            Opdracht 1.3: zoek de rgb waarden van oranje op en zorg ervoor dat de led oranje licht geeft
-          </p>
-          
         </div>
       </div>
     </div>
