@@ -1,0 +1,124 @@
+<div class="box-header">Opdracht 2: Kleurensensor</div>
+    <div class="columns">
+      <div class="column">
+        <p>
+          Download template kleurensensor en upload naar arduino. 
+          Bevestig kleurensensor op het zwarte vakje. 
+        </p>
+
+        <p>
+          Opdracht 2.1: Open de 'Serial monitor'. En lees de rood, groen en blauwe waarde af. 
+          Deze waarden komen niet overeen met de standaard rgb waarden voor zwart. 
+          Hoe hoger een waarde voor rood, groen en blauw, hoe minder aanwezig die kleur is. 
+          Normaal gezien meet je voor zwart 3 waarden op die boven de 2000 zijn. 
+        </p>
+
+        <p>
+          Opdracht 2.2: Haal lijn 54 tem 57 uit commentaar. Dit betekent dat je de '//' voor elke regel weg moet halen. 
+          Om de kleur zwart te herkennen moet je nu op lijn 54 de juiste waarden voor rood, groen en blauw invullen.
+          Bijvoorbeeld:
+          Als rood>2000 en groen>2000 en blauw>2000, dan hebben we te maken met zwart. 
+          Upload je code naar de arduino en kijk of hij de kleur zwart kan herkennen.  
+        </p>
+
+        <p>
+          Opdracht 2.3: Maak het vak nu rood door de slider te bewegen. Wanneer je nu op de Serial monitor kijkt mag de arduino niet meer zeggen dat het vak zwart is. 
+          Indien de arduino nog steeds zegt dat het vak zwart is moet je opdracht 2.2 herhalen en de waarden op lijn 54 juist zetten.  
+          Anders kan je verder gaan door lijn 58 tem 61 uit commentaar te halen en zelf de juiste waarden voor rood, groen en blauw te vinden.
+        </p>
+
+        <p>
+          opdracht 2.4: Herhaal opdracht 2.3 voor zowel groen (lijn 62 tem 65) als blauw (lijn 66 tem 69). 
+        </p>
+
+        <p>
+          Opdracht 2.5: Haal de code voor de andere kleuren uit commentaar. 
+          Hier hebben wij al de waarden ingevuld voor rood, groen en blauw. 
+          Toch kunnen de waarden een beetje verschillen door een verschillend scherm of helderheid. 
+          Test of de arduino de 8 verschillende kleuren kan testen. 
+
+        </p>
+      </div>
+
+      <div class="column">
+        <html lang="en">
+          <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              text-align: center;
+            }
+            .slider-container {
+              display: flex;
+              align-items: center;
+              width: 80%;
+              margin: 20px auto;
+            }
+            .slider {
+              flex: 1;
+              margin-right: 10px;
+            }
+            .color-box {
+              width: 50px; 
+              height: 50px; 
+              margin-left: 10px;
+              border: 1px solid #000;
+            }
+          </style>
+          </head>
+          <body>
+            <h1>RGB Slider</h1>
+            
+            <div class="slider-container">
+              <div class="slider">
+                <label for="red">Red: <span id="redValue">0</span></label>
+                <input type="range" id="red" min="0" max="255" value="0" class="rgb-slider">
+              </div>
+              <div class="color-box" id="colorBox"></div>
+            </div>
+            
+            <div class="slider-container">
+              <div class="slider">
+                <label for="green">Green: <span id="greenValue">0</span></label>
+                <input type="range" id="green" min="0" max="255" value="0" class="rgb-slider">
+              </div>
+            </div>
+            
+            <div class="slider-container">
+              <div class="slider">
+                <label for="blue">Blue: <span id="blueValue">0</span></label>
+                <input type="range" id="blue" min="0" max="255" value="0" class="rgb-slider">
+              </div>
+            </div>
+          
+            <script>
+              const redSlider = document.getElementById('red');
+              const greenSlider = document.getElementById('green');
+              const blueSlider = document.getElementById('blue');
+              const colorBox = document.getElementById('colorBox');
+              const redValue = document.getElementById('redValue');
+              const greenValue = document.getElementById('greenValue');
+              const blueValue = document.getElementById('blueValue');
+              
+              function updateColor() {
+                const r = redSlider.value;
+                const g = greenSlider.value;
+                const b = blueSlider.value;
+                
+                colorBox.style.backgroundColor = `rgb(${r},${g},${b})`;
+                redValue.textContent = r;
+                greenValue.textContent = g;
+                blueValue.textContent = b;
+              }
+              
+              redSlider.addEventListener('change', updateColor);
+              greenSlider.addEventListener('change', updateColor);
+              blueSlider.addEventListener('change', updateColor);
+            </script>
+          </body>
+          </html>
+
+      </div>
+    </div>
