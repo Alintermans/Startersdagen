@@ -8,7 +8,7 @@ current_state = 0
 current_choice = 'None' # 'None', 'beginner', 'advanced'
 current_page = 'home' # 'home', 'game', 'settings'
 
-nb_steps_advanced = 1
+nb_steps_advanced = 6
 nb_steps_beginner = 3
 
 retries = 0 
@@ -167,6 +167,10 @@ def advanced_4():
 @app.route('/advanced-5')
 def advanced_5():
     return render_template('advanced-5.html')
+
+@app.route('/advanced-6')
+def advanced_5():
+    return render_template('advanced-6.html')
 
 
 ##Arduino commands
