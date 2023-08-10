@@ -1,5 +1,4 @@
 //------------------------------------------- Settings -------------------------------------------//
-var led = false;
 var state = 0;
 var nb_steps_advanced = 1;
 var nb_steps_beginner = 1;
@@ -8,26 +7,16 @@ var nb_steps_beginner = 1;
 
 //------------------------------------------- Buttons -------------------------------------------//
 
-function turn_on() {
-    fetch('/turn_on')
-    .then(response => response.json())
-    .then(data => console.log(data));}
 
-function turn_off() {
-    fetch('/turn_off')
-    .then(response => response.json())
-    .then(data => console.log(data));}
     
 
-function led_switch() {
-if (led == false) {
-    led = true;
-    turn_on();
-} else {
-    led = false;
-    turn_off();
-}
-}
+function led() {
+    fetch('/led')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });}
+
 
 
 function reset() {
