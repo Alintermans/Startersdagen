@@ -1,0 +1,5 @@
+{
+    "board": "arduino:avr:megaADK",
+    "programmer": "arduino:avrisp",
+    "port": "/dev/tty.BLTH"
+}

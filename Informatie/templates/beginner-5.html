@@ -9,18 +9,36 @@
         </div>
       <div class="column">
         <div id="rgb-slider">
-          <h1>RGB Color Slider</h1>
-        <label for="redSlider">Red: <span class="slider-value" id="redValue">0</span></label>
-        <input type="range" id="redSlider" min="0" max="255" value="0">
-        
-        <br>
-        <label for="greenSlider">Green: <span class="slider-value" id="greenValue">0</span></label>
-        <input type="range" id="greenSlider" min="0" max="255" value="0">
-        
-        <br>
-        <label for="blueSlider">Blue: <span class="slider-value" id="blueValue">0</span></label>
-        <input type="range" id="blueSlider" min="0" max="255" value="0">
-        
+          <h2>Kalibratie</h2>
+          <div id="rgb-slider-inner-div">
+            
+            <div id="inner-div-sliders">
+              <!-- <h2>Sliders</h2> -->
+                <label for="redSlider">Red: <span class="slider-value" id="redValue">0</span></label>
+                <input type="range" id="redSlider" min="0" max="255" value="0">
+                
+                <br>
+                <label for="greenSlider">Green: <span class="slider-value" id="greenValue">0</span></label>
+                <input type="range" id="greenSlider" min="0" max="255" value="0">
+                
+                <br>
+                <label for="blueSlider">Blue: <span class="slider-value" id="blueValue">0</span></label>
+                <input type="range" id="blueSlider" min="0" max="255" value="0">
+                <br>
+            </div>
+            <div id="inner-div-calibration">
+              <!-- <h2>Kalibratie</h2> -->
+              <button id="detectColorButton" class="button" onclick="detectColor()">Decteer de kleur</button>
+              <br>
+                <b>Gedecteerde kleur: </b><span id="detected-color"></span>
+                <br>
+                Rood-waarde: <span id="detected-red-value"></span>
+                <br>
+                Groen-waarde: <span id="detected-green-value"></span>
+                <br>
+                Blauw-waarde: <span id="detected-blue-value"></span>
+            </div>
+          </div>
         <div class="color-box" id="colorBox"></div>
         </div>
         

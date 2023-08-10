@@ -20,20 +20,47 @@ arduino = serial.Serial(port='/dev/cu.usbmodem141101',   baudrate=230400, timeou
 
 
 def write_read(x):
+    global retries
     arduino.write(bytes(x,   'utf-8'))
     print("Wrote: " + x)
     time.sleep(0.05)
     data = arduino.readline()
     print("Read: " + data.decode('utf-8'))
     if(int(data.decode('utf-8')) == len(x)):
+        retries = 0
         return "OK"
     else:
-        global retries
+        
         retries += 1
         if retries > 5:
             retries = 0
             return "ERROR"
         write_read(x)
+
+def send_detect_color_request():
+    global retries
+    x = 'DC\n'
+    arduino.write(bytes(x,   'utf-8'))
+    print("Wrote: " + x)
+    time.sleep(0.05)
+    data = arduino.readline().decode('utf-8')
+    data = data.split('/')
+    if(len(data) == 5):
+        color = int(data[0])
+        red = int(data[1])
+        green = int(data[2])
+        blue = int(data[3])
+        retries = 0
+        print(data)
+        result = (color, red, green, blue)
+        return result
+    else:
+        retries += 1
+        if retries > 10:
+            retries = 0
+            return "ERROR", "ERROR", "ERROR", "ERROR"
+        time.sleep(0.1)
+        send_detect_color_request()
 
 
 
@@ -188,6 +215,23 @@ def led():
     return jsonify({'status': 'led'})
 
 
+@app.route('/detect-color')
+def detect_color():
+    global retries
+    result = send_detect_color_request()
+    while result == None:
+        if retries > 5:
+            retries = 0
+            return jsonify({'status': 'detect-color', 'detected_color': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
+        time.sleep(0.1)
+        retries += 1
+        result = send_detect_color_request()
+    color = result[0]
+    red = result[1]
+    green = result[2]
+    blue = result[3]
+    retries = 0
+    return jsonify({'status': 'detect-color', 'detected_color': int_color_to_string(color), 'red_value': red, 'green_value': green, 'blue_value': blue})
 
 
 
@@ -206,6 +250,25 @@ def rgb_int_to_string_of_9_charachters(red, green, blue):
         blue = '0' + blue
     return 'L' + red + green + blue + '\n'
     
+def int_color_to_string(color):
+    if color == 0:
+        return 'Zwart'
+    elif color == 1:
+        return 'Rood'
+    elif color == 2:
+        return 'Groen'
+    elif color == 3:
+        return 'Blauw'
+    elif color == 4:
+        return 'Licht Blauw'
+    elif color == 5:
+        return 'Roze'
+    elif color == 6:
+        return 'Geel'
+    elif color == 7:
+        return 'Wit'
+    else:
+        return 'Geen idee'
 
 
 ################################# Main #############################################
