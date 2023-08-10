@@ -116,9 +116,13 @@ function loadPage(pageUrl) {
             document.getElementById('content').innerHTML = html;
             hljs.highlightAll();
 
-            if ((choice === 'beginner' && state == 3) || (choice === 'advanced' && state == 1) ) {
+            if ((choice === 'beginner' && state == 3) ||
+                (choice === 'beginner' && state == 5) ||
+                (choice === 'advanced' && state == 1)  ) {
+
                 initializeSlider();
             }
+            
 
         })
         .catch(error => {

@@ -9,7 +9,7 @@ current_choice = 'None' # 'None', 'beginner', 'advanced'
 current_page = 'home' # 'home', 'game', 'settings'
 
 nb_steps_advanced = 6
-nb_steps_beginner = 3
+nb_steps_beginner = 5
 
 retries = 0 
 
