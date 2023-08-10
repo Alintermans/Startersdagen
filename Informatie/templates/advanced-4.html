@@ -5,38 +5,74 @@
           Download template kleurensensor en upload naar arduino. 
           Bevestig kleurensensor op het zwarte vakje. 
         </p>
-
+        <h3>
+          Opdracht 2.1
+        </h3>
         <p>
-          Opdracht 2.1: Open de 'Serial monitor'. En lees de rood, groen en blauwe waarde af. 
+          Open de 'Serial monitor'. En lees de rood, groen en blauwe waarde af. 
           Deze waarden komen niet overeen met de standaard rgb waarden voor zwart. 
           Hoe hoger een waarde voor rood, groen en blauw, hoe minder aanwezig die kleur is. 
           Normaal gezien meet je voor zwart 3 waarden op die boven de 2000 zijn. 
         </p>
 
+        <h3>
+          Opdracht 2.2
+        </h3>
         <p>
-          Opdracht 2.2: Haal lijn 54 tem 57 uit commentaar. Dit betekent dat je de '//' voor elke regel weg moet halen. 
-          Om de kleur zwart te herkennen moet je nu op lijn 54 de juiste waarden voor rood, groen en blauw invullen.
-          Bijvoorbeeld:
-          Als rood>2000 en groen>2000 en blauw>2000, dan hebben we te maken met zwart. 
-          Upload je code naar de arduino en kijk of hij de kleur zwart kan herkennen.  
+          Haal lijn 54 tem 57 uit commentaar. Dit betekent dat je de '//' voor elke regel weg moet halen. 
+          De code moet er nu zo uitzien:
+        </p>
+          <pre>
+            <code class="language-arduino code-container">
+              int match_kleur(int rood, int groen, int blauw) {
+                kleur_ID = 0;
+                if ((rood > ...) && (groen > ...) && (blauw > ...)) {
+                   Serial.println(" Zwart");
+                   kleur_ID = 0;
+                 }
+                // else if ((rood < ...) && (groen >...) && (blauw > ...)) {
+                //   Serial.println("Rood");
+                //   kleur_ID = 1;  
+              </code> 
+          </pre>
+        <p>
+          Om de kleur zwart te herkennen moet je op lijn 54 '...' vervangen door de juiste waarde voor rood, groen en blauw.
+          <br>
+          <b>Tip: </b> zorg voor voldoende marge! Als je voor rood, groen en blauw waarden rond de 4000 krijgt. Geef dan kleinere waarden in. 
+         <br>
+          Voorbeeld:
+          <br>
+          Als rood>2500 en groen>2500 en blauw>2500, dan hebben we te maken met zwart. 
+          Upload je code naar de arduino en test of hij de kleur zwart kan herkennen.  
+        </p>
+        
+        <h3>
+          Opdracht 2.3
+        </h3>
+        <p>
+          Maak het vak nu rood door de slider te bewegen. 
+          Wanneer je nu op de Serial monitor kijkt mag de arduino niet meer zeggen dat het vakje zwart is. 
+          Indien de arduino nog steeds zegt dat het vak zwart is moet je opdracht 2.2 herhalen en de waarden op lijn 54 juist zetten. 
+          Normaal gezien is 'groter dan 2500' goed voor rood, groen en zwart.   
+          Haal nu lijn 58 tem 61 uit commentaar en probeer zelf goede waarden te vinden voor rood, groen en blauw.
+          Als dit gelukt is zou de arduino nu zowel zwart als rood moeten herkennen. 
         </p>
 
+        <h3>
+          Opdracht 2.4
+        </h3>
         <p>
-          Opdracht 2.3: Maak het vak nu rood door de slider te bewegen. Wanneer je nu op de Serial monitor kijkt mag de arduino niet meer zeggen dat het vak zwart is. 
-          Indien de arduino nog steeds zegt dat het vak zwart is moet je opdracht 2.2 herhalen en de waarden op lijn 54 juist zetten.  
-          Anders kan je verder gaan door lijn 58 tem 61 uit commentaar te halen en zelf de juiste waarden voor rood, groen en blauw te vinden.
+          Herhaal opdracht 2.3 voor zowel groen (lijn 62 tem 65) als blauw (lijn 66 tem 69). 
         </p>
 
+        <h3>
+          Opdracht 2.5
+        </h3>
         <p>
-          opdracht 2.4: Herhaal opdracht 2.3 voor zowel groen (lijn 62 tem 65) als blauw (lijn 66 tem 69). 
-        </p>
-
-        <p>
-          Opdracht 2.5: Haal de code voor de andere kleuren uit commentaar. 
-          Hier hebben wij al de waarden ingevuld voor rood, groen en blauw. 
-          Toch kunnen de waarden een beetje verschillen door een verschillend scherm of helderheid. 
-          Test of de arduino de 8 verschillende kleuren kan testen. 
-
+          Haal de code voor de andere kleuren uit commentaar. 
+          Hier hebben wij al waarden ingevuld voor rood, groen en blauw. 
+          Deze waarden kunnen toch een beetje verschillen door een verschillend scherm of helderheid. 
+          Test of de arduino de 8 verschillende kleuren kan testen en pas indien nodig de waarden aan.
         </p>
       </div>
 
