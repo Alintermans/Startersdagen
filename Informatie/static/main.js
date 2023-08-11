@@ -70,6 +70,21 @@ function motor() {
 
 function servo() {
     const servo_value = document.getElementById('servo-value');
+    if (servo_value.value == '') {
+        alert("Vul eerst een waarde in");
+        return;
+    }
+
+    if (servo_value.value >= 150) {
+        alert("De waarde moet kleiner zijn dan 180");
+        return;
+    }
+
+    if (servo_value.value < 30) {
+        alert("De waarde moet groter zijn dan 30");
+        return;
+    }
+
     fetch('/servo?position=' + servo_value.value.toString())
     .then(response => response.json())
     .then(data => {
@@ -135,6 +150,12 @@ function updateSensorValues(color) {
         alert("Vul alle waardes eerst in voor deze kleur");
         return;
     }
+
+    if (red_value.value >= 10000 || green_value.value >= 10000 || blue_value.value >= 10000) {
+        alert("De waardes moeten kleiner zijn dan 10000");
+        return;
+    }
+
     detect_color_button.disabled = true;
     detect_color_button.classList.add("disabled");
     fetch('/change-sensor-color-values?color=' + color.toString() + '&red-value=' + red_value.value.toString() + '&green-value=' + green_value.value.toString() + '&blue-value=' + blue_value.value.toString())

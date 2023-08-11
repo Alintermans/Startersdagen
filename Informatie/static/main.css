@@ -315,3 +315,57 @@ img {
     width: 50px;
     margin-right: 5px;
 }
+
+#servo_form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#servo_form label {
+    margin-right: 10px;
+}
+
+#servo_form input {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+#servo_form button {
+    margin-left: 10px;
+    background-color: #ff6b6b;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 5px 10px;
+    padding: 10px;
+}
+
+#servo_form button:hover {
+    background-color: #ff8f8f;
+}
+
+#servo_form input[type="number"] {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+#motor_button {
+    background-color: #ff6b6b;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 5px 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+#motor_button:hover {
+    background-color: #ff8f8f;
+}
