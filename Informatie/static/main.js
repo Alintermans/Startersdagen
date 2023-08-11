@@ -68,6 +68,12 @@ function detectColor() {
     const blue_value = document.getElementById('detected-blue-value');
     const detected_color = document.getElementById('detected-color');
     
+    red_value.textContent = "";
+        green_value.textContent = "";
+        blue_value.textContent = "";
+        detected_color.textContent = "";
+
+
     fetch('/detect-color')
     .then(response => response.json())
     .then(data => {
@@ -79,10 +85,14 @@ function detectColor() {
 }
 
 function getSensorValues() {
+    
+
     for (let i = 0; i < 8; i++) {
         const red_value = document.getElementById('red-value-' + i.toString());
         const green_value = document.getElementById('green-value-' + i.toString());
         const blue_value = document.getElementById('blue-value-' + i.toString());
+        
+
         fetch('/get-sensor-color-values?color=' + i.toString())
         .then(response => response.json())
         .then(data => {
@@ -90,6 +100,7 @@ function getSensorValues() {
             red_value.value = data.red_value;
             green_value.value = data.green_value;
             blue_value.value = data.blue_value;
+
             }
             console.log(data);
         });
@@ -100,17 +111,27 @@ function updateSensorValues(color) {
     const red_value = document.getElementById('red-value-' + color.toString());
     const green_value = document.getElementById('green-value-' + color.toString());
     const blue_value = document.getElementById('blue-value-' + color.toString());
+    const detect_color_button = document.getElementById('detectColorButton');
+    const color_form_info = document.getElementById('colorFormInfo');
 
     if (red_value.value == '' || green_value.value == '' || blue_value.value == '') {
         alert("Vul alle waardes eerst in voor deze kleur");
         return;
     }
-
+    detect_color_button.disabled = true;
+    detect_color_button.classList.add("disabled");
     fetch('/change-sensor-color-values?color=' + color.toString() + '&red-value=' + red_value.value.toString() + '&green-value=' + green_value.value.toString() + '&blue-value=' + blue_value.value.toString())
     .then(response => response.json())
     .then(data => {
         console.log(data);
         getSensorValues();
+        detect_color_button.disabled = false;
+        detect_color_button.classList.remove("disabled");
+        color_form_info.textContent = "De waardes zijn aangepast";
+        setTimeout(function(){ 
+
+            color_form_info.textContent = "";
+        }, 3000);
     });     
 }
 
