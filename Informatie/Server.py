@@ -9,7 +9,7 @@ current_choice = 'None' # 'None', 'beginner', 'advanced'
 current_page = 'home' # 'home', 'game', 'settings'
 
 nb_steps_advanced = 7
-nb_steps_beginner = 7
+nb_steps_beginner = 8
 
 retries = 0 
 
@@ -193,6 +193,10 @@ def beginner_6():
 def beginner_7():
     return render_template('beginner-7.html')
 
+@app.route('/beginner-8')
+def beginner_8():
+    return render_template('beginner-8.html')
+
 @app.route('/advanced-1')
 def advanced_1():
     return render_template('advanced-1.html')
@@ -236,6 +240,26 @@ def run_sequention():
     sequention = request.args.get('sequention')
     run_sequention(sequention)
     return jsonify({'status': 'run-sequention'})
+
+@app.route('/test')
+def test():
+    global retries
+    result = send_detect_color_request()
+    while result == None:
+        if retries > 5:
+            retries = 0
+            return jsonify({'status': 'detect-color', 'detected_color': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
+        time.sleep(0.1)
+        retries += 1
+        result = send_detect_color_request()
+    color = result[0]
+    red = result[1]
+    green = result[2]
+    blue = result[3]
+    retries = 0
+    run_sequention(color)
+    return jsonify({'status': 'detect-color', 'detected_color': int_color_to_string(color), 'red_value': red, 'green_value': green, 'blue_value': blue})
+    
 
 ##Arduino commands
 @app.route('/rgb-led')

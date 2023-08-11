@@ -145,6 +145,23 @@ function runSequention(sequention) {
     });
 }
 
+//------------------------------------------- Test Sequence -------------------------------------------//
+function test() {
+    const red_value = document.getElementById('detected-red-value');
+    const green_value = document.getElementById('detected-green-value');
+    const blue_value = document.getElementById('detected-blue-value');
+    const detected_color = document.getElementById('detected-color');
+    fetch('/test')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        red_value.textContent = data.red_value;
+        green_value.textContent = data.green_value;
+        blue_value.textContent = data.blue_value;
+        detected_color.textContent = data.detected_color;
+    });
+}
+
 
 //------------------------------------------- Color Sensor -------------------------------------------//
 
@@ -320,6 +337,7 @@ function loadPage(pageUrl) {
 
             if ((choice === 'beginner' && state == 3) ||
                 (choice === 'beginner' && state == 5) ||
+                (choice === 'beginner' && state == 8) ||
                 (choice === 'advanced' && state == 1) ||
                 (choice === 'advanced' && state == 4)) {
 
