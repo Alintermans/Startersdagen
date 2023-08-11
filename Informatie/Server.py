@@ -8,7 +8,7 @@ current_state = 0
 current_choice = 'None' # 'None', 'beginner', 'advanced'
 current_page = 'home' # 'home', 'game', 'settings'
 
-nb_steps_advanced = 6
+nb_steps_advanced = 7
 nb_steps_beginner = 5
 
 retries = 0 
@@ -18,7 +18,7 @@ retries = 0
 ################################# Arduino #############################################
 
 arduino = serial.Serial(port='/dev/cu.usbmodem142101',   baudrate=230400, timeout=0.01)
-
+#arduino = ""
 
 def write_read(x):
     global retries
@@ -207,6 +207,9 @@ def advanced_5():
 def advanced_6():
     return render_template('advanced-6.html')
 
+@app.route('/advanced-7')
+def advanced_7():
+    return render_template('advanced-7.html')
 
 ##Arduino commands
 @app.route('/rgb-led')
