@@ -187,6 +187,10 @@ def beginner_5():
 def beginner_6():
     return render_template('beginner-6.html')
 
+@app.route('/beginner-7')
+def beginner_7():
+    return render_template('beginner-7.html')
+
 @app.route('/advanced-1')
 def advanced_1():
     return render_template('advanced-1.html')
@@ -360,6 +364,7 @@ def change_color(color, red, green, blue):
     
     
 
+################################# Servo #############################################
 
 
 ################################# Helper Functions #############################################
