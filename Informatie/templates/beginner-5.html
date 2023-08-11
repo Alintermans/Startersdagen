@@ -3,93 +3,171 @@
       <div class="column">
         <h2>Kalibratie</h2>
         <p>
-          Een RGB-LED is een LED die drie kleuren kan weergeven: rood, groen en blauw. Door de intensiteit van deze kleuren te veranderen kan je alle kleuren van de regenboog maken.
+          De kleurensensor geeft voor elk van drie basis-kleuren (rood, groen en blauw) een waarde terug. De sensor is dus eigenlijk een combinatie van drie sensoren, die elk een andere kleur kunnen detecteren. De kleurensensor kan dus de kleur van het licht dat erop valt detecteren door de waarden van de drie sensoren te combineren. 
+          Omdat de omgevingslicht veel invloed kan hebben op de waarden die de kleurensensor teruggeeft, is het belangrijk om de sensor te kalibreren. Dit gaan jullie doen in deze stap.
         </p>
+
+        <p>
+          Omdat er 8 opties zijn voor de verschillende opties van de <b>Smart Coffe/Thea maker</b>, zullen jullie de kleurensensor moeten kalibreren voor 8 verschillende kleuren.
+          De kleurensensor is al gekalibreerd voor de kleuren groen, blauw, licht blauw, roze, geel en wit. Jullie zullen dus enkel de kleuren zwart en rood moeten kalibreren.
+          Naast elke kleur staat een &#60; of een &#62; teken. Dit betekent dat de kleurensensor de kleur moet detecteren als de waarde van de sensor voor die kleur kleiner (&#60;) of groter (&#62;) is dan de waarde die naast de kleur staat. Geen enkel van de waardes zal hoger zijn dan 9999. <br>
+          <u>Tip voor de zwarte kleur:</u> de waardes voor rood, groen en blauw liggen tussen 3500 en 7000. 
+          
+        </p>
+
 
         <h1>RGB Color Input</h1>
     <form id="colorForm">
         <div id="colorInputs">
             <!-- Row 1: Zwart -->
             <div class="colorRow">
-                
-                <label for="zwartRed">Red:</label>
-                <input type="number" id="zwartRed" min="0" max="255" step="1" required>
-                <label for="zwartGreen">Green:</label>
-                <input type="number" id="zwartGreen" min="0" max="255" step="1" required>
-                <label for="zwartBlue">Blue:</label>
-                <input type="number" id="zwartBlue" min="0" max="255" step="1" required>
-                <button type="button" class="updateColor">Update Color</button>
+              <h3>Zwart: </h3>
+              <div class="inputContainer">
+                  <label for="red-value-0">Rood (&#62;):</label>
+                  <input type="number" id="red-value-0" min="0" max="9999" step="1" required>
+              </div>
+              <div class="inputContainer">
+                  <label for="green-value-0">Groen (&#62;):</label>
+                  <input type="number" id="green-value-0" min="0" max="9999" step="1" required>
+              </div>
+              <div class="inputContainer">
+                  <label for="blue-value-0">Blauw (&#62;):</label>
+                  <input type="number" id="blue-value-0" min="0" max="9999" step="1" required>
+              </div>
+              <button type="button" class="updateColorButton" onclick="updateSensorValues(0)">Update Waardes</button>
             </div>
+
             <!-- Row 2: Rood -->
             <div class="colorRow">
-                <label for="roodRed">Red:</label>
-                <input type="number" id="roodRed" min="0" max="255" step="1" required>
-                <label for="roodGreen">Green:</label>
-                <input type="number" id="roodGreen" min="0" max="255" step="1" required>
-                <label for="roodBlue">Blue:</label>
-                <input type="number" id="roodBlue" min="0" max="255" step="1" required>
-                <button type="button" class="updateColor">Update Color</button>
+                <h3>Rood: </h3>
+                <div class="inputContainer">
+                    <label for="red-value-1">Rood (&#60;):</label>
+                    <input type="number" id="red-value-1" min="0" max="9999" step="1" required>
+                </div>
+                <div class="inputContainer">
+                    <label for="green-value-1">Groen (&#62;):</label>
+                    <input type="number" id="green-value-1" min="0" max="9999" step="1" required>
+                </div>
+                <div class="inputContainer">
+                    <label for="blue-value-1">Blauw (&#62;):</label>
+                    <input type="number" id="blue-value-1" min="0" max="9999" step="1" required>
+                </div>
+                <button type="button" class="updateColorButton" onclick="updateSensorValues(1)">Update Waardes</button>
             </div>
+
             <!-- Row 3: Groen -->
             <div class="colorRow">
-                <label for="groenRed">Red:</label>
-                <input type="number" id="groenRed" min="0" max="255" step="1" required>
-                <label for="groenGreen">Green:</label>
-                <input type="number" id="groenGreen" min="0" max="255" step="1" required>
-                <label for="groenBlue">Blue:</label>
-                <input type="number" id="groenBlue" min="0" max="255" step="1" required>
-                <button type="button" class="updateColor">Update Color</button>
+                <h3>Groen: </h3>
+                <div class="inputContainer">
+                    <label for="red-value-2">Rood (&#62;):</label>
+                    <input type="number" id="red-value-2" min="0" max="9999" step="1" required>
+                </div>
+                <div class="inputContainer">
+                    <label for="green-value-2">Groen (&#60;):</label>
+                    <input type="number" id="green-value-2" min="0" max="9999" step="1" required>
+                </div>
+                <div class="inputContainer">
+                    <label for="blue-value-2">Blauw (&#62;):</label>
+                    <input type="number" id="blue-value-2" min="0" max="9999" step="1" required>
+                </div>
+                <button type="button" class="updateColorButton" onclick="updateSensorValues(2)">Update Waardes</button>
             </div>
+
             <!-- Row 4: Blauw -->
             <div class="colorRow">
-                <label for="blauwRed">Red:</label>
-                <input type="number" id="blauwRed" min="0" max="255" step="1" required>
-                <label for="blauwGreen">Green:</label>
-                <input type="number" id="blauwGreen" min="0" max="255" step="1" required>
-                <label for="blauwBlue">Blue:</label>
-                <input type="number" id="blauwBlue" min="0" max="255" step="1" required>
-                <button type="button" class="updateColor">Update Color</button>
+                <h3>Blauw: </h3>
+                <div class="inputContainer">
+                    <label for="red-value-3">Rood (&#62;):</label>
+                    <input type="number" id="red-value-3" min="0" max="9999" step="1" required>
+                </div>
+                <div class="inputContainer">
+                    <label for="green-value-3">Groen (&#60;):</label>
+                    <input type="number" id="green-value-3" min="0" max="9999" step="1" required>
+                </div>
+                <div class="inputContainer">
+                    <label for="blue-value-3">Blauw (&#60;):</label>
+                    <input type="number" id="blue-value-3" min="0" max="9999" step="1" required>
+                </div>
+                <button type="button" class="updateColorButton" onclick="updateSensorValues(3)">Update Waardes</button>
             </div>
+
             <!-- Row 5: Licht Blauw -->
             <div class="colorRow">
-                <label for="lichtBlauwRed">Red:</label>
-                <input type="number" id="lichtBlauwRed" min="0" max="255" step="1" required>
-                <label for="lichtBlauwGreen">Green:</label>
-                <input type="number" id="lichtBlauwGreen" min="0" max="255" step="1" required>
-                <label for="lichtBlauwBlue">Blue:</label>
-                <input type="number" id="lichtBlauwBlue" min="0" max="255" step="1" required>
-                <button type="button" class="updateColor">Update Color</button>
+                <h3>Licht Blauw: </h3>
+                <div class="inputContainer">
+                    <label for="red-value-4">Rood (&#62;):</label>
+                    <input type="number" id="red-value-4" min="0" max="9999" step="1" required>
+                </div>
+                <div class="inputContainer">
+                    <label for="green-value-4">Groen (&#60;):</label>
+                    <input type="number" id="green-value-4" min="0" max="9999" step="1" required>
+                </div>
+                <div class="inputContainer">
+                    <label for="blue-value-4">Blauw (&#60;):</label>
+                    <input type="number" id="blue-value-4" min="0" max="9999" step="1" required>
+                </div>
+                <button type="button" class="updateColorButton" onclick="updateSensorValues(4)">Update Waardes</button>
+
             </div>
+
             <!-- Row 6: Roze -->
             <div class="colorRow">
-                <label for="rozeRed">Red:</label>
-                <input type="number" id="rozeRed" min="0" max="255" step="1" required>
-                <label for="rozeGreen">Green:</label>
-                <input type="number" id="rozeGreen" min="0" max="255" step="1" required>
-                <label for="rozeBlue">Blue:</label>
-                <input type="number" id="rozeBlue" min="0" max="255" step="1" required>
-                <button type="button" class="updateColor">Update Color</button>
+                <h3>Roze: </h3>
+                <div class="inputContainer">
+                    <label for="red-value-5">Rood (&#60;):</label>
+                    <input type="number" id="red-value-5" min="0" max="9999" step="1" required>
+                </div>
+                <div class="inputContainer">
+                    <label for="green-value-5">Groen (&#62;):</label>
+                    <input type="number" id="green-value-5" min="0" max="9999" step="1" required>
+                </div>
+                <div class="inputContainer">
+                    <label for="blue-value-5">Blauw (&#60;):</label>
+                    <input type="number" id="blue-value-5" min="0" max="9999" step="1" required>
+                </div>
+                <button type="button" class="updateColorButton" onclick="updateSensorValues(5)">Update Waardes</button>
             </div>
+
             <!-- Row 7: Geel -->
             <div class="colorRow">
-                <label for="geelRed">Red:</label>
-                <input type="number" id="geelRed" min="0" max="255" step="1" required>
-                <label for="geelGreen">Green:</label>
-                <input type="number" id="geelGreen" min="0" max="255" step="1" required>
-                <label for="geelBlue">Blue:</label>
-                <input type="number" id="geelBlue" min="0" max="255" step="1" required>
-                <button type="button" class="updateColor">Update Color</button>
+                <h3>Geel: </h3>
+                <div class="inputContainer">
+                    <label for="red-value-6">Rood (&#60;):</label>
+                    <input type="number" id="red-value-6" min="0" max="9999" step="1" required>
+                </div>
+                <div class="inputContainer">
+                    <label for="green-value-6">Groen (&#60;):</label>
+                    <input type="number" id="green-value-6" min="0" max="9999" step="1" required>
+                </div>
+                <div class="inputContainer">
+                    <label for="blue-value-6">Blauw (&#62;):</label>
+                    <input type="number" id="blue-value-6" min="0" max="9999" step="1" required>
+                </div>
+                <button type="button" class="updateColorButton" onclick="updateSensorValues(6)">Update Waardes</button>
             </div>
+
             <!-- Row 8: Wit -->
             <div class="colorRow">
-                <label for="witRed">Red:</label>
-                <input type="number" id="witRed" min="0" max="255" step="1" required>
-                <label for="witGreen">Green:</label>
-                <input type="number" id="witGreen" min="0" max="255" step="1" required>
-                <label for="witBlue">Blue:</label>
-                <input type="number" id="witBlue" min="0" max="255" step="1" required>
-                <button type="button" class="updateColor">Update Color</button>
+                <h3>Wit: </h3>
+                <div class="inputContainer">
+                    <label for="red-value-7">Rood (&#60;):</label>
+                    <input type="number" id="red-value-7" min="0" max="9999" step="1" required>
+                </div>
+                <div class="inputContainer">
+                    <label for="green-value-7">Groen (&#60;):</label>
+                    <input type="number" id="green-value-7" min="0" max="9999" step="1" required>
+                </div>
+                <div class="inputContainer">
+                    <label for="blue-value-7">Blauw (&#60;):</label>
+                    <input type="number" id="blue-value-7" min="0" max="9999" step="1" required>
+                </div>
+                <button type="button" class="updateColorButton" onclick="updateSensorValues(7)">Update Waardes</button>
             </div>
+
+            
+              
+
+            
         </div>
     </form>
 
