@@ -155,6 +155,38 @@ img {
     height: 100%;
     margin: 0;
   }
+#detectedColorBox {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  #rgb-slider-inner-div {
+    display: flex;
+    flex-direction: row;
+    height: 50%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #inner-div-calibration {
+    width: 50%;
+    text-align: center;
+    padding: 20px;
+  }
+
+  #inner-div-sliders {
+    width: 50%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+
+  }
 
   label {
     font-size: 16px;
@@ -217,3 +249,28 @@ img {
         background-color: blue;
     }
 
+
+
+    #colorForm {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+  }
+
+  .colorRow {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+  }
+
+  .colorBox {
+      width: 30px;
+      height: 30px;
+      margin-left: 10px;
+      border: 1px solid #ccc;
+  }
+
+  .updateColor {
+      margin-left: 10px;
+  }

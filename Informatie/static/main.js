@@ -60,6 +60,24 @@ function back() {
         loadContent();
     });}
 
+//------------------------------------------- Color Sensor -------------------------------------------//
+
+function detectColor() {
+    const red_value = document.getElementById('detected-red-value');
+    const green_value = document.getElementById('detected-green-value');
+    const blue_value = document.getElementById('detected-blue-value');
+    const detected_color = document.getElementById('detected-color');
+    fetch('/detect-color')
+    .then(response => response.json())
+    .then(data => {
+        red_value.textContent = data.red_value;
+        green_value.textContent = data.green_value;
+        blue_value.textContent = data.blue_value;
+        detected_color.textContent = data.detected_color;
+    }); 
+}
+
+
 //------------------------------------------- RGB-SLIDER -------------------------------------------//
 
 function initializeSlider() {

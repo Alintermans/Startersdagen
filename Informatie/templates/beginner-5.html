@@ -6,21 +6,126 @@
           Een RGB-LED is een LED die drie kleuren kan weergeven: rood, groen en blauw. Door de intensiteit van deze kleuren te veranderen kan je alle kleuren van de regenboog maken.
         </p>
 
+        <h1>RGB Color Input</h1>
+    <form id="colorForm">
+        <div id="colorInputs">
+            <!-- Row 1: Zwart -->
+            <div class="colorRow">
+                
+                <label for="zwartRed">Red:</label>
+                <input type="number" id="zwartRed" min="0" max="255" step="1" required>
+                <label for="zwartGreen">Green:</label>
+                <input type="number" id="zwartGreen" min="0" max="255" step="1" required>
+                <label for="zwartBlue">Blue:</label>
+                <input type="number" id="zwartBlue" min="0" max="255" step="1" required>
+                <button type="button" class="updateColor">Update Color</button>
+            </div>
+            <!-- Row 2: Rood -->
+            <div class="colorRow">
+                <label for="roodRed">Red:</label>
+                <input type="number" id="roodRed" min="0" max="255" step="1" required>
+                <label for="roodGreen">Green:</label>
+                <input type="number" id="roodGreen" min="0" max="255" step="1" required>
+                <label for="roodBlue">Blue:</label>
+                <input type="number" id="roodBlue" min="0" max="255" step="1" required>
+                <button type="button" class="updateColor">Update Color</button>
+            </div>
+            <!-- Row 3: Groen -->
+            <div class="colorRow">
+                <label for="groenRed">Red:</label>
+                <input type="number" id="groenRed" min="0" max="255" step="1" required>
+                <label for="groenGreen">Green:</label>
+                <input type="number" id="groenGreen" min="0" max="255" step="1" required>
+                <label for="groenBlue">Blue:</label>
+                <input type="number" id="groenBlue" min="0" max="255" step="1" required>
+                <button type="button" class="updateColor">Update Color</button>
+            </div>
+            <!-- Row 4: Blauw -->
+            <div class="colorRow">
+                <label for="blauwRed">Red:</label>
+                <input type="number" id="blauwRed" min="0" max="255" step="1" required>
+                <label for="blauwGreen">Green:</label>
+                <input type="number" id="blauwGreen" min="0" max="255" step="1" required>
+                <label for="blauwBlue">Blue:</label>
+                <input type="number" id="blauwBlue" min="0" max="255" step="1" required>
+                <button type="button" class="updateColor">Update Color</button>
+            </div>
+            <!-- Row 5: Licht Blauw -->
+            <div class="colorRow">
+                <label for="lichtBlauwRed">Red:</label>
+                <input type="number" id="lichtBlauwRed" min="0" max="255" step="1" required>
+                <label for="lichtBlauwGreen">Green:</label>
+                <input type="number" id="lichtBlauwGreen" min="0" max="255" step="1" required>
+                <label for="lichtBlauwBlue">Blue:</label>
+                <input type="number" id="lichtBlauwBlue" min="0" max="255" step="1" required>
+                <button type="button" class="updateColor">Update Color</button>
+            </div>
+            <!-- Row 6: Roze -->
+            <div class="colorRow">
+                <label for="rozeRed">Red:</label>
+                <input type="number" id="rozeRed" min="0" max="255" step="1" required>
+                <label for="rozeGreen">Green:</label>
+                <input type="number" id="rozeGreen" min="0" max="255" step="1" required>
+                <label for="rozeBlue">Blue:</label>
+                <input type="number" id="rozeBlue" min="0" max="255" step="1" required>
+                <button type="button" class="updateColor">Update Color</button>
+            </div>
+            <!-- Row 7: Geel -->
+            <div class="colorRow">
+                <label for="geelRed">Red:</label>
+                <input type="number" id="geelRed" min="0" max="255" step="1" required>
+                <label for="geelGreen">Green:</label>
+                <input type="number" id="geelGreen" min="0" max="255" step="1" required>
+                <label for="geelBlue">Blue:</label>
+                <input type="number" id="geelBlue" min="0" max="255" step="1" required>
+                <button type="button" class="updateColor">Update Color</button>
+            </div>
+            <!-- Row 8: Wit -->
+            <div class="colorRow">
+                <label for="witRed">Red:</label>
+                <input type="number" id="witRed" min="0" max="255" step="1" required>
+                <label for="witGreen">Green:</label>
+                <input type="number" id="witGreen" min="0" max="255" step="1" required>
+                <label for="witBlue">Blue:</label>
+                <input type="number" id="witBlue" min="0" max="255" step="1" required>
+                <button type="button" class="updateColor">Update Color</button>
+            </div>
+        </div>
+    </form>
+
         </div>
       <div class="column">
         <div id="rgb-slider">
-          <h1>RGB Color Slider</h1>
-        <label for="redSlider">Red: <span class="slider-value" id="redValue">0</span></label>
-        <input type="range" id="redSlider" min="0" max="255" value="0">
-        
-        <br>
-        <label for="greenSlider">Green: <span class="slider-value" id="greenValue">0</span></label>
-        <input type="range" id="greenSlider" min="0" max="255" value="0">
-        
-        <br>
-        <label for="blueSlider">Blue: <span class="slider-value" id="blueValue">0</span></label>
-        <input type="range" id="blueSlider" min="0" max="255" value="0">
-        
+          <h2>Kalibratie</h2>
+          <div id="rgb-slider-inner-div">
+            
+            <div id="inner-div-sliders">
+              <!-- <h2>Sliders</h2> -->
+                <label for="redSlider">Red: <span class="slider-value" id="redValue">0</span></label>
+                <input type="range" id="redSlider" min="0" max="255" value="0">
+                
+                <br>
+                <label for="greenSlider">Green: <span class="slider-value" id="greenValue">0</span></label>
+                <input type="range" id="greenSlider" min="0" max="255" value="0">
+                
+                <br>
+                <label for="blueSlider">Blue: <span class="slider-value" id="blueValue">0</span></label>
+                <input type="range" id="blueSlider" min="0" max="255" value="0">
+                <br>
+            </div>
+            <div id="inner-div-calibration">
+              <!-- <h2>Kalibratie</h2> -->
+              <button id="detectColorButton" class="button" onclick="detectColor()">Decteer de kleur</button>
+              <br>
+                <b>Gedecteerde kleur: </b><span id="detected-color"></span>
+                <br>
+                Rood-waarde: <span id="detected-red-value"></span>
+                <br>
+                Groen-waarde: <span id="detected-green-value"></span>
+                <br>
+                Blauw-waarde: <span id="detected-blue-value"></span>
+            </div>
+          </div>
         <div class="color-box" id="colorBox"></div>
         </div>
         
