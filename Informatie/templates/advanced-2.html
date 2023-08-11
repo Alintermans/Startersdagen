@@ -12,7 +12,11 @@
         </p>
 
         <p>
-          Op het breadboard dat verbonden is aan de Arduino, zien jullie een RGB-led. Download script en upload het naar de arduino. 
+          Op het breadboard dat verbonden is aan de Arduino, zien jullie een RGB-led. Download 
+          <a href="/static/arduino_code/template_RGB.zip">
+            dit bestand
+        </a>
+          open het en upload de code naar de arduino. 
           De led zou nu rood licht moeten geven.  
         </p>
         <h3>
@@ -23,14 +27,14 @@
             Upload je code opnieuw naar de arduino en test of het ledje groen licht geeft.
         </p>
         <pre>
-          <code class="language-arduino code-container">
-            void loop() {
-              //Pas hier de RGB waarden aan om verschillende kleuren te bekomen
-              analogWrite(pin_rood, 255);
-              analogWrite(pin_groen, 0);
-              analogWrite(pin_blauw, 0);
-            }
-            </code> 
+<code class="language-arduino code-container">
+void loop() {
+  //Pas hier de RGB waarden aan om verschillende kleuren te bekomen
+  analogWrite(pin_rood, 255);
+  analogWrite(pin_groen, 0);
+  analogWrite(pin_blauw, 0);
+}
+  </code> 
         </pre>
 
         <h3>

@@ -118,7 +118,8 @@ function loadPage(pageUrl) {
 
             if ((choice === 'beginner' && state == 3) ||
                 (choice === 'beginner' && state == 5) ||
-                (choice === 'advanced' && state == 1)  ) {
+                (choice === 'advanced' && state == 1) ||
+                (choice === 'advanced' && state == 4)) {
 
                 initializeSlider();
             }

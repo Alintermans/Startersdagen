@@ -1,8 +1,11 @@
-<div class="box-header">Opdracht 2: Kleurensensor</div>
+<div class="box-header">Opdracht 3: Kleurensensor</div>
     <div class="columns">
       <div class="column">
         <p>
-          Download template kleurensensor en upload naar arduino. 
+          Download
+          <a href="/static/arduino_code/template_RGB.zip">
+            dit bestand
+        </a> en upload de code naar de arduino. 
           Bevestig kleurensensor op het zwarte vakje. 
         </p>
         <h3>
@@ -23,17 +26,17 @@
           De code moet er nu zo uitzien:
         </p>
           <pre>
-            <code class="language-arduino code-container">
-              int match_kleur(int rood, int groen, int blauw) {
-                kleur_ID = 0;
-                if ((rood > ...) && (groen > ...) && (blauw > ...)) {
-                   Serial.println(" Zwart");
-                   kleur_ID = 0;
-                 }
-                // else if ((rood < ...) && (groen >...) && (blauw > ...)) {
-                //   Serial.println("Rood");
-                //   kleur_ID = 1;  
-              </code> 
+<code class="language-arduino code-container">
+int match_kleur(int rood, int groen, int blauw) {
+  kleur_ID = 0;
+  if ((rood > ...) && (groen > ...) && (blauw > ...)) {
+      Serial.println(" Zwart");
+      kleur_ID = 0;
+    }
+  // else if ((rood < ...) && (groen >...) && (blauw > ...)) {
+  //   Serial.println("Rood");
+  //   kleur_ID = 1;  
+  </code> 
           </pre>
         <p>
           Om de kleur zwart te herkennen moet je op lijn 54 '...' vervangen door de juiste waarde voor rood, groen en blauw.
@@ -75,86 +78,21 @@
           Test of de arduino de 8 verschillende kleuren kan testen en pas indien nodig de waarden aan.
         </p>
       </div>
-
-      <div class="column">
-        <html lang="en">
-          <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              text-align: center;
-            }
-            .slider-container {
-              display: flex;
-              align-items: center;
-              width: 80%;
-              margin: 20px auto;
-            }
-            .slider {
-              flex: 1;
-              margin-right: 10px;
-            }
-            .color-box {
-              width: 50px; 
-              height: 50px; 
-              margin-left: 10px;
-              border: 1px solid #000;
-            }
-          </style>
-          </head>
-          <body>
-            <h1>RGB Slider</h1>
-            
-            <div class="slider-container">
-              <div class="slider">
-                <label for="red">Red: <span id="redValue">0</span></label>
-                <input type="range" id="red" min="0" max="255" value="0" class="rgb-slider">
-              </div>
-              <div class="color-box" id="colorBox"></div>
-            </div>
-            
-            <div class="slider-container">
-              <div class="slider">
-                <label for="green">Green: <span id="greenValue">0</span></label>
-                <input type="range" id="green" min="0" max="255" value="0" class="rgb-slider">
-              </div>
-            </div>
-            
-            <div class="slider-container">
-              <div class="slider">
-                <label for="blue">Blue: <span id="blueValue">0</span></label>
-                <input type="range" id="blue" min="0" max="255" value="0" class="rgb-slider">
-              </div>
-            </div>
-          
-            <script>
-              const redSlider = document.getElementById('red');
-              const greenSlider = document.getElementById('green');
-              const blueSlider = document.getElementById('blue');
-              const colorBox = document.getElementById('colorBox');
-              const redValue = document.getElementById('redValue');
-              const greenValue = document.getElementById('greenValue');
-              const blueValue = document.getElementById('blueValue');
-              
-              function updateColor() {
-                const r = redSlider.value;
-                const g = greenSlider.value;
-                const b = blueSlider.value;
-                
-                colorBox.style.backgroundColor = `rgb(${r},${g},${b})`;
-                redValue.textContent = r;
-                greenValue.textContent = g;
-                blueValue.textContent = b;
-              }
-              
-              redSlider.addEventListener('change', updateColor);
-              greenSlider.addEventListener('change', updateColor);
-              blueSlider.addEventListener('change', updateColor);
-            </script>
-          </body>
-          </html>
+      <div id="rgb-slider">
+        <h1>RGB Color Slider</h1>
+      <label for="redSlider">Red: <span class="slider-value" id="redValue">0</span></label>
+      <input type="range" id="redSlider" min="0" max="255" value="0">
+      
+      <br>
+      <label for="greenSlider">Green: <span class="slider-value" id="greenValue">0</span></label>
+      <input type="range" id="greenSlider" min="0" max="255" value="0">
+      
+      <br>
+      <label for="blueSlider">Blue: <span class="slider-value" id="blueValue">0</span></label>
+      <input type="range" id="blueSlider" min="0" max="255" value="0">
+      
+      <div class="color-box" id="colorBox"></div>
+      </div>
 
       </div>
     </div>
