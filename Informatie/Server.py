@@ -17,7 +17,7 @@ retries = 0
 
 ################################# Arduino #############################################
 
-arduino = serial.Serial(port='/dev/cu.usbmodem141101',   baudrate=230400, timeout=0.01)
+arduino = serial.Serial(port='/dev/cu.usbmodem142101',   baudrate=230400, timeout=0.01)
 
 
 def write_read(x):
@@ -49,21 +49,22 @@ def send_detect_color_request():
     x = 'DC\n'
     arduino.write(bytes(x,   'utf-8'))
     print("Wrote: " + x)
-    time.sleep(0.05)
+    time.sleep(0.1)
     data = arduino.readline().decode('utf-8')
     data = data.split('/')
-    if(len(data) == 5):
+    print(data)
+    if(len(data) == 5 or (len(data) > 5 and data[4] == '3\r\n')):
         color = int(data[0])
         red = int(data[1])
         green = int(data[2])
         blue = int(data[3])
         retries = 0
-        print(data)
+        
         result = (color, red, green, blue)
         return result
     else:
         retries += 1
-        if retries > 10:
+        if retries > 4:
             retries = 0
             return "ERROR", "ERROR", "ERROR", "ERROR"
         time.sleep(0.1)
@@ -240,7 +241,105 @@ def detect_color():
     retries = 0
     return jsonify({'status': 'detect-color', 'detected_color': int_color_to_string(color), 'red_value': red, 'green_value': green, 'blue_value': blue})
 
+@app.route('/change-sensor-color-values')
+def change_sensor_color_values():
+    color = int(request.args.get('color'))
+    red = int(request.args.get('red-value'))
+    green = int(request.args.get('green-value'))
+    blue = int(request.args.get('blue-value'))
+    change_color(color, red, green, blue)
+    return jsonify({'status': 'change-sensor-color-values'})
 
+@app.route('/get-sensor-color-values')
+def get_sensor_color_values():
+    color = int(request.args.get('color'))
+    if (color == 0):
+        red = zwart[0]
+        green = zwart[1]
+        blue = zwart[2]
+    elif (color == 1):
+        red = rood[0]
+        green = rood[1]
+        blue = rood[2]
+    elif (color == 2):
+        red = groen[0]
+        green = groen[1]
+        blue = groen[2]
+    elif (color == 3):
+        red = blauw[0]
+        green = blauw[1]
+        blue = blauw[2]
+    elif (color == 4):
+        red = licht_blauw[0]
+        green = licht_blauw[1]
+        blue = licht_blauw[2]
+    elif (color == 5):
+        red = roos[0]
+        green = roos[1]
+        blue = roos[2]
+    elif (color == 6):
+        red = geel[0]
+        green = geel[1]
+        blue = geel[2]
+    elif (color == 7):
+        red = wit[0]
+        green = wit[1]
+        blue = wit[2]
+    else:
+        print("Error: color not found")
+    return jsonify({'status': 'get-sensor-color-values', 'red_value': red, 'green_value': green, 'blue_value': blue})
+
+################################# Color Sensor #############################################
+
+# zwart = (4500, 7000, 6500)
+# rood = (400, 1800, 1100)
+zwart = (20000, 20000,20000)
+rood = (20000, 20000, 20000)
+groen = (750, 500, 800)
+blauw = (3000, 1700, 700)
+licht_blauw = (700, 500, 500)
+roos = (400, 700, 500)
+geel = (400, 500, 450)
+wit = (400, 500, 450)
+
+def change_color(color, red, green, blue):
+    global zwart
+    global rood
+    global groen
+    global blauw
+    global licht_blauw
+    global roos
+    global geel
+    global wit
+
+    if (color == 0):
+        zwart = (red, green, blue)
+        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+    elif (color == 1):
+        rood = (red, green, blue)
+        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+    elif (color == 2):
+        groen = (red, green, blue)
+        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+    elif (color == 3):
+        blauw = (red, green, blue)
+        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+    elif (color == 4):
+        licht_blauw = (red, green, blue)
+        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+    elif (color == 5):
+        roos = (red, green, blue)
+        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+    elif (color == 6):
+        geel = (red, green, blue)
+        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+    elif (color == 7):
+        wit = (red, green, blue)
+        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+    else:
+        print("Error: color not found")
+    
+    
 
 
 
@@ -256,6 +355,19 @@ def rgb_int_to_string_of_9_charachters(red, green, blue):
     while len(blue) < 3:
         blue = '0' + blue
     return 'L' + red + green + blue + '\n'
+
+def rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue):
+    red = str(red)
+    green = str(green)
+    blue = str(blue)
+    color = str(color)
+    while len(red) < 4:
+        red = '0' + red
+    while len(green) < 4:
+        green = '0' + green
+    while len(blue) < 4:
+        blue = '0' + blue
+    return 'C' + color + red + green + blue + '\n'
     
 def int_color_to_string(color):
     if color == 0:

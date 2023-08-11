@@ -259,18 +259,59 @@ img {
   }
 
   .colorRow {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-  }
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
 
-  .colorBox {
-      width: 30px;
-      height: 30px;
-      margin-left: 10px;
-      border: 1px solid #ccc;
-  }
+.colorLabel {
+    flex: 0 0 auto;
+    margin-right: 10px;
+}
 
-  .updateColor {
-      margin-left: 10px;
-  }
+.colorInputsContainer {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+}
+
+.inputContainer {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.colorBox {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+}
+
+.updateColorButton {
+    margin-left: auto;
+    background-color: #ff6b6b;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.updateColorButton:hover {
+    background-color: #ff8f8f;
+}
+
+.colorRow h3 {
+    margin: 0;
+    margin-right: 10px;
+}
+
+.colorRow label {
+    margin-right: 5px;
+    font-size: 14px;
+} 
+
+.colorRow input {
+    width: 50px;
+    margin-right: 5px;
+}

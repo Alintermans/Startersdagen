@@ -67,6 +67,7 @@ function detectColor() {
     const green_value = document.getElementById('detected-green-value');
     const blue_value = document.getElementById('detected-blue-value');
     const detected_color = document.getElementById('detected-color');
+    
     fetch('/detect-color')
     .then(response => response.json())
     .then(data => {
@@ -76,6 +77,76 @@ function detectColor() {
         detected_color.textContent = data.detected_color;
     }); 
 }
+
+function getSensorValues() {
+    for (let i = 0; i < 8; i++) {
+        const red_value = document.getElementById('red-value-' + i.toString());
+        const green_value = document.getElementById('green-value-' + i.toString());
+        const blue_value = document.getElementById('blue-value-' + i.toString());
+        fetch('/get-sensor-color-values?color=' + i.toString())
+        .then(response => response.json())
+        .then(data => {
+            if (data.red_value < 10000 && data.green_value  < 10000 && data.blue_value  < 10000) {
+            red_value.value = data.red_value;
+            green_value.value = data.green_value;
+            blue_value.value = data.blue_value;
+            }
+            console.log(data);
+        });
+    }
+}
+
+function updateSensorValues(color) {
+    const red_value = document.getElementById('red-value-' + color.toString());
+    const green_value = document.getElementById('green-value-' + color.toString());
+    const blue_value = document.getElementById('blue-value-' + color.toString());
+
+    if (red_value.value == '' || green_value.value == '' || blue_value.value == '') {
+        alert("Vul alle waardes eerst in voor deze kleur");
+        return;
+    }
+
+    fetch('/change-sensor-color-values?color=' + color.toString() + '&red-value=' + red_value.value.toString() + '&green-value=' + green_value.value.toString() + '&blue-value=' + blue_value.value.toString())
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        getSensorValues();
+    });     
+}
+
+
+function alignColorRows() {
+    var rows = document.querySelectorAll('.colorRow');
+    
+    var h3Widths = Array.from(rows).map(function (row) {
+        return row.querySelector('h3').getBoundingClientRect().width;
+    });
+
+    var inputWidths = Array.from(rows[0].querySelectorAll('.inputContainer')).map(function (input) {
+        return input.getBoundingClientRect().width;
+    });
+
+    rows.forEach(function (row) {
+        var h3 = row.querySelector('h3');
+        h3.style.width = Math.max(...h3Widths) + 'px';
+        
+        var inputs = row.querySelectorAll('.inputContainer');
+        inputs.forEach(function (input, index) {
+            input.style.width = inputWidths[index] + 'px';
+        });
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 //------------------------------------------- RGB-SLIDER -------------------------------------------//
@@ -139,6 +210,11 @@ function loadPage(pageUrl) {
                 (choice === 'advanced' && state == 1)  ) {
 
                 initializeSlider();
+            }
+
+            if ((choice === 'beginner' && state == 5) ) {
+                getSensorValues();
+                alignColorRows();
             }
             
 
