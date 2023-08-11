@@ -369,3 +369,83 @@ img {
 #motor_button:hover {
     background-color: #ff8f8f;
 }
+
+
+.sequention {
+  margin-bottom: 10px;
+}
+
+#sequentions-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#sequention-colors {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#sequention-names {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#sequention-angles {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#sequention-angles input {
+  width: 50px;
+  height: auto;
+  margin-right: 10px;
+}
+
+#sequention-buttons-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sequention-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.sequention-buttons button {
+  margin: 5px;
+}
+
+.sequention-buttons button i {
+  margin: 0px;
+}
+
+.sequention-buttons button i:hover {
+  color: #00d1b2;
+}
+
+.sequention-buttons button:hover {
+  background-color: #00d1b2;
+}
+
+.sequention-buttons button {
+  background-color: #3273dc;
+  color: white;
+}
+
+
+#saveSequentionsButton {
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+#saveSequentionsButton i {
+  margin-right: 5px;
+} 

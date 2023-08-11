@@ -3,6 +3,7 @@ var state = 0;
 var choice = 'None';
 var nb_steps_advanced = 1;
 var nb_steps_beginner = 1;
+var sequtions_saved = false;
 
 
 
@@ -90,6 +91,59 @@ function servo() {
     .then(data => {
         console.log(data);
     });}
+
+
+//------------------------------------------- Servo -------------------------------------------//
+
+function addAngle(sequention) {
+    var angle = document.createElement("input");
+    angle.type = "number";
+    angle.id = "sequention-" + sequention + "-angle-" + document.getElementById("sequention-" + sequention).childElementCount;
+    angle.min = "30";
+    angle.max = "150";
+    angle.value = "90";
+    document.getElementById("sequention-" + sequention).appendChild(angle);
+}
+
+function removeAngle(sequention) {
+    if (document.getElementById("sequention-" + sequention).childElementCount > 1) {
+        document.getElementById("sequention-" + sequention).removeChild(document.getElementById("sequention-" + sequention).lastChild);
+    }
+}
+
+function saveSequentions() {
+    var sequentions = [];
+    for (var i = 0; i < 8; i++) {
+        var sequention = {
+            name: document.getElementById("sequention-" + i + "-name").value,
+            angles: []
+        }
+        for (var j = 0; j < document.getElementById("sequention-" + i).childElementCount; j++) {
+            sequention.angles.push(document.getElementById("sequention-" + i + "-angle-" + j).value);
+        }
+        sequentions.push(sequention);
+    }
+    fetch('/save-sequentions?sequentions=' + JSON.stringify(sequentions))
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        sequtions_saved = true;
+    });
+
+}
+
+function runSequention(sequention) {
+    if (sequtions_saved == false) {
+        alert("Sla eerst de sequenties op");
+        return;
+    }
+
+    fetch('/run-sequention?sequention=' + sequention)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+}
 
 
 //------------------------------------------- Color Sensor -------------------------------------------//

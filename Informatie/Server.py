@@ -9,9 +9,11 @@ current_choice = 'None' # 'None', 'beginner', 'advanced'
 current_page = 'home' # 'home', 'game', 'settings'
 
 nb_steps_advanced = 7
-nb_steps_beginner = 6
+nb_steps_beginner = 7
 
 retries = 0 
+
+sequentions = []
 
 
 
@@ -219,6 +221,22 @@ def advanced_6():
 def advanced_7():
     return render_template('advanced-7.html')
 
+## Servo sequuntions
+
+@app.route('/save-sequentions')
+def save_sequentions():
+    global sequentions
+    sequentions = request.args.get('sequentions')
+    sequentions = eval(sequentions)
+    return jsonify({'status': 'save-sequentions'})
+
+
+@app.route('/run-sequention')
+def run_sequention():
+    sequention = request.args.get('sequention')
+    run_sequention(sequention)
+    return jsonify({'status': 'run-sequention'})
+
 ##Arduino commands
 @app.route('/rgb-led')
 def rgb_led():
@@ -365,6 +383,13 @@ def change_color(color, red, green, blue):
     
 
 ################################# Servo #############################################
+def run_sequention(sequention): 
+    sequention = int(sequention)
+    print(sequentions[sequention].keys())
+    for angle in sequentions[sequention]["angles"]:
+        write_read('S' + position_int_to_3_charachters(int(angle)) + '\n')
+        time.sleep(1)
+    
 
 
 ################################# Helper Functions #############################################
