@@ -9,7 +9,7 @@ current_choice = 'None' # 'None', 'beginner', 'advanced'
 current_page = 'home' # 'home', 'game', 'settings'
 
 nb_steps_advanced = 7
-nb_steps_beginner = 5
+nb_steps_beginner = 6
 
 retries = 0 
 
@@ -183,6 +183,10 @@ def beginner_4():
 def beginner_5():
     return render_template('beginner-5.html')
 
+@app.route('/beginner-6')
+def beginner_6():
+    return render_template('beginner-6.html')
+
 @app.route('/advanced-1')
 def advanced_1():
     return render_template('advanced-1.html')
@@ -292,6 +296,18 @@ def get_sensor_color_values():
         print("Error: color not found")
     return jsonify({'status': 'get-sensor-color-values', 'red_value': red, 'green_value': green, 'blue_value': blue})
 
+@app.route('/motor')
+def motor():
+    write_read('M\n')
+    return jsonify({'status': 'motor'})
+
+@app.route('/servo')
+def servo():
+    position = int(request.args.get('position'))
+    write_read('S' + position_int_to_3_charachters(position) + '\n')
+    return jsonify({'status': 'servo'})
+
+
 ################################# Color Sensor #############################################
 
 # zwart = (4500, 7000, 6500)
@@ -392,6 +408,11 @@ def int_color_to_string(color):
     else:
         return 'Geen idee'
 
+def position_int_to_3_charachters(position):
+    position = str(position)
+    while len(position) < 3:
+        position = '0' + position
+    return position
 
 ################################# Main #############################################
 

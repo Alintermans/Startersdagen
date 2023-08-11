@@ -60,6 +60,23 @@ function back() {
         loadContent();
     });}
 
+
+function motor() {  
+    fetch('/motor')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });}
+
+function servo() {
+    const servo_value = document.getElementById('servo-value');
+    fetch('/servo?position=' + servo_value.value.toString())
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });}
+
+
 //------------------------------------------- Color Sensor -------------------------------------------//
 
 function detectColor() {
