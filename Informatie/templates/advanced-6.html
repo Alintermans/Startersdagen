@@ -4,9 +4,60 @@
         <div id="intro-div">
 
           <p>
-            Template downloaden en de servomotor enkele hoeken laten aannemen.
+            Template downloaden van servomotor
           </p>
-
+          <h3>
+            Opdracht 4.1
+          </h3>
+          <p>
+            Laat de servomotor een hoek van 30° aannemen. Door de code hier aan te passen.
+            <pre>
+              <code class="language-arduino code-container">
+void loop() {
+  myservo.write(30);
+}
+                </code> 
+                </pre>
+            Duid op het houten plankje aan hoe de motor staat bij een hoek van 30°. 
+          </p>
+          <h3>
+            Opdracht 4.2
+          </h3>
+          <p>
+            Herhaal opdracht 4.1 voor de hoeken 40° tem 150° in stappen van 10°.
+          </p>
+          <h3>
+            Opdracht 4.3
+          </h3>
+          <p>
+            Pas je code nu aan zodat de servomotor start bij een hoek van 90°. Vervolgens draait hij langzaam draaien naar 120° om daarna terug naar 90° te draaien. 
+            Hieronder kan je inspiratie opdoen. 
+           <pre>
+              <code class="language-arduino code-container">
+int start = 1;
+void loop() {
+  if (start == 1) {
+    for (i=90; i<=120; i++) {
+      myservo.write(i);
+      delay(20);
+    }
+    delay(200);
+    for (i=120; i>=90; i--) {
+      myservo.write(i);
+      delay(20);
+    }
+    start = 0;
+  }
+}
+                </code> 
+                </pre>
+          </p>
+        <h3>
+          Opdracht 4.4
+        </h3>
+        <p>
+          Pas je code uit 4.3 aan zodat de arduino start bij een hoek van 50° en opeenvolgend draait naar 120°, 30° en 50°. 
+        </p>
         </div>
       </div>
     </div>
