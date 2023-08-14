@@ -133,6 +133,8 @@ void loop() {
 
   Serial.println(x.length());
   Serial.flush();
+  Serial.end();
+  Serial.begin(230400);
 }
 
 void setLedColor(int r, int g, int b) {

@@ -13,7 +13,7 @@ current_page = 'home' # 'home', 'game', 'settings'
 arduino_connected = False
 
 nb_steps_advanced = 7
-nb_steps_beginner = 8
+nb_steps_beginner = 10
 
 retries = 0 
 
@@ -79,7 +79,8 @@ def disconnect_from_arduino():
 
 def write_read(x):
     global retries
-    arduino.flush()
+    arduino.flushInput()
+    arduino.flushOutput()
     arduino.write(bytes(x,   'utf-8'))
     print("Wrote: " + x)
     time.sleep(0.05)
@@ -91,7 +92,14 @@ def write_read(x):
         time.sleep(0.1)
         return write_read(x)
     print("Read: " + data.decode('utf-8'))
-    if(int(data.decode('utf-8')) == len(x)):
+    try:
+        data_length = int(data.decode('utf-8'))
+    except:
+        if retries > 5:
+            retries = 0
+            return "ERROR"
+        return write_read(x)
+    if(data_length == len(x)):
         retries = 0
         return "OK"
     else:
@@ -105,12 +113,26 @@ def write_read(x):
 def send_detect_color_request():
     global retries
     x = 'DC\n'
-    arduino.flush()
+    arduino.flushInput()
+    arduino.flushOutput()
     arduino.write(bytes(x,   'utf-8'))
     print("Wrote: " + x)
     time.sleep(0.2)
-    data = arduino.readline().decode('utf-8')
-    data = data.split('/')
+    datas = arduino.readlines()
+    if len(datas) == 0:
+        retries += 1
+        if retries > 5:
+            retries = 0
+            return "ERROR"
+        return send_detect_color_request()
+    data = ""
+    if len(datas) > 1:
+        for temp_data in datas:
+            if (len(temp_data.decode('utf-8').split('/'))):
+                data = temp_data.decode('utf-8').split('/')
+                break
+    else:
+        data = datas[0].decode('utf-8').split('/')
     print(data)
     if(len(data) == 5 or (len(data) > 5 and data[4] == '3\r\n')):
         color = int(data[0])
@@ -216,6 +238,16 @@ def advanced():
     current_state = 1
     return jsonify({'status': '1'})
 
+@app.route('/reset-arduino')
+def reset_arduino():
+    disconnect_from_arduino()
+    result = connect_to_arduino()
+    if result:
+        return jsonify({'status': 'Arduino has been reset, make sure to initiate all values again!'})
+    else:
+        return jsonify({'status': 'error: arduino not connected after reset, try again!'})
+
+
 @app.route('/beginner-1')
 def beginner_1():
     return render_template('beginner-1.html')
@@ -317,7 +349,28 @@ def test():
     retries = 0
     run_sequention(color)
     return jsonify({'status': 'detect-color', 'detected_color': int_color_to_string(color), 'red_value': red, 'green_value': green, 'blue_value': blue})
-    
+
+@app.route('/run')
+def run():
+    global retries
+    result = send_detect_color_request()
+    while result == None:
+        if retries > 5:
+            retries = 0
+            return jsonify({'status': 'detect-color', 'detected_color': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
+        time.sleep(0.1)
+        retries += 1
+        result = send_detect_color_request()
+    color = result[0]
+    red = result[1]
+    green = result[2]
+    blue = result[3]
+    retries = 0
+    rgb_colors = color_int_to_rgb(color)
+    write_read(rgb_int_to_string_of_9_charachters(rgb_colors[0], rgb_colors[1], rgb_colors[2]))
+    run_sequention(color)
+    name = sequentions[color]["name"]
+    return jsonify({'status': 'detect-color', 'detected_color': int_color_to_string(color), 'red_value': red, 'green_value': green, 'blue_value': blue, 'name': name})
 
 ##Arduino commands
 @app.route('/rgb-led')
@@ -425,6 +478,26 @@ licht_blauw = (700, 500, 500)
 roos = (400, 700, 500)
 geel = (400, 500, 450)
 wit = (400, 500, 450)
+
+def color_int_to_rgb(color):
+    if (color == 0):
+        return (0,0,0)
+    elif (color == 1):
+        return (255,0,0)
+    elif (color == 2):
+        return (0,255,0)
+    elif (color == 3):
+        return (0,0,255)
+    elif (color == 4):
+        return (0,255,255)
+    elif (color == 5):
+        return (255,0,255)
+    elif (color == 6):
+        return (255,255,0)
+    elif (color == 7):
+        return (255,255,255)
+    
+
 
 def change_color(color, red, green, blue):
     global zwart
