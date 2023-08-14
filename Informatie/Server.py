@@ -1,12 +1,16 @@
 import threading
 from flask import Flask, render_template, jsonify, Response, request
 import serial 
+from serial.tools import list_ports
 import time 
+import sys
 
 ################################# Global Variables ######################################
 current_state = 0
 current_choice = 'None' # 'None', 'beginner', 'advanced'
 current_page = 'home' # 'home', 'game', 'settings'
+
+arduino_connected = False
 
 nb_steps_advanced = 7
 nb_steps_beginner = 8
@@ -19,10 +23,59 @@ sequentions_saved = False
 
 
 
+
+
 ################################# Arduino #############################################
 
-arduino = serial.Serial(port='/dev/cu.usbmodem142101',   baudrate=230400, timeout=0.01)
-#arduino = ""
+arduino = ""
+
+def find_arduino():
+    global arduino
+    ports = list_ports.comports()
+    for port in ports :
+        if "2341" in port.hwid:
+            try:
+                arduino = serial.Serial(port=port.device,   baudrate=230400, timeout=0.01)
+            except:
+                print("Arduino is busy, make sure that the Arduino IDE is closed! Restart the program")
+                return False
+            print("Arduino found")
+            return True
+    return False
+
+def connect_to_arduino():
+    global arduino
+    global arduino_connected
+    tries = 0
+    while True:
+        sys.stdout.write('Trying to connect to Arduino: ')
+        for i in range(3):
+            time.sleep(.5)
+            sys.stdout.write('.')
+            sys.stdout.flush()
+        print("")
+        if find_arduino():
+            arduino_connected = True
+            return True
+        if tries > 10:
+            print("Arduino not found, please connect it and restart the program")
+            return False
+        time.sleep(1)
+        sys.stdout.write('Trying to connect to Arduino: ')
+        for i in range(3):
+            time.sleep(.5)
+            sys.stdout.write('.')
+            sys.stdout.flush()
+        print("")
+        tries += 1
+
+def disconnect_from_arduino():
+    global arduino
+    global arduino_connected
+    arduino_connected = False
+    arduino.close()
+
+
 
 def write_read(x):
     global retries
@@ -52,9 +105,10 @@ def write_read(x):
 def send_detect_color_request():
     global retries
     x = 'DC\n'
+    arduino.flush()
     arduino.write(bytes(x,   'utf-8'))
     print("Wrote: " + x)
-    time.sleep(0.1)
+    time.sleep(0.2)
     data = arduino.readline().decode('utf-8')
     data = data.split('/')
     print(data)
@@ -100,17 +154,6 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/turn_on')  
-def turn_on():
-    write_read('L1\n')
-    return jsonify({'status': 'on'})
-
-@app.route('/turn_off')  
-def turn_off():
-
-    write_read('L0\n')
-    return jsonify({'status': 'off  '})
-
 @app.route('/next')
 def next():
     global current_state
@@ -153,6 +196,10 @@ def beginner():
     global current_choice
     global current_page
     global current_state
+    if not arduino_connected:
+        if not connect_to_arduino():
+            return jsonify({'status': '0'})
+
     current_choice = 'beginner'
     current_page = 'beginner-1'
     current_state = 1
@@ -163,6 +210,7 @@ def advanced():
     global current_choice
     global current_page
     global current_state
+    disconnect_from_arduino()
     current_choice = 'advanced'
     current_page = 'advanced-1'
     current_state = 1
@@ -277,7 +325,8 @@ def rgb_led():
     red_value = int(request.args.get('red-value'))
     green_value = int(request.args.get('green-value'))
     blue_value = int(request.args.get('blue-value'))
-    response = write_read(rgb_int_to_string_of_9_charachters(red_value, green_value, blue_value))
+    if arduino_connected:
+        write_read(rgb_int_to_string_of_9_charachters(red_value, green_value, blue_value))
     return jsonify({'status': 'rgb-led'})
 
 @app.route('/led')
@@ -485,7 +534,19 @@ if __name__ == '__main__':
     # Create and start the thread to sample data
     # data_thread = threading.Thread(target=sample_data)
     # data_thread.start()
+
+
+
+    # Connect to Arduino
+    if not connect_to_arduino():
+        exit()
     
+    print("Connected to Arduino")
+    print("")
+    time.sleep(1)
+    print("")
+    print("Starting server...")
+
     # Create and start the thread to run Flask web server
     server_thread = threading.Thread(target=run_server)
     server_thread.start()

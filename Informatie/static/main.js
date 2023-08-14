@@ -34,6 +34,9 @@ function beginner() {
     .then(response => response.json())
     .then(data => {
         console.log(data);
+        if (data.status == 0) {
+            alert("De Arduino is niet verbonden, gelieve de Arduino te verbinden en opnieuw te proberen");
+        } 
         loadContent();
     });}
 
