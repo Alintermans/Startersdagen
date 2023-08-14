@@ -3,6 +3,7 @@ var state = 0;
 var choice = 'None';
 var nb_steps_advanced = 1;
 var nb_steps_beginner = 1;
+var sequtions_saved = false;
 
 
 
@@ -33,6 +34,9 @@ function beginner() {
     .then(response => response.json())
     .then(data => {
         console.log(data);
+        if (data.status == 0) {
+            alert("De Arduino is niet verbonden, gelieve de Arduino te verbinden en opnieuw te proberen");
+        } 
         loadContent();
     });}
 
@@ -70,11 +74,141 @@ function motor() {
 
 function servo() {
     const servo_value = document.getElementById('servo-value');
+    if (servo_value.value == '') {
+        alert("Vul eerst een waarde in");
+        return;
+    }
+
+    if (servo_value.value >= 150) {
+        alert("De waarde moet kleiner zijn dan 180");
+        return;
+    }
+
+    if (servo_value.value < 30) {
+        alert("De waarde moet groter zijn dan 30");
+        return;
+    }
+
     fetch('/servo?position=' + servo_value.value.toString())
     .then(response => response.json())
     .then(data => {
         console.log(data);
     });}
+
+
+//------------------------------------------- Servo -------------------------------------------//
+
+function addAngle(sequention) {
+    var angle = document.createElement("input");
+    angle.type = "number";
+    angle.id = "sequention-" + sequention + "-angle-" + document.getElementById("sequention-" + sequention).childElementCount;
+    angle.min = "30";
+    angle.max = "150";
+    angle.value = "90";
+    document.getElementById("sequention-" + sequention).appendChild(angle);
+}
+
+function removeAngle(sequention) {
+    if (document.getElementById("sequention-" + sequention).childElementCount > 1) {
+        document.getElementById("sequention-" + sequention).removeChild(document.getElementById("sequention-" + sequention).lastChild);
+    }
+}
+
+function saveSequentions() {
+    for (var i = 0; i < 8; i++) {
+        for (var j = 0; j < document.getElementById("sequention-" + i).childElementCount; j++) {
+            if((document.getElementById("sequention-" + i + "-angle-" + j).value) < 30 || (document.getElementById("sequention-" + i + "-angle-" + j).value) > 150) {
+                alert("De hoek moet tussen 30 en 150 liggen");
+                return;
+            }
+        }
+    }
+
+    picked_names = [];
+
+    for (var i = 0; i < 8; i++) {
+        if (document.getElementById("sequention-" + i + "-name").value in picked_names) {
+            alert("Eén kleur per optie!");}
+        picked_names.push(document.getElementById("sequention-" + i + "-name").value);
+    }
+
+    var sequentions = [];
+    for (var i = 0; i < 8; i++) {
+        var sequention = {
+            name: document.getElementById("sequention-" + i + "-name").value,
+            angles: []
+        }
+        for (var j = 0; j < document.getElementById("sequention-" + i).childElementCount; j++) {
+            sequention.angles.push(document.getElementById("sequention-" + i + "-angle-" + j).value);
+        }
+        sequentions.push(sequention);
+    }
+    fetch('/save-sequentions?sequentions=' + JSON.stringify(sequentions))
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        sequtions_saved = true;
+        document.getElementById("saveSequentionsMessage").textContent = "Sequenties opgeslagen";
+        setTimeout(function(){
+            document.getElementById("saveSequentionsMessage").textContent = " Opslaan";
+            document.getElementById('saveSequentionsMessage').style.opacity = 0;
+            document.getElementById('saveSequentionsMessage').style.opacity = 1;
+        }
+        , 3000);
+
+    });
+
+}
+
+function loadSequentions() {
+    fetch('/load-sequentions')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        for (var i = 0; i < 8; i++) {
+            document.getElementById("sequention-" + i + "-name").value = data.sequentions[i].name;
+            for (var j = 0; j < data.sequentions[i].angles.length; j++) {
+                if (j == 0) {
+                    document.getElementById("sequention-" + i + "-angle-" + j).value = data.sequentions[i].angles[j];
+                } else {
+                    addAngle(i);
+                    document.getElementById("sequention-" + i + "-angle-" + j).value = data.sequentions[i].angles[j];
+                }
+            }
+        }
+        sequtions_saved = data.sequentions_saved;
+    });
+}
+
+function runSequention(sequention) {
+    if (sequtions_saved == false) {
+        alert("Sla eerst de sequenties op");
+        return;
+    }
+
+    fetch('/run-sequention?sequention=' + sequention)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+}
+
+//------------------------------------------- Test Sequence -------------------------------------------//
+function test() {
+    const red_value = document.getElementById('detected-red-value');
+    const green_value = document.getElementById('detected-green-value');
+    const blue_value = document.getElementById('detected-blue-value');
+    const detected_color = document.getElementById('detected-color');
+    fetch('/test')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        red_value.textContent = data.red_value;
+        green_value.textContent = data.green_value;
+        blue_value.textContent = data.blue_value;
+        detected_color.textContent = data.detected_color;
+    });
+}
 
 
 //------------------------------------------- Color Sensor -------------------------------------------//
@@ -135,6 +269,12 @@ function updateSensorValues(color) {
         alert("Vul alle waardes eerst in voor deze kleur");
         return;
     }
+
+    if (red_value.value >= 10000 || green_value.value >= 10000 || blue_value.value >= 10000) {
+        alert("De waardes moeten kleiner zijn dan 10000");
+        return;
+    }
+
     detect_color_button.disabled = true;
     detect_color_button.classList.add("disabled");
     fetch('/change-sensor-color-values?color=' + color.toString() + '&red-value=' + red_value.value.toString() + '&green-value=' + green_value.value.toString() + '&blue-value=' + blue_value.value.toString())
@@ -245,6 +385,7 @@ function loadPage(pageUrl) {
 
             if ((choice === 'beginner' && state == 3) ||
                 (choice === 'beginner' && state == 5) ||
+                (choice === 'beginner' && state == 8) ||
                 (choice === 'advanced' && state == 1) ||
                 (choice === 'advanced' && state == 4)) {
 
@@ -254,6 +395,10 @@ function loadPage(pageUrl) {
             if ((choice === 'beginner' && state == 5) ) {
                 getSensorValues();
                 alignColorRows();
+            }
+
+            if ((choice === 'beginner' && state == 7) ) {
+                loadSequentions();
             }
             
 
