@@ -124,11 +124,12 @@ def send_detect_color_request():
         if retries > 5:
             retries = 0
             return "ERROR"
+        time.sleep(0.1)
         return send_detect_color_request()
     data = ""
     if len(datas) > 1:
         for temp_data in datas:
-            if (len(temp_data.decode('utf-8').split('/'))):
+            if (len(temp_data.decode('utf-8').split('/')) == 5):
                 data = temp_data.decode('utf-8').split('/')
                 break
     else:
@@ -280,6 +281,14 @@ def beginner_7():
 def beginner_8():
     return render_template('beginner-8.html')
 
+@app.route('/beginner-9')
+def beginner_9():
+    return render_template('beginner-9.html')
+
+@app.route('/beginner-10')
+def beginner_10():
+    return render_template('beginner-10.html')
+
 @app.route('/advanced-1')
 def advanced_1():
     return render_template('advanced-1.html')
@@ -347,7 +356,8 @@ def test():
     green = result[2]
     blue = result[3]
     retries = 0
-    run_sequention(color)
+    if (color <=7 and color >= 0):
+        run_sequention(color)
     return jsonify({'status': 'detect-color', 'detected_color': int_color_to_string(color), 'red_value': red, 'green_value': green, 'blue_value': blue})
 
 @app.route('/run')
@@ -366,10 +376,12 @@ def run():
     green = result[2]
     blue = result[3]
     retries = 0
-    rgb_colors = color_int_to_rgb(color)
-    write_read(rgb_int_to_string_of_9_charachters(rgb_colors[0], rgb_colors[1], rgb_colors[2]))
-    run_sequention(color)
-    name = sequentions[color]["name"]
+    name = ""
+    if (color <=7 and color >= 0):
+        rgb_colors = color_int_to_rgb(color)
+        write_read(rgb_int_to_string_of_9_charachters(rgb_colors[0], rgb_colors[1], rgb_colors[2]))
+        run_sequention(color)
+        name = sequentions[color]["name"]
     return jsonify({'status': 'detect-color', 'detected_color': int_color_to_string(color), 'red_value': red, 'green_value': green, 'blue_value': blue, 'name': name})
 
 ##Arduino commands
