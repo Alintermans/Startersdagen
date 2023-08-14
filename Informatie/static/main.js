@@ -112,6 +112,23 @@ function removeAngle(sequention) {
 }
 
 function saveSequentions() {
+    for (var i = 0; i < 8; i++) {
+        for (var j = 0; j < document.getElementById("sequention-" + i).childElementCount; j++) {
+            if((document.getElementById("sequention-" + i + "-angle-" + j).value) < 30 || (document.getElementById("sequention-" + i + "-angle-" + j).value) > 150) {
+                alert("De hoek moet tussen 30 en 150 liggen");
+                return;
+            }
+        }
+    }
+
+    picked_names = [];
+
+    for (var i = 0; i < 8; i++) {
+        if (document.getElementById("sequention-" + i + "-name").value in picked_names) {
+            alert("Eén kleur per optie!");}
+        picked_names.push(document.getElementById("sequention-" + i + "-name").value);
+    }
+
     var sequentions = [];
     for (var i = 0; i < 8; i++) {
         var sequention = {
@@ -128,8 +145,36 @@ function saveSequentions() {
     .then(data => {
         console.log(data);
         sequtions_saved = true;
+        document.getElementById("saveSequentionsMessage").textContent = "Sequenties opgeslagen";
+        setTimeout(function(){
+            document.getElementById("saveSequentionsMessage").textContent = " Opslaan";
+            document.getElementById('saveSequentionsMessage').style.opacity = 0;
+            document.getElementById('saveSequentionsMessage').style.opacity = 1;
+        }
+        , 3000);
+
     });
 
+}
+
+function loadSequentions() {
+    fetch('/load-sequentions')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        for (var i = 0; i < 8; i++) {
+            document.getElementById("sequention-" + i + "-name").value = data.sequentions[i].name;
+            for (var j = 0; j < data.sequentions[i].angles.length; j++) {
+                if (j == 0) {
+                    document.getElementById("sequention-" + i + "-angle-" + j).value = data.sequentions[i].angles[j];
+                } else {
+                    addAngle(i);
+                    document.getElementById("sequention-" + i + "-angle-" + j).value = data.sequentions[i].angles[j];
+                }
+            }
+        }
+        sequtions_saved = data.sequentions_saved;
+    });
 }
 
 function runSequention(sequention) {
@@ -347,6 +392,10 @@ function loadPage(pageUrl) {
             if ((choice === 'beginner' && state == 5) ) {
                 getSensorValues();
                 alignColorRows();
+            }
+
+            if ((choice === 'beginner' && state == 7) ) {
+                loadSequentions();
             }
             
 

@@ -449,3 +449,7 @@ img {
 #saveSequentionsButton i {
   margin-right: 5px;
 } 
+
+#saveSequentionsMessage {
+  transition: opacity 1s;
+}

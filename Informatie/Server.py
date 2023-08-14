@@ -13,7 +13,9 @@ nb_steps_beginner = 8
 
 retries = 0 
 
-sequentions = []
+sequentions = [{"name": "Koffie", "angles": ["90"]}, {"name": "Thee", "angles": ["90"]},{"name": "Koffie met suiker", "angles": ["90"]}, {"name": "Thee met suiker", "angles": ["90"]},{"name": "Koffie met melk", "angles": ["90"]}, {"name": "Thee met melk", "angles": ["90"]},{"name": "Koffie met melk en suiker", "angles": ["90"]}, {"name": "Thee met melk en suiker", "angles": ["90"]}]
+
+sequentions_saved = False
 
 
 
@@ -33,6 +35,7 @@ def write_read(x):
         if retries > 5:
             retries = 0
             return "ERROR"
+        time.sleep(0.1)
         return write_read(x)
     print("Read: " + data.decode('utf-8'))
     if(int(data.decode('utf-8')) == len(x)):
@@ -232,7 +235,14 @@ def save_sequentions():
     global sequentions
     sequentions = request.args.get('sequentions')
     sequentions = eval(sequentions)
+    global sequentions_saved
+    sequentions_saved = True
     return jsonify({'status': 'save-sequentions'})
+
+@app.route('/load-sequentions')
+def get_sequentions():
+    global sequentions
+    return jsonify({'status': 'get-sequentions', 'sequentions': sequentions, 'sequentions_saved': sequentions_saved})
 
 
 @app.route('/run-sequention')
@@ -409,7 +419,7 @@ def change_color(color, red, green, blue):
 ################################# Servo #############################################
 def run_sequention(sequention): 
     sequention = int(sequention)
-    print(sequentions[sequention].keys())
+    time.sleep(1)
     for angle in sequentions[sequention]["angles"]:
         write_read('S' + position_int_to_3_charachters(int(angle)) + '\n')
         time.sleep(1)
