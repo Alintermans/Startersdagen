@@ -160,7 +160,7 @@ app = Flask(__name__)    # Create Flask app
 
 
 def run_server():
-    app.run(host='0.0.0.0', port=3000)
+    app.run(host='0.0.0.0', port=80)
 
 # Flask route to display device data
 @app.route('/')
