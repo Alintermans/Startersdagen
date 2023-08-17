@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Laag_1"
+   data-name="Laag 1"
+   width="60cm"
+   height="30cm"
+   viewBox="0 0 1700.7874 850.3937"
+   version="1.1"
+   sodipodi:docname="Baterij-houder_export.svg"
+   inkscape:version="1.3 (0e150ed, 2023-07-21)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="namedview4"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="cm"
+     inkscape:zoom="0.79350855"
+     inkscape:cx="532.44543"
+     inkscape:cy="257.08608"
+     inkscape:window-width="1680"
+     inkscape:window-height="907"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Laag_1" />
+  <title
+     id="title1">Baterij-houder</title>
+  <g
+     id="g1">
+    <path
+       d="M408.09647,8.74757a26.61916,26.61916,0,0,1,26.589,26.58905V406.78937a26.61917,26.61917,0,0,1-26.589,26.589H36.64372a26.61915,26.61915,0,0,1-26.589-26.589V35.33662A26.61915,26.61915,0,0,1,36.64372,8.74757H408.09647m0-.283H36.64372a26.872,26.872,0,0,0-26.872,26.87205V406.78937a26.872,26.872,0,0,0,26.87205,26.872H408.09647a26.872,26.872,0,0,0,26.872-26.872V35.33662a26.87207,26.87207,0,0,0-26.872-26.872Z"
+       fill="red"
+       id="path1"
+       style="stroke-width:0.28346457;stroke-dasharray:none" />
+    <circle
+       cx="52.29134"
+       cy="50.98425"
+       r="12.75591"
+       fill="none"
+       stroke="red"
+       stroke-miterlimit="10"
+       stroke-width="0.283"
+       id="circle1" />
+    <circle
+       cx="392.44882"
+       cy="50.98425"
+       r="12.75591"
+       fill="none"
+       stroke="red"
+       stroke-miterlimit="10"
+       stroke-width="0.283"
+       id="circle2" />
+    <circle
+       cx="52.29134"
+       cy="391.14173"
+       r="12.75591"
+       fill="none"
+       stroke="red"
+       stroke-miterlimit="10"
+       stroke-width="0.283"
+       id="circle3" />
+    <circle
+       cx="392.44882"
+       cy="391.14173"
+       r="12.75591"
+       fill="none"
+       stroke="red"
+       stroke-miterlimit="10"
+       stroke-width="0.283"
+       id="circle4" />
+  </g>
+  <g
+     id="g2"
+     transform="translate(429.79806,0.84180726)">
+    <path
+       d="m 408.09647,8.74757 a 26.61916,26.61916 0 0 1 26.589,26.58905 v 371.45275 a 26.61917,26.61917 0 0 1 -26.589,26.589 H 36.64372 a 26.61915,26.61915 0 0 1 -26.589,-26.589 V 35.33662 a 26.61915,26.61915 0 0 1 26.589,-26.58905 h 371.45275 m 0,-0.283 H 36.64372 a 26.872,26.872 0 0 0 -26.872,26.87205 v 371.45275 a 26.872,26.872 0 0 0 26.87205,26.872 h 371.4527 a 26.872,26.872 0 0 0 26.872,-26.872 V 35.33662 a 26.87207,26.87207 0 0 0 -26.872,-26.872 z"
+       fill="#ff0000"
+       id="path1-9"
+       style="stroke-width:0.283465;stroke-dasharray:none" />
+    <circle
+       cx="52.29134"
+       cy="50.984249"
+       r="12.75591"
+       fill="none"
+       stroke="#ff0000"
+       stroke-miterlimit="10"
+       stroke-width="0.283"
+       id="circle1-3" />
+    <circle
+       cx="392.44882"
+       cy="50.984249"
+       r="12.75591"
+       fill="none"
+       stroke="#ff0000"
+       stroke-miterlimit="10"
+       stroke-width="0.283"
+       id="circle2-8" />
+    <circle
+       cx="52.29134"
+       cy="391.14172"
+       r="12.75591"
+       fill="none"
+       stroke="#ff0000"
+       stroke-miterlimit="10"
+       stroke-width="0.283"
+       id="circle3-0" />
+    <circle
+       cx="392.44882"
+       cy="391.14172"
+       r="12.75591"
+       fill="none"
+       stroke="#ff0000"
+       stroke-miterlimit="10"
+       stroke-width="0.283"
+       id="circle4-2" />
+  </g>
+</svg>
