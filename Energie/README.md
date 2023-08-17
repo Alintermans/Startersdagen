@@ -11,4 +11,12 @@ Ze gaan een lucht-aluminium batterij maken. De batterij bestaat uit een aantal c
 - Actieve kool
 - Zout water
 
+## Voorbereiding
+Voor elk team moet het volgende voorzien zijn:
+- 12 cirkels filter papier
+- 2m aluminium folie
+- 1 doosje aluminium 
+
 ## Stappenplan
+1. Knip een tiental cirkels uit de aluminium folie met een diameter van 100 mm
+2. 
