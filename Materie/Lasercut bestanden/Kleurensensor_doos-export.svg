@@ -1,0 +1,27 @@
+<svg id="Laag_1" data-name="Laag 1" xmlns="http://www.w3.org/2000/svg" width="60cm" height="30cm" viewBox="0 0 1700.7874 850.3937">
+  <title>Kleurensensor_doos</title>
+  <rect x="115.2441" y="117.12416" width="90.70866" height="90.70866" fill="none" stroke="blue" stroke-miterlimit="10" stroke-width="0.28346"/>
+  <g>
+    <polyline points="205.953 117.124 205.953 9.408 115.244 9.408 115.244 117.124" fill="none" stroke="red" stroke-miterlimit="10" stroke-width="0.28346"/>
+    <polyline points="115.244 207.833 115.244 315.549 205.953 315.549 205.953 207.833" fill="none" stroke="red" stroke-miterlimit="10" stroke-width="0.28346"/>
+    <polyline points="205.953 207.833 313.669 207.833 313.669 117.124 205.953 117.124" fill="none" stroke="red" stroke-miterlimit="10" stroke-width="0.28346"/>
+    <polyline points="115.244 117.124 7.528 117.124 7.528 207.833 115.244 207.833" fill="none" stroke="red" stroke-miterlimit="10" stroke-width="0.28346"/>
+  </g>
+  <rect x="61.38583" y="63.2659" width="198.4252" height="198.4252" fill="none" stroke="blue" stroke-miterlimit="10" stroke-width="0.28346"/>
+  <g>
+    <g>
+      <circle cx="123.74803" cy="176.65235" r="1.41732" fill="none" stroke="red" stroke-miterlimit="10" stroke-width="0.28346"/>
+      <circle cx="123.74803" cy="162.47786" r="1.41732" fill="none" stroke="red" stroke-miterlimit="10" stroke-width="0.28346"/>
+      <circle cx="123.74803" cy="155.39125" r="1.41732" fill="none" stroke="red" stroke-miterlimit="10" stroke-width="0.28346"/>
+      <circle cx="123.74803" cy="148.30464" r="1.41732" fill="none" stroke="red" stroke-miterlimit="10" stroke-width="0.28346"/>
+      <circle cx="123.74803" cy="169.56448" r="1.41732" fill="none" stroke="red" stroke-miterlimit="10" stroke-width="0.28346"/>
+    </g>
+    <g>
+      <circle cx="197.44882" cy="176.65235" r="1.41732" fill="none" stroke="red" stroke-miterlimit="10" stroke-width="0.28346"/>
+      <circle cx="197.44882" cy="162.47786" r="1.41732" fill="none" stroke="red" stroke-miterlimit="10" stroke-width="0.28346"/>
+      <circle cx="197.44882" cy="155.39125" r="1.41732" fill="none" stroke="red" stroke-miterlimit="10" stroke-width="0.28346"/>
+      <circle cx="197.44882" cy="148.30464" r="1.41732" fill="none" stroke="red" stroke-miterlimit="10" stroke-width="0.28346"/>
+      <circle cx="197.44882" cy="169.56448" r="1.41732" fill="none" stroke="red" stroke-miterlimit="10" stroke-width="0.28346"/>
+    </g>
+  </g>
+</svg>
