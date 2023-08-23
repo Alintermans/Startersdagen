@@ -11,7 +11,7 @@ current_page = 'home'
 
 arduino_connected = False
 
-nb_steps = 7
+nb_steps = 1
 
 retries = 0 
 
@@ -27,7 +27,7 @@ app = Flask(__name__)    # Create Flask app
 
 
 def run_server():
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=80, debug=True)    # Run Flask web server (HTTP
 
 # Flask route to display device data
 
@@ -110,14 +110,13 @@ def next():
 @app.route('/back')
 def back():
     global current_state
-    global current_choice
     global current_page
     current_state -= 1
     if current_state == 0:
         current_choice = 'None'
         current_page = 'home'
     else:
-        current_page = current_choice + '-' + str(current_state)
+        current_page = 'tutorial-' + str(current_state)
     return jsonify({'status': 'previous'})
 
 
@@ -145,5 +144,9 @@ if __name__ == '__main__':
     print("Starting server...")
 
     # Create and start the thread to run Flask web server
-    server_thread = threading.Thread(target=run_server)
-    server_thread.start()
+    # server_thread = threading.Thread(target=run_server)
+    # server_thread.start()
+    run_server()
+
+
+

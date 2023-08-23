@@ -129,6 +129,8 @@ function loadContent() {
             console.log("current state is 0");
             document.getElementById("back_button").classList.add("disabled");
             document.getElementById("back_button").disabled = true;
+            document.getElementById("next_button").classList.remove("disabled");
+            document.getElementById("next_button").disabled = false;
         } else if (data.state == data.nb_steps) {
             document.getElementById("back_button").classList.remove("disabled");
             document.getElementById("back_button").disabled = false;
