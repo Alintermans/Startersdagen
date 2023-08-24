@@ -115,19 +115,21 @@ def write_read(x):
     arduino.flushInput()
     arduino.flushOutput()
     arduino.write(bytes(x,   'utf-8'))
-    print("Wrote: " + x)
+    #print("Wrote: " + x)
     time.sleep(0.05)
     data = arduino.readline()
     if len(data.decode('utf-8').split('/')) >1:
+        retries +=1
         if retries > 5:
             retries = 0
             return "ERROR"
         time.sleep(0.1)
         return write_read(x)
-    print("Read: " + data.decode('utf-8'))
+    #print("Read: " + data.decode('utf-8'))
     try:
         data_length = int(data.decode('utf-8'))
     except:
+        retries +=1
         if retries > 5:
             retries = 0
             return "ERROR"
@@ -136,7 +138,6 @@ def write_read(x):
         retries = 0
         return "OK"
     else:
-        
         retries += 1
         if retries > 5:
             retries = 0
@@ -660,14 +661,24 @@ if __name__ == '__main__':
     if not connect_to_arduino():
         exit()
     
-    print("Connected to Arduino")
-    print("")
+    print("✅ Connected to Arduino")
+    
     time.sleep(1)
-    print("")
-    print("Starting server...")
+    result = write_read('A\n')
+    if result == "ERROR":
+        print("❌ Error: the Program seems not to be uploaded to the Arduino, please upload it and restart the server")
+        exit()
+    else:
+        print("✅ Arduino program is installed!")
 
     arduino_send_threaad = threading.Thread(target=run_arduino_messenger)
     arduino_send_threaad.start()
+    print("✅ Arduino is communicating!")
+
+    print("")
+    print("Starting server...")
+
+    
 
     # Create and start the thread to run Flask web server
     server_thread = threading.Thread(target=run_server)
