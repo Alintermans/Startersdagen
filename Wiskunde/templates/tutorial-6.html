@@ -11,7 +11,7 @@
       </div>
     </div> -->
 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+    
 
     <div class="box-header">Wiskunde: Gezichtsherkenningsalgoritme implementeren - 6/10</div>
     <div class="columns">
@@ -26,6 +26,7 @@
         </p>
         <br>
         <p>
+          
           Selecteer stukjes van de foto’s en haal er een rechthoek uit met h=80 en w=60 waarbij enkel het aangezicht van de persoon zichtbaar is. Zorg dat het centrum van de neus van de persoon op h=30 en w=30 komt te staan.
         </p>
         <br>
@@ -33,15 +34,23 @@
           Hervorm de matrix van de grijswaardes van de foto’s naar kolommatrices. Momenteel heb je een 60x80 matrix, deze moet je omvormen naar een 4800x1 matrix/vector. 
           <br>
           Momenteel heb je dus één vector die één gezicht voorstelt. Doe hetzelfde voor alle andere afbeeldingen uit de database. 
+          Zo krijg je een set van M vectoren:
+          $$ {\left\{v_1, v_2, ..., v_M\right\}} $$
+          <br>
+          Van al deze vectoren kun je een gemiddelde vector nemen die er als volgt uit ziet:
+          $$ {\Psi = \frac{1}{M} \sum_{i=1}^M v_i} $$
+
+          <br>
+          Nu kun je voor elke vector het verschil berekenen met de gemiddelde vector v het verschil berekenen met de gemiddelde vector $$ {\Psi}$$.
+
         </p>
-        <br>
-        <p>
-          
-        </p>
-      
+        
+
+        
         </div>
       <div class="column">
         <h2>Interactief: wiskundig algoritme in juiste volgorde zetten</h2>
+        $$ {J(\theta) =\frac{1}{2m} [\sum^m_{i=1}(h_\theta(x^{(i)}) - y^{(i)})2 + \lambda\sum^n_{j=1}\theta^2_j} $$
       </div>
     </div>
 

@@ -40,9 +40,11 @@ function back() {
 
 
 
-//------------------------------------------- Servo -------------------------------------------//
+//------------------------------------------- Latex -------------------------------------------//
 
-
+function update_math() {
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+}
 
 
 //------------------------------------------- PICTURE SLIDER --------------------------------------//
@@ -113,6 +115,7 @@ function loadPage(pageUrl) {
         .then(html => {
             document.getElementById('content').innerHTML = html;
             hljs.highlightAll();
+            update_math();
             if (state == 1) {
                 initializePicture();
             }
