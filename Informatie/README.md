@@ -47,6 +47,7 @@ Deze file kan je dan op je bureaublad zetten en dan kan je de server starten doo
 - Als de gevorderde tutorial bezig is mag de Arduino IDE wel open staan
 - Het is niet erg als de webpagina wordt gerefreshed, de server zal de huidige stap onthouden en de studenten kunnen gewoon verder doen waar ze gebleven waren. Hun waardes gaan niet verloren zolang de server aan staat. Moest de computer uitvallen gaan de waardes wel verloren. 
 - De server kan gestopt worden door op ctrl+c te duwen in de terminal waar de server draait.
+- Als er een probleem is met de arduino en hij reageert niet kan de begeleider de arduino altijd ressetten door achter het ip-adres /arduino-reset te typen. Bijvoorbeeld: http://10.123.345/reset-arduino. Dit zal de arduino resetten en de server zal opnieuw proberen om de arduino te vinden. gelieve nadien terug naar de vorige pagina te gaan (/reset-arduino verwijderen) en alle waardes opnieuw door te sturen naar de arduino, door bij de kleurensensor alle waardes te updaten en de sequenties ook door te sturen. 
 
 
 
