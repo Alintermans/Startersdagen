@@ -5,6 +5,8 @@ from serial.tools import list_ports
 import time 
 import sys
 import cv2
+from FaceRecognition import FaceRecognition
+
 
 ################################# Global Variables ######################################
 current_state = 0
@@ -16,6 +18,7 @@ retries = 0
 
 camera = None
 camera_on = False
+fr = None
 
 
 
@@ -151,22 +154,29 @@ def stop_camera_route():
 def start_camera():
     global camera
     global camera_on
-    camera_on = True
+    
     camera = cv2.VideoCapture(1)
+    camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    time.sleep(0.5)
+    camera_on = True
 
 def stop_camera():
     global camera
     global camera_on
-    camera.release()
     camera_on = False
+    time.sleep(0.5)
+    camera.release()
+    
 
 def gen_frames():  
     while True:
         if camera_on:
+            time.sleep(0.02)
             success, frame = camera.read()  # read the camera frame
             if not success:
                 break
             else:
+                frame = fr.process_frame(frame)
                 ret, buffer = cv2.imencode('.jpg', frame)
                 frame = buffer.tobytes()
                 yield (b'--frame\r\n'
@@ -177,10 +187,10 @@ def gen_frames():
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-                    
 
 
 
+################################# Face Recognition - Neuralnet #############################################
 
 
 
@@ -192,6 +202,9 @@ if __name__ == '__main__':
     # Create and start the thread to sample data
     # data_thread = threading.Thread(target=sample_data)
     # data_thread.start()
+
+    print("Starting face recognition engine...")
+    fr = FaceRecognition()
 
     print("Starting server...")
 
