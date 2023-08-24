@@ -6,13 +6,15 @@
             3 cirkels met telkens andere resolutie met telkens de matrix ernaast
           </p>
           <p>
-            P&O in meerdere resoluties met slider
-            scale-0 20x15
-            scale-1 40x30
-            scale-2 80x60
-            scale-3 160x120
-            scale-4 320x240
-            scale-5 640x480
+            P&O in meerdere resoluties met slider: 
+            <ul>
+              <li>20x15</li>
+              <li>40x30</li>
+              <li>80x60</li>
+              <li>160x120</li>
+              <li>320x240</li>
+              <li>640x480</li>
+            </ul>
           </p>
         
         </div>
@@ -21,8 +23,9 @@
           <h1>Slider</h1>
         <label for="blackSlider">Resolutie: <span class="slider-value" id="blackValue">0</span></label>
         <input type="range" id="blackSlider" min="0" max="5" value="0">
-        
+        <img src="{{url_for('static', filename='images/scale-0.jpg')}}" alt="" height="75%" id="picture_resolution_img">
         </div>
+        
       </div>
     </div>
 
