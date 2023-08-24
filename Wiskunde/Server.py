@@ -11,7 +11,7 @@ current_page = 'home'
 
 arduino_connected = False
 
-nb_steps = 7
+nb_steps = 10
 
 retries = 0 
 
