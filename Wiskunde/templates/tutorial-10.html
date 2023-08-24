@@ -3,7 +3,9 @@
       <div class="column">
         <div id="intro-div">
           <h2>Finaal</h2>
-          
+          <button class="button" onclick="start_camera()">Start Camera</button>
+          <button class="button" onclick="stop_camera()">Stop Camera</button>
+          <img src="{{ url_for('video_feed') }}" width="100%">
         </div>
       </div>
     </div>

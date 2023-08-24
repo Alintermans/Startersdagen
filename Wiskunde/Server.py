@@ -4,18 +4,18 @@ import serial
 from serial.tools import list_ports
 import time 
 import sys
+import cv2
 
 ################################# Global Variables ######################################
 current_state = 0
 current_page = 'home' 
 
-arduino_connected = False
-
 nb_steps = 10
 
 retries = 0 
 
-
+camera = None
+camera_on = False
 
 
 
@@ -129,6 +129,58 @@ def reset():
     current_choice = 'None'
     current_page = 'home'
     return jsonify({'status': 'reset'})
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/start_camera')
+def start_camera_route():
+    start_camera()
+    return jsonify({'status': 'started'})
+
+@app.route('/stop_camera')
+def stop_camera_route():
+    stop_camera()
+    return jsonify({'status': 'stopped'})
+
+
+
+
+################################# Camera #############################################
+def start_camera():
+    global camera
+    global camera_on
+    camera_on = True
+    camera = cv2.VideoCapture(1)
+
+def stop_camera():
+    global camera
+    global camera_on
+    camera.release()
+    camera_on = False
+
+def gen_frames():  
+    while True:
+        if camera_on:
+            success, frame = camera.read()  # read the camera frame
+            if not success:
+                break
+            else:
+                ret, buffer = cv2.imencode('.jpg', frame)
+                frame = buffer.tobytes()
+                yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
+        else:
+            img = cv2.imread('static/images/camera_uit.jpg')
+            ret, buffer = cv2.imencode('.jpg', img)
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+                    
+
+
+
 
 
 

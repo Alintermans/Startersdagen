@@ -111,6 +111,25 @@ function updateRGBLED(red, green, blue) {
 }
 
 
+//------------------------------------------- Camera -------------------------------------------//
+function start_camera(){
+    fetch('/start_camera')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+}
+
+function stop_camera(){
+    fetch('/stop_camera')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+}
+
+
+
 
 
 
