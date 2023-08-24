@@ -107,7 +107,7 @@ function loadPage(pageUrl) {
             document.getElementById('content').innerHTML = html;
             hljs.highlightAll();
 
-            if ( state == 4) {
+            if ( state == 2) {
 
                 initializeSlider();
             }
