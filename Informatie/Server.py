@@ -29,6 +29,11 @@ sequentions_saved = False
 
 arduino = ""
 
+arduino_send_queue = []
+
+
+DC_result = None
+
 def find_arduino():
     global arduino
     ports = list_ports.comports()
@@ -75,6 +80,34 @@ def disconnect_from_arduino():
     arduino_connected = False
     arduino.close()
 
+def run_arduino_messenger():
+    global arduino_send_queue
+    global DC_result
+
+    while True:
+        if len(arduino_send_queue) > 0:
+            message = arduino_send_queue[0]
+            arduino_send_queue.pop(0)
+            if message == 'DC':
+                DC_result = send_dc_request_to_arduino()
+            else:
+                write_read(message)
+        time.sleep(0.01)
+
+def send_message(x):
+    global arduino_send_queue
+    arduino_send_queue.append(x)
+
+def send_detect_color_request():
+    global arduino_send_queue
+    global DC_result
+    arduino_send_queue.append('DC')
+    time.sleep(0.1)
+    while DC_result == None:
+        time.sleep(0.1)
+    result = DC_result
+    DC_result = None
+    return result
 
 
 def write_read(x):
@@ -82,19 +115,21 @@ def write_read(x):
     arduino.flushInput()
     arduino.flushOutput()
     arduino.write(bytes(x,   'utf-8'))
-    print("Wrote: " + x)
+    #print("Wrote: " + x)
     time.sleep(0.05)
     data = arduino.readline()
     if len(data.decode('utf-8').split('/')) >1:
+        retries +=1
         if retries > 5:
             retries = 0
             return "ERROR"
         time.sleep(0.1)
         return write_read(x)
-    print("Read: " + data.decode('utf-8'))
+    #print("Read: " + data.decode('utf-8'))
     try:
         data_length = int(data.decode('utf-8'))
     except:
+        retries +=1
         if retries > 5:
             retries = 0
             return "ERROR"
@@ -103,14 +138,13 @@ def write_read(x):
         retries = 0
         return "OK"
     else:
-        
         retries += 1
         if retries > 5:
             retries = 0
             return "ERROR"
         write_read(x)
 
-def send_detect_color_request():
+def send_dc_request_to_arduino():
     global retries
     x = 'DC\n'
     arduino.flushInput()
@@ -125,7 +159,7 @@ def send_detect_color_request():
             retries = 0
             return "ERROR"
         time.sleep(0.1)
-        return send_detect_color_request()
+        return send_dc_request_to_arduino()
     data = ""
     if len(datas) > 1:
         for temp_data in datas:
@@ -150,7 +184,8 @@ def send_detect_color_request():
             retries = 0
             return "ERROR", "ERROR", "ERROR", "ERROR"
         time.sleep(0.1)
-        send_detect_color_request()
+        send_dc_request_to_arduino()
+
 
 
 
@@ -379,7 +414,7 @@ def run():
     name = ""
     if (color <=7 and color >= 0):
         rgb_colors = color_int_to_rgb(color)
-        write_read(rgb_int_to_string_of_9_charachters(rgb_colors[0], rgb_colors[1], rgb_colors[2]))
+        send_message(rgb_int_to_string_of_9_charachters(rgb_colors[0], rgb_colors[1], rgb_colors[2]))
         run_sequention(color)
         name = sequentions[color]["name"]
     return jsonify({'status': 'detect-color', 'detected_color': int_color_to_string(color), 'red_value': red, 'green_value': green, 'blue_value': blue, 'name': name})
@@ -391,12 +426,12 @@ def rgb_led():
     green_value = int(request.args.get('green-value'))
     blue_value = int(request.args.get('blue-value'))
     if arduino_connected:
-        write_read(rgb_int_to_string_of_9_charachters(red_value, green_value, blue_value))
+        send_message(rgb_int_to_string_of_9_charachters(red_value, green_value, blue_value))
     return jsonify({'status': 'rgb-led'})
 
 @app.route('/led')
 def led():
-    write_read('OL\n')
+    send_message('OL\n')
     return jsonify({'status': 'led'})
 
 
@@ -468,13 +503,13 @@ def get_sensor_color_values():
 
 @app.route('/motor')
 def motor():
-    write_read('M\n')
+    send_message('M\n')
     return jsonify({'status': 'motor'})
 
 @app.route('/servo')
 def servo():
     position = int(request.args.get('position'))
-    write_read('S' + position_int_to_3_charachters(position) + '\n')
+    send_message('S' + position_int_to_3_charachters(position) + '\n')
     return jsonify({'status': 'servo'})
 
 
@@ -523,28 +558,28 @@ def change_color(color, red, green, blue):
 
     if (color == 0):
         zwart = (red, green, blue)
-        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+        send_message(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
     elif (color == 1):
         rood = (red, green, blue)
-        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+        send_message(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
     elif (color == 2):
         groen = (red, green, blue)
-        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+        send_message(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
     elif (color == 3):
         blauw = (red, green, blue)
-        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+        send_message(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
     elif (color == 4):
         licht_blauw = (red, green, blue)
-        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+        send_message(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
     elif (color == 5):
         roos = (red, green, blue)
-        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+        send_message(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
     elif (color == 6):
         geel = (red, green, blue)
-        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+        send_message(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
     elif (color == 7):
         wit = (red, green, blue)
-        write_read(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
+        send_message(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
     else:
         print("Error: color not found")
     
@@ -555,7 +590,7 @@ def run_sequention(sequention):
     sequention = int(sequention)
     time.sleep(1)
     for angle in sequentions[sequention]["angles"]:
-        write_read('S' + position_int_to_3_charachters(int(angle)) + '\n')
+        send_message('S' + position_int_to_3_charachters(int(angle)) + '\n')
         time.sleep(1)
     
 
@@ -626,11 +661,24 @@ if __name__ == '__main__':
     if not connect_to_arduino():
         exit()
     
-    print("Connected to Arduino")
-    print("")
+    print("✅ Connected to Arduino")
+    
     time.sleep(1)
+    result = write_read('A\n')
+    if result == "ERROR":
+        print("❌ Error: the Program seems not to be uploaded to the Arduino, please upload it and restart the server")
+        exit()
+    else:
+        print("✅ Arduino program is installed!")
+
+    arduino_send_threaad = threading.Thread(target=run_arduino_messenger)
+    arduino_send_threaad.start()
+    print("✅ Arduino is communicating!")
+
     print("")
     print("Starting server...")
+
+    
 
     # Create and start the thread to run Flask web server
     server_thread = threading.Thread(target=run_server)

@@ -11,7 +11,9 @@
           Omdat er 8 opties zijn voor de verschillende opties van de <b>Smart Coffe/Thea maker</b>, zullen jullie de kleurensensor moeten kalibreren voor 8 verschillende kleuren.
           De kleurensensor is al gekalibreerd voor de kleuren groen, blauw, licht blauw, roze, geel en wit. Jullie zullen dus enkel de kleuren zwart en rood moeten kalibreren.
           Naast elke kleur staat een &#60; of een &#62; teken. Dit betekent dat de kleurensensor de kleur moet detecteren als de waarde van de sensor voor die kleur kleiner (&#60;) of groter (&#62;) is dan de waarde die naast de kleur staat. Geen enkel van de waardes zal hoger zijn dan 9999. <br>
-          <u>Tip voor de zwarte kleur:</u> de waardes voor rood, groen en blauw liggen tussen 3500 en 7000. 
+          <u>Tip voor de zwarte kleur:</u> de waardes voor rood, groen en blauw liggen tussen 3500 en 7000. <br>
+          <u>Tip voor de specialere kleuren:</u> zoek de RGB-waarden eens op!
+
           
         </p>
 
@@ -94,7 +96,7 @@
 
             <!-- Row 5: Licht Blauw -->
             <div class="colorRow">
-                <h3>Licht Blauw: </h3>
+                <h3>Cyaan: </h3>
                 <div class="inputContainer">
                     <label for="red-value-4">Rood (&#62;):</label>
                     <input type="number" id="red-value-4" min="0" max="9999" step="1" required>
@@ -113,7 +115,7 @@
 
             <!-- Row 6: Roze -->
             <div class="colorRow">
-                <h3>Roze: </h3>
+                <h3>Magenta: </h3>
                 <div class="inputContainer">
                     <label for="red-value-5">Rood (&#60;):</label>
                     <input type="number" id="red-value-5" min="0" max="9999" step="1" required>
@@ -181,21 +183,21 @@
             
             <div id="inner-div-sliders">
               <!-- <h2>Sliders</h2> -->
-                <label for="redSlider">Red: <span class="slider-value" id="redValue">0</span></label>
+                <label for="redSlider">Rood: <span class="slider-value" id="redValue">0</span></label>
                 <input type="range" id="redSlider" min="0" max="255" value="0">
                 
                 <br>
-                <label for="greenSlider">Green: <span class="slider-value" id="greenValue">0</span></label>
+                <label for="greenSlider">Groen: <span class="slider-value" id="greenValue">0</span></label>
                 <input type="range" id="greenSlider" min="0" max="255" value="0">
                 
                 <br>
-                <label for="blueSlider">Blue: <span class="slider-value" id="blueValue">0</span></label>
+                <label for="blueSlider">Blauw: <span class="slider-value" id="blueValue">0</span></label>
                 <input type="range" id="blueSlider" min="0" max="255" value="0">
                 <br>
             </div>
             <div id="inner-div-calibration">
               <!-- <h2>Kalibratie</h2> -->
-              <button id="detectColorButton" class="button" onclick="detectColor()">Decteer de kleur</button>
+              <button id="detectColorButton" class="button" onclick="detectColor()">Detecteer de kleur</button>
               <br>
                 <b>Gedecteerde kleur: </b><span id="detected-color"></span>
                 <br>

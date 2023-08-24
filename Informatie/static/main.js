@@ -79,13 +79,13 @@ function servo() {
         return;
     }
 
-    if (servo_value.value >= 150) {
+    if (servo_value.value > 180) {
         alert("De waarde moet kleiner zijn dan 180");
         return;
     }
 
-    if (servo_value.value < 30) {
-        alert("De waarde moet groter zijn dan 30");
+    if (servo_value.value < 0) {
+        alert("De waarde moet groter zijn dan 0");
         return;
     }
 
@@ -102,8 +102,8 @@ function addAngle(sequention) {
     var angle = document.createElement("input");
     angle.type = "number";
     angle.id = "sequention-" + sequention + "-angle-" + document.getElementById("sequention-" + sequention).childElementCount;
-    angle.min = "30";
-    angle.max = "150";
+    angle.min = "0";
+    angle.max = "180";
     angle.value = "90";
     document.getElementById("sequention-" + sequention).appendChild(angle);
 }
@@ -117,8 +117,8 @@ function removeAngle(sequention) {
 function saveSequentions() {
     for (var i = 0; i < 8; i++) {
         for (var j = 0; j < document.getElementById("sequention-" + i).childElementCount; j++) {
-            if((document.getElementById("sequention-" + i + "-angle-" + j).value) < 30 || (document.getElementById("sequention-" + i + "-angle-" + j).value) > 150) {
-                alert("De hoek moet tussen 30 en 150 liggen");
+            if((document.getElementById("sequention-" + i + "-angle-" + j).value) < 0 || (document.getElementById("sequention-" + i + "-angle-" + j).value) > 180) {
+                alert("De hoek moet tussen 0 en 180 liggen");
                 return;
             }
         }
