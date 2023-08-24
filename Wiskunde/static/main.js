@@ -46,17 +46,24 @@ function back() {
 
 
 //------------------------------------------- PICTURE SLIDER --------------------------------------//
+var currentPicture = 0;
+
 function initializePicture() {
     const blackSlider = document.getElementById('blackSlider');
     blackSlider.addEventListener('input', updatePicture);
+    currentPicture = blackSlider.value;
     updatePicture();
 }
 
 function updatePicture() {
+    const values = ['20x15', '40x30', '80x60', '160x120', '320x240', '640x480']
     const blackSlider = document.getElementById('blackSlider');
     const blackValueElement = document.getElementById('blackValue');
-    const blackValue = blackSlider.value;
+    const blackValue = values[blackSlider.value];
+    const picture = document.getElementById('picture_resolution_img');
+    picture.src = "/static/images/scale-"+blackSlider.value+".jpg";
     blackValueElement.textContent = blackValue;
+
 }
 
 //------------------------------------------- RGB-SLIDER -------------------------------------------//
