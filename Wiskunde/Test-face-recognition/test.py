@@ -36,22 +36,71 @@ class FaceRecognition:
     face_found_distance = 0.0
     face_found_location = []
 
+    saved_encodings_file = "saved_encodings.npy"
+    saved_encodings_names_file = "saved_encodings_names.npy"
+
+    clf = None
+
     def __init__(self):
-        for directory in os.listdir("faces/"):
-            if os.path.isdir("faces/"+directory):
-                self.encode_faces("faces/"+directory+"/")
-        print(self.known_face_names)
+        #if the encoded faces aren't saved, encode them and save them
+        if not os.path.isfile(self.saved_encodings_file):
+            for directory in os.listdir("faces/"):
+                if os.path.isdir("faces/"+directory):
+                    self.encode_faces("faces/"+directory+"/")
+            print(self.known_face_names)
+
+            #save the encoded faces
+            self.save_faces()
+        else:
+            #load the encoded faces
+            self.load_faces()
+    
+
+    def save_faces(self):
+        np.save(self.saved_encodings_file, self.known_face_encodings)
+        np.save(self.saved_encodings_names_file, self.known_face_names)
+
+    def load_faces(self):
+        self.known_face_encodings = np.load(self.saved_encodings_file)
+        self.known_face_names = np.load(self.saved_encodings_names_file)
+    
+        
+
 
     def encode_faces(self, path):
+        
+        
+        print("Encoding faces in " + path)
+
         for filename in os.listdir(path):
-            if filename.endswith(".jpg") or filename.endswith(".png"):
+            if filename.endswith(".jpg") or filename.endswith(".png") or filename.endswith(".jpeg") or filename.endswith(".JPG") or filename.endswith(".PNG") or filename.endswith(".JPEG"):
                 image = face_recognition.load_image_file(path + filename)
                 if len(face_recognition.face_encodings(image)) == 0:
                     print("No face found in " + filename)
                     continue
                 encoding = face_recognition.face_encodings(image)[0]
                 self.known_face_encodings.append(encoding)
-                self.known_face_names.append(filename.split(".")[0])
+                
+                self.known_face_names.append('prof. ' + path.split("/")[-2])
+
+        
+    def calculate_average_face_distance(self, face_distances, matches):
+        #calculate the average face distance of each person, one person can have multiple faces
+        faces = {}
+        for i in range(len(matches)):
+            if matches[i]:
+                name = self.known_face_names[i]
+                if name in faces:
+                    faces[name].append(face_distances[i])
+                else:
+                    faces[name] = [face_distances[i]]
+        for name in faces:
+            faces[name] = sum(faces[name])/len(faces[name])
+        return faces
+
+
+
+
     
     def run_recognition(self):
         video_capture = cv2.VideoCapture(1)
@@ -82,10 +131,19 @@ class FaceRecognition:
 
                     face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
                     best_match_index = np.argmin(face_distances)
-                    if matches[best_match_index]:
-                        name = self.known_face_names[best_match_index]
-                        confidance = face_confidence(face_distances[best_match_index])
+                    average_faces = self.calculate_average_face_distance(face_distances, matches)
+                    if (len(average_faces) > 0):
+                        name = min(average_faces, key=average_faces.get)
+                        confidance = face_confidence(average_faces[name])
 
+
+                    
+
+
+                    # if matches[best_match_index]:
+                    #     name = self.known_face_names[best_match_index]
+                    #     confidance = face_confidence(face_distances[best_match_index])
+                    
                     self.face_names.append(f'{name} ({confidance})')
 
             self.process_current_frame = not self.process_current_frame

@@ -7,7 +7,7 @@
 
 Deze kunnen makkelijk geinstalleerd worden met pip:
 ```bash
-pip install pyserial flask
+python -m pip install pyserial flask
 ```
 
 ## Gebruik
