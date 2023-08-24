@@ -233,6 +233,15 @@ img {
     background-color: rgb(255, 0, 0);
   }
 
+  #blackSlider::-webkit-slider-thumb {
+    background-color: rgb(0, 0, 0);
+    
+  }
+
+  #blackSlider {
+    background-color: rgb(0, 0, 0);
+  }
+
   #greenSlider::-webkit-slider-thumb {
     background-color: green;
   }

@@ -45,11 +45,19 @@ function back() {
 
 
 
+//------------------------------------------- PICTURE SLIDER --------------------------------------//
+function initializePicture() {
+    const blackSlider = document.getElementById('blackSlider');
+    blackSlider.addEventListener('input', updatePicture);
+    updatePicture();
+}
 
-
-
-
-
+function updatePicture() {
+    const blackSlider = document.getElementById('blackSlider');
+    const blackValueElement = document.getElementById('blackValue');
+    const blackValue = blackSlider.value;
+    blackValueElement.textContent = blackValue;
+}
 
 //------------------------------------------- RGB-SLIDER -------------------------------------------//
 
@@ -65,6 +73,7 @@ function initializeSlider() {
 }
 
 
+
 function updateColor() {
     const redSlider = document.getElementById('redSlider');
     const greenSlider = document.getElementById('greenSlider');
@@ -76,11 +85,9 @@ function updateColor() {
     const redValue = redSlider.value;
     const greenValue = greenSlider.value;
     const blueValue = blueSlider.value;
-
     redValueElement.textContent = redValue;
     greenValueElement.textContent = greenValue;
     blueValueElement.textContent = blueValue;
-
     const color = `rgb(${redValue},${greenValue},${blueValue})`;
     colorBox.style.backgroundColor = color;
     updateRGBLED(redValue, greenValue, blueValue);
@@ -106,9 +113,10 @@ function loadPage(pageUrl) {
         .then(html => {
             document.getElementById('content').innerHTML = html;
             hljs.highlightAll();
-
-            if ( state == 2) {
-
+            if (state == 1) {
+                initializePicture();
+            }
+            else if ( state == 2) {
                 initializeSlider();
             }
 

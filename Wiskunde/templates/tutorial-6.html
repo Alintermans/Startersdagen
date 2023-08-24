@@ -1,11 +1,47 @@
-<div class="box-header">Wiskunde: Gezichtsherkenningsalgoritme implementeren - 6/10</div>
+<!-- <div class="box-header">Wiskunde: Gezichtsherkenningsalgoritme implementeren - 6/10</div>
     <div class="columns">
       <div class="column">
         <div id="intro-div">
           <h2>Interactief: wiskundig algoritme in juiste volgorde zetten</h2>
           <p>
+
             pas bij werkend algoritme kan je naar de volgende stap gaan 
           </p>
         </div>
       </div>
+    </div> -->
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+
+    <div class="box-header">Wiskunde: Gezichtsherkenningsalgoritme implementeren - 6/10</div>
+    <div class="columns">
+      <div class="column">
+        <h2>Algoritme</h2>
+        <p>
+          Je computer stockeert de gegevens van een afbeelding in een soort matrix waarvan elke waarde op een specifieke rij of kolom staat voor een bepaalde kleurintensiteit. Als de foto een kleurenfoto (in JPEG formaat) is worden er 3 lagen aan waardes toegekend (3 lagen voor elk van de drie kleuren: rood, groen en blauw).
+        </p>
+        <br>
+        <p>
+          Echter als er nu verder gewerkt zou worden met deze matrices zou dit tot een gigantische hoeveelheid data leiden die niet meer hanteerbaar is door de computer. Daarom wordt deze data gereduceerd tot een 2D-matrix (een matrix zoals voorgesteld in figuur 1). De foto wordt m.a.w. omgezet in een foto die enkel uit grijswaardes bestaat door een gewogen gemiddelde te maken van de waardes voor Red, Green en Blue.
+        </p>
+        <br>
+        <p>
+          Selecteer stukjes van de foto’s en haal er een rechthoek uit met h=80 en w=60 waarbij enkel het aangezicht van de persoon zichtbaar is. Zorg dat het centrum van de neus van de persoon op h=30 en w=30 komt te staan.
+        </p>
+        <br>
+        <p>
+          Hervorm de matrix van de grijswaardes van de foto’s naar kolommatrices. Momenteel heb je een 60x80 matrix, deze moet je omvormen naar een 4800x1 matrix/vector. 
+          <br>
+          Momenteel heb je dus één vector die één gezicht voorstelt. Doe hetzelfde voor alle andere afbeeldingen uit de database. 
+        </p>
+        <br>
+        <p>
+          
+        </p>
+      
+        </div>
+      <div class="column">
+        <h2>Interactief: wiskundig algoritme in juiste volgorde zetten</h2>
+      </div>
     </div>
+
