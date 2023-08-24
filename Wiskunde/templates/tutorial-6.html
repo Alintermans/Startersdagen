@@ -22,7 +22,7 @@
         </p>
         <br>
         <p>
-          Echter als er nu verder gewerkt zou worden met deze matrices zou dit tot een gigantische hoeveelheid data leiden die niet meer hanteerbaar is door de computer. Daarom wordt deze data gereduceerd tot een 2D-matrix (een matrix zoals voorgesteld in figuur 1). De foto wordt m.a.w. omgezet in een foto die enkel uit grijswaardes bestaat door een gewogen gemiddelde te maken van de waardes voor Red, Green en Blue.
+          Echter als er nu verder gewerkt zou worden met deze matrices zou dit tot een gigantische hoeveelheid data leiden die niet meer hanteerbaar is door de computer. Daarom wordt deze data gereduceerd tot een 2D-matrix (een matrix zoals voorgesteld in figuur 1). De foto wordt m.a.w. omgezet in een foto die enkel uit grijswaardes bestaat door een gewogen gemiddelde te maken van de waardes voor rood, groen en blauw.
         </p>
         <br>
         <p>
@@ -38,11 +38,28 @@
           $$ {\left\{v_1, v_2, ..., v_M\right\}} $$
           <br>
           Van al deze vectoren kun je een gemiddelde vector nemen die er als volgt uit ziet:
-          $$ {\Psi = \frac{1}{M} \sum_{i=1}^M v_i} $$
+          $$ {\psi = \frac{1}{M} \sum_{i=1}^M v_i} $$
 
           <br>
-          Nu kun je voor elke vector het verschil berekenen met de gemiddelde vector v het verschil berekenen met de gemiddelde vector $$ {\Psi}$$.
+          Nu kun je voor elke vector het verschil berekenen met de gemiddelde vector v het verschil berekenen met de gemiddelde vector \(\psi\).
+          $${ \Phi_i = v_i - \psi }$$
+          <br>
+          Maak nu de covariantie matrix \(C\) die als volgt gedefinieerd is:
+          $${C = \frac{1}{M} \sum_{i=0}^M \Phi_i \Phi_i^T  }$$
+          <br>
+          Bereken nu de eigenwaarden \( \Lambda \) en eigenvectoren \(U\) van \(C\) 
+          Nu heb je een collectie van eigenfaces \(U = \left\{u_i \right\}\). Hiermee kan je aan de slag gaan om andere gezichten te herkennen. 
+          <br>
+          Voor elke gezicht \(v\) bepaal je een gewichtsvector \( \Omega \) als volgt: 
+          $${ \Omega =  U^T (v - \psi) }$$
 
+          Een nieuw gezicht kan op diezelfde manier geprojecteerd worden op de gezichtsruimte. Hiervoor moet je opnieuw de matrix omvormen tot een kolomvector \( v_{nieuw} \). 
+          Daarna voer je volgende bewerking uit:
+          $${ \Omega_{nieuw} =  U^T (v_{nieuw} - \psi) }$$
+          Om nu het nieuwe gezicht te herkennen kan de norm van de euclidische afstand berekend worden tusssen de kolommen \( \Omega \) en \( \Omega_{nieuw} \).
+          $${ \epsilon =  \|\Omega - \Omega_{nieuw} \|  }$$
+          
+          De index van \( \epsilon \) met de kleinste afstand tussen \( \Omega \) en \( \Omega_{nieuw} \) geeft aan met welk gezicht er het meest overeenkomst is. 
         </p>
         
 
@@ -50,7 +67,29 @@
         </div>
       <div class="column">
         <h2>Interactief: wiskundig algoritme in juiste volgorde zetten</h2>
-        $$ {J(\theta) =\frac{1}{2m} [\sum^m_{i=1}(h_\theta(x^{(i)}) - y^{(i)})2 + \lambda\sum^n_{j=1}\theta^2_j} $$
+        <h3>
+          Database maken
+        </h3>
+        <li>Afbeelding omzetten in grijstinten</li>
+        <li>Afbeelding omvormen naar 60x80 pixels</li>
+        <li>Matrix van afbeelding omvormen tot een kolomvector</li>
+        <li>Set van kolomvectoren maken</li>
+        <li>Gemiddelde vector berekenen</li>
+        <li>Voor elke vector het verschil met gemiddelde vector berekenen</li>
+        <li>covariantie matrix berekenen</li>
+        <li>Eigenwaarden en eigenvectoren berekenen</li>
+        <li>Gewichten ten opzichte van gezichtsruimte bepalen</li>
+
+        <h3>
+          Nieuwe foto herkennen
+        </h3>
+        <li>Afbeelding omzetten in grijstinten</li>
+        <li>Afbeelding omvormen naar 60x80 pixels</li>
+        <li>Matrix omvormen tot een kolomvector</li>
+        <li>Verschil met gemiddelde vector berekenen</li>
+        <li>Projectie op gezichtsruimte</li>
+        <li>Norm van de euclidische afstand bepalen tussen de kolommen van Omega en vector Omega_nieuw</li>
+        <li>Minimum zoeken</li>
       </div>
     </div>
 
