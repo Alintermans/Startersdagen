@@ -167,10 +167,10 @@ function loadPage(pageUrl) {
             document.getElementById('content').innerHTML = html;
             hljs.highlightAll();
             update_math();
-            if (state == 1) {
+            if (state == 2) {
                 initializePicture();
             }
-            else if ( state == 2) {
+            else if ( state == 3) {
                 initializeSlider();
             }
 
