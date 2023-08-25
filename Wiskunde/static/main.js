@@ -110,6 +110,31 @@ function updateRGBLED(red, green, blue) {
     });
 }
 
+//------------------------------------------- small quiz -------------------------------------------//
+function check_q1() {
+    const q1 = document.getElementById('q1');
+    const q2 = document.getElementById('q2');
+    const q3 = document.getElementById('q3');
+    const q4 = document.getElementById('q4');
+    const q5 = document.getElementById('q5');
+    const result = document.getElementById('result_q1');
+
+    if (q2.checked && q3.checked && q4.checked && !q1.checked && !q5.checked) {
+        result.innerHTML = "<div class='correct'>Correct!</div>";
+    } else {
+        result.innerHTML = "<div class='incorrect'>Fout! probeer opnieuw</div>";
+    }
+    q1.checked = false;
+    q2.checked = false;
+    q3.checked = false;
+    q4.checked = false;
+    q5.checked = false;
+
+
+}
+
+
+
 
 //------------------------------------------- Camera -------------------------------------------//
 function start_camera(){

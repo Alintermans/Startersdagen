@@ -1,15 +1,33 @@
-<div class="box-header">Wiskunde: Wat is een Afbeelding - 1/10</div>
+<div class="box-header">Wiskunde: Gezichtsherkenning met Machine Learning - 1/10</div>
     <div class="columns">
       <div class="column">
-          <h2>Finaal</h2>
+      <p>
+        Het voorgande algoritme dat de gezichtsherkennning deed op basis van enkel de eiegngezichten is jammer genoeg niet zo performant. 
+        <br> Hoe denk je dat dit komt? Duid al de juiste antwoorden aan.
+        <form>
+
+          <input type="radio" id="q1" name="q1" value="1">
+          <label for="1" style="font-size: small;">Het algoritme maakt enkel gebruik van grijstinten</label><br>
+          <input type="radio" id="q2" name="q2" value="2">
+          <label for="2" style="font-size: small;">De personen moeten allemaal op dezelfde manier kijken</label><br>
+          <input type="radio" id="q3" name="q3" value="3">
+          <label for="3" style="font-size: small;">De gezichten op de afbeeldingen moeten allemaal even groot zijn</label><br>
+          <input type="radio" id="q4" name="q4" value="4">
+          <label for="4" style="font-size: small;">Het maakt gebruik van de euclidische afstand</label><br>
+          <input type="radio" id="q5" name="q5" value="5">
+          <label for="5" style="font-size: small;">Alle afbeeldingen worden omgezet in kolomvectoren</label><br>
+          
+        </form>
+        <div style="display: flex; flex-direction: row; align-items: center;" >
+          <button class="button" onclick="check_q1()" style="margin-top: 10px; padding:15px; " >Controleer je antwoorden</button> <b><span id="result_q1"></span></b>
+        </div>
+        
+       
+
+      </p>
+      <h3>Gezichtsdetectie</h3>
           
       </div>
       <div class="column" id="camera_div">
-          <h2>Test</h2>
-          <div>
-            <button class="button" onclick="start_camera()">Start Camera</button>
-            <button class="button" onclick="stop_camera()">Stop Camera</button>
-          </div>
-          <img src="{{ url_for('video_feed') }}" height="75%">
-        </div>
+          
     </div>
