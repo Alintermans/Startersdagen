@@ -4,7 +4,6 @@ import cv2
 import numpy as np
 import os
 import math
-from sklearn import svm
 
 
 
