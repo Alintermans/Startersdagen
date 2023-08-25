@@ -12,7 +12,7 @@ from FaceRecognition import FaceRecognition
 current_state = 0
 current_page = 'home' 
 
-nb_steps = 10
+nb_steps = 11
 
 retries = 0 
 
@@ -125,11 +125,9 @@ def back():
 
 @app.route('/reset')
 def reset():
-    global current_choice
     global current_page
     global current_state
     current_state = 0
-    current_choice = 'None'
     current_page = 'home'
     return jsonify({'status': 'reset'})
 
@@ -169,7 +167,7 @@ def stop_camera():
     
 
 def gen_frames():  
-    while True:
+    while current_state == 11:
         if camera_on:
             time.sleep(0.02)
             success, frame = camera.read()  # read the camera frame
