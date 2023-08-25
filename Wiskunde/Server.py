@@ -19,6 +19,9 @@ retries = 0
 camera = None
 camera_on = False
 fr = None
+current_camera_choice = 'None'
+add_face_name = None
+adding_face = False
 
 
 
@@ -145,6 +148,49 @@ def stop_camera_route():
     stop_camera()
     return jsonify({'status': 'stopped'})
 
+@app.route('/face_landmarks')
+def face_landmarks():
+    global current_camera_choice
+    if current_camera_choice == 'face_landmarks':
+        current_camera_choice = 'None'
+    else:
+        current_camera_choice = 'face_landmarks'
+    return jsonify({'status': 'face_landmarks'})
+
+@app.route('/makeup')
+def makeup():
+    global current_camera_choice
+    if current_camera_choice == 'makeup':
+        current_camera_choice = 'None'
+    else:
+        current_camera_choice = 'makeup'
+    return jsonify({'status': 'makeup'})
+
+@app.route('/face_recognition')
+def face_recognition():
+    global current_camera_choice
+    if current_camera_choice == 'face_recognition':
+        current_camera_choice = 'None'
+    else:
+        current_camera_choice = 'face_recognition'
+    return jsonify({'status': 'face_recognition'})
+
+
+@app.route('/add_face')
+def add_face():
+    global adding_face
+    global add_face_name
+    name = request.args.get('name')
+    if not adding_face:
+        add_face_name = name
+        adding_face = True
+        return jsonify({'status': 'started'})
+    else:
+        return jsonify({'status': 'failed'})
+
+    
+    
+
 
 
 
@@ -155,7 +201,7 @@ def start_camera():
     
     camera = cv2.VideoCapture(1)
     camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-    time.sleep(0.5)
+    time.sleep(1.5)
     camera_on = True
 
 def stop_camera():
@@ -167,6 +213,8 @@ def stop_camera():
     
 
 def gen_frames():  
+    global adding_face
+    global add_face_name
     while current_state == 11:
         if camera_on:
             time.sleep(0.02)
@@ -174,7 +222,17 @@ def gen_frames():
             if not success:
                 break
             else:
-                frame = fr.process_frame(frame)
+                if adding_face:
+                    fr.add_face(frame, add_face_name)
+                    adding_face = False
+                    add_face_name = None
+                if current_camera_choice == 'face_landmarks':
+                    frame = fr.process_frame_with_facial_features(frame)
+                elif current_camera_choice == 'makeup':
+                    frame = fr.process_frame_with_makeup(frame)
+                elif current_camera_choice == 'face_recognition':
+                    frame = fr.process_frame(frame)
+
                 ret, buffer = cv2.imencode('.jpg', frame)
                 frame = buffer.tobytes()
                 yield (b'--frame\r\n'

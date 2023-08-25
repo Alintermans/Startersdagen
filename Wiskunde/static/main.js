@@ -158,7 +158,38 @@ function stop_camera(){
     });
 }
 
+function toggle_face_landmarks(){
+    fetch('/face_landmarks')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+}
 
+function toggle_face_recognition(){
+    fetch('/face_recognition')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+}
+
+function toggle_makeup(){  
+    fetch('/makeup')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+}
+
+function add_face(){
+    const name = document.getElementById('add_face_name').value;
+    fetch('/add_face?name=' + name)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+}
 
 
 

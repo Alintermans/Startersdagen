@@ -1,4 +1,4 @@
-<div class="box-header">Wiskunde: Gezichtsherkenning met Machine Learning - 1/10</div>
+<div class="box-header">Wiskunde: Gezichtsherkenning met Machine Learning - 10/10</div>
     <div class="columns">
       <div class="column">
       <p>
@@ -28,7 +28,7 @@
           <br> <br>
           <ul>
             <li><b>Stap 1:</b> Gezichten detecteren op de foto's en knip de gezichten uit, zodat ze allemaal het formaat hebben</li>
-            <li><b>Stap 2:</b> Detecteer de gezichtsherkenningspunten en transformeer de gezichten zodat ze allemaal op dezelfde manier kijken!</li>
+            <li><b>Stap 2:</b> Detecteer de specifieke gezichtskenmerken en transformeer de gezichten zodat ze allemaal op dezelfde manier kijken!</li>
             <li><b>Stap 3:</b> Encodeer de gezichten naar een 128-dimensionale kolomvector op basis van een neuraal netwerk</li>
             <li><b>Stap 4:</b> Gebruik een neural netwerk om te bepalen of twee gezichten dezelfde persoon zijn</li>
           </ul>
@@ -40,7 +40,25 @@
       <div class="column">
         <div class="correct_answer" style="display:none;">
           <h3>Stap 1: Gezichten detecteren</h3>
-
+          Voor de gezichten te detecteren maken we gebruik van het HOG algoritme. 
+          Het HOG (Histogram of Oriented Gradients) algoritme is een methode om objecten, zoals gezichten in afbeeldingen, te detecteren. Het werkt door de richtingen van helderheidsveranderingen in kleine delen van de afbeelding vast te leggen. Deze richtingen worden samengevat in histogrammen en gecombineerd tot 'blokken' voor patroonherkenning. Het algoritme zoekt naar deze patronen om objecten te detecteren, zoals gezichtskenmerken, en onderscheidt ze van de achtergrond.
+          Op de afbeelding hieronder kan je de gradienten zien van een afbeelding en het patroon waarnaar het zoekt. De gradienten zijn de richtingen van de helderheidsveranderingen.
+          <br> 
+          Nadat het gezicht gedecteerd wordt, wordt het uitgeknipt en gebruikt in stap 2.
+          <div style="display: flex; justify-content: center;"><img src="{{ url_for('static', filename='images/HOG.jpg') }}" alt="HOG gradienten" style=" width:50%;"></div>
+          <h3>Stap 2: Specifieke gezichtskenmerken detecteren en het gezicht transformeren</h3>
+          Nadat we de gezichten in onze afbeelding hebben geïsoleerd, staan we voor een probleem: gezichten die in verschillende richtingen zijn gedraaid, lijken voor computers helemaal anders, in tegenstelling tot menselijke herkenning. Om dit aan te pakken, maken we gebruik van gezichtskenmerken-estimatie. Deze techniek houdt in dat we 68 belangrijke punten op elk gezicht identificeren, zoals de bovenkant van de kin, de hoeken van de ogen en de randen van de wenkbrauwen. 
+          Een machine learning-algoritme wordt getraind om deze punten op elk gezicht te vinden. 
+          Door deze aanpak kunnen we afbeeldingen uitlijnen door ze te roteren, schalen en vervormen, zodat de ogen en mond gecentreerd worden. Dit zorgt ervoor dat, ongeacht de oriëntatie van het gezicht, de belangrijke kenmerken redelijk consistent blijven. 
+          Deze stap, waarbij basis beeldtransformaties worden gebruikt, verbetert de nauwkeurigheid voor verdere verwerking.
+          <br>
+          <div style="display: flex; justify-content: center;"><img src="{{ url_for('static', filename='images/face-landmarks.webp') }}" alt="HOG gradienten" style=" width:80%;"></div>
+          <h3>Stap 3: Gezichten encoderen</h3>
+          Nadat we de gezichten hebben uitgelijnd, kunnen we ze coderen in een 128-dimensionale vector.  Dit gaan we doen met een neural netwerk, dat al op voorhand op meer dan 3 miljoen verschillende gezichten is getrained. Voor meer informatie over de specifieke werking van het neural netwerk, kan je <a href="https://medium.com/@ageitgey/machine-learning-is-fun-part-4-modern-face-recognition-with-deep-learning-c3cffc121d78">dit artikel</a> lezen. 
+          <br>
+          <h3>Stap 4: Gezichten vergelijken</h3>
+          Nu we de gezichten hebben gecodeerd, kunnen we ze vergelijken. Dit doen we door gebruik te maken van een ander soort neural netwerk dat wederom getrained is op miljoenen gezichten. Dit netwerk gaat de 128-dimensionale vector van twee gezichten vergelijken en een waarde tussen 0 en 1 geven. Hoe dichter de waarde bij 1 ligt, hoe groter de kans dat de twee gezichten dezelfde persoon zijn.
+          <br>
         </div>
       </div>
           
