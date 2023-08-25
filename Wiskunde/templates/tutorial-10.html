@@ -1,11 +1,15 @@
 <div class="box-header">Wiskunde: Wat is een Afbeelding - 1/10</div>
     <div class="columns">
       <div class="column">
-        <div id="intro-div">
           <h2>Finaal</h2>
-          <button class="button" onclick="start_camera()">Start Camera</button>
-          <button class="button" onclick="stop_camera()">Stop Camera</button>
-          <img src="{{ url_for('video_feed') }}" width="100%">
-        </div>
+          
       </div>
+      <div class="column" id="camera_div">
+          <h2>Test</h2>
+          <div>
+            <button class="button" onclick="start_camera()">Start Camera</button>
+            <button class="button" onclick="stop_camera()">Stop Camera</button>
+          </div>
+          <img src="{{ url_for('video_feed') }}" height="75%">
+        </div>
     </div>
