@@ -36,17 +36,17 @@ class FaceRecognition:
     face_found_distance = 0.0
     face_found_location = []
 
-    saved_encodings_file = "saved_encodings.npy"
-    saved_encodings_names_file = "saved_encodings_names.npy"
+    saved_encodings_file = "face-recognition/saved_encodings.npy"
+    saved_encodings_names_file = "face-recognition/saved_encodings_names.npy"
 
     clf = None
 
     def __init__(self):
         #if the encoded faces aren't saved, encode them and save them
         if not os.path.isfile(self.saved_encodings_file):
-            for directory in os.listdir("faces/"):
-                if os.path.isdir("faces/"+directory):
-                    self.encode_faces("faces/"+directory+"/")
+            for directory in os.listdir("face-recognition/faces/"):
+                if os.path.isdir("fface-recognition/aces/"+directory):
+                    self.encode_faces("face-recognition/faces/"+directory+"/")
             print(self.known_face_names)
 
             #save the encoded faces
