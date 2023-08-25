@@ -1,52 +1,27 @@
-<div class="box-header">Wiskunde: RGB - 2/10</div>
+<div class="box-header">Wiskunde: Resolutie - 2/10</div>
     <div class="columns">
       <div class="column">
-        <h3>RGB-waarden</h3>
-        <p>
-          Met rood, groen en blauw kan je alle kleuren maken. Daarom houdt een computer voor elke pixel 3 waarden bij, die de RGB-waarden worden genoemd. 
-          Dit zijn 3 getallen tussen 0 en 255 die respectievelijk weergeven hoe sterk rood, groen en blauw aanwezig zijn.
-          Wanneer groen een waarde van 0 heeft, betekent dit dat er geen groen aanwezig is. 
-          <br>
-          Voorbeeld:
-          <br>
-          255 0 0 wil zeggen dat er enkel rood aanwezig is. 
-        </p>
-        <h3>
-          Opdracht 1.1
-        </h3>
-        <p>
-          Maak blauw door de sliders hiernaast de bewegen. 
-        </p>
-        <h3>
-          Opdracht 1.2
-        </h3>
-        <p>
-          Zoek de RGB waarden voor wit op en maak met de sliders hiernaast wit. 
-        </p>
-        <h3>
-          Opdracht 1.3
-        </h3>
-        <p>
-          Zoek de RGB waarden voor oranje op en maak met de sliders hiernaast oranje. 
-        </p>
+        <h2>Resolutie</h2>
+          <p>
+            P&O in meerdere resoluties met slider: 
+            <ul>
+              <li>20x15</li>
+              <li>40x30</li>
+              <li>80x60</li>
+              <li>160x120</li>
+              <li>320x240</li>
+              <li>640x480</li>
+            </ul>
+          </p>
         
         </div>
       <div class="column">
         <div id="rgb-slider">
-          <h1>RGB Color Slider</h1>
-        <label for="redSlider">Red: <span class="slider-value" id="redValue">0</span></label>
-        <input type="range" id="redSlider" min="0" max="255" value="0">
-        
-        <br>
-        <label for="greenSlider">Green: <span class="slider-value" id="greenValue">0</span></label>
-        <input type="range" id="greenSlider" min="0" max="255" value="0">
-        
-        <br>
-        <label for="blueSlider">Blue: <span class="slider-value" id="blueValue">0</span></label>
-        <input type="range" id="blueSlider" min="0" max="255" value="0">
-        
-        <div class="color-box" id="colorBox"></div>
+          <h1>Slider</h1>
+        <label for="blackSlider">Resolutie: <span class="slider-value" id="blackValue">0</span></label>
+        <input type="range" id="blackSlider" min="0" max="5" value="0">
+        <img src="{{url_for('static', filename='images/scale-0.jpg')}}" alt="" height="75%" id="picture_resolution_img">
         </div>
+        
       </div>
-    </div>
-
+    </div>  

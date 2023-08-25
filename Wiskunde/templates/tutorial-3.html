@@ -1,27 +1,52 @@
-<div class="box-header">Wiskunde: RGB naar grijstinten - 3/10</div>
+<div class="box-header">Wiskunde: RGB - 3/10</div>
     <div class="columns">
       <div class="column">
-        <div id="intro-div">
-          <h2>Grijswaarden</h2>
-          <p>
-            In een kleurenfoto wordt elke pixel voorgesteld door drie getallen tussen 0 en 255. 
-            In een zwart-wit afbeelding wordt elke pixel voorgesteld door één waarde tussen 0 en 255. 
-            Om een kleurenfoto om te vormen naar een foto in grijstinten moet er het percentage rood, groen en blauw gekozen worden. 
-          </p>
-          <p>
-            opdracht 1:
-            converteer de afbeelding een naar grijswaarden door enkel rood, groen of blauw op te slaan 
-          </p>
-          <p>
-            opdracht 2:
-            gemiddelde van rood groen en blauw 
-            waarom nog steeds geen goed idee en foto laten zien RGB.png
-            Je kan de kleuren dan niet meer onderscheiden 
-          </p>
-          <p>
-            opdracht 3:
-            Opzoeken wat het ideale percentage rood groen en blauw is en instellen 
-          </p>
+        <h3>RGB-waarden</h3>
+        <p>
+          Met rood, groen en blauw kan je alle kleuren maken. Daarom houdt een computer voor elke pixel 3 waarden bij, die de RGB-waarden worden genoemd. 
+          Dit zijn 3 getallen tussen 0 en 255 die respectievelijk weergeven hoe sterk rood, groen en blauw aanwezig zijn.
+          Wanneer groen een waarde van 0 heeft, betekent dit dat er geen groen aanwezig is. 
+          <br>
+          Voorbeeld:
+          <br>
+          255 0 0 wil zeggen dat er enkel rood aanwezig is. 
+        </p>
+        <h3>
+          Opdracht 1.1
+        </h3>
+        <p>
+          Maak blauw door de sliders hiernaast de bewegen. 
+        </p>
+        <h3>
+          Opdracht 1.2
+        </h3>
+        <p>
+          Zoek de RGB waarden voor wit op en maak met de sliders hiernaast wit. 
+        </p>
+        <h3>
+          Opdracht 1.3
+        </h3>
+        <p>
+          Zoek de RGB waarden voor oranje op en maak met de sliders hiernaast oranje. 
+        </p>
+        
+        </div>
+      <div class="column">
+        <div id="rgb-slider">
+          <h1>RGB Color Slider</h1>
+        <label for="redSlider">Red: <span class="slider-value" id="redValue">0</span></label>
+        <input type="range" id="redSlider" min="0" max="255" value="0">
+        
+        <br>
+        <label for="greenSlider">Green: <span class="slider-value" id="greenValue">0</span></label>
+        <input type="range" id="greenSlider" min="0" max="255" value="0">
+        
+        <br>
+        <label for="blueSlider">Blue: <span class="slider-value" id="blueValue">0</span></label>
+        <input type="range" id="blueSlider" min="0" max="255" value="0">
+        
+        <div class="color-box" id="colorBox"></div>
         </div>
       </div>
     </div>
+
