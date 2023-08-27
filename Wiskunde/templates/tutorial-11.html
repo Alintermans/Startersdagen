@@ -1,14 +1,37 @@
-<div class="box-header">Wiskunde: Wat is een Afbeelding - 1/10</div>
+<div class="box-header">Wiskunde: Gezichtsherkenning met nieuw algoritme - 1/11</div>
     <div class="columns">
       <div class="column">
-          <h2>Finaal</h2>
+          <h2>Specifieke gezichtskenmerken</h2>
+          Zoals eerder aangehaald, worden de gezichten uitgelijnd door gebruik te maken van gezichtskenmerken-estimatie. Deze techniek houdt in dat we 68 belangrijke punten op elk gezicht identificeren, zoals de bovenkant van de kin, de hoeken van de ogen en de randen van de wenkbrauwen. 
+          De locaties van deze kenmerken kunnen vervolgens gebruikt worden om de foto aan te passen en bijvoorbeeld de gezichten te centreren zoals nodig is voor het encoderen, maar je kan ook bijvoorbeeld Artificiële Make-up toevoegen aan de gezichten.
+          <br>
+          Door op de knop hieronder te klikken, kan je de gezichtskenmerken aanzetten op de camera feed hiernaast. Met de make up knop kan je de make up aan en uit zetten. 
+          <br>
+          <div style="display: flex; flex-direction: row;" >
+            <button class="button" onclick="toggle_face_landmarks()" style="margin-top: 10px; padding: 10px;"><i class="fas fa-eye"></i> Gezichtskenmerken</button>
+            <button class="button" onclick="toggle_makeup()" style="margin-top: 10px; padding:10px;"><i class="fas fa-magic"></i> Make up</button>
+          </div>
+          
+          
+          <h2>Gezichtsherkennning</h2>
+          Al de stappen die in de vorige stap zijn uitgelegd, zijn al geïmplementeerd omdat het zeer geavenceerde code is. Jullie kunnen zelf ook jullie gezicht toevoegen aan de database waarmee vergeleken wordt, door, je naam hieronder in te vullen, in de camera te kijken en op de knop te drukken.
+          <br>
+          <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;" >
+            <input type="text" id="add_face_name" name="name" value="Persoon-1" style=" padding: 10px; margin-right: 10px;">
+            <button class="button" onclick="add_face()" style="margin: 0; padding: 10px;"><i class="fas fa-plus"></i> Voeg toe</button>
+          </div>
+          <br>
+          Door op de knop hieronder te klikken kan je de gezichtsherkennning aan of uit zetten op de camera feed hiernaast.
+          <br>
+          <button class="button" onclick="toggle_face_recognition()" style="margin-top: 10px; padding: 10px;"><i class="fas fa-eye"></i> Gezichtsherkennning</button>
+
           
       </div>
       <div class="column" id="camera_div">
-          <h2>Test</h2>
+          <h2>Camera</h2>
           <div>
-            <button class="button" onclick="start_camera()">Start Camera</button>
-            <button class="button" onclick="stop_camera()">Stop Camera</button>
+            <button class="button" onclick="start_camera()"><i class="fas fa-play"></i> Start Camera</button>
+            <button class="button" onclick="stop_camera()"><i class="fas fa-stop"></i> Stop Camera</button>
           </div>
           <img src="{{ url_for('video_feed') }}" height="75%">
         </div>

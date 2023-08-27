@@ -118,9 +118,14 @@ function check_q1() {
     const q4 = document.getElementById('q4');
     const q5 = document.getElementById('q5');
     const result = document.getElementById('result_q1');
+    const divs_to_show = document.getElementsByClassName('correct_answer');
 
     if (q2.checked && q3.checked && q4.checked && !q1.checked && !q5.checked) {
         result.innerHTML = "<div class='correct'>Correct!</div>";
+        for (var i = 0; i < divs_to_show.length; i++) {
+            divs_to_show[i].style.display = "block";
+        }
+
     } else {
         result.innerHTML = "<div class='incorrect'>Fout! probeer opnieuw</div>";
     }
@@ -153,7 +158,38 @@ function stop_camera(){
     });
 }
 
+function toggle_face_landmarks(){
+    fetch('/face_landmarks')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+}
 
+function toggle_face_recognition(){
+    fetch('/face_recognition')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+}
+
+function toggle_makeup(){  
+    fetch('/makeup')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+}
+
+function add_face(){
+    const name = document.getElementById('add_face_name').value;
+    fetch('/add_face?name=' + name)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+}
 
 
 
