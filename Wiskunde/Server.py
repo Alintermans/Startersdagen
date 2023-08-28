@@ -12,7 +12,7 @@ from FaceRecognition import FaceRecognition
 current_state = 0
 current_page = 'home' 
 
-nb_steps = 12
+nb_steps = 14
 
 retries = 0 
 
@@ -95,6 +95,15 @@ def tutorial_11():
 @app.route('/tutorial-12')
 def tutorial_12():
     return render_template('tutorial-12.html')
+
+@app.route('/tutorial-13')
+def tutorial_13():
+    return render_template('tutorial-13.html')
+
+@app.route('/tutorial-14')
+def tutorial_14():
+    return render_template('tutorial-14.html')
+
 
 
 
@@ -247,7 +256,7 @@ def gen_frames():
     global add_face_name
     global recognized_prof
     global current_camera_choice
-    while current_state == 11 or current_state == 12:
+    while current_state == 11 or current_state == 14 or current_state == 13 or current_state == 12 or current_state == 10:
         if camera_on:
             time.sleep(0.02)
             success, frame = camera.read()  # read the camera frame

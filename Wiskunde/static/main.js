@@ -10,9 +10,13 @@ var colors = ["#000000", "#ff0000", "#00ff00", "#0000ff",   "#00ffff", "#ff00ff"
 var options = ["Zwarte koffie", "Zwarte koffie met suiker", "Koffie met melk en suiker", "Koffie met melk", "Thee", "Thee met melk", "Thee met melk en suiker", "Thee met suiker"];
 var songs = ["'Riptide' Official Video.mp3", "Canon in D Major.mp3", "De Zji.mp3", "Eye Of The Tiger.mp3", "Feral Roots.mp3", "Hijo de la Luna (Videoclip).mp3", "Louis Neefs.mp3", "No One Knows.mp3", "Sultans Of Swing.mp3", "The Way To Your Heart.mp3", "Vuurwerk - Lyrics.mp3", "Where Is My Mind_.mp3", "yevgueni.mp3", "europe-the-final-countdown-official-video-9jK-NcRmVcw.mp3"];
 var preferences_profs = {'prof. Geraedts': [6,"europe-the-final-countdown-official-video-9jK-NcRmVcw.mp3"], 'prof. Van-Hamme': [4, "No One Knows.mp3"], 'prof. Vandepitte': [2, "The Way To Your Heart.mp3"], 'prof. Houssa': [1, "Canon in D Major.mp3"], 'prof. Blanpain': [4, "Louis Neefs.mp3"],  'prof. Vanmeensel': [5, "yevgueni.mp3"], 'prof. Beernaert': [3, "Hijo de la Luna (Videoclip).mp3"], 'prof. Van-Puyvelde': [0, "Where Is My Mind_.mp3"],   'prof. Dehaene': [5, "Sultans Of Swing.mp3"], 'prof. Moelans': [3, "Canon in D Major.mp3"], 'prof. Anton': [0, "'Riptide' Official Video.mp3"],  'prof. Vandebril': [0, "Eye Of The Tiger.mp3"], 'prof. Baelmans': [5, "Hijo de la Luna (Videoclip).mp3"], 'prof. Jacobs': [0, "Vuurwerk - Lyrics.mp3"], 'prof. De-Laet': [5, "Feral Roots.mp3"], 'prof. Van-De-Walle': [3, "De Zji.mp3"], 'prof. Rijmen': [4, "yevgueni.mp3"], 'prof. Smets': [4, "Eye Of The Tiger.mp3"], 'prof. Holvoet': [3, "'Riptide' Official Video.mp3"], 'prof. Vander-Sloten': [3, "The Way To Your Heart.mp3"]};
+var audio = false;
+
+var savedOptions = [];
+
 var correctly_answered = false;
 
-var audio = false
+
 //------------------------------------------- Buttons -------------------------------------------//
 
 
@@ -35,6 +39,12 @@ function next() {
         alert("Please answer the questions first");
         return;
     }
+
+    if (state == 12) {
+        saveOptions();
+    }
+
+
     fetch('/next')
     .then(response => response.json())
     .then(data => {
@@ -44,6 +54,9 @@ function next() {
     });}
 
 function back() {
+    if (state == 12) {
+        saveOptions();
+    }
     fetch('/back')
     .then(response => response.json())
     .then(data => {
@@ -55,7 +68,27 @@ function back() {
         }
     });}
 
+//------------------------------------------- Save options -------------------------------------------//
 
+
+function saveOptions() {
+    const optionsDiv = document.getElementById('profs_div');
+    const selectOptions = optionsDiv.querySelectorAll('select');
+            
+    selectOptions.forEach(select => {
+        savedOptions.push(select.value);
+    });
+    console.log(savedOptions);
+}
+
+function loadOptions() {
+    const optionsDiv = document.getElementById('profs_div');
+    const selectOptions = optionsDiv.querySelectorAll('select');
+
+    selectOptions.forEach((select, index) => {
+        select.value = savedOptions[index];
+    });
+}
 
 
 
@@ -262,6 +295,8 @@ function loadPage(pageUrl) {
             }
             else if ( state == 3) {
                 initializeSlider();
+            } else if (state == 12 && savedOptions.length > 0) {
+                loadOptions();
             }
 
         })
@@ -297,9 +332,11 @@ function loadContent() {
 
         
 
+        
+
 
         loadPage(data.page);
-
+        
         
     });
 
