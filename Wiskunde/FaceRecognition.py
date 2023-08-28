@@ -24,6 +24,8 @@ class FaceRecognition:
     face_names = []
     process_current_frame = True
 
+    new_face_encodings = []
+    new_face_names = []
     known_face_encodings = []
     known_face_names = []
     face_match_threshold = 0.6
@@ -88,8 +90,9 @@ class FaceRecognition:
         if len(encodings) == 0:
             return False
         encoding = encodings[0]
-        self.known_face_encodings.append(encoding)
-        self.known_face_names.append(name)
+        self.new_face_encodings.append(encoding)
+        self.new_face_names.append(name)
+        print(self.new_face_names)
         return True
         
         
@@ -151,10 +154,57 @@ class FaceRecognition:
         cv_image_rgb = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
         return cv_image_rgb
     
-    
-
-
     def process_frame(self, frame):
+        if self.process_current_frame:
+            small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+            rgb_small_frame = small_frame[:, :, ::-1]
+        
+            self.face_locations = face_recognition.face_locations(rgb_small_frame)
+            self.face_encodings = face_recognition.face_encodings(rgb_small_frame, self.face_locations)
+
+            self.face_names = []
+            for face_encoding in self.face_encodings:
+                name = "Unknown"
+                confidance = 100.0
+                if len(self.new_face_encodings) > 0:
+                    matches = face_recognition.compare_faces(self.new_face_encodings, face_encoding, tolerance=self.face_match_threshold)
+                    
+
+                    face_distances = face_recognition.face_distance(self.new_face_encodings, face_encoding)
+                    if len(face_distances) > 0:
+                        best_match_index = np.argmin(face_distances)         
+                        name = self.new_face_names[best_match_index]
+                        confidance = face_confidence(face_distances[best_match_index])
+
+
+                    
+
+
+                    # if matches[best_match_index]:
+                    #     name = self.known_face_names[best_match_index]
+                    #     confidance = face_confidence(face_distances[best_match_index])
+                    
+                self.face_names.append(f'{name} ({confidance})')
+
+        self.process_current_frame = not self.process_current_frame
+
+        for (top, right, bottom, left), name in zip(self.face_locations, self.face_names):
+            top *= 4
+            right *= 4
+            bottom *= 4
+            left *= 4
+
+            cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+
+            cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+
+            font = cv2.FONT_HERSHEY_DUPLEX
+            cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+        
+        return frame
+
+
+    def process_frame_with_prof(self, frame):
         if self.process_current_frame:
             small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
             rgb_small_frame = small_frame[:, :, ::-1]
@@ -167,6 +217,7 @@ class FaceRecognition:
                 matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding, tolerance=self.face_match_threshold)
                 name = "Unknown"
                 confidance = 100.0
+                self.prof_found = 'None'
 
 
                 face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)

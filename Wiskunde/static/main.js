@@ -11,6 +11,8 @@ var options = ["Zwarte koffie", "Zwarte koffie met suiker", "Koffie met melk en 
 var songs = ["'Riptide' Official Video.mp3", "Canon in D Major.mp3", "De Zji.mp3", "Eye Of The Tiger.mp3", "Feral Roots.mp3", "Hijo de la Luna (Videoclip).mp3", "Louis Neefs.mp3", "No One Knows.mp3", "Sultans Of Swing.mp3", "The Way To Your Heart.mp3", "Vuurwerk - Lyrics.mp3", "Where Is My Mind_.mp3", "yevgueni.mp3", "europe-the-final-countdown-official-video-9jK-NcRmVcw.mp3"];
 var preferences_profs = {'prof. Geraedts': [6,"europe-the-final-countdown-official-video-9jK-NcRmVcw.mp3"], 'prof. Van-Hamme': [4, "No One Knows.mp3"], 'prof. Vandepitte': [2, "The Way To Your Heart.mp3"], 'prof. Houssa': [1, "Canon in D Major.mp3"], 'prof. Blanpain': [4, "Louis Neefs.mp3"],  'prof. Vanmeensel': [5, "yevgueni.mp3"], 'prof. Beernaert': [3, "Hijo de la Luna (Videoclip).mp3"], 'prof. Van-Puyvelde': [0, "Where Is My Mind_.mp3"],   'prof. Dehaene': [5, "Sultans Of Swing.mp3"], 'prof. Moelans': [3, "Canon in D Major.mp3"], 'prof. Anton': [0, "'Riptide' Official Video.mp3"],  'prof. Vandebril': [0, "Eye Of The Tiger.mp3"], 'prof. Baelmans': [5, "Hijo de la Luna (Videoclip).mp3"], 'prof. Jacobs': [0, "Vuurwerk - Lyrics.mp3"], 'prof. De-Laet': [5, "Feral Roots.mp3"], 'prof. Van-De-Walle': [3, "De Zji.mp3"], 'prof. Rijmen': [4, "yevgueni.mp3"], 'prof. Smets': [4, "Eye Of The Tiger.mp3"], 'prof. Holvoet': [3, "'Riptide' Official Video.mp3"], 'prof. Vander-Sloten': [3, "The Way To Your Heart.mp3"]};
 var correctly_answered = false;
+
+var audio = false
 //------------------------------------------- Buttons -------------------------------------------//
 
 
@@ -48,6 +50,9 @@ function back() {
         console.log(data);
         loadContent();
         caemra_on = false;
+        if (audio != false) {
+            audio.pause();
+        }
     });}
 
 
@@ -227,7 +232,10 @@ function detect_face(){
             detected_color_box.style.backgroundColor = colors[preferences_profs[data.result][0]];
             detected_song.innerHTML = `${preferences_profs[data.result][1]}`;
             detected_option.innerHTML = `${options[preferences_profs[data.result][0]]}`;
-            var audio = new Audio("/static/music/"+preferences_profs[data.result][1]);
+            if (audio != false) {
+                audio.pause();
+            }
+            audio = new Audio("/static/music/"+preferences_profs[data.result][1]);
             audio.play();
         } else {
             detected_prof.innerHTML = `Geen profesoor gedetecteerd, probeer opnieuw`;
