@@ -34,6 +34,8 @@ class FaceRecognition:
     face_found_confidence = ""
     face_found_distance = 0.0
     face_found_location = []
+    prof_found = 'None'
+    known_names = ['prof. Geraedts', 'prof. Van-Hamme', 'prof. Vandepitte', 'prof. Houssa', 'prof. Blanpain',  'prof. Vanmeensel', 'prof. Beernaert', 'prof. Van-Puyvelde',   'prof. Dehaene', 'prof. Moelans', 'prof. Anton',  'prof. Vandebril', 'prof. Baelmans', 'prof. Jacobs', 'prof. De-Laet', 'prof. Van-De-Walle', 'prof. Rijmen', 'prof. Smets', 'prof. Holvoet', 'prof. Vander-Sloten']
 
     saved_encodings_file = "face-recognition/saved_encodings.npy"
     saved_encodings_names_file = "face-recognition/saved_encodings_names.npy"
@@ -148,6 +150,8 @@ class FaceRecognition:
         # Convert the image back to RGB for display
         cv_image_rgb = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
         return cv_image_rgb
+    
+    
 
 
     def process_frame(self, frame):
@@ -173,7 +177,8 @@ class FaceRecognition:
                     confidance = face_confidence(average_faces[name])
 
 
-                
+                if name in self.known_names:
+                    self.prof_found = name
 
 
                 # if matches[best_match_index]:

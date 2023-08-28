@@ -2,8 +2,15 @@
 var state = 0;
 var nb_steps = 1;
 
+var caemra_on = false;
 
+var profs = ['prof. Geraedts', 'prof. Van-Hamme', 'prof. Vandepitte', 'prof. Houssa', 'prof. Blanpain',  'prof. Vanmeensel', 'prof. Beernaert', 'prof. Van-Puyvelde',   'prof. Dehaene', 'prof. Moelans', 'prof. Anton',  'prof. Vandebril', 'prof. Baelmans', 'prof. Jacobs', 'prof. De-Laet', 'prof. Van-De-Walle', 'prof. Rijmen', 'prof. Smets', 'prof. Holvoet', 'prof. Vander-Sloten'];
 
+var colors = ["#000000", "#ff0000", "#00ff00", "#0000ff",   "#00ffff", "#ff00ff", "#ffff00","#ffffff"];
+var options = ["Zwarte koffie", "Zwarte koffie met suiker", "Koffie met melk en suiker", "Koffie met melk", "Thee", "Thee met melk", "Thee met melk en suiker", "Thee met suiker"];
+var songs = ["'Riptide' Official Video.mp3", "Canon in D Major.mp3", "De Zji.mp3", "Eye Of The Tiger.mp3", "Feral Roots.mp3", "Hijo de la Luna (Videoclip).mp3", "Louis Neefs.mp3", "No One Knows.mp3", "Sultans Of Swing.mp3", "The Way To Your Heart.mp3", "Vuurwerk - Lyrics.mp3", "Where Is My Mind_.mp3", "yevgueni.mp3", "europe-the-final-countdown-official-video-9jK-NcRmVcw.mp3"];
+var preferences_profs = {'prof. Geraedts': [6,"europe-the-final-countdown-official-video-9jK-NcRmVcw.mp3"], 'prof. Van-Hamme': [4, "No One Knows.mp3"], 'prof. Vandepitte': [2, "The Way To Your Heart.mp3"], 'prof. Houssa': [1, "Canon in D Major.mp3"], 'prof. Blanpain': [4, "Louis Neefs.mp3"],  'prof. Vanmeensel': [5, "yevgueni.mp3"], 'prof. Beernaert': [3, "Hijo de la Luna (Videoclip).mp3"], 'prof. Van-Puyvelde': [0, "Where Is My Mind_.mp3"],   'prof. Dehaene': [5, "Sultans Of Swing.mp3"], 'prof. Moelans': [3, "Canon in D Major.mp3"], 'prof. Anton': [0, "'Riptide' Official Video.mp3"],  'prof. Vandebril': [0, "Eye Of The Tiger.mp3"], 'prof. Baelmans': [5, "Hijo de la Luna (Videoclip).mp3"], 'prof. Jacobs': [0, "Vuurwerk - Lyrics.mp3"], 'prof. De-Laet': [5, "Feral Roots.mp3"], 'prof. Van-De-Walle': [3, "De Zji.mp3"], 'prof. Rijmen': [4, "yevgueni.mp3"], 'prof. Smets': [4, "Eye Of The Tiger.mp3"], 'prof. Holvoet': [3, "'Riptide' Official Video.mp3"], 'prof. Vander-Sloten': [3, "The Way To Your Heart.mp3"]};
+var correctly_answered = false;
 //------------------------------------------- Buttons -------------------------------------------//
 
 
@@ -17,15 +24,21 @@ function reset() {
     .then(data => {
         console.log(data);
         loadContent();
+        caemra_on = false;
     });}
 
 
 function next() {
+    if ((state == 10) && (correctly_answered == false)) {
+        alert("Please answer the questions first");
+        return;
+    }
     fetch('/next')
     .then(response => response.json())
     .then(data => {
         console.log(data);
         loadContent();
+        caemra_on = false;
     });}
 
 function back() {
@@ -34,6 +47,7 @@ function back() {
     .then(data => {
         console.log(data);
         loadContent();
+        caemra_on = false;
     });}
 
 
@@ -125,6 +139,7 @@ function check_q1() {
         for (var i = 0; i < divs_to_show.length; i++) {
             divs_to_show[i].style.display = "block";
         }
+        correctly_answered = true;
 
     } else {
         result.innerHTML = "<div class='incorrect'>Fout! probeer opnieuw</div>";
@@ -147,6 +162,7 @@ function start_camera(){
     .then(response => response.json())
     .then(data => {
         console.log(data);
+        caemra_on = true;
     });
 }
 
@@ -155,6 +171,7 @@ function stop_camera(){
     .then(response => response.json())
     .then(data => {
         console.log(data);
+        caemra_on = false;
     });
 }
 
@@ -191,6 +208,35 @@ function add_face(){
     });
 }
 
+function detect_face(){
+    const detected_prof = document.getElementById('detected_prof');
+    const detected_color_box = document.getElementById('detected_color_box');
+    const detected_song = document.getElementById('detected_song');
+    const detected_option = document.getElementById('detected_option');
+    if (caemra_on==false) {
+        alert("Please start the camera first");
+        return; 
+    }
+    fetch('/detect_face')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        if (profs.includes(data.result)) {
+            console.log(preferences_profs[data.result]);
+            detected_prof.innerHTML = `${data.result}`;
+            detected_color_box.style.backgroundColor = colors[preferences_profs[data.result][0]];
+            detected_song.innerHTML = `${preferences_profs[data.result][1]}`;
+            detected_option.innerHTML = `${options[preferences_profs[data.result][0]]}`;
+            var audio = new Audio("/static/music/"+preferences_profs[data.result][1]);
+            audio.play();
+        } else {
+            detected_prof.innerHTML = `Geen profesoor gedetecteerd, probeer opnieuw`;
+            detected_color_box.style.backgroundColor = "#AAAAAA";
+            detected_song.innerHTML = `None`;
+            detected_option.innerHTML = `None`;
+        }
+    });
+}
 
 
 

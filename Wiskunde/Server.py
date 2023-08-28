@@ -12,7 +12,7 @@ from FaceRecognition import FaceRecognition
 current_state = 0
 current_page = 'home' 
 
-nb_steps = 11
+nb_steps = 12
 
 retries = 0 
 
@@ -22,6 +22,7 @@ fr = None
 current_camera_choice = 'None'
 add_face_name = None
 adding_face = False
+recognized_prof = None
 
 
 
@@ -91,6 +92,11 @@ def tutorial_10():
 def tutorial_11():
     return render_template('tutorial-11.html')
 
+@app.route('/tutorial-12')
+def tutorial_12():
+    return render_template('tutorial-12.html')
+
+
 
 
 #########Data############
@@ -104,12 +110,17 @@ def get_data():
 def next():
     global current_state
     global current_page
-
+    global current_camera_choice
+    global camera_on
     current_state += 1
     if  current_state > nb_steps:
         current_state = nb_steps
     else:
         current_page = 'tutorial-' + str(current_state)
+    if camera_on:
+        stop_camera()
+        current_camera_choice = 'None'
+        camera_on = False
 
     return jsonify({'status': 'next'})
 
@@ -117,12 +128,18 @@ def next():
 def back():
     global current_state
     global current_page
+    global current_camera_choice
+    global camera_on
     current_state -= 1
     if current_state == 0:
         current_choice = 'None'
         current_page = 'home'
     else:
         current_page = 'tutorial-' + str(current_state)
+    if camera_on:
+        stop_camera()
+        current_camera_choice = 'None'
+        camera_on = False
     return jsonify({'status': 'previous'})
 
 
@@ -188,6 +205,19 @@ def add_face():
     else:
         return jsonify({'status': 'failed'})
 
+@app.route('/detect_face')
+def detect_face():
+    global current_camera_choice
+    global current_state
+    global recognized_prof
+    recognized_prof = None
+    current_camera_choice = 'recognize_prof'
+    while recognized_prof == None:
+        time.sleep(0.1)
+    result = recognized_prof
+    recognized_prof = None
+    return jsonify({'status': 'detect_face', 'result': result})
+
     
     
 
@@ -215,7 +245,9 @@ def stop_camera():
 def gen_frames():  
     global adding_face
     global add_face_name
-    while current_state == 11:
+    global recognized_prof
+    global current_camera_choice
+    while current_state == 11 or current_state == 12:
         if camera_on:
             time.sleep(0.02)
             success, frame = camera.read()  # read the camera frame
@@ -232,6 +264,11 @@ def gen_frames():
                     frame = fr.process_frame_with_makeup(frame)
                 elif current_camera_choice == 'face_recognition':
                     frame = fr.process_frame(frame)
+                elif current_camera_choice == 'recognize_prof':
+                    fr.prof_found = 'None'
+                    frame = fr.process_frame(frame)
+                    recognized_prof = fr.prof_found
+                    current_camera_choice = 'None'
 
                 ret, buffer = cv2.imencode('.jpg', frame)
                 frame = buffer.tobytes()
