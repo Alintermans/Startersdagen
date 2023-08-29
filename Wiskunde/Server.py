@@ -275,6 +275,7 @@ def gen_frames():
                     frame = fr.process_frame(frame)
                 elif current_camera_choice == 'recognize_prof':
                     frame = fr.process_frame_with_prof(frame)
+                    frame = fr.process_frame_with_prof(frame)
                     recognized_prof = fr.prof_found
                     current_camera_choice = 'None'
 
