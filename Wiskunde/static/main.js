@@ -79,6 +79,121 @@ function back() {
         }
     });}
 
+//------------------------------------------- Basic Face Recognition -------------------------------------------//
+
+var fileInput = '';
+var outputDiv = '';
+
+function initializeAlgorithm() {
+    
+    fileInput = document.getElementById('fileInput');
+    outputDiv = document.getElementById('output');  
+    fileInput.addEventListener('change', handleFileSelect);      
+}
+
+
+
+function handleFileSelect(event) {
+    const selectedFiles = event.target.files;
+    outputDiv.innerHTML = ''; // Clear previous results
+    console.log("hello")
+    // Process each selected file
+    for (const file of selectedFiles) {
+        processImage(file);
+    }
+}
+
+function processImage(file) {
+    const image = new Image();
+    image.onload = function () {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        const resizedWidth = 115;
+        const resizedHeight = 80;
+
+        canvas.width = resizedWidth;
+        canvas.height = resizedHeight;
+        context.drawImage(image, 0, 0, resizedWidth, resizedHeight);
+        const imageData = context.getImageData(0, 0, resizedWidth, resizedHeight);
+
+        const grayscaleData = convertToGrayscale(imageData);
+        const eigenface = calculateEigenface(grayscaleData);
+
+        displayEigenface(eigenface);
+
+        // Add interactivity to the displayed eigenface
+        eigenfaceCanvas.addEventListener('click', () => {
+            displayOriginalImage(image);
+        });
+    };
+
+    image.src = URL.createObjectURL(file);
+}
+
+function convertToGrayscale(imageData) {
+    const grayscaleData = new Uint8ClampedArray(imageData.width * imageData.height);
+
+    for (let i = 0; i < imageData.data.length; i += 4) {
+        const r = imageData.data[i];
+        const g = imageData.data[i + 1];
+        const b = imageData.data[i + 2];
+        const grayValue = 0.2989 * r + 0.587 * g + 0.114 * b;
+        grayscaleData[i / 4] = grayValue;
+    }
+
+    return grayscaleData;
+}
+
+function calculateDeviationMatrix(grayscaleData, averageFace) {
+    const deviationMatrix = [];
+
+    for (let i = 0; i < grayscaleData.length; i++) {
+        deviationMatrix.push(grayscaleData[i] - averageFace[i]);
+    }
+
+    return deviationMatrix;
+}
+
+function calculateEigenface(grayscaleData, averageFace) {
+    const deviationMatrix = calculateDeviationMatrix(grayscaleData, averageFace);
+
+    const covariance = math.multiply(deviationMatrix, math.transpose(deviationMatrix));
+    const V = math.multiply(math.transpose(deviationMatrix), deviationMatrix);
+    const { values, vectors } = math.eigs(V, 20); // Eigenvalues and eigenvectors
+
+    const U = math.multiply(deviationMatrix, vectors, math.inv(math.sqrt(values)));
+
+    // For demonstration purposes, we'll return a simple image data array
+    // Replace this with your actual eigenface data processing
+    const eigenfaceData = new Uint8ClampedArray(grayscaleData.length);
+
+    for (let i = 0; i < grayscaleData.length; i++) {
+        eigenfaceData[i] = Math.abs(U[i][0]); // Replace with your eigenface data
+    }
+
+    const eigenfaceImageData = new ImageData(eigenfaceData, grayscaleData.length, 1);
+
+    return eigenfaceImageData;
+}
+
+function displayEigenface(eigenface) {
+    const eigenfaceCanvas = document.createElement('canvas');
+    eigenfaceCanvas.width = eigenface.width;
+    eigenfaceCanvas.height = eigenface.height;
+    const eigenfaceContext = eigenfaceCanvas.getContext('2d');
+    eigenfaceContext.putImageData(eigenface, 0, 0);
+
+    outputDiv.appendChild(eigenfaceCanvas);
+}
+
+function displayOriginalImage(image) {
+    const originalImage = new Image();
+    originalImage.src = image.src;
+
+    outputDiv.innerHTML = ''; // Clear previous eigenface
+    outputDiv.appendChild(originalImage);
+}
+
 //------------------------------------------- RGB-to-grey-values -------------------------------------------//
 
 function convert_to_grey() {
@@ -528,7 +643,11 @@ function loadPage(pageUrl) {
                 initializeSlider();
             } else if (state == 4) {
                 convert_to_grey();
-            } else if (state == 12 && savedOptions.length > 0) {
+            } else if (state == 6) {
+                initializeAlgorithm();
+            }
+            
+            else if (state == 12 && savedOptions.length > 0) {
                 loadOptions();
             } else if (state == 13 && savedColors.length > 0) {
                 loadColors();

@@ -240,10 +240,10 @@ void setServoPosition(int position) {
     analogWrite(motor,0);
     motor_on = false;
   }
-  if(position < 37) {
-    position = 37;
-  } else if (position > 155) {
-    position = 155;
+  if(position < 0) {
+    position = 0;
+  } else if (position > 180) {
+    position = 180;
   }
   myServo.write(position);
 }
