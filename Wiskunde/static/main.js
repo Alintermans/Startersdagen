@@ -81,7 +81,7 @@ function back() {
 
 //------------------------------------------- Basic Face Recognition -------------------------------------------//
 var current_step = 0;
-const numebr_of_steps_alg = 6;
+const numebr_of_steps_alg = 5;
 
 function initializeAlgorithm() {
     const first_canvas = document.getElementById('cnv_alg_0');
@@ -143,6 +143,9 @@ function reset_alg() {
     current_step = 0;
     const first_div = document.getElementById('alg-0');
     first_div.style.display = "flex";
+    const next_button = document.getElementById('next_step_alg_btn');
+        next_button.classList.remove("disabled");
+        next_button.disabled = false;
     
 }
 
@@ -155,6 +158,12 @@ function next_step_alg() {
     current_div.style.display = "none";
     next_div.style.display = "flex";
     current_step += 1;
+
+    if (current_step == numebr_of_steps_alg) {
+        const next_button = document.getElementById('next_step_alg_btn');
+        next_button.classList.add("disabled");
+        next_button.disabled = true;
+    }
 
 }
 
@@ -252,6 +261,15 @@ function alg_to_eigenfaces() {
         const ctx = fifth_canvas.getContext('2d');
         ctx.drawImage(image, 0, 0);
     }
+}
+
+function alg_compare() {
+    const clostest_match = document.getElementById('closest_match');
+    const clostest_matches = document.getElementById('closest_matches');
+
+    clostest_match.style.display = "block";
+    clostest_matches.style.display = "block";
+
 }
 
 
@@ -605,6 +623,8 @@ function start_camera(){
     .then(data => {
         console.log(data);
         caemra_on = true;
+        
+        // video_feed.src = "/video_feed"; 
     });
 }
 

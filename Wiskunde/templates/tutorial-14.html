@@ -6,7 +6,7 @@
             <button class="button" onclick="start_camera()"><i class="fas fa-play"></i> Start Camera</button>
             <button class="button" onclick="stop_camera()"><i class="fas fa-stop"></i> Stop Camera</button>
           </div>
-          <img src="{{ url_for('video_feed') }}" height="75%">
+          <img src="{{ url_for('video_feed') }}" height="75%" id="video_feed">
           <div>
             <button class="button" onclick="detect_face()" style="margin-top: 10px; padding: 10px;">Detecteer de prof!</button>
           </div>
