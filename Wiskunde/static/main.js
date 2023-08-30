@@ -36,15 +36,15 @@ function reset() {
 
 
 function next() {
-    if ((state == 10) && (correctly_answered == false)) {
+    if ((state == 8) && (correctly_answered == false)) {
         alert("Please answer the questions first");
         return;
     }
 
-    if (state == 12) {
+    if (state == 10) {
         saveOptions();
     }
-    if (state == 13) {
+    if (state == 11) {
         if (!checkAllDifferent()) {
             return;
         }
@@ -61,10 +61,10 @@ function next() {
     });}
 
 function back() {
-    if (state == 12) {
+    if (state == 10) {
         saveOptions();
     }
-    if (state == 13) {
+    if (state == 11) {
         
         saveColors();
     }
@@ -728,9 +728,9 @@ function loadPage(pageUrl) {
                 initializeAlgorithm();
             }
             
-            else if (state == 12 && savedOptions.length > 0) {
+            else if (state == 10 && savedOptions.length > 0) {
                 loadOptions();
-            } else if (state == 13 && savedColors.length > 0) {
+            } else if (state == 11 && savedColors.length > 0) {
                 loadColors();
             }
 
