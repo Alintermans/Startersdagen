@@ -493,3 +493,14 @@ img {
   justify-content: left;
   align-items: center;
 }
+
+.alg-frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.alg-frame h3 {
+  margin-top: 0;
+}

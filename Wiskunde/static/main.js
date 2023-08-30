@@ -80,119 +80,180 @@ function back() {
     });}
 
 //------------------------------------------- Basic Face Recognition -------------------------------------------//
-
-var fileInput = '';
-var outputDiv = '';
+var current_step = 0;
+const numebr_of_steps_alg = 6;
 
 function initializeAlgorithm() {
-    
-    fileInput = document.getElementById('fileInput');
-    outputDiv = document.getElementById('output');  
-    fileInput.addEventListener('change', handleFileSelect);      
-}
+    const first_canvas = document.getElementById('cnv_alg_0');
+    const second_canvas = document.getElementById('cnv_alg_1');
+    const third_canvas = document.getElementById('cnv_alg_2');
+    const fourth_canvas = document.getElementById('cnv_alg_3');
+    const fifth_canvas = document.getElementById('cnv_alg_4');
 
-
-
-function handleFileSelect(event) {
-    const selectedFiles = event.target.files;
-    outputDiv.innerHTML = ''; // Clear previous results
-    console.log("hello")
-    // Process each selected file
-    for (const file of selectedFiles) {
-        processImage(file);
-    }
-}
-
-function processImage(file) {
-    const image = new Image();
+    var image = new Image();
+    image.src = 'static/images/JVDS.png';
     image.onload = function () {
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        const resizedWidth = 115;
-        const resizedHeight = 80;
-
-        canvas.width = resizedWidth;
-        canvas.height = resizedHeight;
-        context.drawImage(image, 0, 0, resizedWidth, resizedHeight);
-        const imageData = context.getImageData(0, 0, resizedWidth, resizedHeight);
-
-        const grayscaleData = convertToGrayscale(imageData);
-        const eigenface = calculateEigenface(grayscaleData);
-
-        displayEigenface(eigenface);
-
-        // Add interactivity to the displayed eigenface
-        eigenfaceCanvas.addEventListener('click', () => {
-            displayOriginalImage(image);
-        });
-    };
-
-    image.src = URL.createObjectURL(file);
-}
-
-function convertToGrayscale(imageData) {
-    const grayscaleData = new Uint8ClampedArray(imageData.width * imageData.height);
-
-    for (let i = 0; i < imageData.data.length; i += 4) {
-        const r = imageData.data[i];
-        const g = imageData.data[i + 1];
-        const b = imageData.data[i + 2];
-        const grayValue = 0.2989 * r + 0.587 * g + 0.114 * b;
-        grayscaleData[i / 4] = grayValue;
+        first_canvas.width = image.width;
+        first_canvas.height = image.height;
+        const ctx = first_canvas.getContext('2d');
+        ctx.drawImage(image, 0, 0);
     }
 
-    return grayscaleData;
-}
-
-function calculateDeviationMatrix(grayscaleData, averageFace) {
-    const deviationMatrix = [];
-
-    for (let i = 0; i < grayscaleData.length; i++) {
-        deviationMatrix.push(grayscaleData[i] - averageFace[i]);
+    var image2 = new Image();
+    image2.src = 'static/images/JVDS_crop.png';
+    image2.onload = function () {
+        second_canvas.width = image2.width;
+        second_canvas.height = image2.height;
+        const ctx = second_canvas.getContext('2d');
+        ctx.drawImage(image2, 0, 0);
     }
 
-    return deviationMatrix;
-}
-
-function calculateEigenface(grayscaleData, averageFace) {
-    const deviationMatrix = calculateDeviationMatrix(grayscaleData, averageFace);
-
-    const covariance = math.multiply(deviationMatrix, math.transpose(deviationMatrix));
-    const V = math.multiply(math.transpose(deviationMatrix), deviationMatrix);
-    const { values, vectors } = math.eigs(V, 20); // Eigenvalues and eigenvectors
-
-    const U = math.multiply(deviationMatrix, vectors, math.inv(math.sqrt(values)));
-
-    // For demonstration purposes, we'll return a simple image data array
-    // Replace this with your actual eigenface data processing
-    const eigenfaceData = new Uint8ClampedArray(grayscaleData.length);
-
-    for (let i = 0; i < grayscaleData.length; i++) {
-        eigenfaceData[i] = Math.abs(U[i][0]); // Replace with your eigenface data
+    var image3 = new Image();
+    image3.src = 'static/images/JVDS_grey.png';
+    image3.onload = function () {
+        third_canvas.width = image3.width;
+        third_canvas.height = image3.height;
+        const ctx = third_canvas.getContext('2d');
+        ctx.drawImage(image3, 0, 0);
     }
 
-    const eigenfaceImageData = new ImageData(eigenfaceData, grayscaleData.length, 1);
+    var image4 = new Image();
+    image4.src = 'static/images/average_face.png';
+    image4.onload = function () {
+        fourth_canvas.width = image4.width;
+        fourth_canvas.height = image4.height;
+        const ctx = fourth_canvas.getContext('2d');
+        ctx.drawImage(image4, 0, 0);
+    }
 
-    return eigenfaceImageData;
+    var image5 = new Image();
+    image5.src = 'static/images/JVDS_diff.png';
+    image5.onload = function () {
+        fifth_canvas.width = image5.width;
+        fifth_canvas.height = image5.height;
+        const ctx = fifth_canvas.getContext('2d');
+        ctx.drawImage(image5, 0, 0);
+    }
+
 }
 
-function displayEigenface(eigenface) {
-    const eigenfaceCanvas = document.createElement('canvas');
-    eigenfaceCanvas.width = eigenface.width;
-    eigenfaceCanvas.height = eigenface.height;
-    const eigenfaceContext = eigenfaceCanvas.getContext('2d');
-    eigenfaceContext.putImageData(eigenface, 0, 0);
-
-    outputDiv.appendChild(eigenfaceCanvas);
+function reset_alg() {
+    const current_div = document.getElementById('alg-'+current_step);
+    current_div.style.display = "none";
+    current_step = 0;
+    const first_div = document.getElementById('alg-0');
+    first_div.style.display = "flex";
+    
 }
 
-function displayOriginalImage(image) {
-    const originalImage = new Image();
-    originalImage.src = image.src;
+function next_step_alg() {
+    if (current_step == numebr_of_steps_alg) {
+        return;
+    }
+    const current_div = document.getElementById('alg-'+current_step); 
+    const next_div = document.getElementById('alg-'+(current_step+1));
+    current_div.style.display = "none";
+    next_div.style.display = "flex";
+    current_step += 1;
 
-    outputDiv.innerHTML = ''; // Clear previous eigenface
-    outputDiv.appendChild(originalImage);
 }
+
+function alg_crop_and_scale() {
+    const first_canvas = document.getElementById('cnv_alg_0');
+
+    var image = new Image();
+    image.src = 'static/images/JVDS_crop.png';
+    image.onload = function () {
+        first_canvas.width = image.width;
+        first_canvas.height = image.height;
+        const ctx = first_canvas.getContext('2d');
+        ctx.drawImage(image, 0, 0);
+    }
+}
+
+var in_grey = false;
+function alg_to_grey() {
+    const second_canvas = document.getElementById('cnv_alg_1');
+    var image = new Image();
+    if (in_grey) {
+        image.src = 'static/images/JVDS_crop.png';
+        in_grey = false;
+    } else {
+        image.src = 'static/images/JVDS_grey.png';
+        in_grey = true;
+    }
+    
+    image.onload = function () {
+        second_canvas.width = image.width;
+        second_canvas.height = image.height;
+        const ctx = second_canvas.getContext('2d');
+        ctx.drawImage(image, 0, 0);
+    }
+    
+
+
+}
+
+var in_mean = false;
+function alg_to_mean() {
+    const third_canvas = document.getElementById('cnv_alg_2');
+    var image = new Image();
+    
+    if (in_mean) {
+        image.src = 'static/images/JVDS_grey.png';
+        in_mean = false;
+    } else {
+        image.src = 'static/images/average_face.png';
+        in_mean = true;
+    }
+    image.onload = function () {
+        third_canvas.width = image.width;
+        third_canvas.height = image.height;
+        const ctx = third_canvas.getContext('2d');
+        ctx.drawImage(image, 0, 0);
+    }
+}
+var in_diff = false;
+function alg_to_diff() {
+    const fourth_canvas = document.getElementById('cnv_alg_3');
+    var image = new Image();
+    if (in_diff) {
+        image.src = 'static/images/average_face.png';
+        in_diff = false;
+    } else {
+    image.src = 'static/images/JVDS_diff.png';
+    in_diff = true;
+    }
+
+    image.onload = function () {
+        fourth_canvas.width = image.width;
+        fourth_canvas.height = image.height;
+        const ctx = fourth_canvas.getContext('2d');
+        ctx.drawImage(image, 0, 0);
+    }
+
+
+}
+
+var in_eigen = false;
+function alg_to_eigenfaces() {
+    const fifth_canvas = document.getElementById('cnv_alg_4');
+    var image = new Image();
+    if(in_eigen) {
+        image.src = 'static/images/JVDS_diff.png';
+        in_eigen = false;
+    } else {
+        image.src = 'static/images/eigenface_0.png';
+        in_eigen = true;
+    }
+    image.onload = function () {
+        fifth_canvas.width = image.width;
+        fifth_canvas.height = image.height;
+        const ctx = fifth_canvas.getContext('2d');
+        ctx.drawImage(image, 0, 0);
+    }
+}
+
 
 //------------------------------------------- RGB-to-grey-values -------------------------------------------//
 

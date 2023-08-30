@@ -50,8 +50,8 @@
 
     
     </div>
-  <div class="column">
-    <h2>Interactief: wiskundig algoritme in juiste volgorde zetten</h2>
+  <div class="column" style="display: flex; flex-direction: column; align-items: center; justify-content: space-around;">
+    <h2 style="text-align: center; margin-bottom: 0;">Leer het algoritme visueel kennen!<button style="margin-left: 10px;" onclick="reset_alg()"><i class="fas fa-undo"></i></button></h2> 
     <!-- <h3>
       Database maken
     </h3>
@@ -75,9 +75,63 @@
     <li>Projectie op gezichtsruimte</li>
     <li>Norm van de euclidische afstand bepalen tussen de kolommen van Omega en vector Omega_nieuw</li>
     <li>Minimum zoeken</li> -->
-    <input type="file" id="fileInput" multiple>
-    <div id="output"></div>
+    <!-- <input type="file" id="fileInput" multiple>
+    <div id="output"></div> -->
+
+    <div id="alg-0" class="alg-frame" >
+      <h3>Stap 1: Knip afbeelding uit en vorm om naar juiste resolutie</h3>
+      <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
+        <canvas id="cnv_alg_0" style="border-radius: 10px; height: 200px;"></canvas>
+        <button class="button" onclick="alg_crop_and_scale()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Knip uit & vorm om</button>
+      </div>
+      
+    </div>
+
+    <div id="alg-1" class="alg-frame" style="display: none;">
+      <h3>Stap 2: Zet afbeelding om in grijswaarden</h3>
+      <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
+        <canvas id="cnv_alg_1" style="border-radius: 10px; height: 200px;"></canvas>
+        <button class="button" onclick="alg_to_grey()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Naar grijswaarden</button>
+      </div>
+      
+    </div>
+
+    <div id="alg-2" class="alg-frame" style="display: none;">
+      <h3>Stap 3: Gemiddeld gezicht maken</h3>
+      <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
+        <canvas id="cnv_alg_2" style="border-radius: 10px; height: 200px;"></canvas>
+        <button class="button" onclick="alg_to_mean()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Naar gemiddeld gezicht</button>
+      </div>
+    </div>
+
+    <div id="alg-3" class="alg-frame" style="display: none;">
+      <h3>Stap 4: Verschil met gemiddeld gezicht</h3>
+      <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
+        <canvas id="cnv_alg_3" style="border-radius: 10px; height: 200px;"></canvas>
+        <button class="button" onclick="alg_to_diff()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Verschil met gemiddeld gezicht</button>
+      </div>
+    </div>
+
+    <div id="alg-4" class="alg-frame" style="display: none;">
+      <h3>Stap 5: Eigenfaces Berekenen</h3>
+      <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
+        <canvas id="cnv_alg_4" style="border-radius: 10px; height: 200px;"></canvas>
+        <button class="button" onclick="alg_to_eigenfaces()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Eigenfaces berekenen</button>
+      </div>
+    </div>
+
+    <div id="alg-5" class="alg-frame" style="display: none;">
+      <h3>Stap 6: Gewichten bepalen</h3>
+      <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
+        <img src="{{ url_for('static', filename='images/eigenface_0.png') }}" style="border-radius: 10px; height: 200px;">
+        <button class="button" onclick="alg_to_weights()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Gewichten bepalen</button>
+      </div>
+    </div>
+
     
+    
+
+    <button class="button" onclick="next_step_alg()" style="margin-top: 10px; padding: 10px; align-self: center;"><i class="fas fa-arrow-right"></i> Volgende stap</button>
   </div>
 </div>
 
