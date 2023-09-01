@@ -34,7 +34,7 @@ app = Flask(__name__)    # Create Flask app
 
 
 def run_server():
-    app.run(host='0.0.0.0', port=30, debug=True)    # Run Flask web server (HTTP
+    app.run(host='0.0.0.0', port=3000, debug=True)    # Run Flask web server (HTTP
 
 # Flask route to display device data
 
