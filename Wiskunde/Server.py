@@ -12,7 +12,7 @@ from FaceRecognition import FaceRecognition
 current_state = 0
 current_page = 'home' 
 
-nb_steps = 14
+nb_steps = 12
 
 retries = 0 
 
@@ -238,8 +238,9 @@ def start_camera():
     global camera
     global camera_on
     
-    camera = cv2.VideoCapture(1)
-    camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    #camera = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+    camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    #camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     time.sleep(1.5)
     camera_on = True
 
@@ -249,17 +250,21 @@ def stop_camera():
     camera_on = False
     time.sleep(0.5)
     camera.release()
-    
+    global current_camera_choice
+    current_camera_choice = 'None'
 
 def gen_frames():  
     global adding_face
     global add_face_name
     global recognized_prof
     global current_camera_choice
-    while current_state == 11 or current_state == 14 or current_state == 13 or current_state == 12 or current_state == 10:
+    while current_state == 8 or current_state == 12 or current_state == 11 or current_state == 10 or current_state == 9:
         if camera_on:
             time.sleep(0.02)
-            success, frame = camera.read()  # read the camera frame
+            try:
+                success, frame = camera.read()  # read the camera frame
+            except:
+                break
             if not success:
                 break
             else:
@@ -287,8 +292,15 @@ def gen_frames():
             img = cv2.imread('static/images/camera_uit.jpg')
             ret, buffer = cv2.imencode('.jpg', img)
             frame = buffer.tobytes()
+            
             yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            
+    img = cv2.imread('static/images/camera_uit.jpg')
+    ret, buffer = cv2.imencode('.jpg', img)
+    frame = buffer.tobytes()
+    yield (b'--frame\r\n'
+            b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 
 

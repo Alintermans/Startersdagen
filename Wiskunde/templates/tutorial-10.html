@@ -1,65 +1,1093 @@
-<div class="box-header">Wiskunde: Gezichtsherkenning met Machine Learning - 10/14</div>
+<div class="box-header">Wiskunde: Database van de proffen - 10/12</div>
     <div class="columns">
       <div class="column">
-      <p>
-        Het voorgande algoritme dat de gezichtsherkennning deed op basis van enkel de eiegngezichten is jammer genoeg niet zo performant. 
-        <br> Hoe denk je dat dit komt? Duid al de juiste antwoorden aan.
-        <form>
+          <h2>Proffen toevoegen aan database</h2>
+          <p>Om de gezichtsherkenning te laten werken, moeten we eerst de proffen toevoegen aan de database. De foto's hebben we al geüpload, jullie moeten enkel de foto aan de juiste naam koppelen en hun favoriete drankje en liedje nog selecteren. Deze vinden jullie op het opgaveblad. </p>
+          <div style="display: grid; gap: 10px; text-align: center;" id="profs_div">
+            <h4 style="grid-column: 1; grid-row: 1;">Proffen</h4>
+            <h4 style="grid-column: 2; grid-row: 1;">Naam</h4>
+            <h4 style="grid-column: 3; grid-row: 1;">Favoriete drankje</h4>
+            <h4 style="grid-column: 4; grid-row: 1;">Favoriete liedje</h4>
+            <!-- TB.png ; prof_jacobs.jpg ; prof_smets.jpg ;prof_Van hamme.jpg ; PVP.jpg ; prof_dehaene.jpg ; JVDS.png ; MH.png ; prof_rijmen.jpg; blanpain.png ; DVDP.png; TDL.jpg ; prof_Vandewalle.JPG ; prof_moelans.jpg ; prof_vandebril.png ; prof_Beernaert.jpg ; TH.png ; KVM.png -->
+            <div style="grid-column: 1; grid-row: 2;">
+              <img src="{{ url_for('static', filename='images/TB.png') }}" style=" height: 100px; object-fit: cover;">
+            </div>
+            <div style="grid-column: 2; grid-row: 2;">
+              <select id="sequention-0-name">
+                <option value="Baelmans">Prof. Baelmans</option>
+                <option value="Beernaert">Prof. Beernaert </option>
+                <option value="Blanpain">Prof. Blanpain</option>
+                <option value="De-Laet">Prof. De Laet</option>
+                <option value="Dehaene">Prof. Dehaene</option>
+                <option value="Holvoet">Prof. Holvoet</option>
+                <option value="Houssa">Prof. Houssa</option>
+                <option value="Jacobs">Prof. Jacobs</option>
+                <option value="Moelans">Prof. Moelans</option>
+                <option value="Rijmen">Prof. Rijmen</option>
+                <option value="Smets">Prof. Smets</option>
+                <option value="Van-De-Walle">Prof. Van De Walle</option>
+                <option value="Van-Hamme">Prof. Van Hamme</option>
+                <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                <option value="Vandebril">Prof. Vandebril</option>
+                <option value="Vandepitte">Prof. Vandepitte</option>
+                <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                <option value="Vanmeensel">Prof. Vanmeensel</option>
+            </select>
+            </div>
+            <div style="grid-column: 3; grid-row: 2;">
+              <select id="sequention-0-drink">
+                  <option value="Koffie">Koffie</option>
+                  <option value="Thee">Thee</option>
+                  <option value="Koffie met suiker">Koffie met suiker</option>
+                  <option value="Thee met suiker">Thee met suiker</option>
+                  <option value="Koffie met melk">Koffie met melk</option>
+                  <option value="Thee met melk">Thee met melk</option>
+                  <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                  <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+              </select>
+            </div>
+            <div style="grid-column: 4; grid-row: 2;">
+             
+              <select id="sequention-0-song">
+                  <option value="Riptide">Riptide</option>
+                  <option value="Canon in D Major">Canon in D Major</option>
+                  <option value="De Zji">De Zji</option>
+                  <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                  <option value="Feral Roots">Feral Roots</option>
+                  <option value="Hijo de la Luna">Hijo de la Luna</option>
+                  <option value="Louis Neefs">Louis Neefs</option>
+                  <option value="No One Knows">No One Knows</option>
+                  <option value="Sultans Of Swing">Sultans Of Swing</option>
+                  <option value="The Way To Your Heart">The Way To Your Heart</option>
+                  <option value="Vuurwerk">Vuurwerk</option>
+                  <option value="Where Is My Mind_">Where Is My Mind</option>
+                  <option value="yevgueni">Yevgueni</option>
+                  <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+              </select>
+              </div>
 
-          <input type="radio" id="q1" name="q1" value="1">
-          <label for="1" style="font-size: small;">Het algoritme maakt enkel gebruik van grijstinten</label><br>
-          <input type="radio" id="q2" name="q2" value="2">
-          <label for="2" style="font-size: small;">De personen moeten allemaal op dezelfde manier kijken</label><br>
-          <input type="radio" id="q3" name="q3" value="3">
-          <label for="3" style="font-size: small;">De gezichten op de afbeeldingen moeten allemaal even groot zijn</label><br>
-          <input type="radio" id="q4" name="q4" value="4">
-          <label for="4" style="font-size: small;">Het maakt gebruik van de euclidische afstand</label><br>
-          <input type="radio" id="q5" name="q5" value="5">
-          <label for="5" style="font-size: small;">Alle afbeeldingen worden omgezet in kolomvectoren</label><br>
-          
-        </form>
-        <div style="display: flex; flex-direction: row; align-items: center;" >
-          <button class="button" onclick="check_q1()" style="margin-top: 10px; padding:15px; " >Controleer je antwoorden</button> <b><span id="result_q1"></span></b>
-        </div>
-      </p>
-      <div class="correct_answer" style="display:none;">
-        <h3>Een nieuwe aanpak</h3>
-          Om de performantie te verbeteren gaan we verschillende stappen toevoegen en gebruik maken van <i>Machine Learning</i>.
-          <br> <br>
-          <ul>
-            <li><b>Stap 1:</b> Gezichten detecteren op de foto's en knip de gezichten uit, zodat ze allemaal het formaat hebben</li>
-            <li><b>Stap 2:</b> Detecteer de specifieke gezichtskenmerken en transformeer de gezichten zodat ze allemaal op dezelfde manier kijken!</li>
-            <li><b>Stap 3:</b> Encodeer de gezichten naar een 128-dimensionale kolomvector op basis van een neuraal netwerk</li>
-            <li><b>Stap 4:</b> Gebruik een neural netwerk om te bepalen of twee gezichten dezelfde persoon zijn</li>
-          </ul>
+            <div style="grid-column: 1; grid-row: 3;">
+              <img src="{{ url_for('static', filename='images/prof_jacobs.jpg') }}" style=" height: 100px; object-fit: cover;">
+              </div>
 
+            <div style="grid-column: 2; grid-row: 3;">
+              <select id="sequention-1-name">
+                <option value="Baelmans">Prof. Baelmans</option>
+                <option value="Beernaert">Prof. Beernaert </option>
+                <option value="Blanpain">Prof. Blanpain</option>
+                <option value="De-Laet">Prof. De Laet</option>
+                <option value="Dehaene">Prof. Dehaene</option>
+                <option value="Holvoet">Prof. Holvoet</option>
+                <option value="Houssa">Prof. Houssa</option>
+                <option value="Jacobs">Prof. Jacobs</option>
+                <option value="Moelans">Prof. Moelans</option>
+                <option value="Rijmen">Prof. Rijmen</option>
+                <option value="Smets">Prof. Smets</option>
+                <option value="Van-De-Walle">Prof. Van De Walle</option>
+                <option value="Van-Hamme">Prof. Van Hamme</option>
+                <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                <option value="Vandebril">Prof. Vandebril</option>
+                <option value="Vandepitte">Prof. Vandepitte</option>
+                <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                <option value="Vanmeensel">Prof. Vanmeensel</option>
+            </select>
+            </div>
 
-      </div>
-      </div>
+            <div style="grid-column: 3; grid-row: 3;">
+              <select id="sequention-1-drink">
+                  <option value="Koffie">Koffie</option>
+                  <option value="Thee">Thee</option>
+                  <option value="Koffie met suiker">Koffie met suiker</option>
+                  <option value="Thee met suiker">Thee met suiker</option>
+                  <option value="Koffie met melk">Koffie met melk</option>
+                  <option value="Thee met melk">Thee met melk</option>
+                  <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                  <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 4; grid-row: 3;">
+              <select id="sequention-1-song">
+                <option value="Riptide">Riptide</option>
+                <option value="Canon in D Major">Canon in D Major</option>
+                <option value="De Zji">De Zji</option>
+                <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                <option value="Feral Roots">Feral Roots</option>
+                <option value="Hijo de la Luna">Hijo de la Luna</option>
+                <option value="Louis Neefs">Louis Neefs</option>
+                <option value="No One Knows">No One Knows</option>
+                <option value="Sultans Of Swing">Sultans Of Swing</option>
+                <option value="The Way To Your Heart">The Way To Your Heart</option>
+                <option value="Vuurwerk">Vuurwerk</option>
+                <option value="Where Is My Mind_">Where Is My Mind</option>
+                <option value="yevgueni">Yevgueni</option>
+                <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 1; grid-row: 4;">
+              <img src="{{ url_for('static', filename='images/prof_smets.jpg') }}" style=" height: 100px; object-fit: cover;">
+              </div>
+
+            <div style="grid-column: 2; grid-row: 4;">
+              <select id="sequention-2-name">
+                <option value="Baelmans">Prof. Baelmans</option>
+                <option value="Beernaert">Prof. Beernaert </option>
+                <option value="Blanpain">Prof. Blanpain</option>
+                <option value="De-Laet">Prof. De Laet</option>
+                <option value="Dehaene">Prof. Dehaene</option>
+                <option value="Holvoet">Prof. Holvoet</option>
+                <option value="Houssa">Prof. Houssa</option>
+                <option value="Jacobs">Prof. Jacobs</option>
+                <option value="Moelans">Prof. Moelans</option>
+                <option value="Rijmen">Prof. Rijmen</option>
+                <option value="Smets">Prof. Smets</option>
+                <option value="Van-De-Walle">Prof. Van De Walle</option>
+                <option value="Van-Hamme">Prof. Van Hamme</option>
+                <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                <option value="Vandebril">Prof. Vandebril</option>
+                <option value="Vandepitte">Prof. Vandepitte</option>
+                <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                <option value="Vanmeensel">Prof. Vanmeensel</option>
+            </select>
+            </div>
+
+            <div style="grid-column: 3; grid-row: 4;">
+              <select id="sequention-2-drink">
+                  <option value="Koffie">Koffie</option>
+                  <option value="Thee">Thee</option>
+                  <option value="Koffie met suiker">Koffie met suiker</option>
+                  <option value="Thee met suiker">Thee met suiker</option>
+                  <option value="Koffie met melk">Koffie met melk</option>
+                  <option value="Thee met melk">Thee met melk</option>
+                  <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                  <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+              </select>
+            </div>
+            
+            
+            <div style="grid-column: 4; grid-row: 4;">
+              <select id="sequention-2-song">
+                <option value="Riptide">Riptide</option>
+                <option value="Canon in D Major">Canon in D Major</option>
+                <option value="De Zji">De Zji</option>
+                <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                <option value="Feral Roots">Feral Roots</option>
+                <option value="Hijo de la Luna">Hijo de la Luna</option>
+                <option value="Louis Neefs">Louis Neefs</option>
+                <option value="No One Knows">No One Knows</option>
+                <option value="Sultans Of Swing">Sultans Of Swing</option>
+                <option value="The Way To Your Heart">The Way To Your Heart</option>
+                <option value="Vuurwerk">Vuurwerk</option>
+                <option value="Where Is My Mind_">Where Is My Mind</option>
+                <option value="yevgueni">Yevgueni</option>
+                <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 1; grid-row: 5;">
+              <img src="{{ url_for('static', filename='images/prof_Van hamme.jpg') }}" style=" height: 100px; object-fit: cover;">
+              </div>
+
+            <div style="grid-column: 2; grid-row: 5;">
+              <select id="sequention-3-name">
+                <option value="Baelmans">Prof. Baelmans</option>
+                <option value="Beernaert">Prof. Beernaert </option>
+                <option value="Blanpain">Prof. Blanpain</option>
+                <option value="De-Laet">Prof. De Laet</option>
+                <option value="Dehaene">Prof. Dehaene</option>
+                <option value="Holvoet">Prof. Holvoet</option>
+                <option value="Houssa">Prof. Houssa</option>
+                <option value="Jacobs">Prof. Jacobs</option>
+                <option value="Moelans">Prof. Moelans</option>
+                <option value="Rijmen">Prof. Rijmen</option>
+                <option value="Smets">Prof. Smets</option>
+                <option value="Van-De-Walle">Prof. Van De Walle</option>
+                <option value="Van-Hamme">Prof. Van Hamme</option>
+                <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                <option value="Vandebril">Prof. Vandebril</option>
+                <option value="Vandepitte">Prof. Vandepitte</option>
+                <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                <option value="Vanmeensel">Prof. Vanmeensel</option>
+            </select>
+            </div>
+
+            <div style="grid-column: 3; grid-row: 5;">
+              <select id="sequention-3-drink">
+                  <option value="Koffie">Koffie</option>
+                  <option value="Thee">Thee</option>
+                  <option value="Koffie met suiker">Koffie met suiker</option>
+                  <option value="Thee met suiker">Thee met suiker</option>
+                  <option value="Koffie met melk">Koffie met melk</option>
+                  <option value="Thee met melk">Thee met melk</option>
+                  <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                  <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 4; grid-row: 5;">
+              <select id="sequention-3-song">
+                <option value="Riptide">Riptide</option>
+                <option value="Canon in D Major">Canon in D Major</option>
+                <option value="De Zji">De Zji</option>
+                <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                <option value="Feral Roots">Feral Roots</option>
+                <option value="Hijo de la Luna">Hijo de la Luna</option>
+                <option value="Louis Neefs">Louis Neefs</option>
+                <option value="No One Knows">No One Knows</option>
+                <option value="Sultans Of Swing">Sultans Of Swing</option>
+                <option value="The Way To Your Heart">The Way To Your Heart</option>
+                <option value="Vuurwerk">Vuurwerk</option>
+                <option value="Where Is My Mind_">Where Is My Mind</option>
+                <option value="yevgueni">Yevgueni</option>
+                <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 1; grid-row: 6;">
+              <img src="{{ url_for('static', filename='images/PVP.jpg') }}" style=" height: 100px; object-fit: cover;">
+              </div>
+
+            <div style="grid-column: 2; grid-row: 6;">
+              <select id="sequention-4-name">
+                <option value="Baelmans">Prof. Baelmans</option>
+                <option value="Beernaert">Prof. Beernaert </option>
+                <option value="Blanpain">Prof. Blanpain</option>
+                <option value="De-Laet">Prof. De Laet</option>
+                <option value="Dehaene">Prof. Dehaene</option>
+                <option value="Holvoet">Prof. Holvoet</option>
+                <option value="Houssa">Prof. Houssa</option>
+                <option value="Jacobs">Prof. Jacobs</option>
+                <option value="Moelans">Prof. Moelans</option>
+                <option value="Rijmen">Prof. Rijmen</option>
+                <option value="Smets">Prof. Smets</option>
+                <option value="Van-De-Walle">Prof. Van De Walle</option>
+                <option value="Van-Hamme">Prof. Van Hamme</option>
+                <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                <option value="Vandebril">Prof. Vandebril</option>
+                <option value="Vandepitte">Prof. Vandepitte</option>
+                <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                <option value="Vanmeensel">Prof. Vanmeensel</option>
+            </select>
+            </div>
+
+            <div style="grid-column: 3; grid-row: 6;">
+              <select id="sequention-4-drink">
+                  <option value="Koffie">Koffie</option>
+                  <option value="Thee">Thee</option>
+                  <option value="Koffie met suiker">Koffie met suiker</option>
+                  <option value="Thee met suiker">Thee met suiker</option>
+                  <option value="Koffie met melk">Koffie met melk</option>
+                  <option value="Thee met melk">Thee met melk</option>
+                  <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                  <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 4; grid-row: 6;">
+              <select id="sequention-4-song">
+                <option value="Riptide">Riptide</option>
+                <option value="Canon in D Major">Canon in D Major</option>
+                <option value="De Zji">De Zji</option>
+                <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                <option value="Feral Roots">Feral Roots</option>
+                <option value="Hijo de la Luna">Hijo de la Luna</option>
+                <option value="Louis Neefs">Louis Neefs</option>
+                <option value="No One Knows">No One Knows</option>
+                <option value="Sultans Of Swing">Sultans Of Swing</option>
+                <option value="The Way To Your Heart">The Way To Your Heart</option>
+                <option value="Vuurwerk">Vuurwerk</option>
+                <option value="Where Is My Mind_">Where Is My Mind</option>
+                <option value="yevgueni">Yevgueni</option>
+                <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 1; grid-row: 7;">
+              <img src="{{ url_for('static', filename='images/prof_dehaene.jpg') }}" style=" height: 100px; object-fit: cover;">
+              </div>
+
+            <div style="grid-column: 2; grid-row: 7;">
+
+              <select id="sequention-5-name">
+                <option value="Baelmans">Prof. Baelmans</option>
+                <option value="Beernaert">Prof. Beernaert </option>
+                <option value="Blanpain">Prof. Blanpain</option>
+                <option value="De-Laet">Prof. De Laet</option>
+                <option value="Dehaene">Prof. Dehaene</option>
+                <option value="Holvoet">Prof. Holvoet</option>
+                <option value="Houssa">Prof. Houssa</option>
+                <option value="Jacobs">Prof. Jacobs</option>
+                <option value="Moelans">Prof. Moelans</option>
+                <option value="Rijmen">Prof. Rijmen</option>
+                <option value="Smets">Prof. Smets</option>
+                <option value="Van-De-Walle">Prof. Van De Walle</option>
+                <option value="Van-Hamme">Prof. Van Hamme</option>
+                <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                <option value="Vandebril">Prof. Vandebril</option>
+                <option value="Vandepitte">Prof. Vandepitte</option>
+                <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                <option value="Vanmeensel">Prof. Vanmeensel</option>
+            </select>
+            </div>
+
+            <div style="grid-column: 3; grid-row: 7;">
+              <select id="sequention-5-drink">
+                  <option value="Koffie">Koffie</option>
+                  <option value="Thee">Thee</option>
+                  <option value="Koffie met suiker">Koffie met suiker</option>
+                  <option value="Thee met suiker">Thee met suiker</option>
+                  <option value="Koffie met melk">Koffie met melk</option>
+                  <option value="Thee met melk">Thee met melk</option>
+                  <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                  <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 4; grid-row: 7;">
+              <select id="sequention-5-song">
+                <option value="Riptide">Riptide</option>
+                <option value="Canon in D Major">Canon in D Major</option>
+                <option value="De Zji">De Zji</option>
+                <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                <option value="Feral Roots">Feral Roots</option>
+                <option value="Hijo de la Luna">Hijo de la Luna</option>
+                <option value="Louis Neefs">Louis Neefs</option>
+                <option value="No One Knows">No One Knows</option>
+                <option value="Sultans Of Swing">Sultans Of Swing</option>
+                <option value="The Way To Your Heart">The Way To Your Heart</option>
+                <option value="Vuurwerk">Vuurwerk</option>
+                <option value="Where Is My Mind_">Where Is My Mind</option>
+                <option value="yevgueni">Yevgueni</option>
+                <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 1; grid-row: 8;">
+              <img src="{{ url_for('static', filename='images/JVDS.png') }}" style=" height: 100px; object-fit: cover;">
+              </div>
+
+            <div style="grid-column: 2; grid-row: 8;">
+              <select id="sequention-6-name">
+                <option value="Baelmans">Prof. Baelmans</option>
+                <option value="Beernaert">Prof. Beernaert </option>
+                <option value="Blanpain">Prof. Blanpain</option>
+                <option value="De-Laet">Prof. De Laet</option>
+                <option value="Dehaene">Prof. Dehaene</option>
+                <option value="Holvoet">Prof. Holvoet</option>
+                <option value="Houssa">Prof. Houssa</option>
+                <option value="Jacobs">Prof. Jacobs</option>
+                <option value="Moelans">Prof. Moelans</option>
+                <option value="Rijmen">Prof. Rijmen</option>
+                <option value="Smets">Prof. Smets</option>
+                <option value="Van-De-Walle">Prof. Van De Walle</option>
+                <option value="Van-Hamme">Prof. Van Hamme</option>
+                <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                <option value="Vandebril">Prof. Vandebril</option>
+                <option value="Vandepitte">Prof. Vandepitte</option>
+                <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                <option value="Vanmeensel">Prof. Vanmeensel</option>
+            </select>
+            </div>
+
+            <div style="grid-column: 3; grid-row: 8;">
+              <select id="sequention-6-drink">
+                  <option value="Koffie">Koffie</option>
+                  <option value="Thee">Thee</option>
+                  <option value="Koffie met suiker">Koffie met suiker</option>
+                  <option value="Thee met suiker">Thee met suiker</option>
+                  <option value="Koffie met melk">Koffie met melk</option>
+                  <option value="Thee met melk">Thee met melk</option>
+                  <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                  <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 4; grid-row: 8;">
+              <select id="sequention-6-song">
+                <option value="Riptide">Riptide</option>
+                <option value="Canon in D Major">Canon in D Major</option>
+                <option value="De Zji">De Zji</option>
+                <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                <option value="Feral Roots">Feral Roots</option>
+                <option value="Hijo de la Luna">Hijo de la Luna</option>
+                <option value="Louis Neefs">Louis Neefs</option>
+                <option value="No One Knows">No One Knows</option>
+                <option value="Sultans Of Swing">Sultans Of Swing</option>
+                <option value="The Way To Your Heart">The Way To Your Heart</option>
+                <option value="Vuurwerk">Vuurwerk</option>
+                <option value="Where Is My Mind_">Where Is My Mind</option>
+                <option value="yevgueni">Yevgueni</option>
+                <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 1; grid-row: 9;">
+              <img src="{{ url_for('static', filename='images/MH.png') }}" style=" height: 100px; object-fit: cover;">
+              </div>
+
+            <div style="grid-column: 2; grid-row: 9;">
+              <select id="sequention-7-name">
+                <option value="Baelmans">Prof. Baelmans</option>
+                <option value="Beernaert">Prof. Beernaert </option>
+                <option value="Blanpain">Prof. Blanpain</option>
+                <option value="De-Laet">Prof. De Laet</option>
+                <option value="Dehaene">Prof. Dehaene</option>
+                <option value="Holvoet">Prof. Holvoet</option>
+                <option value="Houssa">Prof. Houssa</option>
+                <option value="Jacobs">Prof. Jacobs</option>
+                <option value="Moelans">Prof. Moelans</option>
+                <option value="Rijmen">Prof. Rijmen</option>
+                <option value="Smets">Prof. Smets</option>
+                <option value="Van-De-Walle">Prof. Van De Walle</option>
+                <option value="Van-Hamme">Prof. Van Hamme</option>
+                <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                <option value="Vandebril">Prof. Vandebril</option>
+                <option value="Vandepitte">Prof. Vandepitte</option>
+                <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                <option value="Vanmeensel">Prof. Vanmeensel</option>
+            </select>
+            </div>
+
+            <div style="grid-column: 3; grid-row: 9;">
+              <select id="sequention-7-drink">
+                  <option value="Koffie">Koffie</option>
+                  <option value="Thee">Thee</option>
+                  <option value="Koffie met suiker">Koffie met suiker</option>
+                  <option value="Thee met suiker">Thee met suiker</option>
+                  <option value="Koffie met melk">Koffie met melk</option>
+                  <option value="Thee met melk">Thee met melk</option>
+                  <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                  <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 4; grid-row: 9;">
+              <select id="sequention-7-song">
+                <option value="Riptide">Riptide</option>
+                <option value="Canon in D Major">Canon in D Major</option>
+                <option value="De Zji">De Zji</option>
+                <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                <option value="Feral Roots">Feral Roots</option>
+                <option value="Hijo de la Luna">Hijo de la Luna</option>
+                <option value="Louis Neefs">Louis Neefs</option>
+                <option value="No One Knows">No One Knows</option>
+                <option value="Sultans Of Swing">Sultans Of Swing</option>
+                <option value="The Way To Your Heart">The Way To Your Heart</option>
+                <option value="Vuurwerk">Vuurwerk</option>
+                <option value="Where Is My Mind_">Where Is My Mind</option>
+                <option value="yevgueni">Yevgueni</option>
+                <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 1; grid-row: 10;">
+              <img src="{{ url_for('static', filename='images/prof_rijmen.jpg') }}" style=" height: 100px; object-fit: cover;">
+              </div>
+
+            <div style="grid-column: 2; grid-row: 10;">
+              <select id="sequention-8-name">
+                <option value="Baelmans">Prof. Baelmans</option>
+                <option value="Beernaert">Prof. Beernaert </option>
+                <option value="Blanpain">Prof. Blanpain</option>
+                <option value="De-Laet">Prof. De Laet</option>
+                <option value="Dehaene">Prof. Dehaene</option>
+                <option value="Holvoet">Prof. Holvoet</option>
+                <option value="Houssa">Prof. Houssa</option>
+                <option value="Jacobs">Prof. Jacobs</option>
+                <option value="Moelans">Prof. Moelans</option>
+                <option value="Rijmen">Prof. Rijmen</option>
+                <option value="Smets">Prof. Smets</option>
+                <option value="Van-De-Walle">Prof. Van De Walle</option>
+                <option value="Van-Hamme">Prof. Van Hamme</option>
+                <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                <option value="Vandebril">Prof. Vandebril</option>
+                <option value="Vandepitte">Prof. Vandepitte</option>
+                <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                <option value="Vanmeensel">Prof. Vanmeensel</option>
+            </select>
+            </div>
+
+            <div style="grid-column: 3; grid-row: 10;">
+              <select id="sequention-8-drink">
+                  <option value="Koffie">Koffie</option>
+                  <option value="Thee">Thee</option>
+                  <option value="Koffie met suiker">Koffie met suiker</option>
+                  <option value="Thee met suiker">Thee met suiker</option>
+                  <option value="Koffie met melk">Koffie met melk</option>
+                  <option value="Thee met melk">Thee met melk</option>
+                  <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                  <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 4; grid-row: 10;">
+              <select id="sequention-8-song">
+                <option value="Riptide">Riptide</option>
+                <option value="Canon in D Major">Canon in D Major</option>
+                <option value="De Zji">De Zji</option>
+                <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                <option value="Feral Roots">Feral Roots</option>
+                <option value="Hijo de la Luna">Hijo de la Luna</option>
+                <option value="Louis Neefs">Louis Neefs</option>
+                <option value="No One Knows">No One Knows</option>
+                <option value="Sultans Of Swing">Sultans Of Swing</option>
+                <option value="The Way To Your Heart">The Way To Your Heart</option>
+                <option value="Vuurwerk">Vuurwerk</option>
+                <option value="Where Is My Mind_">Where Is My Mind</option>
+                <option value="yevgueni">Yevgueni</option>
+                <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+              </select>
+            </div>
+
+            <!-- TB.png ; prof_jacobs.jpg ; prof_smets.jpg ;prof_Van hamme.jpg ; PVP.jpg ; prof_dehaene.jpg ; JVDS.png ; MH.png ; prof_rijmen.jpg; blanpain.png ; DVDP.png; TDL.jpg ; prof_Vandewalle.JPG ; prof_moelans.jpg ; prof_vandebril.png ; prof_Beernaert.jpg ; TH.png ; KVM.png -->
+           
+            <div style="grid-column: 1; grid-row: 11;">
+              <img src="{{ url_for('static', filename='images/blanpain.png') }}" style=" height: 100px; object-fit: cover;">
+              </div>
+
+            <div style="grid-column: 2; grid-row: 11;">
+              <select id="sequention-9-name">
+                <option value="Baelmans">Prof. Baelmans</option>
+                <option value="Beernaert">Prof. Beernaert </option>
+                <option value="Blanpain">Prof. Blanpain</option>
+                <option value="De-Laet">Prof. De Laet</option>
+                <option value="Dehaene">Prof. Dehaene</option>
+                <option value="Holvoet">Prof. Holvoet</option>
+                <option value="Houssa">Prof. Houssa</option>
+                <option value="Jacobs">Prof. Jacobs</option>
+                <option value="Moelans">Prof. Moelans</option>
+                <option value="Rijmen">Prof. Rijmen</option>
+                <option value="Smets">Prof. Smets</option>
+                <option value="Van-De-Walle">Prof. Van De Walle</option>
+                <option value="Van-Hamme">Prof. Van Hamme</option>
+                <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                <option value="Vandebril">Prof. Vandebril</option>
+                <option value="Vandepitte">Prof. Vandepitte</option>
+                <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                <option value="Vanmeensel">Prof. Vanmeensel</option>
+                </select>
+            </div>
+
+            <div style="grid-column: 3; grid-row: 11;">
+              <select id="sequention-9-drink">
+                  <option value="Koffie">Koffie</option>
+                  <option value="Thee">Thee</option>
+                  <option value="Koffie met suiker">Koffie met suiker</option>
+                  <option value="Thee met suiker">Thee met suiker</option>
+                  <option value="Koffie met melk">Koffie met melk</option>
+                  <option value="Thee met melk">Thee met melk</option>
+                  <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                  <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+              </select>
+            </div>
+
+              
+              <div style="grid-column: 4; grid-row: 11;">
+                <select id="sequention-9-song">
+                  <option value="Riptide">Riptide</option>
+                  <option value="Canon in D Major">Canon in D Major</option>
+                  <option value="De Zji">De Zji</option>
+                  <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                  <option value="Feral Roots">Feral Roots</option>
+                  <option value="Hijo de la Luna">Hijo de la Luna</option>
+                  <option value="Louis Neefs">Louis Neefs</option>
+                  <option value="No One Knows">No One Knows</option>
+                  <option value="Sultans Of Swing">Sultans Of Swing</option>
+                  <option value="The Way To Your Heart">The Way To Your Heart</option>
+                  <option value="Vuurwerk">Vuurwerk</option>
+                  <option value="Where Is My Mind_">Where Is My Mind</option>
+                  <option value="yevgueni">Yevgueni</option>
+                  <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+                </select>
+              </div>
+
+            <div style="grid-column: 1; grid-row: 12;">
+              <img src="{{ url_for('static', filename='images/DVDP.png') }}" style=" height: 100px; object-fit: cover;">
+              </div>
+
+            <div style="grid-column: 2; grid-row: 12;">
+              <select id="sequention-10-name">
+                <option value="Baelmans">Prof. Baelmans</option>
+                <option value="Beernaert">Prof. Beernaert </option>
+                <option value="Blanpain">Prof. Blanpain</option>
+                <option value="De-Laet">Prof. De Laet</option>
+                <option value="Dehaene">Prof. Dehaene</option>
+                <option value="Holvoet">Prof. Holvoet</option>
+                <option value="Houssa">Prof. Houssa</option>
+                <option value="Jacobs">Prof. Jacobs</option>
+                <option value="Moelans">Prof. Moelans</option>
+                <option value="Rijmen">Prof. Rijmen</option>
+                <option value="Smets">Prof. Smets</option>
+                <option value="Van-De-Walle">Prof. Van De Walle</option>
+                <option value="Van-Hamme">Prof. Van Hamme</option>
+                <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                <option value="Vandebril">Prof. Vandebril</option>
+                <option value="Vandepitte">Prof. Vandepitte</option>
+                <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                <option value="Vanmeensel">Prof. Vanmeensel</option>
+                </select>
+            </div>
+
+            <div style="grid-column: 3; grid-row: 12;">
+              <select id="sequention-10-drink">
+                  <option value="Koffie">Koffie</option>
+                  <option value="Thee">Thee</option>
+                  <option value="Koffie met suiker">Koffie met suiker</option>
+                  <option value="Thee met suiker">Thee met suiker</option>
+                  <option value="Koffie met melk">Koffie met melk</option>
+                  <option value="Thee met melk">Thee met melk</option>
+                  <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                  <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+              </select> 
+            </div>
+
+            <div style="grid-column: 4; grid-row: 12;">
+              <select id="sequention-10-song">
+                <option value="Riptide">Riptide</option>
+                <option value="Canon in D Major">Canon in D Major</option>
+                <option value="De Zji">De Zji</option>
+                <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                <option value="Feral Roots">Feral Roots</option>
+                <option value="Hijo de la Luna">Hijo de la Luna</option>
+                <option value="Louis Neefs">Louis Neefs</option>
+                <option value="No One Knows">No One Knows</option>
+                <option value="Sultans Of Swing">Sultans Of Swing</option>
+                <option value="The Way To Your Heart">The Way To Your Heart</option>
+                <option value="Vuurwerk">Vuurwerk</option>
+                <option value="Where Is My Mind_">Where Is My Mind</option>
+                <option value="yevgueni">Yevgueni</option>
+                <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 1; grid-row: 13;">
+              <img src="{{ url_for('static', filename='images/TDL.jpg') }}" style=" height: 100px; object-fit: cover;">
+              </div>
+
+              <div style="grid-column: 2; grid-row: 13;">
+                <select id="sequention-11-name">
+                  <option value="Baelmans">Prof. Baelmans</option>
+                  <option value="Beernaert">Prof. Beernaert </option>
+                  <option value="Blanpain">Prof. Blanpain</option>
+                  <option value="De-Laet">Prof. De Laet</option>
+                  <option value="Dehaene">Prof. Dehaene</option>
+                  <option value="Holvoet">Prof. Holvoet</option>
+                  <option value="Houssa">Prof. Houssa</option>
+                  <option value="Jacobs">Prof. Jacobs</option>
+                  <option value="Moelans">Prof. Moelans</option>
+                  <option value="Rijmen">Prof. Rijmen</option>
+                  <option value="Smets">Prof. Smets</option>
+                  <option value="Van-De-Walle">Prof. Van De Walle</option>
+                  <option value="Van-Hamme">Prof. Van Hamme</option>
+                  <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                  <option value="Vandebril">Prof. Vandebril</option>
+                  <option value="Vandepitte">Prof. Vandepitte</option>
+                  <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                  <option value="Vanmeensel">Prof. Vanmeensel</option>
+                  </select>
+              </div>
+  
+              <div style="grid-column: 3; grid-row: 13;">
+                <select id="sequention-11-drink">
+                    <option value="Koffie">Koffie</option>
+                    <option value="Thee">Thee</option>
+                    <option value="Koffie met suiker">Koffie met suiker</option>
+                    <option value="Thee met suiker">Thee met suiker</option>
+                    <option value="Koffie met melk">Koffie met melk</option>
+                    <option value="Thee met melk">Thee met melk</option>
+                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+                </select> 
+              </div>
+  
+              <div style="grid-column: 4; grid-row: 13;">
+                <select id="sequention-11-song">
+                  <option value="Riptide">Riptide</option>
+                  <option value="Canon in D Major">Canon in D Major</option>
+                  <option value="De Zji">De Zji</option>
+                  <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                  <option value="Feral Roots">Feral Roots</option>
+                  <option value="Hijo de la Luna">Hijo de la Luna</option>
+                  <option value="Louis Neefs">Louis Neefs</option>
+                  <option value="No One Knows">No One Knows</option>
+                  <option value="Sultans Of Swing">Sultans Of Swing</option>
+                  <option value="The Way To Your Heart">The Way To Your Heart</option>
+                  <option value="Vuurwerk">Vuurwerk</option>
+                  <option value="Where Is My Mind_">Where Is My Mind</option>
+                  <option value="yevgueni">Yevgueni</option>
+                  <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+                </select>
+              </div>
+
+              <div style="grid-column: 1; grid-row: 14;">
+                <img src="{{ url_for('static', filename='images/prof_Vandewalle.JPG') }}" style=" height: 100px; object-fit: cover;">
+                </div>
+
+                <div style="grid-column: 2; grid-row: 14;">
+                  <select id="sequention-12-name">
+                    <option value="Baelmans">Prof. Baelmans</option>
+                    <option value="Beernaert">Prof. Beernaert </option>
+                    <option value="Blanpain">Prof. Blanpain</option>
+                    <option value="De-Laet">Prof. De Laet</option>
+                    <option value="Dehaene">Prof. Dehaene</option>
+                    <option value="Holvoet">Prof. Holvoet</option>
+                    <option value="Houssa">Prof. Houssa</option>
+                    <option value="Jacobs">Prof. Jacobs</option>
+                    <option value="Moelans">Prof. Moelans</option>
+                    <option value="Rijmen">Prof. Rijmen</option>
+                    <option value="Smets">Prof. Smets</option>
+                    <option value="Van-De-Walle">Prof. Van De Walle</option>
+                    <option value="Van-Hamme">Prof. Van Hamme</option>
+                    <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                    <option value="Vandebril">Prof. Vandebril</option>
+                    <option value="Vandepitte">Prof. Vandepitte</option>
+                    <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                    <option value="Vanmeensel">Prof. Vanmeensel</option>
+                    </select>
+                </div>
+    
+                <div style="grid-column: 3; grid-row: 14;">
+                  <select id="sequention-12-drink">
+                      <option value="Koffie">Koffie</option>
+                      <option value="Thee">Thee</option>
+                      <option value="Koffie met suiker">Koffie met suiker</option>
+                      <option value="Thee met suiker">Thee met suiker</option>
+                      <option value="Koffie met melk">Koffie met melk</option>
+                      <option value="Thee met melk">Thee met melk</option>
+                      <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                      <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+                  </select> 
+                </div>
+    
+                <div style="grid-column: 4; grid-row: 14;">
+                  <select id="sequention-12-song">
+                    <option value="Riptide">Riptide</option>
+                    <option value="Canon in D Major">Canon in D Major</option>
+                    <option value="De Zji">De Zji</option>
+                    <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                    <option value="Feral Roots">Feral Roots</option>
+                    <option value="Hijo de la Luna">Hijo de la Luna</option>
+                    <option value="Louis Neefs">Louis Neefs</option>
+                    <option value="No One Knows">No One Knows</option>
+                    <option value="Sultans Of Swing">Sultans Of Swing</option>
+                    <option value="The Way To Your Heart">The Way To Your Heart</option>
+                    <option value="Vuurwerk">Vuurwerk</option>
+                    <option value="Where Is My Mind_">Where Is My Mind</option>
+                    <option value="yevgueni">Yevgueni</option>
+                    <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+                  </select>
+                </div>
+
+                <div style="grid-column: 1; grid-row: 15;">
+                  <img src="{{ url_for('static', filename='images/prof_moelans.jpg') }}" style=" height: 100px; object-fit: cover;">
+                  </div>
+  
+                  <div style="grid-column: 2; grid-row: 15;">
+                    <select id="sequention-13-name">
+                      <option value="Baelmans">Prof. Baelmans</option>
+                      <option value="Beernaert">Prof. Beernaert </option>
+                      <option value="Blanpain">Prof. Blanpain</option>
+                      <option value="De-Laet">Prof. De Laet</option>
+                      <option value="Dehaene">Prof. Dehaene</option>
+                      <option value="Holvoet">Prof. Holvoet</option>
+                      <option value="Houssa">Prof. Houssa</option>
+                      <option value="Jacobs">Prof. Jacobs</option>
+                      <option value="Moelans">Prof. Moelans</option>
+                      <option value="Rijmen">Prof. Rijmen</option>
+                      <option value="Smets">Prof. Smets</option>
+                      <option value="Van-De-Walle">Prof. Van De Walle</option>
+                      <option value="Van-Hamme">Prof. Van Hamme</option>
+                      <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                      <option value="Vandebril">Prof. Vandebril</option>
+                      <option value="Vandepitte">Prof. Vandepitte</option>
+                      <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                      <option value="Vanmeensel">Prof. Vanmeensel</option>
+                      </select>
+                  </div>
       
-      <div class="column">
-        <div class="correct_answer" style="display:none;">
-          <h3>Stap 1: Gezichten detecteren</h3>
-          Voor de gezichten te detecteren maken we gebruik van het HOG algoritme. 
-          Het HOG (Histogram of Oriented Gradients) algoritme is een methode om objecten, zoals gezichten in afbeeldingen, te detecteren. Het werkt door de richtingen van helderheidsveranderingen in kleine delen van de afbeelding vast te leggen. Deze richtingen worden samengevat in histogrammen en gecombineerd tot 'blokken' voor patroonherkenning. Het algoritme zoekt naar deze patronen om objecten te detecteren, zoals gezichtskenmerken, en onderscheidt ze van de achtergrond.
-          Op de afbeelding hieronder kan je de gradienten zien van een afbeelding en het patroon waarnaar het zoekt. De gradienten zijn de richtingen van de helderheidsveranderingen.
-          <br> 
-          Nadat het gezicht gedecteerd wordt, wordt het uitgeknipt en gebruikt in stap 2.
-          <div style="display: flex; justify-content: center;"><img src="{{ url_for('static', filename='images/HOG.jpg') }}" alt="HOG gradienten" style=" width:50%;"></div>
-          <h3>Stap 2: Specifieke gezichtskenmerken detecteren en het gezicht transformeren</h3>
-          Nadat we de gezichten in onze afbeelding hebben geïsoleerd, staan we voor een probleem: gezichten die in verschillende richtingen zijn gedraaid, lijken voor computers helemaal anders, in tegenstelling tot menselijke herkenning. Om dit aan te pakken, maken we gebruik van gezichtskenmerken-estimatie. Deze techniek houdt in dat we 68 belangrijke punten op elk gezicht identificeren, zoals de bovenkant van de kin, de hoeken van de ogen en de randen van de wenkbrauwen. 
-          Een machine learning-algoritme wordt getraind om deze punten op elk gezicht te vinden. 
-          Door deze aanpak kunnen we afbeeldingen uitlijnen door ze te roteren, schalen en vervormen, zodat de ogen en mond gecentreerd worden. Dit zorgt ervoor dat, ongeacht de oriëntatie van het gezicht, de belangrijke kenmerken redelijk consistent blijven. 
-          Deze stap, waarbij basis beeldtransformaties worden gebruikt, verbetert de nauwkeurigheid voor verdere verwerking.
-          <br>
-          <div style="display: flex; justify-content: center;"><img src="{{ url_for('static', filename='images/face-landmarks.webp') }}" alt="HOG gradienten" style=" width:80%;"></div>
-          <h3>Stap 3: Gezichten encoderen</h3>
-          Nadat we de gezichten hebben uitgelijnd, kunnen we ze coderen in een 128-dimensionale vector.  Dit gaan we doen met een neural netwerk, dat al op voorhand op meer dan 3 miljoen verschillende gezichten is getrained. Voor meer informatie over de specifieke werking van het neural netwerk, kan je <a href="https://medium.com/@ageitgey/machine-learning-is-fun-part-4-modern-face-recognition-with-deep-learning-c3cffc121d78">dit artikel</a> lezen. 
-          <br>
-          <h3>Stap 4: Gezichten vergelijken</h3>
-          Nu we de gezichten hebben gecodeerd, kunnen we ze vergelijken. Dit doen we door gebruik te maken van een ander soort neural netwerk dat wederom getrained is op miljoenen gezichten. Dit netwerk gaat de 128-dimensionale vector van twee gezichten vergelijken en een waarde tussen 0 en 1 geven. Hoe dichter de waarde bij 1 ligt, hoe groter de kans dat de twee gezichten dezelfde persoon zijn.
-          <br>
-        </div>
-      </div>
+                  <div style="grid-column: 3; grid-row: 15;">
+                    <select id="sequention-13-drink">
+                        <option value="Koffie">Koffie</option>
+                        <option value="Thee">Thee</option>
+                        <option value="Koffie met suiker">Koffie met suiker</option>
+                        <option value="Thee met suiker">Thee met suiker</option>
+                        <option value="Koffie met melk">Koffie met melk</option>
+                        <option value="Thee met melk">Thee met melk</option>
+                        <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                        <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+                    </select> 
+                  </div>
+      
+                  <div style="grid-column: 4; grid-row: 15;">
+                    <select id="sequention-13-song">
+                      <option value="Riptide">Riptide</option>
+                      <option value="Canon in D Major">Canon in D Major</option>
+                      <option value="De Zji">De Zji</option>
+                      <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                      <option value="Feral Roots">Feral Roots</option>
+                      <option value="Hijo de la Luna">Hijo de la Luna</option>
+                      <option value="Louis Neefs">Louis Neefs</option>
+                      <option value="No One Knows">No One Knows</option>
+                      <option value="Sultans Of Swing">Sultans Of Swing</option>
+                      <option value="The Way To Your Heart">The Way To Your Heart</option>
+                      <option value="Vuurwerk">Vuurwerk</option>
+                      <option value="Where Is My Mind_">Where Is My Mind</option>
+                      <option value="yevgueni">Yevgueni</option>
+                      <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+                    </select>
+                  </div>
+
+                  <div style="grid-column: 1; grid-row: 16;">
+                    <img src="{{ url_for('static', filename='images/prof_vandebril.png') }}" style=" height: 100px; object-fit: cover;">
+                    </div>
+    
+                    <div style="grid-column: 2; grid-row: 16;">
+                      <select id="sequention-14-name">
+                        <option value="Baelmans">Prof. Baelmans</option>
+                        <option value="Beernaert">Prof. Beernaert </option>
+                        <option value="Blanpain">Prof. Blanpain</option>
+                        <option value="De-Laet">Prof. De Laet</option>
+                        <option value="Dehaene">Prof. Dehaene</option>
+                        <option value="Holvoet">Prof. Holvoet</option>
+                        <option value="Houssa">Prof. Houssa</option>
+                        <option value="Jacobs">Prof. Jacobs</option>
+                        <option value="Moelans">Prof. Moelans</option>
+                        <option value="Rijmen">Prof. Rijmen</option>
+                        <option value="Smets">Prof. Smets</option>
+                        <option value="Van-De-Walle">Prof. Van De Walle</option>
+                        <option value="Van-Hamme">Prof. Van Hamme</option>
+                        <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                        <option value="Vandebril">Prof. Vandebril</option>
+                        <option value="Vandepitte">Prof. Vandepitte</option>
+                        <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                        <option value="Vanmeensel">Prof. Vanmeensel</option>
+                        </select>
+                    </div>
+        
+                    <div style="grid-column: 3; grid-row: 16;">
+                      <select id="sequention-14-drink">
+                          <option value="Koffie">Koffie</option>
+                          <option value="Thee">Thee</option>
+                          <option value="Koffie met suiker">Koffie met suiker</option>
+                          <option value="Thee met suiker">Thee met suiker</option>
+                          <option value="Koffie met melk">Koffie met melk</option>
+                          <option value="Thee met melk">Thee met melk</option>
+                          <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                          <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+                      </select> 
+                    </div>
+        
+                    <div style="grid-column: 4; grid-row: 16;">
+                      <select id="sequention-14-song">
+                        <option value="Riptide">Riptide</option>
+                        <option value="Canon in D Major">Canon in D Major</option>
+                        <option value="De Zji">De Zji</option>
+                        <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                        <option value="Feral Roots">Feral Roots</option>
+                        <option value="Hijo de la Luna">Hijo de la Luna</option>
+                        <option value="Louis Neefs">Louis Neefs</option>
+                        <option value="No One Knows">No One Knows</option>
+                        <option value="Sultans Of Swing">Sultans Of Swing</option>
+                        <option value="The Way To Your Heart">The Way To Your Heart</option>
+                        <option value="Vuurwerk">Vuurwerk</option>
+                        <option value="Where Is My Mind_">Where Is My Mind</option>
+                        <option value="yevgueni">Yevgueni</option>
+                        <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+                      </select>
+                    </div>
+
+                    <div style="grid-column: 1; grid-row: 17;">
+                      <img src="{{ url_for('static', filename='images/prof_Beernaert.jpg') }}" style=" height: 100px; object-fit: cover;">
+                      </div>
+      
+                      <div style="grid-column: 2; grid-row: 17;">
+                        <select id="sequention-15-name">
+                          <option value="Baelmans">Prof. Baelmans</option>
+                          <option value="Beernaert">Prof. Beernaert </option>
+                          <option value="Blanpain">Prof. Blanpain</option>
+                          <option value="De-Laet">Prof. De Laet</option>
+                          <option value="Dehaene">Prof. Dehaene</option>
+                          <option value="Holvoet">Prof. Holvoet</option>
+                          <option value="Houssa">Prof. Houssa</option>
+                          <option value="Jacobs">Prof. Jacobs</option>
+                          <option value="Moelans">Prof. Moelans</option>
+                          <option value="Rijmen">Prof. Rijmen</option>
+                          <option value="Smets">Prof. Smets</option>
+                          <option value="Van-De-Walle">Prof. Van De Walle</option>
+                          <option value="Van-Hamme">Prof. Van Hamme</option>
+                          <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                          <option value="Vandebril">Prof. Vandebril</option>
+                          <option value="Vandepitte">Prof. Vandepitte</option>
+                          <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                          <option value="Vanmeensel">Prof. Vanmeensel</option>
+                          </select>
+                      </div>
           
+                      <div style="grid-column: 3; grid-row: 17;">
+                        <select id="sequention-15-drink">
+                            <option value="Koffie">Koffie</option>
+                            <option value="Thee">Thee</option>
+                            <option value="Koffie met suiker">Koffie met suiker</option>
+                            <option value="Thee met suiker">Thee met suiker</option>
+                            <option value="Koffie met melk">Koffie met melk</option>
+                            <option value="Thee met melk">Thee met melk</option>
+                            <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                            <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+                        </select> 
+                      </div>
+          
+                      <div style="grid-column: 4; grid-row: 17;">
+                        <select id="sequention-15-song">
+                          <option value="Riptide">Riptide</option>
+                          <option value="Canon in D Major">Canon in D Major</option>
+                          <option value="De Zji">De Zji</option>
+                          <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                          <option value="Feral Roots">Feral Roots</option>
+                          <option value="Hijo de la Luna">Hijo de la Luna</option>
+                          <option value="Louis Neefs">Louis Neefs</option>
+                          <option value="No One Knows">No One Knows</option>
+                          <option value="Sultans Of Swing">Sultans Of Swing</option>
+                          <option value="The Way To Your Heart">The Way To Your Heart</option>
+                          <option value="Vuurwerk">Vuurwerk</option>
+                          <option value="Where Is My Mind_">Where Is My Mind</option>
+                          <option value="yevgueni">Yevgueni</option>
+                          <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+                        </select>
+                      </div>
+
+                      
+                      <div style="grid-column: 1; grid-row: 18;">
+                        <img src="{{ url_for('static', filename='images/TH.png') }}" style=" height: 100px; object-fit: cover;">
+                        </div>
+        
+                        <div style="grid-column: 2; grid-row: 18;">
+                          <select id="sequention-16-name">
+                            <option value="Baelmans">Prof. Baelmans</option>
+                            <option value="Beernaert">Prof. Beernaert </option>
+                            <option value="Blanpain">Prof. Blanpain</option>
+                            <option value="De-Laet">Prof. De Laet</option>
+                            <option value="Dehaene">Prof. Dehaene</option>
+                            <option value="Holvoet">Prof. Holvoet</option>
+                            <option value="Houssa">Prof. Houssa</option>
+                            <option value="Jacobs">Prof. Jacobs</option>
+                            <option value="Moelans">Prof. Moelans</option>
+                            <option value="Rijmen">Prof. Rijmen</option>
+                            <option value="Smets">Prof. Smets</option>
+                            <option value="Van-De-Walle">Prof. Van De Walle</option>
+                            <option value="Van-Hamme">Prof. Van Hamme</option>
+                            <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                            <option value="Vandebril">Prof. Vandebril</option>
+                            <option value="Vandepitte">Prof. Vandepitte</option>
+                            <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                            <option value="Vanmeensel">Prof. Vanmeensel</option>
+                            </select>
+                        </div>
+            
+                        <div style="grid-column: 3; grid-row: 18;">
+                          <select id="sequention-16-drink">
+                              <option value="Koffie">Koffie</option>
+                              <option value="Thee">Thee</option>
+                              <option value="Koffie met suiker">Koffie met suiker</option>
+                              <option value="Thee met suiker">Thee met suiker</option>
+                              <option value="Koffie met melk">Koffie met melk</option>
+                              <option value="Thee met melk">Thee met melk</option>
+                              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+                          </select> 
+                        </div>
+            
+                        <div style="grid-column: 4; grid-row: 18;">
+                          <select id="sequention-16-song">
+                            <option value="Riptide">Riptide</option>
+                            <option value="Canon in D Major">Canon in D Major</option>
+                            <option value="De Zji">De Zji</option>
+                            <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                            <option value="Feral Roots">Feral Roots</option>
+                            <option value="Hijo de la Luna">Hijo de la Luna</option>
+                            <option value="Louis Neefs">Louis Neefs</option>
+                            <option value="No One Knows">No One Knows</option>
+                            <option value="Sultans Of Swing">Sultans Of Swing</option>
+                            <option value="The Way To Your Heart">The Way To Your Heart</option>
+                            <option value="Vuurwerk">Vuurwerk</option>
+                            <option value="Where Is My Mind_">Where Is My Mind</option>
+                            <option value="yevgueni">Yevgueni</option>
+                            <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+                          </select>
+                        </div>
+
+                        <div style="grid-column: 1; grid-row: 19;">
+                          <img src="{{ url_for('static', filename='images/KVM.png') }}" style=" height: 100px; object-fit: cover;">
+                          </div>
+          
+                          <div style="grid-column: 2; grid-row: 19;">
+                            <select id="sequention-17-name">
+                              <option value="Baelmans">Prof. Baelmans</option>
+                              <option value="Beernaert">Prof. Beernaert </option>
+                              <option value="Blanpain">Prof. Blanpain</option>
+                              <option value="De-Laet">Prof. De Laet</option>
+                              <option value="Dehaene">Prof. Dehaene</option>
+                              <option value="Holvoet">Prof. Holvoet</option>
+                              <option value="Houssa">Prof. Houssa</option>
+                              <option value="Jacobs">Prof. Jacobs</option>
+                              <option value="Moelans">Prof. Moelans</option>
+                              <option value="Rijmen">Prof. Rijmen</option>
+                              <option value="Smets">Prof. Smets</option>
+                              <option value="Van-De-Walle">Prof. Van De Walle</option>
+                              <option value="Van-Hamme">Prof. Van Hamme</option>
+                              <option value="Van-Puyvelde">Prof. Van Puyvelde</option>
+                              <option value="Vandebril">Prof. Vandebril</option>
+                              <option value="Vandepitte">Prof. Vandepitte</option>
+                              <option value="Vander-Sloten">Prof. Vander Sloten</option>
+                              <option value="Vanmeensel">Prof. Vanmeensel</option>
+                              </select>
+                          </div>
+              
+                          <div style="grid-column: 3; grid-row: 19;">
+                            <select id="sequention-17-drink">
+                              <option value="Koffie">Koffie</option>
+                              <option value="Thee">Thee</option>
+                              <option value="Koffie met suiker">Koffie met suiker</option>
+                              <option value="Thee met suiker">Thee met suiker</option>
+                              <option value="Koffie met melk">Koffie met melk</option>
+                              <option value="Thee met melk">Thee met melk</option>
+                              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
+                          </select> 
+                        </div>
+            
+                        <div style="grid-column: 4; grid-row: 19;">
+                          <select id="sequention-17-song">
+                            <option value="Riptide">Riptide</option>
+                            <option value="Canon in D Major">Canon in D Major</option>
+                            <option value="De Zji">De Zji</option>
+                            <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                            <option value="Feral Roots">Feral Roots</option>
+                            <option value="Hijo de la Luna">Hijo de la Luna</option>
+                            <option value="Louis Neefs">Louis Neefs</option>
+                            <option value="No One Knows">No One Knows</option>
+                            <option value="Sultans Of Swing">Sultans Of Swing</option>
+                            <option value="The Way To Your Heart">The Way To Your Heart</option>
+                            <option value="Vuurwerk">Vuurwerk</option>
+                            <option value="Where Is My Mind_">Where Is My Mind</option>
+                            <option value="yevgueni">Yevgueni</option>
+                            <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+                          </select>
+                        </div>
+  
+
+
+
+
+
+
+
+
+
+            
+            
+
+
+          </div>
+      </div>
     </div>

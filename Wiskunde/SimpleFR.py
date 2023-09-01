@@ -7,7 +7,8 @@ from scipy.linalg import eigh
 # Load image files
 image_dir = './SimpleFRDatabase'  # Provide the path to your image directory
 image_files = [file for file in os.listdir(image_dir) if file not in ['.', '..', 'Thumbs.db', '.DS_Store']]
-image_files = image_files[:20]
+image_names = [file.split('.')[0] for file in image_files]
+
 
 # Task 1: Load and process images
 A = []
@@ -63,7 +64,7 @@ E = C - np.outer(D, np.ones(len(image_files)))
 
 
 # save image for each difference from the average face
-for i in range(20):
+for i in range(len(image_files)):
     difference = (E[:, i]).reshape(80, 115)
     difference_image = Image.fromarray(np.uint8(difference))
     difference_image.save(f'./export/task4_difference_{i}.png')
@@ -85,7 +86,7 @@ U = np.dot(U, np.diag(val**(-0.5)))
 
 # U = (U)*255/np.max(U)
 #save all eigenfaces as images
-for i in range(20):
+for i in range(len(image_files)):
    
     eigenface = (U[:, i]*255/U[:,i].max()).reshape(80, 115)
     
@@ -131,15 +132,31 @@ new_weights = np.dot(U.T, new_E)
 # take the difference between each weight of a face in the database and the new image but exclude the last eigenface
 # and take the norm of that difference
 # the smallest norm is the closest match
-distances = np.zeros((20, 1))
-for i in range(20):
-    distances[i] = new_weights - weights[:, i].T
+distances = np.zeros((len(image_files), 1))
+for i in range(len(image_files)):
+    distances[i] = np.linalg.norm(new_weights[:17]-weights[:17, i])
 print(distances)
 
 
 
-#closest_match_index = np.argmin(distances)
+closest_match_index = np.argmin(distances)
+print(closest_match_index)
+# show the closest match
+closest_match = gray_images[closest_match_index]
+closest_match_image = Image.fromarray(np.uint8(closest_match))
+closest_match_image.save('./export/task5_closest_match.png')
+
+# sort distances and take the first 5 and print their names
+sorted_distances = np.sort(distances, axis=0)
+
+for i in range(5):
+    index = np.where(distances == sorted_distances[i])
+    print('distance: '+ str(sorted_distances[i]) + ' ' + str(image_names[index[0][0]]))
+
+
+
 
 # # Print the closest match index and associated song
-#print("Closest match index:", closest_match_index)
+print("Closest match index:", closest_match_index)
+print("Closest match name:", image_names[closest_match_index])
 # print("Favorite song:", namenenliedjes[closest_match_index]['song'])

@@ -1,4 +1,4 @@
-<div class="box-header">Wiskunde: Gezichtsherkenningsalgoritme implementeren - 6/14</div>
+<div class="box-header">Wiskunde: Gezichtsherkenningsalgoritme implementeren - 6/12</div>
 <div class="columns">
   <div class="column">
     <h2>Algoritme</h2>
@@ -79,7 +79,14 @@
     <div id="output"></div> -->
 
     <div id="alg-0" class="alg-frame" >
-      <h3>Stap 1: Knip afbeelding uit en vorm om naar juiste resolutie</h3>
+      <div style="text-align: center;">
+        <h3>Stap 1: Knip afbeelding uit en vorm om naar juiste resolutie</h3>
+        <p style="padding-left: 20px; padding-right: 20px;" > 
+          Om ervoor te zorgen dat het algoritme goed werkt, moeten alle afbeeldingen in de database dezelfde resolutie hebben en enkel van het hoofd. Daarom moet je de afbeeldingen eerst bijsnijden en omvormen naar een resolutie van 115x80 pixels. 
+          Achter de schermen gebeurt dit allemaal voor jou. Als je op de knop hieronder drukt zal je de bewerking zien gebeuren bij prof. Vander Sloten.
+        </p>
+      </div>
+      
       <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
         <canvas id="cnv_alg_0" style="border-radius: 10px; height: 200px;"></canvas>
         <button class="button" onclick="alg_crop_and_scale()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Knip uit & vorm om</button>
@@ -88,7 +95,13 @@
     </div>
 
     <div id="alg-1" class="alg-frame" style="display: none;">
-      <h3>Stap 2: Zet afbeelding om in grijswaarden</h3>
+      
+      <div style="text-align: center;">
+        <h3>Stap 2: Zet afbeelding om in grijswaarden</h3>
+        <p style="padding-left: 20px; padding-right: 20px;" > 
+          Het algoritme werkt enkel met grijswaarden. Daarom moet je de afbeeldingen eerst omzetten naar grijswaarden. Hieronder zie je hoe dit gebeurt bij prof. Vander Sloten.
+        </p>
+      </div>
       <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
         <canvas id="cnv_alg_1" style="border-radius: 10px; height: 200px;"></canvas>
         <button class="button" onclick="alg_to_grey()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Naar grijswaarden</button>
@@ -97,7 +110,14 @@
     </div>
 
     <div id="alg-2" class="alg-frame" style="display: none;">
-      <h3>Stap 3: Gemiddeld gezicht maken</h3>
+      <div style="text-align: center;">
+        <h3>Stap 3: Gemiddeld gezicht maken</h3>
+      <p style="padding-left: 20px; padding-right: 20px;" > 
+        Om het algoritme te laten werken, moet je eerst een gemiddeld gezicht maken. Dit doe je door alle gezichten in de database op te tellen en te delen door het aantal gezichten. Hieronder kan je het gezicht van prof. Vander Sloten zien vergelijken met het gemiddelde gezicht.
+        </p>  
+      </div>
+      
+
       <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
         <canvas id="cnv_alg_2" style="border-radius: 10px; height: 200px;"></canvas>
         <button class="button" onclick="alg_to_mean()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Naar gemiddeld gezicht</button>
@@ -105,7 +125,12 @@
     </div>
 
     <div id="alg-3" class="alg-frame" style="display: none;">
-      <h3>Stap 4: Verschil met gemiddeld gezicht</h3>
+      <div style="text-align: center;">
+        <h3>Stap 4: Verschil met gemiddeld gezicht</h3>
+      <p style="padding-left: 20px; padding-right: 20px;" > 
+        Zoals ook hiernaast staat uitgelegd gaan we van elk gezicht het verschil berekenen met het gemiddelde gezicht. Dit doen we door van elk gezicht het gemiddelde gezicht af te trekken. Hieronder kan je zien hoe dit gebeurt bij prof. Vander Sloten.
+      </p> 
+      </div>
       <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
         <canvas id="cnv_alg_3" style="border-radius: 10px; height: 200px;"></canvas>
         <button class="button" onclick="alg_to_diff()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Verschil met gemiddeld gezicht</button>
@@ -113,7 +138,14 @@
     </div>
 
     <div id="alg-4" class="alg-frame" style="display: none;">
-      <h3>Stap 5: Eigenfaces Berekenen</h3>
+      
+      <div style="text-align: center;">
+        <h3>Stap 5: Eigenfaces Berekenen</h3>
+      <p style="padding-left: 20px; padding-right: 20px;" > 
+        Eens de verschillen met het gemiddelde gezicht berekend zijn, kunnen we de eigenfaces berekenen. Dit doen we door de covariantie matrix te berekenen en de eigenwaarden en eigenvectoren te bepalen. Eens we de eigenvectoren en eigenwaarden hebben bepaald, houden we enkel de eigenvectoren bij die de grootste eigenwaarden hebben. Deze eigenvectoren noemen we de eigenfaces. Hieronder kan je de eigenface hoorende bij de grootste eigenwaarde vergeleken met het verschil van prof. Vander Sloten.
+        Nadat alle eigenfaces zijn berekend, maken we een gewichten matrix, zoals hiernaast uitgelegd. Deze gewichten matrix kunnen we gebruiken om nieuwe gezichten te herkennen.
+        </p>
+      </div>
       <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
         <canvas id="cnv_alg_4" style="border-radius: 10px; height: 200px;"></canvas>
         <button class="button" onclick="alg_to_eigenfaces()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Eigenfaces berekenen</button>
@@ -121,17 +153,33 @@
     </div>
 
     <div id="alg-5" class="alg-frame" style="display: none;">
-      <h3>Stap 6: Gewichten bepalen</h3>
-      <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
-        <img src="{{ url_for('static', filename='images/eigenface_0.png') }}" style="border-radius: 10px; height: 200px;">
-        <button class="button" onclick="alg_to_weights()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Gewichten bepalen</button>
+      
+      <div style="text-align: center;">
+        <h3>Stap 6: Gezichten vergelijken</h3>
+      <p style="padding-left: 20px; padding-right: 20px;" > 
+        Nu alles is berekend, kunnen we het algoritme gebruiken om nieuwe gezichten te herkennen. Dit doen we door de gewichten matrix te berekenen van het nieuwe gezicht en de norm van de euclidische afstand te berekenen tussen de gewichten matrix van het nieuwe gezicht en de gewichten matrix van de gezichten in de database. Het gezicht met de kleinste afstand is het gezicht dat het meest overeenkomt met het nieuwe gezicht. We kunnen het ook gebruiken om te zien hoeveel een totaal nieuw persoon lijkt op de gezichten in de database. Welke professor lijkt het meest op Mr. Bean? Kom het te weten door op de knop te drukken!
+      </p>
       </div>
+      <button class="button" onclick="alg_compare()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Vergelijk!</button>
+      <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
+        <img src="{{ url_for('static', filename='images/mr_bean_cut.png') }}" style="border-radius: 10px; height: 200px;">
+        <img src="{{ url_for('static', filename='images/closest_match.png') }}" style="display: none; border-radius: 10px; height: 200px; margin-left: 20px;" id="closest_match">
+      </div>
+        De top 5 van gezichten die het meest overeenkomen met Mr. Bean zijn:
+        <ol id="closest_matches" style="display: none;">
+          <li>Prof. Rijmen</li>
+          <li>Prof. Vander Sloten</li>
+          <li>Prof. Baelmans</li>
+          <li>Prof. Van Hamme</li>
+          <li>Prof. De Laet</li>
+        </ol>
+
     </div>
 
     
     
 
-    <button class="button" onclick="next_step_alg()" style="margin-top: 10px; padding: 10px; align-self: center;"><i class="fas fa-arrow-right"></i> Volgende stap</button>
+    <button class="button" onclick="next_step_alg()" id="next_step_alg_btn"  style="margin-top: 10px; padding: 10px; align-self: center;"><i class="fas fa-arrow-right"></i> Volgende stap</button>
   </div>
 </div>
 
