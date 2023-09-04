@@ -7,7 +7,7 @@
     </p>
     <br>
     <p>
-    Om het gezichtsherkenningsalgoritme te implementeren starten we met een database van kleurenfoto's van 18 professoren van het eerste jaar burgerlijk ingenieur. Enkele van deze professoren zullen op het einde van deze workshop ook langskomen om je werk van vandaag te bekijken.
+    Om het gezichtsherkenningsalgoritme te implementeren zal er gestart worden met een database van kleurenfoto's van 18 professoren van het eerste jaar burgerlijk ingenieur. Enkele van deze professoren zullen op het einde van deze workshop ook langskomen om je werk van vandaag te bekijken.
     </p>
     <br>
     <p>
@@ -33,9 +33,9 @@
 </p>
 <br>
 <p>
-     In een volgende stap gaat de matrix van de grijswaardes van de foto’s omgevormd worden naar zogenaamde kolommatrices. Momenteel had je via voorgaande bewerking telkens per foto een 80x115 matrix, maar deze moet je omvormen naar een 9200x1 matrix (of kolomvector genaamd). 
+     In een volgende stap gaan de matrices van de grijswaardes van de foto’s omgevormd worden naar zogenaamde kolommatrices. Momenteel had je via voorgaande bewerking telkens per foto een 80x115 matrix, maar deze moet je omvormen naar een 9200x1 matrix (of kolomvector genaamd). 
       <br>
-      Vervolgens heb je dan één vector \( v_{1} \) die één gezicht voorstelt. Doe hetzelfde voor alle andere afbeeldingen uit de database. 
+      Vervolgens heb je dan één vector \( v_{1} \) die één gezicht voorstelt. Deze bewerking moet uitgevoerd worden voor alle andere afbeeldingen uit de database. 
     </p>
     <br>
     <p>
@@ -81,12 +81,12 @@
     <br>
     <p>
 
-      Voor elke gezicht \(v\) uit de database kan je een zogenaamde gewichtsvector \( \Omega \) bepalen als volgt: 
-      $${ \Omega =  U^T (v - \psi) }$$
+      Voor elke gezicht \( v_{i} \) uit de database kan je een zogenaamde gewichtsvector \( \Omega_{i} \) bepalen als volgt: 
+      $${ \Omega_{i} =  U^T (v_{i} - \psi) }$$
     </p>
     <br>
     <p>
-Dit levert ons dan 18 gewichtsvectoren op. Elke foto uit de database heeft zijn eigen unieke gewichtsvector. Met behulp van deze gewichtsvector en de eigenfaces kan je een foto reconstrueren. Een foto kan namelijk opgebouwd worden als een lineaire combinatie van alle eigenfaces. Dus als een som van (scalaire) veelvouden van de eigenvectoren (eigenfaces).
+Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichtsvectoren op. Elke foto uit de database heeft zijn eigen unieke gewichtsvector. Met behulp van deze gewichtsvector en de eigenfaces kan je een foto reconstrueren. Eender welke foto van een gezicht kan namelijk opgebouwd worden als een lineaire combinatie van alle eigenfaces. Dus als een som van (scalaire) veelvouden van de eigenvectoren (eigenfaces).
       	<br>
     </p>
     <br>
@@ -96,17 +96,17 @@ Dit levert ons dan 18 gewichtsvectoren op. Elke foto uit de database heeft zijn 
     <br>
     <p>
       Waartoe hebben we nu al het voorgaande nodig? We willen bekijken of een nieuwe foto (of een nieuw gezicht) overeenkomt met iemand uit onze database. Hiervoor zullen de eerste drie stappen op deze nieuwe foto uitgevoerd moeten worden. En bekom je uiteindelijk een kolomvector \( v_{nieuw} \). 
-      Daarna voer je volgende bewerking uit:
+      Daarna voer je ook terug de bewerking uit stap 5 uit, waarbij voor de nieuwe foto een bijhorende gewichtsvector wordt berekend:
       $${ \Omega_{nieuw} =  U^T (v_{nieuw} - \psi) }$$
 
     </p>
     <br>
     <p>
       
-      Om nu het nieuwe gezicht te herkennen kan de norm van de euclidische afstand berekend worden tusssen de kolommen \( \Omega \) en \( \Omega_{nieuw} \).
-      $${ \epsilon =  \|\Omega - \Omega_{nieuw} \|  }$$
+      Om nu het nieuwe gezicht te herkennen kan telkens de norm van de euclidische afstand berekend worden tussen één van de 18 gewichtsvectoren \( \Omega_{i} \) en de gewichtsvector van de nieuwe foto \( \Omega_{nieuw} \).
+      $${ \epsilon_{i} =  \|\Omega_{i} - \Omega_{nieuw} \|  }$$
       
-      De index van \( \epsilon \) met de kleinste afstand tussen \( \Omega \) en \( \Omega_{nieuw} \) geeft aan met welk gezicht er het meest overeenkomst is. 
+      De gewichtsvector \( \Omega_{i} \) horende bij een specifieke persoon uit de database waarvoor deze \( \epsilon_{i} \) het kleinst is, geeft vervolgens aan met welk gezicht uit de database er het meest overeenkomst is. Als die norm klein genoeg is, kan je met voldoende zekerheid stellen dat de nieuwe foto overeenkomt met één van de foto's uit de database en dat de persoon geïdentificeerd is. Over de bepaling van deze grens gaan we nu niet dieper op in.
     </p>
     
 
@@ -144,8 +144,8 @@ Dit levert ons dan 18 gewichtsvectoren op. Elke foto uit de database heeft zijn 
       <div style="text-align: center;">
         <h3>Stap 1: Knip afbeelding uit en vorm om naar juiste resolutie</h3>
         <p style="padding-left: 20px; padding-right: 20px;" > 
-          Om ervoor te zorgen dat het algoritme goed werkt, moeten alle afbeeldingen in de database dezelfde resolutie hebben en enkel van het hoofd. Daarom moet je de afbeeldingen eerst bijsnijden en omvormen naar een resolutie van 115x80 pixels. 
-          Achter de schermen gebeurt dit allemaal voor jou. Als je op de knop hieronder drukt zal je de bewerking zien gebeuren bij prof. Vander Sloten. Hij is de vice-decaan van onze faculteit én een van de professoren voor het vak <i>Toegepaste Mechanica, deel 1</i>.
+          Om ervoor te zorgen dat het algoritme goed werkt, moeten alle afbeeldingen in de database dezelfde resolutie hebben en enkel van het hoofd. Daarom moet je alle afbeeldingen eerst bijsnijden en omvormen naar een specifieke resolutie (in ons voorbeeld nemen we 115x80 pixels). 
+          Als je op de knop hieronder drukt zal je de bewerking zien gebeuren bij prof. Vander Sloten. Hij is de vice-decaan van onze faculteit én een van de professoren voor het vak <i>Toegepaste Mechanica, deel 1</i>. Achter de schermen gebeurt deze stap nu voor alle afbeeldingen van de proffen. Later in deze tutorial ga je nog afbeeldingen tegenkomen van docenten die in de database zitten. 
         </p>
       </div>
       
