@@ -603,6 +603,10 @@ function check_q1() {
 
     } else {
         result.innerHTML = "<div class='incorrect'>Fout! probeer opnieuw</div>";
+        for (var i = 0; i < divs_to_show.length; i++) {
+            divs_to_show[i].style.display = "block";
+        }
+        correctly_answered = true;
     }
     q1.checked = false;
     q2.checked = false;
