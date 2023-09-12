@@ -115,7 +115,7 @@ function removeAngle(sequention) {
 }
 
 function saveSequentions() {
-    for (var i = 0; i < 8; i++) {
+    for (var i = 0; i < 4; i++) {
         for (var j = 0; j < document.getElementById("sequention-" + i).childElementCount; j++) {
             if((document.getElementById("sequention-" + i + "-angle-" + j).value) < 0 || (document.getElementById("sequention-" + i + "-angle-" + j).value) > 180) {
                 alert("De hoek moet tussen 0 en 180 liggen");
@@ -126,14 +126,14 @@ function saveSequentions() {
 
     picked_names = [];
 
-    for (var i = 0; i < 8; i++) {
+    for (var i = 0; i < 4; i++) {
         if (document.getElementById("sequention-" + i + "-name").value in picked_names) {
             alert("Eén kleur per optie!");}
         picked_names.push(document.getElementById("sequention-" + i + "-name").value);
     }
 
     var sequentions = [];
-    for (var i = 0; i < 8; i++) {
+    for (var i = 0; i < 4; i++) {
         var sequention = {
             name: document.getElementById("sequention-" + i + "-name").value,
             angles: []
@@ -165,7 +165,7 @@ function loadSequentions() {
     .then(response => response.json())
     .then(data => {
         console.log(data);
-        for (var i = 0; i < 8; i++) {
+        for (var i = 0; i < 4; i++) {
             document.getElementById("sequention-" + i + "-name").value = data.sequentions[i].name;
             for (var j = 0; j < data.sequentions[i].angles.length; j++) {
                 if (j == 0) {
@@ -288,7 +288,7 @@ function detectColor() {
 function getSensorValues() {
     
 
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 4; i++) {
         const red_value = document.getElementById('red-value-' + i.toString());
         const green_value = document.getElementById('green-value-' + i.toString());
         const blue_value = document.getElementById('blue-value-' + i.toString());
