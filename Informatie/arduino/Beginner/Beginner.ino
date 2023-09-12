@@ -44,7 +44,7 @@ int groen_b = 800;
 int blauw_r = 3000;
 int blauw_g = 1700;
 int blauw_b = 700;
-
+/*
 int licht_blauw_r = 700;
 int licht_blauw_g = 500;
 int licht_blauw_b = 500;
@@ -60,7 +60,7 @@ int geel_b = 450;
 int wit_r = 400;
 int wit_g = 500;
 int wit_b = 450;
-
+*/
 
 void setup() {
   pinMode(LED_BUILTIN,OUTPUT);
@@ -172,6 +172,7 @@ int detectColor() {
   else if ((rood > blauw_r) && (groen < blauw_g) && (blauw <blauw_b)) {
     return 3; //Blauw
   }
+  /*
   else if ((rood > licht_blauw_r) && (groen < licht_blauw_g) && (blauw <licht_blauw_b)) {
     return 4; //Licht Blauw
   }
@@ -183,7 +184,7 @@ int detectColor() {
   }
   else if ((rood < wit_r) && (groen <wit_g) && (blauw <wit_b)) {
     return 7; //Wit
-  }
+  }*/
   else {
     return 8; //Geen Idee
   }
@@ -206,7 +207,7 @@ void changeParam(int color, int red, int green, int blue) {
       blauw_r = red;
       blauw_g = green;
       blauw_b = blue;
-  } else if (color == 4) {
+  } /* else if (color == 4) {
       licht_blauw_r = red;
       licht_blauw_g = green;
       licht_blauw_b = blue;
@@ -222,7 +223,7 @@ void changeParam(int color, int red, int green, int blue) {
       wit_r = red;
       wit_g = green;
       wit_b = blue;
-  }
+  }*/
 }
 
 void switchMotor() {
