@@ -1,10 +1,10 @@
-<div class="box-header">Wiskunde: Database van de proffen - 10/12</div>
+<div class="box-header">Wiskunde: Database van de docenten - 10/12</div>
     <div class="columns">
       <div class="column">
-        <h2>Voorbereidende stap: de proffen toevoegen aan de database</h2>
-        <p>In een eerste stap moeten we de proffen toevoegen aan de database. De foto's hebben we al geüpload, jullie moeten enkel de foto aan de juiste naam koppelen en hun favoriete drankje en liedje nog selecteren. Deze vinden jullie op het opgaveblad. Google de professoren bvb met volgende zoekopdracht "Lutgarde Beernaert KU Leuven" en bekijk in de wie-is-wie via het tabblad Onderwijs welke vak(ken) ze doceren. Om deze oefening niet omvangrijk te maken, laten we jullie enkel de docenten van de vakken van het eerste semester invoeren. De docenten van het tweede semester zijn al toegevoegd in de database.</p>
+        <h2>Volgende stap: enkele docenten toevoegen aan de database</h2>
+        <p>In deze stap gaan we enkele docenten toevoegen aan de database. Dit kan je weer terug per twee doen op je eigen computer. De foto's hebben we al geüpload, jullie moeten enkel de foto aan de juiste naam koppelen en hun favoriete drankje en liedje nog selecteren. Deze vinden jullie op het blad dat bij de computer ligt. Zoek de professoren door <a href="https://onderwijsaanbod.kuleuven.be/2023/opleidingen/n/SC_55036830.htm#fasen=1&bl=all" target="_blank">hier</a> bij de vakken van het eerste te kijken en op de naam van de prof te klikken. Als je niet direct een foto ziet bij een prof, google zijn/haar naam dan eens. Om deze oefening niet omvangrijk te maken, laten we jullie enkel de docenten van de vakken van het eerste semester bekijken.</p>
         <div style="display: grid; gap: 10px; text-align: center;" id="profs_div">
-          <h4 style="grid-column: 1; grid-row: 1;">Proffen</h4>
+          <h4 style="grid-column: 1; grid-row: 1;">Docenten</h4>
           <h4 style="grid-column: 2; grid-row: 1;">Naam</h4>
           <h4 style="grid-column: 3; grid-row: 1;">Welk vak geven ze?</h4>
           <h4 style="grid-column: 4; grid-row: 1;">Favoriete drankje</h4>
@@ -609,5 +609,67 @@
                   <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
               </select>
               </div>
+
+
+
+              <div style="grid-column: 1; grid-row: 12;">
+                <img src="{{ url_for('static', filename='images/prof_smets.jpg') }}" style=" height: 100px; object-fit: cover;">
+                </div>
+    
+                <div style="grid-column: 2; grid-row: 12;">
+                  <select id="sequention-0-name">
+                    <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+                    <option value="De-Laet">Prof. Tinne De Laet</option>
+                    <option value="Rijmen">Prof. Vincent Rijmen</option>
+                    <option value="Smets">Prof. Ilse Smets</option>
+                    <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+                    <option value="Van-hamme">Prof. Hugo Van hamme</option>
+                    <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+                    <option value="Vandebril">Prof. Raf Vandebril</option>
+                    <option value="Vandepitte">Prof. Dirk Vandepitte</option>
+                    <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+                    <option value="Geraedts">Dr. Ir. Kathleen Geraedts</option>
+                </select>
+                </div>
+                <div style="grid-column: 3; grid-row: 12;">
+                  <select id="sequention-0-name">
+                    <option value="Analyse">Analyse</option>
+                    <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+                    <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+                    <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+                    <option value="Probleemoplossen-en-ontwerpen">Probleemoplossen en Ontwerpen</option>
+                  </select>
+                </div>
+                <div style="grid-column: 4; grid-row: 12;">
+                  <select id="sequention-0-drink">
+                    <option value="Koffie">Koffie</option>
+                    <!--<option value="Thee">Thee</option> -->
+                    <option value="Koffie met suiker">Koffie met suiker</option>
+                    <!-- <option value="Thee met suiker">Thee met suiker</option> -->
+                    <option value="Koffie met melk">Koffie met melk</option>
+                    <!-- <option value="Thee met melk">Thee met melk</option> -->
+                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
+                    <!-- <option value="Thee met melk en suiker">Thee met melk en suiker</option> -->
+                  </select>
+                </div>
+                <div style="grid-column: 5; grid-row: 12;">
+                 
+                  <select id="sequention-0-song">
+                      <option value="Riptide">Riptide</option>
+                      <option value="Canon in D Major">Canon in D Major</option>
+                      <option value="De Zji">De Zji</option>
+                      <option value="Eye Of The Tiger">Eye Of The Tiger</option>
+                      <option value="Feral Roots">Feral Roots</option>
+                      <option value="Hijo de la Luna">Hijo de la Luna</option>
+                      <option value="Louis Neefs">Louis Neefs</option>
+                      <option value="No One Knows">No One Knows</option>
+                      <option value="Sultans Of Swing">Sultans Of Swing</option>
+                      <option value="The Way To Your Heart">The Way To Your Heart</option>
+                      <option value="Vuurwerk">Vuurwerk</option>
+                      <option value="Where Is My Mind_">Where Is My Mind</option>
+                      <option value="yevgueni">Yevgueni</option>
+                      <option value="europe-the-final-countdown-official-video-9jK-NcRmVcw">The Final Countdown</option>
+                  </select>
+                  </div>
           </div>
       

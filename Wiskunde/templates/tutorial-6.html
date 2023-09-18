@@ -204,7 +204,7 @@ Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichts
       <div style="text-align: center;">
         <h3>Stap 5: Eigenfaces Berekenen</h3>
       <p style="padding-left: 20px; padding-right: 20px;" > 
-        Eens de verschillen met het gemiddelde gezicht berekend zijn, kunnen we de zogenaamde <i>eigenfaces</i> berekenen. Dit doen we door de zogenaamde <i>covariantie matrix</i> te berekenen en de eigenwaarden en eigenvectoren te bepalen. Eens we de eigenvectoren en eigenwaarden hebben bepaald, houden we enkel de eigenvectoren bij die de grootste eigenwaarden hebben. Deze eigenvectoren noemen we de eigenfaces. Hieronder kan je de eigenface hoorende bij de grootste eigenwaarde vergeleken met het verschil van prof. Vander Sloten.
+        Eens de verschillen met het gemiddelde gezicht berekend zijn, kunnen we de zogenaamde <i>eigenfaces</i> berekenen. Dit doen we door de zogenaamde <i>covariantie matrix</i> te berekenen en de eigenwaarden en eigenvectoren te bepalen. Eens we de eigenvectoren en eigenwaarden hebben bepaald, houden we enkel de eigenvectoren bij die de grootste eigenwaarden hebben. Deze eigenvectoren noemen we de eigenfaces. Hieronder kan je de eigenface horende bij de grootste eigenwaarde vergeleken met het verschil van prof. Vander Sloten.
         Nadat alle eigenfaces zijn berekend, maken we een gewichten matrix, zoals hiernaast uitgelegd. Deze gewichten matrix kunnen we gebruiken om nieuwe gezichten te herkennen.
         </p>
       </div>
@@ -219,7 +219,7 @@ Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichts
       <div style="text-align: center;">
         <h3>Stap 6: Gezichten vergelijken</h3>
       <p style="padding-left: 20px; padding-right: 20px;" > 
-        Nu alles is berekend, kunnen we het algoritme gebruiken om nieuwe gezichten te herkennen. Dit doen we door de gewichten matrix te berekenen van het nieuwe gezicht en de norm van de euclidische afstand te berekenen tussen de gewichten matrix van het nieuwe gezicht en de gewichten matrix van de gezichten in de database. Het gezicht met de kleinste afstand is het gezicht dat het meest overeenkomt met het nieuwe gezicht. We kunnen het ook gebruiken om te zien hoeveel een totaal nieuw persoon lijkt op de gezichten in de database. Welke professor lijkt het meest op Mr. Bean? Kom het te weten door op de knop te drukken!
+        Nu alles is berekend, kunnen we het algoritme gebruiken om nieuwe gezichten te herkennen. Dit doen we door de gewichten matrix te berekenen van het nieuwe gezicht en de norm van de euclidische afstand te berekenen tussen de gewichten matrix van het nieuwe gezicht en de gewichten matrix van de gezichten in de database. Het gezicht met de kleinste afstand is het gezicht dat het meest overeenkomt met het nieuwe gezicht.</p><p></p> We kunnen het echter ook gebruiken om te zien hoeveel een totaal nieuw en onbekend persoon wiskundig gezien het meest lijkt op één van de gezichten in de database. Welke professor lijkt het meest op Mr. Bean? Kom het te weten door op de knop te drukken!
       </p>
       </div>
       <button class="button" onclick="alg_compare()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Vergelijk!</button>
@@ -227,13 +227,13 @@ Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichts
         <img src="{{ url_for('static', filename='images/mr_bean_cut.png') }}" style="border-radius: 10px; height: 200px;">
         <img src="{{ url_for('static', filename='images/closest_match.png') }}" style="display: none; border-radius: 10px; height: 200px; margin-left: 20px;" id="closest_match">
       </div>
-        De top 5 van gezichten die het meest overeenkomen met Mr. Bean zijn:
+       <br>De top 5 van gezichten die het meest overeenkomen met Mr. Bean zijn:
         <ol id="closest_matches" style="display: none;">
-          <li>Prof. Rijmen</li>
-          <li>Prof. Vander Sloten</li>
-          <li>Prof. Baelmans</li>
-          <li>Prof. Van Hamme</li>
-          <li>Prof. De Laet</li>
+          <li>Prof. Rijmen (Toegepaste Algebra)</li>
+          <li>Prof. Vander Sloten (Toegepaste Mechanica)</li>
+          <li>Prof. Baelmans (Thermodynamica)</li>
+          <li>Prof. Van Hamme (Toegepaste Algebra)</li>
+          <li>Prof. De Laet (Toegepaste Mechanica)</li>
         </ol>
 
     </div>
