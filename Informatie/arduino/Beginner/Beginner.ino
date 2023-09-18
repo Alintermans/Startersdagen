@@ -1,5 +1,6 @@
 #include <Servo.h>
 
+#define battery_led 2
 
 #define red_led 5
 #define green_led 6
@@ -67,6 +68,7 @@ void setup() {
   pinMode(red_led, OUTPUT);
   pinMode(green_led, OUTPUT);
   pinMode(blue_led,OUTPUT);
+  pinMode(battery_led,OUTPUT);
 
   pinMode(S0, OUTPUT);
   pinMode(S1, OUTPUT);
@@ -76,6 +78,8 @@ void setup() {
 
   digitalWrite(S0, HIGH);
   digitalWrite(S1, LOW);
+
+  digitalWrite(battery_led, HIGH);
 
   myServo.attach(servo_pin);
 
@@ -237,6 +241,7 @@ void switchMotor() {
 }
 
 void setServoPosition(int position) {
+  digitalWrite(battery_led, LOW);
   if(motor_on) {
     analogWrite(motor,0);
     motor_on = false;
@@ -247,4 +252,6 @@ void setServoPosition(int position) {
     position = 180;
   }
   myServo.write(position);
+  delay(200);
+  digitalWrite(battery_led, HIGH);
 }
