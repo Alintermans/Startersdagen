@@ -101,6 +101,8 @@ def send_message(x):
 def send_detect_color_request():
     global arduino_send_queue
     global DC_result
+    DC_result = None
+    time.sleep(0.5)
     arduino_send_queue.append('DC')
     time.sleep(0.1)
     while DC_result == None:
@@ -278,6 +280,10 @@ def advanced():
 def reset_arduino():
     disconnect_from_arduino()
     result = connect_to_arduino()
+    global DC_result
+    global arduino_send_queue
+    DC_result = None
+    arduino_send_queue = []
     if result:
         return jsonify({'status': 'Arduino has been reset, make sure to initiate all values again!'})
     else:
@@ -439,13 +445,14 @@ def led():
 def detect_color():
     global retries
     result = send_detect_color_request()
-    while result == None:
-        if retries > 5:
-            retries = 0
-            return jsonify({'status': 'detect-color', 'detected_color': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
-        time.sleep(0.1)
-        retries += 1
-        result = send_detect_color_request()
+    # while result == None:
+    #     if retries > 5:
+    #         retries = 0
+    #         return jsonify({'status': 'detect-color', 'detected_color': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
+    #     time.sleep(0.1)
+    #     retries += 1
+    #     result = send_detect_color_request()
+    
     color = result[0]
     red = result[1]
     green = result[2]
