@@ -8,15 +8,15 @@
           <p>
             Download
             <a href="/static/arduino_code/Motor_template.zip">
-              dit bestand</a> en upload de code naar de arduino. 
-            Laat nu de DC-motor draaien door in Serial Monitor 'd' te versturen naar de arduino.
-            Stop de DC-motor door in Serial Monitor 'o' te versturen.
+              dit bestand</a> en upload de code naar de Arduino. 
+            Laat nu de DC-motor draaien door in de Serial Monitor 'd' te versturen naar de Arduino.
+            Stop de DC-motor door in de Serial Monitor 'o' te versturen.
           </p>
           <h3>
             Opdracht 4.2
           </h3>
           <p>
-            Verstuur 's' naar de arduino. De servo motor zal nu naar een bepaalde hoek draaien, en daarna weer terug draaien.
+            Verstuur 's' naar de Arduino. Dan draait de servomotor naar een bepaalde hoek en daarna weer terug.
           </p>
           <h3>
             Opdracht 4.3
@@ -25,32 +25,10 @@
             Download
             <a href="/static/arduino_code/template_servo.zip">
               dit bestand</a>.
-            Zorg dat de servomotor bevestigd is op het houten plankje. 
-            Laat de servomotor een hoek van 30° aannemen door je code te uploaden naar de arduino.
-            Duid op het houten plankje de positie van de motor aan onder een hoek van 30°. 
-            
-            </p>
-            <h3>
-              Opdracht 4.4
-            </h3>
-            <p>
-              Pas onderstaande code aan zodat de servomotor een hoek van 40° aanneemnt en duid opnieuw de positie van de motor aan.
-            <pre>
-              <code class="language-arduino code-container">
-void loop() {
-  myservo.write(30);
-}
-                </code> 
-                </pre>
+            Laat de servomotor een hoek van 30° aannemen door je code te uploaden naar de Arduino. Probeer vervolgens andere hoeken in te stellen.
           </p>
           <h3>
-            Opdracht 4.5
-          </h3>
-          <p>
-            Herhaal opdracht 4.4 voor de hoeken 50° tem 150° in stappen van 10°.
-          </p>
-          <h3>
-            Opdracht 4.6
+            Opdracht 4.4
           </h3>
           <p>
             Pas je code nu aan zodat de servomotor start bij een hoek van 90°. Vervolgens moet hij langzaam draaien naar 120° om daarna terug naar 90° te draaien. 
@@ -61,7 +39,7 @@ void loop() {
   if (Serial.available() > 0) {
     char letter = Serial.read();
     if (letter == 's') {
-      Serial.println("Servo motor begint nu");
+      Serial.println("Servomotor begint nu");
       for (i=90; i<=120; i++) {
         myservo.write(i);
         delay(20);
@@ -78,10 +56,10 @@ void loop() {
                 </pre>
           </p>
         <h3>
-          Opdracht 4.7
+          Opdracht 4.5
         </h3>
         <p>
-          Pas je code uit 4.3 aan zodat de arduino start bij een hoek van 50° en opeenvolgend draait naar 120°, 30° en 50°. 
+          Pas je code uit 4.3 en 4.4 aan zodat de Arduino start bij een hoek van 50° en opeenvolgend langzaam draait naar 120°, 30° en 50°.
         </p>
         </div>
       </div>

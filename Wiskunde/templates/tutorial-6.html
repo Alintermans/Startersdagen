@@ -3,11 +3,11 @@
   <div class="column">
     <h2>Algoritme</h2>
     <p>
-      Je computer stockeert de gegevens van een afbeelding in een soort matrix waarvan elke waarde op een specifieke rij of kolom staat voor een bepaalde kleurintensiteit. Als de foto een kleurenfoto (in JPEG formaat) is worden er 3 lagen aan waardes toegekend (3 lagen voor elk van de drie kleuren: rood, groen en blauw).
+      Je computer stockeert de gegevens van een afbeelding in een soort matrix waarvan elke waarde op een specifieke rij of kolom een bepaalde kleurintensiteit uitdrukt. Als de foto een kleurenfoto (in JPEG formaat) is, worden er drie lagen aan waardes toegekend (een laag voor elk van de drie kleuren: rood, groen en blauw).
     </p>
     <br>
     <p>
-    Om het gezichtsherkenningsalgoritme te implementeren zal er gestart worden met een database van kleurenfoto's van 18 professoren van het eerste jaar burgerlijk ingenieur. Enkele van deze professoren zullen op het einde van deze workshop ook langskomen om je werk van vandaag te bekijken.
+    Om het gezichtsherkenningsalgoritme te implementeren starten we met een database van kleurenfoto's van 18 professoren van het eerste jaar burgerlijk ingenieur. Enkele van deze professoren zullen op het einde van deze workshop ook langskomen om je werk van vandaag te bekijken.
     </p>
     <br>
     <p>
@@ -15,7 +15,7 @@
 </p>
 <br>
 <p>
-    Er moet opgemerkt worden dat de foto's meer gegevens bevatten dan enkel het gezicht van een professor. In een eerste stap zullen we daarom een specifiek stukje van de foto’s selecteren waarbij er telkens een rechthoek uitgehaald zal worden met hoogte=115 en breedte=80 waarbij enkel het aangezicht van de persoon zichtbaar is. 
+    Foto's bevatten meer gegevens dan enkel het gezicht van een professor. In een eerste stap selecteren we daarom een specifiek stukje van de foto’s. Dit stukje is telkens een rechthoek met hoogte=115 en breedte=80 die enkel het aangezicht van de persoon toont. 
     </p>
     <br>
     <p>
@@ -23,8 +23,8 @@
 </p>
 <br>
 <p>
-    Als er nu verder gewerkt zou worden met de drie-lagige matrices van al deze 18 foto's zou dit tot een gigantische hoeveelheid data leiden die niet meer hanteerbaar is door de computer. Daarom wordt deze data gereduceerd tot een 2D-matrix (een matrix zoals voorgesteld op pagina 1/12 van deze tutorial). De foto wordt m.a.w. omgezet in een foto die enkel uit grijswaardes bestaat door een gewogen gemiddelde te maken van de waardes voor rood, groen en blauw.
-  In het algoritme zullen stap 1 en stap 2 voor elke foto uit onze database uitgevoerd worden.  
+    Als we nu verderwerkten met de drie-lagige matrices van deze 18 foto's zouden we een gigantische hoeveelheid data krijgen. Daarom reduceren we deze data tot een 2D-matrix (een matrix zoals voorgesteld op pagina 1/12 van deze tutorial). De foto wordt m.a.w. omgezet in een foto die enkel uit grijswaardes bestaat door een gewogen gemiddelde te maken van de waardes voor rood, groen en blauw.
+  Het algoritme voert stap 1 en stap 2 uit voor elke foto in onze database.  
   </p>
     <br>
     <p>
@@ -33,9 +33,9 @@
 </p>
 <br>
 <p>
-     In een volgende stap gaan de matrices van de grijswaardes van de foto’s omgevormd worden naar zogenaamde kolommatrices. Momenteel had je via voorgaande bewerking telkens per foto een 80x115 matrix, maar deze moet je omvormen naar een 9200x1 matrix (of kolomvector genaamd). 
+     In een volgende stap vormen we de matrices met de grijswaardes van de foto’s om naar zogenaamde kolommatrices. Waar we tot nu toe per foto een 80x115 matrix hadden, vormen we deze matrix nu om naar een 9200x1 matrix. We noemen dit een kolomvector.
       <br>
-      Vervolgens heb je dan één vector \( v_{1} \) die één gezicht voorstelt. Deze bewerking moet uitgevoerd worden voor alle andere afbeeldingen uit de database. 
+      We krijgen telkens één vector \( v_{1} \) die één gezicht voorstelt. Deze bewerking voeren we uit voor alle afbeeldingen uit de database. 
     </p>
     <br>
     <p>
@@ -45,7 +45,7 @@
       <br>
 
       
-      Van al deze vectoren kun je een gemiddelde vector nemen die er als volgt uit ziet:
+      Van al deze vectoren nemen we de gemiddelde vector. Die ziet eruit als volgt:
       $$ {\psi = \frac{1}{M} \sum_{i=1}^M v_i} $$
 
       <br>
@@ -53,7 +53,7 @@
     </p>
     <br>
     <p>
-      Nu kun je voor elke vector \( v_{i} \) het verschil berekenen met de gemiddelde vector \(\psi\).
+      Nu berekenen we voor elke vector \( v_{i} \) het verschil met de gemiddelde vector \(\psi\).
       $${ \Phi_i = v_i - \psi }$$
       <br>
       STAP 5
@@ -61,33 +61,33 @@
     <br>
     <p>
 
-      Deze stap bevat heel wat op het eerste zicht moeilijke wiskundige bewerkingen. Hierover ga je binnenkort alle details van leren in het vak Toegepaste Algebra. Voor nu is het voldoende dat je dit eens doorneemt en simpelweg weet dat we matrixbewerkingen aan het uitvoeren zijn. 
+      Deze stap bevat heel wat op het eerste zicht moeilijke wiskundige bewerkingen. Hierover leer je binnenkort alle details in het vak Toegepaste Algebra. Voor nu is het voldoende dat je dit eens doorneemt en simpelweg weet dat we matrixbewerkingen aan het uitvoeren zijn.
     </p>
     <br>
     <p>
 
-      Maak nu de zogenaamde <i>covariantie matrix</i> \(C\) die als volgt gedefinieerd is:
+      We stellen de zogenaamde <i>covariantiematrix</i> \(C\) op. Die definiëren we als volgt:
       $${C = \frac{1}{M} \sum_{i=0}^M \Phi_i \Phi_i^T  }$$
       <br>
-      Bereken nu de zogenaamde eigenwaarden \( \Lambda \) en eigenvectoren \(U\) van \(C\). Wat precies eigenwaarden en eigenvectoren zijn ga je binnenkort leren bij Toegepaste Algebra.
+      We berekenen nu de zogenaamde eigenwaarden \( \Lambda \) en eigenvectoren \(U\) van deze covariantiematrix \(C\). Wat eigenwaarden en eigenvectoren precies zijn, leer je binnenkort bij Toegepaste Algebra.
       <br>
     </p>
     <br>
     <p>
 
-      Hiermee krijg je nu een collectie van eigenvectoren die we in deze context van gezichtsherkenning de eigenfaces \(U = \left\{u_i \right\}\) zullen noemen. Hiermee kan je aan de slag gaan om andere gezichten te herkennen. 
+      Hiermee krijgen we nu een collectie van eigenvectoren. In deze context van gezichtsherkenning noemen we deze eigenvectoren de <i>eigenfaces</i> \(U = \left\{u_i \right\}\). Met deze eigenfaces gaan we aan de slag om andere gezichten te herkennen. 
       <br>
     </p>
     <br>
     <p>
 
-      Voor elke gezicht \( v_{i} \) uit de database kan je een zogenaamde gewichtsvector \( \Omega_{i} \) bepalen als volgt: 
+      Voor elk gezicht \( v_{i} \) uit de database kunnen we een zogenaamde gewichtsvector \( \Omega_{i} \) bepalen als volgt: 
       $${ \Omega_{i} =  U^T (v_{i} - \psi) }$$
     </p>
     <br>
     <p>
-Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichtsvectoren op. Elke foto uit de database heeft zijn eigen unieke gewichtsvector. Met behulp van deze gewichtsvector en de eigenfaces kan je een foto reconstrueren. Eender welke foto van een gezicht kan namelijk opgebouwd worden als een lineaire combinatie van alle eigenfaces. Dus als een som van (scalaire) veelvouden van de eigenvectoren (eigenfaces).
-      	<br>
+Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichtsvectoren op, want een gewichtsvector is uniek voor elke foto. Met deze gewichtsvector en de eigenfaces kunnen we een foto reconstrueren. We maken dan een lineaire combinatie van de eigenfaces, dat wil zeggen een som van (scalaire) veelvouden van elke eigenface. We vermenigvuldigen elke eigenface met zijn bijhorende waarde uit de gewichtsvector.
+    	<br>
     </p>
     <br>
     <p>
@@ -95,18 +95,18 @@ Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichts
     </p>
     <br>
     <p>
-      Waartoe hebben we nu al het voorgaande nodig? We willen bekijken of een nieuwe foto (of een nieuw gezicht) overeenkomt met iemand uit onze database. Hiervoor zullen de eerste drie stappen op deze nieuwe foto uitgevoerd moeten worden. En bekom je uiteindelijk een kolomvector \( v_{nieuw} \). 
-      Daarna voer je ook terug de bewerking uit stap 5 uit, waarbij voor de nieuwe foto een bijhorende gewichtsvector wordt berekend:
+      Waartoe hebben we al het voorgaande nodig? We willen bekijken of een nieuwe foto (of een nieuw gezicht) overeenkomt met iemand uit onze database. Hiervoor voeren we de eerste drie stappen op deze nieuwe foto uit en bekomen we opnieuw een kolomvector \( v_{nieuw} \). 
+      Dan voeren we de bewerking van stap 5 uit. Die stap berekent voor de nieuwe foto de bijhorende gewichtsvector:
       $${ \Omega_{nieuw} =  U^T (v_{nieuw} - \psi) }$$
 
     </p>
     <br>
     <p>
-      
-      Om nu het nieuwe gezicht te herkennen kan telkens de norm van de euclidische afstand berekend worden tussen één van de 18 gewichtsvectoren \( \Omega_{i} \) en de gewichtsvector van de nieuwe foto \( \Omega_{nieuw} \).
+      We vergelijken de nieuwe foto met de foto's in de database door de nieuwe gewichtsvector te vergelijken met de gewichtsvectoren in de database.
+	  Wiskundig gebruiken we hiervoor de Euclidische afstand tussen vectoren. We berekenen telkens de norm van de Euclidische afstand tussen één van de 18 gewichtsvectoren \( \Omega_{i} \) en de gewichtsvector van de nieuwe foto \( \Omega_{nieuw} \).
       $${ \epsilon_{i} =  \|\Omega_{i} - \Omega_{nieuw} \|  }$$
       
-      De gewichtsvector \( \Omega_{i} \) horende bij een specifieke persoon uit de database waarvoor deze \( \epsilon_{i} \) het kleinst is, geeft vervolgens aan met welk gezicht uit de database er het meest overeenkomst is. Als die norm klein genoeg is, kan je met voldoende zekerheid stellen dat de nieuwe foto overeenkomt met één van de foto's uit de database en dat de persoon geïdentificeerd is. Over de bepaling van deze grens gaan we nu niet dieper op in.
+      Als \( \epsilon_{i} \) klein is, lijken de gewichtsvectoren op elkaar. We zoeken dus de gewichtsvector \( \Omega_{i} \) waarvoor deze \( \epsilon_{i} \) het kleinst is. De persoon wiens gewichtsvector dit is, lijkt het meest op de persoon in de nieuwe foto. Als die norm \( \epsilon_{i} \) klein genoeg is, kunnen we met voldoende zekerheid stellen dat de persoon op de nieuwe foto overeenkomt met een persoon uit de database en dat de persoon geïdentificeerd is. Op de bepaling van deze grens gaan we hier niet dieper in.
     </p>
     
 
@@ -144,7 +144,7 @@ Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichts
       <div style="text-align: center;">
         <h3>Stap 1: Knip afbeelding uit en vorm om naar juiste resolutie</h3>
         <p style="padding-left: 20px; padding-right: 20px;" > 
-          Om ervoor te zorgen dat het algoritme goed werkt, moeten alle afbeeldingen in de database dezelfde resolutie hebben en enkel van het hoofd. Daarom moet je alle afbeeldingen eerst bijsnijden en omvormen naar een specifieke resolutie (in ons voorbeeld nemen we 115x80 pixels). 
+          Om ervoor te zorgen dat het algoritme goed werkt, moeten alle afbeeldingen in de database dezelfde resolutie hebben en enkel het gezicht bevatten. Daarom moet je alle afbeeldingen eerst bijsnijden en omvormen naar een specifieke resolutie (in ons voorbeeld nemen we 115x80 pixels). 
           Als je op de knop hieronder drukt zal je de bewerking zien gebeuren bij prof. Vander Sloten. Hij is de vice-decaan van onze faculteit én een van de professoren voor het vak <i>Toegepaste Mechanica, deel 1</i>. Achter de schermen gebeurt deze stap nu voor alle afbeeldingen van de proffen. Later in deze tutorial ga je nog afbeeldingen tegenkomen van docenten die in de database zitten. 
         </p>
       </div>
@@ -190,7 +190,7 @@ Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichts
       <div style="text-align: center;">
         <h3>Stap 4: Verschil met gemiddeld gezicht</h3>
       <p style="padding-left: 20px; padding-right: 20px;" > 
-        Zoals ook hiernaast staat uitgelegd gaan we van elk gezicht het verschil berekenen met het gemiddelde gezicht. Dit doen we door van elk gezicht het gemiddelde gezicht af te trekken. Hieronder kan je zien hoe dit gebeurt bij prof. Vander Sloten.
+        Zoals ook hiernaast staat uitgelegd, berekenen we per gezicht het verschil met het gemiddelde gezicht. Dit doen we door van elk gezicht het gemiddelde gezicht af te trekken. Hieronder kan je zien hoe dit gebeurt bij prof. Vander Sloten.
       </p> 
       </div>
       <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
@@ -204,8 +204,8 @@ Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichts
       <div style="text-align: center;">
         <h3>Stap 5: Eigenfaces Berekenen</h3>
       <p style="padding-left: 20px; padding-right: 20px;" > 
-        Eens de verschillen met het gemiddelde gezicht berekend zijn, kunnen we de zogenaamde <i>eigenfaces</i> berekenen. Dit doen we door de zogenaamde <i>covariantie matrix</i> te berekenen en de eigenwaarden en eigenvectoren te bepalen. Eens we de eigenvectoren en eigenwaarden hebben bepaald, houden we enkel de eigenvectoren bij die de grootste eigenwaarden hebben. Deze eigenvectoren noemen we de eigenfaces. Hieronder kan je de eigenface horende bij de grootste eigenwaarde vergeleken met het verschil van prof. Vander Sloten.
-        Nadat alle eigenfaces zijn berekend, maken we een gewichten matrix, zoals hiernaast uitgelegd. Deze gewichten matrix kunnen we gebruiken om nieuwe gezichten te herkennen.
+        Eens de verschillen met het gemiddelde gezicht berekend zijn, kunnen we de zogenaamde <i>eigenfaces</i> berekenen. Dit doen we door de zogenaamde <i>covariantie matrix</i> te berekenen en de eigenwaarden en eigenvectoren te bepalen. Eens we de eigenvectoren en eigenwaarden hebben bepaald, houden we enkel de eigenvectoren bij die de grootste eigenwaarden hebben. Deze eigenvectoren noemen we de eigenfaces. Hieronder kan je de eigenface horende bij de grootste eigenwaarde vergelijken met het verschil van prof. Vander Sloten.
+        Nadat alle eigenfaces zijn berekend, maken we per persoon een gewichtsvector, zoals hiernaast uitgelegd. Deze gewichtsvectoren kunnen we gebruiken om nieuwe gezichten te herkennen.
         </p>
       </div>
       <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
@@ -219,7 +219,8 @@ Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichts
       <div style="text-align: center;">
         <h3>Stap 6: Gezichten vergelijken</h3>
       <p style="padding-left: 20px; padding-right: 20px;" > 
-        Nu alles is berekend, kunnen we het algoritme gebruiken om nieuwe gezichten te herkennen. Dit doen we door de gewichten matrix te berekenen van het nieuwe gezicht en de norm van de euclidische afstand te berekenen tussen de gewichten matrix van het nieuwe gezicht en de gewichten matrix van de gezichten in de database. Het gezicht met de kleinste afstand is het gezicht dat het meest overeenkomt met het nieuwe gezicht.</p><p></p> We kunnen het echter ook gebruiken om te zien hoeveel een totaal nieuw en onbekend persoon wiskundig gezien het meest lijkt op één van de gezichten in de database. Welke professor lijkt het meest op Mr. Bean? Kom het te weten door op de knop te drukken!
+        Nu alles is berekend, kunnen we het algoritme gebruiken om nieuwe gezichten te herkennen. Dit doen we door de gewichtsvector te berekenen van het nieuwe gezicht en de norm van de Euclidische afstand te berekenen tussen de gewichtsvector van het nieuwe gezicht en de gewichtsvectoren van de gezichten in de database. De gewichtsvector uit de database met de kleinste Euclidische afstand tot de nieuwe gewichtsvector hoort bij de persoon die het meest overeenkomt met het nieuwe gezicht.</p><p></p> We kunnen dit proces ook gebruiken met een totaal nieuw en onbekend persoon. Op wie uit de database lijkt deze nieuwe persoon wiskundig gezien het meest?
+		Op welke professor lijkt bijvoorbeeld Mr. Bean het meest? Kom het te weten door op de knop te drukken!
       </p>
       </div>
       <button class="button" onclick="alg_compare()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Vergelijk!</button>

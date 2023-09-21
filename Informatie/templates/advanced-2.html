@@ -1,21 +1,21 @@
-<div class="box-header">Opdracht 2: RGB Led - 2/7</div>
+<div class="box-header">Opdracht 2: RGB-led - 2/7</div>
     <div class="columns">
       <div class="column">
         <div id="intro-div">
-          <h3>RGB-LED</h3>
+          <h3>RGB-led</h3>
         <p>
-          Een RGB-LED is een LED die drie kleuren kan weergeven: rood, groen en blauw. Door de intensiteit van deze kleuren te veranderen kan je alle kleuren van de regenboog maken.
+          Een RGB-led is een led die in verschillende kleuren kan schijnen. Zo'n RGB-led bestaat eigenlijk uit drie leds met de basiskleuren, rood, groen en blauw. Door de intensiteit van deze kleuren te veranderen kan je alle kleuren van de regenboog maken.
         </p>
 
         <p>
-          Elke kleur in een RGB-led wordt vertegenwoordigd door een specifieke RGB-waarde, uitgedrukt als getallen tussen 0 en 255 voor rood, groen en blauw. Door deze waarden aan te passen, kunnen diverse kleuren en tinten worden gecreëerd. Dit geeft gebruikers de mogelijkheid om nauwkeurig hun gewenste kleur te bereiken, waardoor RGB-leds zeer veelzijdig zijn voor verlichting, visuele effecten en artistieke toepassingen.
+          Elke kleur in een RGB-led wordt vertegenwoordigd door een specifieke RGB-waarde, uitgedrukt als getallen tussen 0 en 255 voor rood, groen en blauw. Door deze waarden aan te passen, kan je diverse kleuren en tinten creëren. Je kan heel nauwkeurig een gewenste kleur bereiken, waardoor RGB-leds zeer veelzijdig zijn voor verlichting, visuele effecten en artistieke toepassingen.
         </p>
 
         <p>
           Op het breadboard dat verbonden is aan de Arduino, zien jullie een RGB-led. Download 
           <a href="/static/arduino_code/template_RGB.zip">
-            dit bestand</a>, open het en upload de code naar de arduino. 
-            Vergeet niet om bij 'Select Board' de juiste arduino te selecteren, anders is het niet mogelijk om je code te uploaden.
+            dit bestand</a>, open het en upload de code naar de Arduino. 
+            Vergeet niet om bij 'Select Board' de juiste Arduino te selecteren, anders is het niet mogelijk om je code te uploaden.
             Het ledje zou nu rood licht moeten geven.  
         </p>
         <h3>
@@ -23,12 +23,12 @@
         </h3>
         <p>
             Maak de led groen door de RGB-waarden van dit stuk code aan te passen. 
-            Upload je code opnieuw naar de arduino en test of het ledje groen licht geeft.
+            Upload je code opnieuw naar de Arduino en test of het ledje groen licht geeft.
         </p>
         <pre>
 <code class="language-arduino code-container">
 void loop() {
-  //Pas hier de RGB waarden aan om verschillende kleuren te bekomen
+  //Pas hier de RGB-waarden aan om verschillende kleuren te bekomen
   analogWrite(pin_rood, 255);
   analogWrite(pin_groen, 0);
   analogWrite(pin_blauw, 0);

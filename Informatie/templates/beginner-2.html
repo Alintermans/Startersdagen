@@ -1,19 +1,19 @@
-<div class="box-header">Beginner: LED - 2/10</div>
+<div class="box-header">Beginner: Led - 2/10</div>
     <div class="columns">
       <div class="column">
-        <h2>LED</h2>
+        <h2>Led</h2>
         <p>
-          LED staat voor Light Emitting Diode. Dit zijn halfgeleiders die licht uitzenden. De vaste stof fysica hierachter is voor specialisten elektrotechniek. LEDs gedragen zich, eenmaal ze licht geven, als een batterijtje (er staat een constante elektrische spanning over). De stroom erdoor bepaalt de lichtsterkte. Die stroom kunnen we instellen met behulp van een weerstand. Hoe dat moet? Zie het vak “Elektrische netwerken”.
+          Led staat voor Light Emitting Diode. Leds zijn halfgeleiders die licht uitzenden. De vastestoffysica erachter leer je in het derde jaar elektrotechniek, in het vak "Halfgeleidercomponenten". Leds zijn diodes, wat wil zeggen dat ze de stroom slechts in één richting doorlaten. Hoe meer stroom ze doorlaten, hoe feller het licht. Die stroomsterkte kunnen we instellen met behulp van een weerstand. Hoe dat kan, leer je in het vak “Elektrische netwerken”.
         </p>
         <p>
-          Elk arduino bord heeft altijd een ledje op het bordje dat kan aangestuurd worden met je programma. Dit ledje is verbonden met pin 13. Je kan dit ledje aansturen door de pin 13 op hoog te zetten (HIGH) of op laag (LOW). Als je de pin op hoog zet zal het ledje branden, als je de pin op laag zet zal het ledje uitgaan. Dit ledje kan je terugvinden op het bordje, zoals aangegeven op de foto hiernaast.
+          Elk Arduino-bordje heeft een ingebouwd ledje. Dit ledje is intern verbonden met pin 13, zodat je dit ledje kan aansturen door pin 13 op hoog te zetten (HIGH) of op laag (LOW). Als je de pin op hoog zet zal het ledje branden en als je de pin op laag zet zal het ledje doven. Op de foto hiernaast zie je waar je het ledje precies kan vinden.
           De knop hieronder zal dit ledje aan of uit zetten. Probeer het maar eens en zoek het lichtje op het bordje!
         </p>
         <button class="button" onclick="led()"><i class="fas fa-lightbulb"></i> LED</button>
 
         <h2>Code</h2>
         <p>
-          Voor de geïnteresseerden kan je hieronder al eens de code vinden om het ledje te laten blinken. Door de pin 13 op hoog te zetten zal het ledje branden, door de pin op laag te zetten zal het ledje uitgaan. De delay zorgt ervoor dat de code 1000ms (1 seconde) wacht vooraleer de volgende regel code uitgevoerd wordt. Dit zorgt ervoor dat het ledje 1 seconde aan en 1 seconde uit is.
+          Voor de geïnteresseerden kan je hieronder al eens een voorbeeld van een code vinden. Deze code laat het ledje blinken. Door de pin 13 op hoog te zetten zal het ledje branden, door de pin op laag te zetten zal het ledje uitgaan. De delay zorgt ervoor dat de code 1000ms (1 seconde) wacht vooraleer de volgende regel code uitgevoerd wordt. Dit zorgt ervoor dat het ledje 1 seconde aan en 1 seconde uit staat.
         </p>
         <pre>
 <code class="language-arduino code-container">void setup() {
