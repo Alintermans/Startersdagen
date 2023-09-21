@@ -622,12 +622,16 @@ function check_q1() {
 
 //------------------------------------------- Camera -------------------------------------------//
 function start_camera(){
+    const start_camera_button = document.getElementById('start_camera_btn');
+    start_camera_button.classList.add("disabled");
+    start_camera_button.disabled = true;
     fetch('/start_camera')
     .then(response => response.json())
     .then(data => {
         console.log(data);
         caemra_on = true;
-        
+        start_camera_button.classList.remove("disabled");
+    start_camera_button.disabled = false;
         // video_feed.src = "/video_feed"; 
     });
 }
