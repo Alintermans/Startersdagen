@@ -24,6 +24,8 @@ add_face_name = None
 adding_face = False
 recognized_prof = None
 
+camera_ready = False
+
 
 
 
@@ -166,7 +168,11 @@ def video_feed():
 
 @app.route('/start_camera')
 def start_camera_route():
+    global camera_ready
+    camera_ready = False
     start_camera()
+    while not camera_ready:
+        time.sleep(0.1)
     return jsonify({'status': 'started'})
 
 @app.route('/stop_camera')
@@ -237,27 +243,29 @@ def detect_face():
 def start_camera():
     global camera
     global camera_on
-    
-    #camera = cv2.VideoCapture(1, cv2.CAP_DSHOW)
-    camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-    #camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-    time.sleep(1.5)
-    camera_on = True
+    if not camera_on:
+        #camera = cv2.VideoCapture(1)
+        camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        #camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        time.sleep(1.5)
+        camera_on = True
 
 def stop_camera():
     global camera
     global camera_on
-    camera_on = False
-    time.sleep(0.5)
-    camera.release()
-    global current_camera_choice
-    current_camera_choice = 'None'
+    if camera_on:
+        camera_on = False
+        time.sleep(0.5)
+        camera.release()
+        global current_camera_choice
+        current_camera_choice = 'None'
 
 def gen_frames():  
     global adding_face
     global add_face_name
     global recognized_prof
     global current_camera_choice
+    global camera_ready
     while current_state == 8 or current_state == 12 or current_state == 11 or current_state == 10 or current_state == 9:
         if camera_on:
             time.sleep(0.02)
@@ -268,6 +276,7 @@ def gen_frames():
             if not success:
                 break
             else:
+                camera_ready = True
                 if adding_face:
                     fr.add_face(frame, add_face_name)
                     adding_face = False
