@@ -1,6 +1,6 @@
-REM Activate the Anaconda environment
+REM Activate environment and run script
 call conda activate dlib
-
-REM Add your commands here
-python C:\Users\K00140012\Desktop\Startersdagen\Informatie\Server.py
-
+REM cd C:\Users\Public\Documents\Startersdagen\Informatie
+cd C:\Users\k00140012\Desktop\Startersdagen\Informatie
+REM python C:\Users\Public\Documents\Startersdagen\Informatie\Server.py
+python Server.py
