@@ -390,46 +390,39 @@ def run_sequention():
 @app.route('/test')
 def test():
     global retries
-    result = send_detect_color_request()
-    while result == None:
-        if retries > 5:
+    color_1, color_2 = sample_color_combinations()
+    while color_1 == None:
+        if retries > 3:
             retries = 0
             return jsonify({'status': 'detect-color', 'detected_color': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
         time.sleep(0.1)
         retries += 1
-        result = send_detect_color_request()
-    color = result[0]
-    red = result[1]
-    green = result[2]
-    blue = result[3]
+        color_1, color_2 = sample_color_combinations()
     retries = 0
-    if (color <=7 and color >= 0):
-        run_sequention(color)
-    return jsonify({'status': 'detect-color', 'detected_color': int_color_to_string(color), 'red_value': red, 'green_value': green, 'blue_value': blue})
+    index = color_combination_to_index(int_color_to_string(color_1)+'/'+int_color_to_string(color_1))
+    run_sequention(index)
+    send_voltage_to_pico(index)
+
+    return jsonify({'status': 'detect-color', 'detected_color_combination': int_color_to_string(color_1)+'/'+int_color_to_string(color_1)})
 
 @app.route('/run')
 def run():
     global retries
-    result = send_detect_color_request()
-    while result == None:
-        if retries > 5:
+    color_1, color_2 = sample_color_combinations()
+    while color_1 == None:
+        if retries > 3:
             retries = 0
-            return jsonify({'status': 'detect-color', 'detected_color': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
+            return jsonify({'status': 'detect-color', 'detected_color_combination': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
         time.sleep(0.1)
         retries += 1
-        result = send_detect_color_request()
-    color = result[0]
-    red = result[1]
-    green = result[2]
-    blue = result[3]
+        color_1, color_2 = sample_color_combinations()
     retries = 0
-    name = ""
-    if (color <=7 and color >= 0):
-        rgb_colors = color_int_to_rgb(color)
-        send_message(rgb_int_to_string_of_9_charachters(rgb_colors[0], rgb_colors[1], rgb_colors[2]))
-        run_sequention(color)
-        name = sequentions[color]["name"]
-    return jsonify({'status': 'detect-color', 'detected_color': int_color_to_string(color), 'red_value': red, 'green_value': green, 'blue_value': blue, 'name': name})
+    index = color_combination_to_index(int_color_to_string(color_1)+'/'+int_color_to_string(color_1))
+    run_sequention(index)
+    send_voltage_to_pico(index)
+    name = sequentions[index]["name"]
+
+    return jsonify({'status': 'detect-color', 'detected_color_combination': int_color_to_string(color), 'red_value': red, 'green_value': green, 'blue_value': blue, 'name': name})
 
 ##Arduino commands
 @app.route('/rgb-led')
@@ -545,7 +538,34 @@ def load_voltages():
     return jsonify({'status': 'load-voltages', 'voltages': pico_voltages})
 
 
+def send_voltage_to_pico(index):
+    send_message('V' + position_int_to_3_charachters(pico_voltages[index]) + '\n')
+
+
 ################################# Color Sensor #############################################
+
+
+#Make a function where the colorsensor checks the color each second for 10 seconds and then returns the two most common colors
+def sample_color_combinations():
+    color_combinations = []
+    for i in range(10):
+        color = send_detect_color_request()
+        if color == None:
+            continue
+        if color in color_combinations:
+            color_combinations[color] += 1
+        else:
+            color_combinations[color] = 1
+        time.sleep(1)
+    color_combinations = sorted(color_combinations.items(), key=lambda x: x[1], reverse=True)
+
+    if len(color_combinations) == 0:
+        return None, None
+
+    if len(color_combinations) < 2:
+        return color_combinations[0][0], color_combinations[0][0]
+
+    return color_combinations[0][0], color_combinations[1][0]
 
 # zwart = (4500, 7000, 6500)
 # rood = (400, 1800, 1100)
@@ -672,6 +692,39 @@ def int_color_to_string(color):
         return 'Wit'
     else:
         return 'Geen idee'
+
+
+def color_combination_to_index(combo):
+    if combo == 'Zwart/Zwart':
+        return 0
+    elif combo == 'Zwart/Rood':
+        return 1
+    elif combo == 'Zwart/Blauw':
+        return 2
+    elif combo == 'Zwart/Groen':
+        return 3
+    elif combo == 'Zwart/Wit':
+        return 4
+    elif combo == 'Rood/Rood':
+        return 5
+    elif combo == 'Rood/Blauw':
+        return 6
+    elif combo == 'Rood/Groen':
+        return 7
+    elif combo == 'Rood/Wit':
+        return 8
+    elif combo == 'Blauw/Blauw':
+        return 9
+    elif combo == 'Blauw/Groen':
+        return 10
+    elif combo == 'Blauw/Wit':
+        return 11
+    elif combo == 'Groen/Groen':
+        return 12
+    elif combo == 'Groen/Wit':
+        return 13
+    elif combo == 'Wit/Wit':
+        return 14
 
 def position_int_to_3_charachters(position):
     position = str(position)

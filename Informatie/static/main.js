@@ -347,17 +347,11 @@ function runColorBox() {
 
 //------------------------------------------- Run -------------------------------------------//
 function run(){
-    const red_value = document.getElementById('detected-red-value');
-    const green_value = document.getElementById('detected-green-value');
-    const blue_value = document.getElementById('detected-blue-value');
-    const detected_color = document.getElementById('detected-color');
+    const detected_color_combination = document.getElementById('detected-color-combination-run');
     const detected_name = document.getElementById('detected-name');
     const button = document.getElementById('runButton');
 
-    red_value.textContent = "";
-    green_value.textContent = "";
-    blue_value.textContent = "";
-    detected_color.textContent = "";
+    detected_color_combination.textContent = "";
     detected_name.textContent = "";
     button.disabled = true;
     button.classList.add("disabled");
@@ -367,10 +361,7 @@ function run(){
     .then(response => response.json())
     .then(data => {
         console.log(data);
-        red_value.textContent = data.red_value;
-        green_value.textContent = data.green_value;
-        blue_value.textContent = data.blue_value;
-        detected_color.textContent = data.detected_color;
+        detected_color_combination.textContent = data.detected_color_combination;
         detected_name.textContent = data.name;
         button.disabled = false;
         button.classList.remove("disabled");
