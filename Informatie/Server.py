@@ -13,11 +13,13 @@ current_page = 'home' # 'home', 'game', 'settings'
 arduino_connected = False
 
 nb_steps_advanced = 7
-nb_steps_beginner = 10
+nb_steps_beginner = 11
 
 retries = 0 
 
-sequentions = [{"name": "Koffie", "angles": ["90"]}, {"name": "Thee", "angles": ["90"]},{"name": "Koffie met suiker", "angles": ["90"]}, {"name": "Thee met suiker", "angles": ["90"]},{"name": "Koffie met melk", "angles": ["90"]}, {"name": "Thee met melk", "angles": ["90"]},{"name": "Koffie met melk en suiker", "angles": ["90"]}, {"name": "Thee met melk en suiker", "angles": ["90"]}]
+pico_voltages = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+sequentions = [{"name": "Koffie", "angles": ["90"]}, {"name": "Thee", "angles": ["90"]},{"name": "Koffie met suiker", "angles": ["90"]}, {"name": "Thee met suiker", "angles": ["90"]},{"name": "Koffie met melk", "angles": ["90"]}, {"name": "Thee met melk", "angles": ["90"]},{"name": "Koffie met melk en suiker", "angles": ["90"]}, {"name": "Thee met melk en suiker", "angles": ["90"]}, {"name": "Koffie", "angles": ["90"]}, {"name": "Thee", "angles": ["90"]},{"name": "Koffie met suiker", "angles": ["90"]}, {"name": "Thee met suiker", "angles": ["90"]},{"name": "Koffie met melk", "angles": ["90"]}, {"name": "Thee met melk", "angles": ["90"]},{"name": "Koffie met melk en suiker", "angles": ["90"]}, {"name": "Thee met melk en suiker", "angles": ["90"]}, {"name": "Koffie", "angles": ["90"]}, {"name": "Thee", "angles": ["90"]},{"name": "Koffie met suiker", "angles": ["90"]}, {"name": "Thee met suiker", "angles": ["90"]},{"name": "Koffie met melk", "angles": ["90"]}, {"name": "Thee met melk", "angles": ["90"]},{"name": "Koffie met melk en suiker", "angles": ["90"]}, {"name": "Thee met melk en suiker", "angles": ["90"]}, {"name": "Koffie", "angles": ["90"]}, {"name": "Thee", "angles": ["90"]},{"name": "Koffie met suiker", "angles": ["90"]}, {"name": "Thee met suiker", "angles": ["90"]},{"name": "Koffie met melk", "angles": ["90"]}, {"name": "Thee met melk", "angles": ["90"]},{"name": "Koffie met melk en suiker", "angles": ["90"]}]
 
 sequentions_saved = False
 
@@ -197,7 +199,7 @@ app = Flask(__name__)    # Create Flask app
 
 
 def run_server():
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=8080)
 
 # Flask route to display device data
 @app.route('/')
@@ -329,6 +331,10 @@ def beginner_9():
 @app.route('/beginner-10')
 def beginner_10():
     return render_template('beginner-10.html')
+
+@app.route('/beginner-11')
+def beginner_11():
+    return render_template('beginner-11.html')
 
 @app.route('/advanced-1')
 def advanced_1():
@@ -489,9 +495,9 @@ def get_sensor_color_values():
         green = blauw[1]
         blue = blauw[2]
     elif (color == 4):
-        red = licht_blauw[0]
-        green = licht_blauw[1]
-        blue = licht_blauw[2]
+        red = wit[0]
+        green = wit[1]
+        blue = wit[2]
     elif (color == 5):
         red = roos[0]
         green = roos[1]
@@ -519,6 +525,25 @@ def servo():
     send_message('S' + position_int_to_3_charachters(position) + '\n')
     return jsonify({'status': 'servo'})
 
+################################# Pico Volt #############################################
+
+@app.route('/pico_volt')
+def pivo_volt():
+    position = int(request.args.get('value'))
+    send_message('V' + position_int_to_3_charachters(position) + '\n')
+    return jsonify({'status': 'pico_voltage'})
+
+@app.route('/pico_save_values')
+def pico_save_values():
+    value = int(request.args.get('value'))
+    index = int(request.args.get('index'))
+    pico_voltages[index] = value
+    return jsonify({'status': 'pico_voltage'})
+
+@app.route('/load-voltages')
+def load_voltages():
+    return jsonify({'status': 'load-voltages', 'voltages': pico_voltages})
+
 
 ################################# Color Sensor #############################################
 
@@ -543,7 +568,7 @@ def color_int_to_rgb(color):
     elif (color == 3):
         return (0,0,255)
     elif (color == 4):
-        return (0,255,255)
+        return (255,255,255)
     elif (color == 5):
         return (255,0,255)
     elif (color == 6):
@@ -576,7 +601,7 @@ def change_color(color, red, green, blue):
         blauw = (red, green, blue)
         send_message(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
     elif (color == 4):
-        licht_blauw = (red, green, blue)
+        wit = (red, green, blue)
         send_message(rgb_int_to_string_of_12_charachters_for_changing_sensor_values(color, red, green, blue))
     elif (color == 5):
         roos = (red, green, blue)
@@ -638,7 +663,7 @@ def int_color_to_string(color):
     elif color == 3:
         return 'Blauw'
     elif color == 4:
-        return 'Licht Blauw'
+        return 'Wit'
     elif color == 5:
         return 'Roze'
     elif color == 6:

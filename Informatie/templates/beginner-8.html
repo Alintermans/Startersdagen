@@ -1,49 +1,179 @@
-<div class="box-header">Beginner: Testen - 8/10</div>
+<div class="box-header">Beginner: Gegevensoverdacht met Pico - 8/10</div>
     <div class="columns">
       <div class="column">
-        <h2>Testen</h2>
+        <h3>
+          Analoge Communicatie
+        </h3>
         <p>
-            Nu we alle tussenstappen hebben geprogrammeerd, gaan we het systeem testen. Zet een kleur klaar en druk op 'run'. Als alles goed gaat, draait de servo-motor en brandt de led.
-            Als geen van de gekende kleuren wordt gedetecteerd zal de servomotor niet draaien.
+          Communicatie tussen apparaten kan op verschillende manieren gebeuren. Een eerste distinguering die we kunnen maken is tussen digitale en analoge communicatie.
+          Digitale communicatie is de meest voorkomende vorm van communicatie. Hierbij worden signalen verstuurd die enkel twee waarden kunnen aannemen: 0 of 1.
+          Analoge communicatie daarentegen kan een oneindig aantal waarden aannemen. Denk bijvoorbeeld aan een analoge klok, waarbij de wijzers elke mogelijke positie kunnen aannemen.
+          <br>
+          <br>
+          Het Energie team hebben een Pico microcontroller gekregen, waaraan een buzzer en een OLED scherm zijn aangesloten, die gevoed worden door de batterij die ze hebben gemaakt.
+          Deze Pico is zo geprogrammeerd dat die bepaalde liedjes met bijhorende tekst kan afspelen op de buzzer en op het scherm. 
+          Voor elke professor die zal langskomen is zijn of haar favoriete liedje en bijhorende tekst al geprogrammeerd. 
+          <br>
+          <br>
+          Via analogie communicatie tussen de Arduino en de Pico kunnen jullie de Pico laten weten welk liedje en tekst moet worden afgespeeld.
+          De arduino is zo geprogrammeerd dat die een voltage stuurt naar de Pico, die dan op basis van dat voltage weet welk liedje en tekst moet worden afgespeeld.
+          Met de slider hieronder kunnen jullie het voltage instellen dat de Arduino naar de Pico stuurt. De mensen van de batterij weten hoe de draadjes van de Pico aan de Arduino moeten worden aangesloten.
+          <br>  
+          <br>
+          Probeer eens te spelen met de slider en kijk wat er gebeurt met de Pico. Het is dan aan jullie om hiernaast de juiste voltage in te stellen voor het de juiste kleurencombinatie die bij één van de proffen hoort. 
         </p>
 
-        <button class="button" onclick="test()" id="testButton"><i class="fas fa-play"></i> Test</button>
-
+        <label for="slider_pico">Voltage: <span  id="slider_pico_value">0.00</span></span></label>
+          <input type="range" id="slider_pico" min="0" max="164" value="0" onchange="pico_changslider(this.value)">
+        <br>
+        
       </div>
-        <div class="column">
-            <div id="rgb-slider">
-                    <div id="rgb-slider-inner-div">
-                    
-                    <div id="inner-div-sliders">
-                        <!-- <h2>Sliders</h2> -->
-                        <label for="redSlider">Red: <span class="slider-value" id="redValue">0</span></label>
-                        <input type="range" id="redSlider" min="0" max="255" value="0">
-                        
-                        <br>
-                        <label for="greenSlider">Green: <span class="slider-value" id="greenValue">0</span></label>
-                        <input type="range" id="greenSlider" min="0" max="255" value="0">
-                        
-                        <br>
-                        <label for="blueSlider">Blue: <span class="slider-value" id="blueValue">0</span></label>
-                        <input type="range" id="blueSlider" min="0" max="255" value="0">
-                        <br>
-                    </div>
-                    <div id="inner-div-calibration">
-                        <!-- <h2>Kalibratie</h2> -->
-                        <br>
-                        <b>Gedecteerde kleur: </b><span id="detected-color"></span>
-                        <br>
-                        Rood-waarde: <span id="detected-red-value"></span>
-                        <br>
-                        Groen-waarde: <span id="detected-green-value"></span>
-                        <br>
-                        Blauw-waarde: <span id="detected-blue-value"></span>
-                    </div>
-                    </div>
-                <div class="color-box" id="colorBox"></div>
-              </div>
+      <div class="column">
+        <h3>
+          Kleuren Combinatie combineren met juiste voltage voor juiste liedje
+        </h3>
+        
+        <div>
+
+          <div class="voltage_inputs_div">
+            <h3>Zwart/Zwart</h3>
+            <div>
+              Voltage: 
+            <input type="number" id="voltage_0" min="0" max="3.3" value="0" onchange="save_pico_value(this.value, 0, this)"> 
+            </div>
+          </div>
+
+          <div class="voltage_inputs_div">
+            <h3>Zwart/Rood</h3>
+            <div>
+              Voltage: 
+            <input type="number" id="voltage_1" min="0" max="3.3" value="0" onchange="save_pico_value(this.value, 1, this)"> 
+          </div>
+          </div>
+
+          <div class="voltage_inputs_div">
+            <h3>Zwart/Blauw</h3>
+            <div>
+              Voltage: 
+            <input type="number" id="voltage_2" min="0" max="3.3" value="0" onchange="save_pico_value(this.value, 2, this)">
+            </div>
+          </div>
+
+          <div class="voltage_inputs_div">
+            <h3>Zwart/Groen</h3>
+            <div>
+              Voltage: 
+            <input type="number" id="voltage_3" min="0" max="3.3" value="0" onchange="save_pico_value(this.value, 3, this)">
+            </div>
+          </div>
+          
+
+          <div class="voltage_inputs_div">
+            <h3>Zwart/Wit</h3>
+            <div>
+              Voltage: 
+            <input type="number" id="voltage_4" min="0" max="3.3" value="0" onchange="save_pico_value(this.value, 4, this)">
+            </div>
+          </div>
+          
+
+          <div class="voltage_inputs_div">
+            <h3>Rood/Rood</h3>
+            <div>
+              Voltage: 
+            <input type="number" id="voltage_5" min="0" max="3.3" value="0" onchange="save_pico_value(this.value, 5, this)">
+            </div>
+          </div>  
+
+          <div class="voltage_inputs_div">
+            <h3>Rood/Blauw</h3>
+            <div>
+              Voltage: 
+            <input type="number" id="voltage_6" min="0" max="3.3" value="0" onchange="save_pico_value(this.value, 6, this)">
+            </div>
+          </div>
+
+          <div class="voltage_inputs_div">
+            <h3>Rood/Groen</h3>
+            <div>
+              Voltage: 
+            <input type="number" id="voltage_7" min="0" max="3.3" value="0" onchange="save_pico_value(this.value, 7, this)">
+            </div>
+          </div>
+
+          <div class="voltage_inputs_div">
+            <h3>Rood/Wit</h3>
+            <div>
+              Voltage: 
+            <input type="number" id="voltage_8" min="0" max="3.3" value="0" onchange="save_pico_value(this.value, 8, this)">
+            </div>
+          </div>
+
+          <div class="voltage_inputs_div">
+            <h3>Blauw/Blauw</h3>
+            <div>
+              Voltage: 
+            <input type="number" id="voltage_9" min="0" max="3.3" value="0" onchange="save_pico_value(this.value, 9, this)">
+            </div>
+          </div>
+
+          <div class="voltage_inputs_div">
+            <h3>Blauw/Groen</h3>
+            <div>
+              Voltage: 
+            <input type="number" id="voltage_10" min="0" max="3.3" value="0" onchange="save_pico_value(this.value, 10, this)">
+            </div>
+          </div>
+
+          <div class="voltage_inputs_div">
+            <h3>Blauw/Wit</h3>
+            <div>
+              Voltage: 
+            <input type="number" id="voltage_11" min="0" max="3.3" value="0" onchange="save_pico_value(this.value, 11, this)">
+            </div>
+          </div>
+
+          <div class="voltage_inputs_div">
+            <h3>Groen/Groen</h3>
+            <div>
+              Voltage: 
+            <input type="number" id="voltage_12" min="0" max="3.3" value="0" onchange="save_pico_value(this.value, 12, this)">
+            </div>
+          </div>
+
+          <div class="voltage_inputs_div">
+            <h3>Groen/Wit</h3>
+            <div>
+              Voltage: 
+            <input type="number" id="voltage_13" min="0" max="3.3" value="0" onchange="save_pico_value(this.value, 13, this)">
+            </div>
+          </div>
+
+          <div class="voltage_inputs_div">
+            <h3>Wit/Wit</h3>
+            <div>
+              Voltage: 
+            <input type="number" id="voltage_14" min="0" max="3.3" value="0" onchange="save_pico_value(this.value, 14, this)">
+            </div>
+          </div>
+          
+          
+          
+
+          
+
+
         </div>
         
         
-    </div>
+        
+          
+        
 
+       
+        
+      </div>
+
+
+
+  </div>

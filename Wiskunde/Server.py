@@ -244,8 +244,8 @@ def start_camera():
     global camera
     global camera_on
     if not camera_on:
-        #camera = cv2.VideoCapture(1)
-        camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        camera = cv2.VideoCapture(0)
+        #camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
         #camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         time.sleep(1.5)
         camera_on = True
@@ -276,27 +276,30 @@ def gen_frames():
             if not success:
                 break
             else:
-                camera_ready = True
-                if adding_face:
-                    fr.add_face(frame, add_face_name)
-                    adding_face = False
-                    add_face_name = None
-                if current_camera_choice == 'face_landmarks':
-                    frame = fr.process_frame_with_facial_features(frame)
-                elif current_camera_choice == 'makeup':
-                    frame = fr.process_frame_with_makeup(frame)
-                elif current_camera_choice == 'face_recognition':
-                    frame = fr.process_frame(frame)
-                elif current_camera_choice == 'recognize_prof':
-                    frame = fr.process_frame_with_prof(frame)
-                    frame = fr.process_frame_with_prof(frame)
-                    recognized_prof = fr.prof_found
-                    current_camera_choice = 'None'
+                try: 
+                    camera_ready = True
+                    if adding_face:
+                        fr.add_face(frame, add_face_name)
+                        adding_face = False
+                        add_face_name = None
+                    if current_camera_choice == 'face_landmarks':
+                        frame = fr.process_frame_with_facial_features(frame)
+                    elif current_camera_choice == 'makeup':
+                        frame = fr.process_frame_with_makeup(frame)
+                    elif current_camera_choice == 'face_recognition':
+                        frame = fr.process_frame(frame)
+                    elif current_camera_choice == 'recognize_prof':
+                        frame = fr.process_frame_with_prof(frame)
+                        frame = fr.process_frame_with_prof(frame)
+                        recognized_prof = fr.prof_found
+                        current_camera_choice = 'None'
 
-                ret, buffer = cv2.imencode('.jpg', frame)
-                frame = buffer.tobytes()
-                yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
+                    ret, buffer = cv2.imencode('.jpg', frame)
+                    frame = buffer.tobytes()
+                    yield (b'--frame\r\n'
+                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
+                except:
+                    break
         else:
             img = cv2.imread('static/images/camera_uit.jpg')
             ret, buffer = cv2.imencode('.jpg', img)

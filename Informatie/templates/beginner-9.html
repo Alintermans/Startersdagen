@@ -1,29 +1,50 @@
-<div class="box-header">Beginner: Make the coffee! - 9/10</div>
+<div class="box-header">Beginner: Testen - 9/11</div>
     <div class="columns">
       <div class="column">
-        <h2 style="text-align: center;">Testen</h2>
-        <p style="text-align: center;">
-            Wanneer de andere groepen van jouw team ook klaar zijn, kunnen jullie alle deelsystemen achter elkaar zetten en koffie maken! Verklein dit scherm zodat het slechts de helft van het totale scherm inneemt. Op de andere helft van je scherm open je het programma van je teamleden met opdracht 'Wiskunde' (beeldherkenning).
+        <h2>Testen</h2>
+        <p>
+            Nu we alle tussenstappen hebben geprogrammeerd, gaan we het systeem testen. Zet een kleurencombinatie klaar, zet hem op en druk op 'run'. Als alles goed gaat, draait de servo-motor en brandt de led.
+            Als geen van de gekende kleuren wordt gedetecteerd zal de servomotor niet draaien.
         </p>
 
-        
-
-        <div id="inner-div-calibration" style="width: 100%;">
-          <button class="button" onclick="run()" id="runButton" ><i class="fas fa-play"></i> Start</button>
-          <br>
-          <b>Gedetecteerde kleur: </b><span id="detected-color"></span>
-          <br>
-          <b>Gedetecteerde optie: </b><span id="detected-name"></span>
-          <br>
-          Rood-waarde: <span id="detected-red-value"></span>
-          <br>
-          Groen-waarde: <span id="detected-green-value"></span>
-          <br>
-          Blauw-waarde: <span id="detected-blue-value"></span>
-        </div>
+        <button class="button" onclick="test()" id="testButton"><i class="fas fa-play"></i> Test</button>
 
       </div>
-        
+        <div class="column">
+            <div id="">
+                    <div id="">
+                        
+                      <div id="">
+                        <b>Kies een kleurencombinatie:</b>
+                        <select id="colorCombination">
+                          <option value="0">Zwart/Zwart</option>
+                          <option value="1">Zwart/Rood</option>
+                          <option value="2">Zwart/Blauw</option>
+                          <option value="3">Zwart/Groen</option>
+                          <option value="4">Zwart/Wit</option>
+                          <option value="5">Rood/Rood</option>
+                          <option value="6">Rood/Blauw</option>
+                          <option value="7">Rood/Groen</option>
+                          <option value="8">Rood/Wit</option>
+                          <option value="9">Blauw/Blauw</option>
+                          <option value="10">Blauw/Groen</option>
+                          <option value="11">Blauw/Wit</option>
+                          <option value="12">Groen/Groen</option>
+                          <option value="13">Groen/Wit</option>
+                          <option value="14">Wit/Wit</option>
+                      </select>
+                      <br>
+                      <br>
+                      <button class="button" onclick="runColorBox()" id="colorBoxBtn"><i class="fas fa-play"></i> Start Sequentie</button>
+                      </div>
+                      <div id="">
+                          <br>
+                          <b>Gedecteerde kleuren combinatie: </b><span id="detected-color-combination-test"></span>
+                      </div>
+                    </div>
+                <div class="color-box" id="colorBoxTest"></div>
+              </div>
+        </div>
         
         
     </div>

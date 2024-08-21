@@ -93,7 +93,62 @@ function servo() {
     .then(response => response.json())
     .then(data => {
         console.log(data);
-    });}
+    });
+}
+
+//------------------------------------------- Pico -------------------------------------------//
+
+
+function pico_changslider(input_value) {
+    var value = parseInt(input_value);
+    document.getElementById("slider_pico_value").textContent = (value*3.3/164).toFixed(2);
+    send_pico_value(value);
+  }
+
+
+function send_pico_value(value) {
+    if (value <= 164) {
+        fetch('/pico_volt?value=' + value.toString())
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+    });
+    }
+}
+
+save_pico_value = function(value, index, input) {
+
+    if (value > 3.3) {
+        input.value = 3.3;
+    }
+
+    if (value < 0) {
+        input.value = 0;
+    }
+
+    value = value * 164 / 3.3;
+    value = Math.round(value);
+
+    fetch('/pico_save_values?value=' + value.toString() + '&index=' + index.toString())
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });    
+
+
+}
+
+function loadVoltages() {
+    fetch('/load-voltages')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        for (var i = 0; i < 15; i++) {
+            document.getElementById("voltage_" + i.toString()).value = (data.voltages[i]*3.3/164).toFixed(2);
+        }
+    });
+}
+
 
 
 //------------------------------------------- Servo -------------------------------------------//
@@ -165,7 +220,7 @@ function loadSequentions() {
     .then(response => response.json())
     .then(data => {
         console.log(data);
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < 15; i++) {
             document.getElementById("sequention-" + i + "-name").value = data.sequentions[i].name;
             for (var j = 0; j < data.sequentions[i].angles.length; j++) {
                 if (j == 0) {
@@ -195,16 +250,11 @@ function runSequention(sequention) {
 
 //------------------------------------------- Test Sequence -------------------------------------------//
 function test() {
-    const red_value = document.getElementById('detected-red-value');
-    const green_value = document.getElementById('detected-green-value');
-    const blue_value = document.getElementById('detected-blue-value');
-    const detected_color = document.getElementById('detected-color');
+    const detected_color_combination = document.getElementById('detected-color-combination-test');
     const button = document.getElementById('testButton');
 
-    red_value.textContent = "";
-    green_value.textContent = "";
-    blue_value.textContent = "";
-    detected_color.textContent = "";
+
+    detected_color_combination.textContent = "";
     button.disabled = true;
     button.classList.add("disabled");
 
@@ -212,13 +262,87 @@ function test() {
     .then(response => response.json())
     .then(data => {
         console.log(data);
-        red_value.textContent = data.red_value;
-        green_value.textContent = data.green_value;
-        blue_value.textContent = data.blue_value;
-        detected_color.textContent = data.detected_color;
+        detected_color_combination.textContent = data.detected_color_combination;
         button.disabled = false;
         button.classList.remove("disabled");
     });
+}
+
+function runColorBox() {
+    var colorBox = document.getElementById('colorBoxTest');
+    var colorCombination = document.getElementById('colorCombination');
+
+    var firstColor = 'black';
+    var secondColor = 'black';
+
+    if (colorCombination.value == 0) {
+        firstColor = 'black';
+        secondColor = 'black';
+    } else if (colorCombination.value == 1) {
+        firstColor = 'black';
+        secondColor = 'red';
+    } else if (colorCombination.value == 2) {
+        firstColor = 'black';
+        secondColor = 'blue';
+    } else if (colorCombination.value == 3) {
+        firstColor = 'black';
+        secondColor = 'green';
+    } else if (colorCombination.value == 4) {
+        firstColor = 'black';
+        secondColor = 'white';
+    } else if (colorCombination.value == 5) {
+        firstColor = 'red';
+        secondColor = 'red';
+    } else if (colorCombination.value == 6) {
+        firstColor = 'red';
+        secondColor = 'blue';
+    } else if (colorCombination.value == 7) {
+        firstColor = 'red';
+        secondColor = 'green';
+    } else if (colorCombination.value == 8) {
+        firstColor = 'red';
+        secondColor = 'white';
+    } else if (colorCombination.value == 9) {
+        firstColor = 'blue';
+        secondColor = 'blue';
+    } else if (colorCombination.value == 10) {
+        firstColor = 'blue';
+        secondColor = 'green';
+    } else if (colorCombination.value == 11) {
+        firstColor = 'blue';
+        secondColor = 'white';
+    } else if (colorCombination.value == 12) {
+        firstColor = 'green';
+        secondColor = 'green';
+    } else if (colorCombination.value == 13) {
+        firstColor = 'green';
+        secondColor = 'white';
+    } else if (colorCombination.value == 14) {
+        firstColor = 'white';
+        secondColor = 'white';
+    }
+
+    // For 20 seconds display the first color for 1 second and the second color for 1 second
+    var i = 0;
+    document.getElementById("colorBoxBtn").disabled = true;
+    document.getElementById("colorBoxBtn").classList.add("disabled");
+
+    var interval = setInterval(function() {
+        if (i % 2 == 0) {
+            colorBox.style.backgroundColor = firstColor;
+        } else {
+            colorBox.style.backgroundColor = secondColor;
+        }
+        i++;
+        if (i == 20) {
+            clearInterval(interval);
+            document.getElementById("colorBoxBtn").disabled = false;
+            document.getElementById("colorBoxBtn").classList.remove("disabled");
+            colorBox.style.backgroundColor = '#f9f9f9';
+        }
+    }, 1000);
+     
+
 }
 
 //------------------------------------------- Run -------------------------------------------//
@@ -288,7 +412,7 @@ function detectColor() {
 function getSensorValues() {
     
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
         const red_value = document.getElementById('red-value-' + i.toString());
         const green_value = document.getElementById('green-value-' + i.toString());
         const blue_value = document.getElementById('blue-value-' + i.toString());
@@ -435,7 +559,7 @@ function loadPage(pageUrl) {
 
             if ((choice === 'beginner' && state == 3) ||
                 (choice === 'beginner' && state == 5) ||
-                (choice === 'beginner' && state == 8) ||
+                (choice === 'beginner' && state == 9) ||
                 (choice === 'advanced' && state == 1) ||
                 (choice === 'advanced' && state == 4)) {
 
@@ -449,6 +573,10 @@ function loadPage(pageUrl) {
 
             if ((choice === 'beginner' && state == 7) ) {
                 loadSequentions();
+            }
+
+            if ((choice === 'beginner' && state == 8) ) {
+                loadVoltages();
             }
             
 

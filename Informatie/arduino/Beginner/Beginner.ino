@@ -12,6 +12,7 @@
 #define sensor 48
 #define motor 10
 #define servo_pin 12
+#define pico_pin 13
 
 Servo myServo;
 
@@ -69,6 +70,7 @@ void setup() {
   pinMode(green_led, OUTPUT);
   pinMode(blue_led,OUTPUT);
   pinMode(battery_led,OUTPUT);
+  pinMode(pico_pin, OUTPUT);
 
   pinMode(S0, OUTPUT);
   pinMode(S1, OUTPUT);
@@ -133,6 +135,11 @@ void loop() {
   } else if (x.indexOf("S") == 0 && x.length() == 5) {
     int position = x.substring(1,4).toInt();
     setServoPosition(position);
+  } else if (x.indexOf("V") == 0 && x.length() == 5) {
+    int pico_value = x.substring(1,4).toInt();
+    if (pico_value < 165) {
+      analogWrite(pico_pin, pico_value);
+    }
   }
 
   Serial.println(x.length());

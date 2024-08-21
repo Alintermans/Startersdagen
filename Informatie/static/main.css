@@ -229,6 +229,11 @@ img {
     
   }
 
+  #slider_pico::-webkit-slider-thumb {
+    background-color: rgb(255, 0, 0);
+    
+  }
+
   #redSlider {
     background-color: rgb(255, 0, 0);
   }
@@ -458,5 +463,12 @@ img {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
+}
+
+.voltage_inputs_div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
   align-items: center;
 }
