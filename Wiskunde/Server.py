@@ -12,7 +12,7 @@ from FaceRecognition import FaceRecognition
 current_state = 0
 current_page = 'home' 
 
-nb_steps = 12
+nb_steps = 11
 
 retries = 0 
 
@@ -229,7 +229,7 @@ def detect_face():
     current_camera_choice = 'recognize_prof'
     while recognized_prof == None:
         time.sleep(0.1)
-    result = recognized_prof
+    result = str(recognized_prof)
     recognized_prof = None
     return jsonify({'status': 'detect_face', 'result': result})
 
@@ -244,8 +244,8 @@ def start_camera():
     global camera
     global camera_on
     if not camera_on:
-        camera = cv2.VideoCapture(0)
-        #camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        #camera = cv2.VideoCapture(0)
+        camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
         #camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         time.sleep(1.5)
         camera_on = True
@@ -272,8 +272,10 @@ def gen_frames():
             try:
                 success, frame = camera.read()  # read the camera frame
             except:
+                print('Failed to read frame')
                 break
             if not success:
+                print('Failed to read frame - success')
                 break
             else:
                 try: 
@@ -298,7 +300,9 @@ def gen_frames():
                     frame = buffer.tobytes()
                     yield (b'--frame\r\n'
                         b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
-                except:
+                except Exception as e:
+                    print('Failed to process frame - exception')
+                    print(e)
                     break
         else:
             img = cv2.imread('static/images/camera_uit.jpg')

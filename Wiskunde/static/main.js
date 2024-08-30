@@ -4,7 +4,7 @@ var nb_steps = 1;
 
 var caemra_on = false;
 
-var profs = ['prof. Geraedts', 'prof. Van-Hamme', 'prof. Vandepitte', 'prof. Houssa', 'prof. Blanpain',  'prof. Vanmeensel', 'prof. Beernaert', 'prof. Van-Puyvelde',   'prof. Dehaene', 'prof. Moelans', 'prof. Anton',  'prof. Vandebril', 'prof. Baelmans', 'prof. Jacobs', 'prof. De-Laet', 'prof. Van-De-Walle', 'prof. Rijmen', 'prof. Smets', 'prof. Holvoet', 'prof. Vander-Sloten'];
+var profs = ['prof. Beernaert', 'prof. De-Laet', 'prof. Van-Hamme', 'prof. Van-Puyvelde', 'prof. Van-De-Walle', 'prof. Vander-Sloten', 'prof. Vandebril', 'prof. Rijmen', 'prof. Vansteenwegen', 'prof. Braem', 'prof. Smets', 'prof. Houssa', 'prof. Holvoet', 'prof. Jacobs', 'prof. Dehaene']
 
 var colors = ["#000000", "#ff0000", "#00ff00", "#0000ff",   "#00ffff", "#ff00ff", "#ffff00","#ffffff"];
 var options = ["Koffie", "Koffie met suiker", "Koffie met melk en suiker", "Koffie met melk", "Thee", "Thee met melk", "Thee met melk en suiker", "Thee met suiker"];
@@ -42,14 +42,17 @@ function next() {
     }
 
     if (state == 10) {
-        saveOptions();
-    }
-    if (state == 11) {
-        if (!checkAllDifferent()) {
+        if (!checkEveryThirdOptionIsDifferent()) {
             return;
         }
-        saveColors();
+        saveOptions();
     }
+    // if (state == 11) {
+    //     if (!checkAllDifferent()) {
+    //         return;
+    //     }
+    //     saveColors();
+    // }
 
 
     fetch('/next')
@@ -64,10 +67,10 @@ function back() {
     if (state == 10) {
         saveOptions();
     }
-    if (state == 11) {
+    // if (state == 11) {
         
-        saveColors();
-    }
+    //     saveColors();
+    // }
     fetch('/back')
     .then(response => response.json())
     .then(data => {
@@ -445,7 +448,7 @@ function uploadColorsAndOptions() {
             saveColors();
             
             savedOptions = data.options;
-            saveOptions();
+            //saveOptions();
         }
     }
     input.click();
@@ -511,6 +514,26 @@ function loadOptions() {
         select.value = savedOptions[index];
     });
 }
+
+function checkEveryThirdOptionIsDifferent() {
+    const optionsDiv = document.getElementById('profs_div');
+    const selectOptions = optionsDiv.querySelectorAll('select');
+    const selectedOptions = [];
+    selectOptions.forEach(select => {
+        selectedOptions.push(select.value);
+    });
+    const filteredOptions = [];
+    for (let i = 2; i < selectedOptions.length; i += 3) {
+        filteredOptions.push(selectedOptions[i]);
+    }
+    const unique = [...new Set(filteredOptions)];
+    if (unique.length != filteredOptions.length) {
+        alert("Je hebt twee dezelfde opties geselecteerd voor twee kleuren, probeer opnieuw!");
+        return false;
+    }
+    return true;
+}
+        
 
 
 
@@ -582,6 +605,83 @@ function updateRGBLED(red, green, blue) {
     .then(data => {
         console.log(data);
     });
+}
+
+//------------------------------------------- FinalColorBox -------------------------------------------//
+function runColorBox(colorCombination) {
+    var colorBox = document.getElementById('detected_color_box');
+
+    var firstColor = 'black';
+    var secondColor = 'black';
+
+    if (colorCombination == 0) {
+        firstColor = 'black';
+        secondColor = 'black';
+    } else if (colorCombination == 1) {
+        firstColor = 'black';
+        secondColor = 'red';
+    } else if (colorCombination == 2) {
+        firstColor = 'black';
+        secondColor = 'blue';
+    } else if (colorCombination == 3) {
+        firstColor = 'black';
+        secondColor = 'green';
+    } else if (colorCombination == 4) {
+        firstColor = 'black';
+        secondColor = 'white';
+    } else if (colorCombination == 5) {
+        firstColor = 'red';
+        secondColor = 'red';
+    } else if (colorCombination == 6) {
+        firstColor = 'red';
+        secondColor = 'blue';
+    } else if (colorCombination == 7) {
+        firstColor = 'red';
+        secondColor = 'green';
+    } else if (colorCombination == 8) {
+        firstColor = 'red';
+        secondColor = 'white';
+    } else if (colorCombination == 9) {
+        firstColor = 'blue';
+        secondColor = 'blue';
+    } else if (colorCombination == 10) {
+        firstColor = 'blue';
+        secondColor = 'green';
+    } else if (colorCombination == 11) {
+        firstColor = 'blue';
+        secondColor = 'white';
+    } else if (colorCombination == 12) {
+        firstColor = 'green';
+        secondColor = 'green';
+    } else if (colorCombination == 13) {
+        firstColor = 'green';
+        secondColor = 'white';
+    } else if (colorCombination == 14) {
+        firstColor = 'white';
+        secondColor = 'white';
+    }
+
+    // For 20 seconds display the first color for 1 second and the second color for 1 second
+    var i = 0;
+    document.getElementById("btn_detect_face").disabled = true;
+    document.getElementById("btn_detect_face").classList.add("disabled");
+
+    var interval = setInterval(function() {
+        if (i % 2 == 0) {
+            colorBox.style.backgroundColor = firstColor;
+        } else {
+            colorBox.style.backgroundColor = secondColor;
+        }
+        i++;
+        if (i == 20) {
+            clearInterval(interval);
+            document.getElementById("btn_detect_face").disabled = false;
+            document.getElementById("btn_detect_face").classList.remove("disabled");
+            colorBox.style.backgroundColor = '#f9f9f9';
+        }
+    }, 1000);
+     
+
 }
 
 //------------------------------------------- small quiz -------------------------------------------//
@@ -680,9 +780,6 @@ function add_face(){
 
 function detect_face(){
     const detected_prof = document.getElementById('detected_prof');
-    const detected_color_box = document.getElementById('detected_color_box');
-    const detected_song = document.getElementById('detected_song');
-    const detected_option = document.getElementById('detected_option');
     if (caemra_on==false) {
         alert("Please start the camera first");
         return; 
@@ -692,19 +789,21 @@ function detect_face(){
     .then(data => {
         console.log(data);
         if (profs.includes(data.result)) {
+            const index = profs.indexOf(data.result);
             console.log(preferences_profs[data.result]);
             detected_prof.innerHTML = `${data.result}`;
-            const option = options[preferences_profs[data.result][0]];
-            const colorIndex = savedColors.indexOf(option);
-            const color = colors[colorIndex];
-            detected_color_box.style.backgroundColor = color;
-            detected_song.innerHTML = `${preferences_profs[data.result][1]}`;
-            detected_option.innerHTML = `${options[preferences_profs[data.result][0]]}`;
-            if (audio != false) {
-                audio.pause();
-            }
-            audio = new Audio("/static/music/"+preferences_profs[data.result][1]);
-            audio.play();
+            runColorBox(index);
+            // const option = options[preferences_profs[data.result][0]];
+            // const colorIndex = savedColors.indexOf(option);
+            // const color = colors[colorIndex];
+            // detected_color_box.style.backgroundColor = color;
+            // detected_song.innerHTML = `${preferences_profs[data.result][1]}`;
+            // detected_option.innerHTML = `${options[preferences_profs[data.result][0]]}`;
+            // if (audio != false) {
+            //     audio.pause();
+            // }
+            // audio = new Audio("/static/music/"+preferences_profs[data.result][1]);
+            // audio.play();
         } else {
             detected_prof.innerHTML = `Geen professor gedetecteerd, probeer opnieuw`;
             detected_color_box.style.backgroundColor = "#AAAAAA";
@@ -738,9 +837,10 @@ function loadPage(pageUrl) {
             
             else if (state == 10 && savedOptions.length > 0) {
                 loadOptions();
-            } else if (state == 11 && savedColors.length > 0) {
-                loadColors();
-            }
+            } 
+            // else if (state == 11 && savedColors.length > 0) {
+            //     loadColors();
+            // }
 
         })
         .catch(error => {

@@ -1,130 +1,25 @@
-<div class="box-header">Wiskunde: Kleurenkeuze - 11/12</div>
+<div class="box-header">Wiskunde: Detecteer wie de prof is! - 11/11</div>
+<p> <font size="2">  Dit is de laatste pagina van jouw tutorial. Hierna ben je klaar en kan je samen met het subteam Informatie bekijken hoe je alles samenvoegt. Concreet wil dit zeggen dat jullie tijdens de eigenlijke demonstratie werken via één laptop, de laptop waarmee het subteam Informatie werkte. Jullie kunnen de beeldherkenningstutorial (en meer bepaald pagina 10) openen op hun laptop (waarmee de kleursensor gekalibreerd is). Je verkleint deze pagina zodanig dat ze een half beeldscherm omvat. De andere helft van het scherm wordt dan ingenomen door de tutorial van het subteam Informatie. Zorg ervoor dat het vakje met de kleur precies achter de kleursensor terecht komt. Het subteam Informatie weet waarom dit belangrijk is!
+Duid op de laptop waarmee de finale demonstratie gebeurt, op pagina 10 aan welke kleuren combinatie jullie hebben afgesproken en kom dan terug naar deze pagina.</font> 
+</p>
+
     <div class="columns">
-      <div class="column" id="color_select_div">
-        <div id="servo_sequentions_title_div">
-          <h2>Kleuren kiezen </h2>
-          <!-- <button class="button" id="saveSequentionsButton" onclick="downloadColorsAndOptions()"><i class="fas fa-save"></i> <span id="saveSequentionsMessage"> Download</span></button>
-          <button class="button" id="saveSequentionsButton" onclick="uploadColorsAndOptions()"><i class="fas fa-upload"></i> <span id="importSequentionsMessage"> Upload</span></button> -->
-      </div>
-          Nadat jullie de professor herkend hebben, tonen jullie met de Smart Coffee Maker een kleur. Deze kleur drukt uit welk drankje de professor wil. De kleur dient als signaal voor jullie teamgenoten van Informatie die hebben leren werken met een kleurensensor. Met deze sensor kunnen zij ontdekken welk drankje de professor wil. 
-		Samen met het subteam van Informatie moeten jullie dus beslissen welke kleur bij welke drankje hoort. Ga na het einde van deze tutorial naar het subteam Informatie (vraag aan de begeleiding waar jullie subteam zit) en bespreek. Eens jullie de keuzes hebben gemaakt en ze hieronder aangeduid hebben, is het programma bruikbaar voor de finale demonstratie.
-          <br>
-          <!-- zwart - rood - groen - blauw - cyaan - magenta - geel - wit -->
-
-          <div style="display: flex; flex-direction: row; align-items: center; justify-content: left;">
-            <h3 style="margin-right: 20px;">Zwart: </h3>
-            <select id="zwart">
-              <option value="Koffie">Koffie</option>
-              <!-- <option value="Thee">Thee</option> -->
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <!-- <option value="Thee met suiker">Thee met suiker</option> -->
-              <option value="Koffie met melk">Koffie met melk</option>
-              <!-- <option value="Thee met melk">Thee met melk</option> -->
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <!-- <option value="Thee met melk en suiker">Thee met melk en suiker</option> -->
-            </select>
+      <div class="column" id="camera_div">
+        <br><br>
+        <br>
+          <h2>Gezichtsherkenning voor koffie of thee!</h2>
+          <div>
+            <button class="button" id="start_camera_btn" onclick="start_camera()"><i class="fas fa-play"></i> Start Camera</button>
+            <button class="button" onclick="stop_camera()"><i class="fas fa-stop"></i> Stop Camera</button>
           </div>
-
-          <div style="display: flex; flex-direction: row; align-items: center; justify-content: left;">
-            <h3 style="margin-right: 20px;">Rood: </h3>
-            <select id="rood">
-              <option value="Koffie">Koffie</option>
-              <!-- <option value="Thee">Thee</option> -->
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <!-- <option value="Thee met suiker">Thee met suiker</option> -->
-              <option value="Koffie met melk">Koffie met melk</option>
-              <!-- <option value="Thee met melk">Thee met melk</option> -->
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <!-- <option value="Thee met melk en suiker">Thee met melk en suiker</option> -->
-            </select>
+          <img src="{{ url_for('video_feed') }}" height="75%" id="video_feed">
+          <div>
+            <button class="button" onclick="detect_face()" id="btn_detect_face" style="margin-top: 10px; padding: 10px;">Detecteer de prof!</button>
           </div>
-
-          <div style="display: flex; flex-direction: row; align-items: center; justify-content: left;">
-            <h3 style="margin-right: 20px;">Groen: </h3>
-            <select id="groen">
-              <option value="Koffie">Koffie</option>
-              <!-- <option value="Thee">Thee</option> -->
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <!-- <option value="Thee met suiker">Thee met suiker</option> -->
-              <option value="Koffie met melk">Koffie met melk</option>
-              <!-- <option value="Thee met melk">Thee met melk</option> -->
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <!-- <option value="Thee met melk en suiker">Thee met melk en suiker</option> -->
-            </select>
-          </div>
-
-          <div style="display: flex; flex-direction: row; align-items: center; justify-content: left;">
-            <h3 style="margin-right: 20px;">Blauw: </h3>
-            <select id="blauw">
-              <option value="Koffie">Koffie</option>
-              <!-- <option value="Thee">Thee</option> -->
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <!-- <option value="Thee met suiker">Thee met suiker</option> -->
-              <option value="Koffie met melk">Koffie met melk</option>
-              <!-- <option value="Thee met melk">Thee met melk</option> -->
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <!-- <option value="Thee met melk en suiker">Thee met melk en suiker</option> -->
-            </select>
-          </div>
-          <!-- 
-          <div style="display: flex; flex-direction: row; align-items: center; justify-content: left;">
-            <h3 style="margin-right: 20px;">Cyaan: </h3>
-            <select id="cyaan">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-            </select>
-          </div>
-
-          <div style="display: flex; flex-direction: row; align-items: center; justify-content: left;">
-            <h3 style="margin-right: 20px;">Magenta: </h3>
-            <select id="magenta">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-            </select>
-          </div>
-
-          <div style="display: flex; flex-direction: row; align-items: center; justify-content: left;">
-            <h3 style="margin-right: 20px;">Geel: </h3>
-            <select id="geel">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-            </select>
-          </div>
-
-          <div style="display: flex; flex-direction: row; align-items: center; justify-content: left;">
-            <h3 style="margin-right: 20px;">Wit: </h3>
-            <select id="wit">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-            </select>
-          </div>
-        -->
           
-          
-      </div>
-      
+        </div>
+        <div class="column">
+          <p><b>De gedecteerde prof: </b> <span id="detected_prof"> </span></p>
+          <div id="detected_color_box" class="color-box" style="background-color: brown; width: 100%; height: 80%;" ></div>
+        </div>
     </div>

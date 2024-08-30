@@ -11,6 +11,7 @@
 #define S3 46
 #define sensor 48
 #define motor 10
+#define reference_pin 11
 #define servo_pin 12
 #define pico_pin 13
 
@@ -71,7 +72,8 @@ void setup() {
   pinMode(blue_led,OUTPUT);
   pinMode(battery_led,OUTPUT);
   pinMode(pico_pin, OUTPUT);
-
+  pinMode(reference_pin, OUTPUT);
+  
   pinMode(S0, OUTPUT);
   pinMode(S1, OUTPUT);
   pinMode(S2, OUTPUT);
@@ -82,6 +84,7 @@ void setup() {
   digitalWrite(S1, LOW);
 
   digitalWrite(battery_led, HIGH);
+  analogWrite(reference_pin, 164);
 
   myServo.attach(servo_pin);
 

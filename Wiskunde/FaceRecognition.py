@@ -37,7 +37,7 @@ class FaceRecognition:
     face_found_distance = 0.0
     face_found_location = []
     prof_found = 'None'
-    known_names = ['prof. Geraedts', 'prof. Van-Hamme', 'prof. Vandepitte', 'prof. Houssa', 'prof. Blanpain',  'prof. Vanmeensel', 'prof. Beernaert', 'prof. Van-Puyvelde',   'prof. Dehaene', 'prof. Moelans', 'prof. Anton',  'prof. Vandebril', 'prof. Baelmans', 'prof. Jacobs', 'prof. De-Laet', 'prof. Van-De-Walle', 'prof. Rijmen', 'prof. Smets', 'prof. Holvoet', 'prof. Vander-Sloten']
+    known_names = ['prof. Geraedts', 'prof. Van-Hamme', 'prof. Vandepitte', 'prof. Houssa', 'prof. Blanpain',  'prof. Vanmeensel', 'prof. Beernaert', 'prof. Van-Puyvelde',   'prof. Dehaene', 'prof. Moelans', 'prof. Anton',  'prof. Vandebril', 'prof. Baelmans', 'prof. Jacobs', 'prof. De-Laet', 'prof. Van-De-Walle', 'prof. Rijmen', 'prof. Smets', 'prof. Holvoet', 'prof. Vander-Sloten', 'prof. Braem', 'prof. Vansteenwegen']
 
     saved_encodings_file = "face-recognition/saved_encodings.npy"
     saved_encodings_names_file = "face-recognition/saved_encodings_names.npy"
@@ -48,7 +48,7 @@ class FaceRecognition:
         #if the encoded faces aren't saved, encode them and save them
         if not os.path.isfile(self.saved_encodings_file):
             for directory in os.listdir("face-recognition/faces/"):
-                if os.path.isdir("fface-recognition/aces/"+directory):
+                if os.path.isdir("face-recognition/faces/"+directory):
                     self.encode_faces("face-recognition/faces/"+directory+"/")
             print(self.known_face_names)
 
@@ -221,7 +221,8 @@ class FaceRecognition:
 
 
                 face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
-                best_match_index = np.argmin(face_distances)
+               
+                #best_match_index = np.argmin(face_distances)
                 average_faces = self.calculate_average_face_distance(face_distances, matches)
                 if (len(average_faces) > 0):
                     name = min(average_faces, key=average_faces.get)
@@ -285,7 +286,7 @@ class FaceRecognition:
 
 
                     face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
-                    best_match_index = np.argmin(face_distances)
+                    #best_match_index = np.argmin(face_distances)
                     average_faces = self.calculate_average_face_distance(face_distances, matches)
                     if (len(average_faces) > 0):
                         name = min(average_faces, key=average_faces.get)
