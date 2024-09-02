@@ -84,7 +84,6 @@ void setup() {
   digitalWrite(S1, LOW);
 
   digitalWrite(battery_led, HIGH);
-  analogWrite(reference_pin, 164);
 
   myServo.attach(servo_pin);
 
