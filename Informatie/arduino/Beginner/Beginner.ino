@@ -11,9 +11,7 @@
 #define S3 46
 #define sensor 48
 #define motor 10
-#define reference_pin 11
 #define servo_pin 12
-#define pico_pin 13
 
 Servo myServo;
 
@@ -59,11 +57,12 @@ int roos_b = 500;
 int geel_r = 400;
 int geel_g = 500;
 int geel_b = 450;
+*/
 
 int wit_r = 400;
 int wit_g = 500;
 int wit_b = 450;
-*/
+
 
 void setup() {
   pinMode(LED_BUILTIN,OUTPUT);
@@ -71,9 +70,7 @@ void setup() {
   pinMode(green_led, OUTPUT);
   pinMode(blue_led,OUTPUT);
   pinMode(battery_led,OUTPUT);
-  pinMode(pico_pin, OUTPUT);
-  pinMode(reference_pin, OUTPUT);
-  
+
   pinMode(S0, OUTPUT);
   pinMode(S1, OUTPUT);
   pinMode(S2, OUTPUT);
@@ -137,11 +134,6 @@ void loop() {
   } else if (x.indexOf("S") == 0 && x.length() == 5) {
     int position = x.substring(1,4).toInt();
     setServoPosition(position);
-  } else if (x.indexOf("V") == 0 && x.length() == 5) {
-    int pico_value = x.substring(1,4).toInt();
-    if (pico_value < 165) {
-      analogWrite(pico_pin, pico_value);
-    }
   }
 
   Serial.println(x.length());
@@ -194,10 +186,12 @@ int detectColor() {
   }
   else if ((rood < geel_r) && (groen <geel_g) && (blauw >geel_b)) {
     return 6;//Geel
-  }
+   
+  } */
+  
   else if ((rood < wit_r) && (groen <wit_g) && (blauw <wit_b)) {
     return 7; //Wit
-  }*/
+  }
   else {
     return 8; //Geen Idee
   }
@@ -232,11 +226,14 @@ void changeParam(int color, int red, int green, int blue) {
       geel_r = red;
       geel_g = green;
       geel_b = blue;
-  } else if (color == 7) {
+
+  } */ 
+   
+   else if (color == 7) {
       wit_r = red;
       wit_g = green;
       wit_b = blue;
-  }*/
+   }
 }
 
 void switchMotor() {
