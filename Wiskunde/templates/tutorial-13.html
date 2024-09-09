@@ -1,0 +1,25 @@
+<div class="box-header">Wiskunde: Detecteer wie de prof is! - 11/11</div>
+<p> <font size="2">  Dit is de laatste pagina van jouw tutorial. Hierna ben je klaar en kan je samen met het subteam Informatie bekijken hoe je alles samenvoegt. Concreet wil dit zeggen dat jullie tijdens de eigenlijke demonstratie werken via één laptop, de laptop waarmee het subteam Informatie werkte. Jullie kunnen de beeldherkenningstutorial (en meer bepaald pagina 10) openen op hun laptop (waarmee de kleursensor gekalibreerd is). Je verkleint deze pagina zodanig dat ze een half beeldscherm omvat. De andere helft van het scherm wordt dan ingenomen door de tutorial van het subteam Informatie. Zorg ervoor dat het vakje met de kleur precies achter de kleursensor terecht komt. Het subteam Informatie weet waarom dit belangrijk is!
+Duid op de laptop waarmee de finale demonstratie gebeurt, op pagina 10 aan welke kleuren combinatie jullie hebben afgesproken en kom dan terug naar deze pagina.</font> 
+</p>
+
+    <div class="columns">
+      <div class="column" id="camera_div">
+        <br><br>
+        <br>
+          <h2>Gezichtsherkenning voor koffie of thee!</h2>
+          <div>
+            <button class="button" id="start_camera_btn" onclick="start_camera()"><i class="fas fa-play"></i> Start Camera</button>
+            <button class="button" onclick="stop_camera()"><i class="fas fa-stop"></i> Stop Camera</button>
+          </div>
+          <img src="{{ url_for('video_feed') }}" height="75%" id="video_feed">
+          <div>
+            <button class="button" onclick="detect_face()" id="btn_detect_face" style="margin-top: 10px; padding: 10px;">Detecteer de prof!</button>
+          </div>
+          
+        </div>
+        <div class="column">
+          <p><b>De gedecteerde prof: </b> <span id="detected_prof"> </span></p>
+          <div id="detected_color_box" class="color-box" style="background-color: brown; width: 100%; height: 80%;" ></div>
+        </div>
+    </div>

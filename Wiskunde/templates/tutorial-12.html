@@ -1,0 +1,846 @@
+<div class="box-header">Wiskunde: Database van de docenten - 12/13</div>
+    <div class="columns">
+      <div class="column">
+        <h2>Volgende stap: enkele docenten toevoegen aan de database</h2>
+        <p>In deze stap gaan we enkele docenten toevoegen aan de database. Dit kan je weer terug per twee doen op je eigen computer. De foto's hebben we al geüpload, jullie moeten enkel de foto aan de juiste naam koppelen en hun favoriete drankje en liedje nog selecteren. Deze vinden jullie op het blad dat bij de computer ligt. Zoek de professoren door <a href="https://onderwijsaanbod.kuleuven.be/2023/opleidingen/n/SC_55036830.htm#fasen=1&bl=all" target="_blank">hier</a> bij de vakken van het eerste te kijken en op de naam van de prof te klikken. Als je niet direct een foto ziet bij een prof, google zijn/haar naam dan eens. Om deze oefening niet omvangrijk te maken, laten we jullie enkel de docenten van de vakken van het eerste semester bekijken.</p>
+        <div style="display: grid; gap: 10px; text-align: center;" id="profs_div">
+          <h4 style="grid-column: 1; grid-row: 1;">Docenten</h4>
+          <h4 style="grid-column: 2; grid-row: 1;">Naam</h4>
+          <h4 style="grid-column: 3; grid-row: 1;">Welk vak geven ze?</h4>
+          <h4 style="grid-column: 4; grid-row: 1;">Kleuren Combinatie</h4>
+          <!-- TB.png ; prof_smets.jpg ;prof_Van hamme.jpg ; PVP.jpg ; prof_dehaene.jpg ; JVDS.png ; MH.png ; prof_rijmen.jpg; blanpain.png ; DVDP.png; TDL.jpg ; prof_Vandewalle.JPG ; prof_moelans.jpg ; prof_vandebril.png ; prof_Beernaert.jpg ; TH.png ; KVM.png ; fotoKG.jpg-->
+          <div style="grid-column: 1; grid-row: 2;">
+            <img src="{{ url_for('static', filename='images/prof_Beernaert.jpg') }}" style=" height: 100px; object-fit: cover;">
+          </div>
+          <div style="grid-column: 2; grid-row: 2;">
+            <select id="sequention-0-name">
+              <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+              <option value="De-Laet">Prof. Tinne De Laet</option>
+              <option value="Rijmen">Prof. Vincent Rijmen</option>
+              <option value="Smets">Prof. Ilse Smets</option>
+              <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+              <option value="Van-hamme">Prof. Hugo Van hamme</option>
+              <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+              <option value="Vandebril">Prof. Raf Vandebril</option>
+              <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+              <option value="Braem">Prof. Annabel Braem</option>
+              <option value="Vandepitte">Prof. Drik Vandepitte</option>
+              <option value="Geraedts">Dr. Kathleen Geraedts</option>
+              <option value="Jacobs">Prof. Bart Jacobs</option>
+              <option value="Dehaene">Prof. Wim Dehaene</option>
+              <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
+
+              
+          </select>
+          </div>
+          <div style="grid-column: 3; grid-row: 2;">
+            <select id="sequention-0-name">
+              <option value="Analyse">Analyse</option>
+              <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+              <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+              <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+              <option value="Bedrijfskunde-en-ondernemen">Bedrijfskunde en ondernemen</option>
+              <option value="Elektrische-netwerken">Elektrische netwerken</option>
+              <option value="Methodiek-van-de-informatica">Methodiek van de informatica</option>
+              <option value="Inleiding-tot-materiaalkunde">Inleiding tot materiaalkunde</option>
+            </select>
+          </div>
+          <div style="grid-column: 4; grid-row: 2;">
+            <select id="sequention-0-color-combination">
+              <option value="0">Zwart/Zwart</option>
+              <option value="1">Zwart/Rood</option>
+              <option value="2">Zwart/Blauw</option>
+              <option value="3">Zwart/Groen</option>
+              <option value="4">Zwart/Wit</option>
+              <option value="5">Rood/Rood</option>
+              <option value="6">Rood/Blauw</option>
+              <option value="7">Rood/Groen</option>
+              <option value="8">Rood/Wit</option>
+              <option value="9">Blauw/Blauw</option>
+              <option value="10">Blauw/Groen</option>
+              <option value="11">Blauw/Wit</option>
+              <option value="12">Groen/Groen</option>
+              <option value="13">Groen/Wit</option>
+              <option value="14">Wit/Wit</option>
+            </select>
+          </div>
+
+            <div style="grid-column: 1; grid-row: 3;">
+            <img src=" {{ url_for('static', filename='images/TDL.jpg') }} " style=" height: 100px; object-fit: cover;">
+            </div>
+
+            <div style="grid-column: 2; grid-row: 3;">
+              <select id="sequention-0-name">
+                <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+              <option value="De-Laet">Prof. Tinne De Laet</option>
+              <option value="Rijmen">Prof. Vincent Rijmen</option>
+              <option value="Smets">Prof. Ilse Smets</option>
+              <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+              <option value="Van-hamme">Prof. Hugo Van hamme</option>
+              <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+              <option value="Vandebril">Prof. Raf Vandebril</option>
+              <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+              <option value="Braem">Prof. Annabel Braem</option>
+              <option value="Vandepitte">Prof. Drik Vandepitte</option>
+              <option value="Geraedts">Dr. Kathleen Geraedts</option>
+              <option value="Jacobs">Prof. Bart Jacobs</option>
+              <option value="Dehaene">Prof. Wim Dehaene</option>
+              <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
+            </select>
+            </div>
+            <div style="grid-column: 3; grid-row: 3;">
+              <select id="sequention-0-name">
+                <option value="Analyse">Analyse</option>
+              <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+              <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+              <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+              <option value="Bedrijfskunde-en-ondernemen">Bedrijfskunde en ondernemen</option>
+              <option value="Elektrische-netwerken">Elektrische netwerken</option>
+              <option value="Methodiek-van-de-informatica">Methodiek van de informatica</option>
+              <option value="Inleiding-tot-materiaalkunde">Inleiding tot materiaalkunde</option>
+              </select>
+            </div>
+            <div style="grid-column: 4; grid-row: 3;">
+              <select id="sequention-0-color-combination">
+                <option value="0">Zwart/Zwart</option>
+                <option value="1">Zwart/Rood</option>
+                <option value="2">Zwart/Blauw</option>
+                <option value="3">Zwart/Groen</option>
+                <option value="4">Zwart/Wit</option>
+                <option value="5">Rood/Rood</option>
+                <option value="6">Rood/Blauw</option>
+                <option value="7">Rood/Groen</option>
+                <option value="8">Rood/Wit</option>
+                <option value="9">Blauw/Blauw</option>
+                <option value="10">Blauw/Groen</option>
+                <option value="11">Blauw/Wit</option>
+                <option value="12">Groen/Groen</option>
+                <option value="13">Groen/Wit</option>
+                <option value="14">Wit/Wit</option>
+              </select>
+            </div>
+            
+
+          <div style="grid-column: 1; grid-row: 4;">
+            <img src="{{ url_for('static', filename='images/prof_Van hamme.jpg') }}" style=" height: 100px; object-fit: cover;">
+            </div>
+            
+            <div style="grid-column: 2; grid-row: 4;">
+                     <select id="sequention-0-name">
+              <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+              <option value="De-Laet">Prof. Tinne De Laet</option>
+              <option value="Rijmen">Prof. Vincent Rijmen</option>
+              <option value="Smets">Prof. Ilse Smets</option>
+              <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+              <option value="Van-hamme">Prof. Hugo Van hamme</option>
+              <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+              <option value="Vandebril">Prof. Raf Vandebril</option>
+              <option value="Vandepitte">Prof. Dirk Vandepitte</option>
+              <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+              <option value="Geraedts">Dr. Ir. Kathleen Geraedts</option>
+          </select>
+            </div>
+            <div style="grid-column: 3; grid-row: 4;">
+              <select id="sequention-0-name">
+                <option value="Analyse">Analyse</option>
+              <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+              <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+              <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+              <option value="Bedrijfskunde-en-ondernemen">Bedrijfskunde en ondernemen</option>
+              <option value="Elektrische-netwerken">Elektrische netwerken</option>
+              <option value="Methodiek-van-de-informatica">Methodiek van de informatica</option>
+              <option value="Inleiding-tot-materiaalkunde">Inleiding tot materiaalkunde</option>
+              </select>
+            </div>
+            <div style="grid-column: 4; grid-row: 4;">
+              <select id="sequention-0-color-combination">
+                <option value="0">Zwart/Zwart</option>
+                <option value="1">Zwart/Rood</option>
+                <option value="2">Zwart/Blauw</option>
+                <option value="3">Zwart/Groen</option>
+                <option value="4">Zwart/Wit</option>
+                <option value="5">Rood/Rood</option>
+                <option value="6">Rood/Blauw</option>
+                <option value="7">Rood/Groen</option>
+                <option value="8">Rood/Wit</option>
+                <option value="9">Blauw/Blauw</option>
+                <option value="10">Blauw/Groen</option>
+                <option value="11">Blauw/Wit</option>
+                <option value="12">Groen/Groen</option>
+                <option value="13">Groen/Wit</option>
+                <option value="14">Wit/Wit</option>
+              </select>
+            </div>
+
+          <div style="grid-column: 1; grid-row: 5;">
+            <img src="{{ url_for('static', filename='images/PVP.jpg') }}" style=" height: 100px; object-fit: cover;">
+            </div>
+            <div style="grid-column: 2; grid-row: 5;">
+            <select id="sequention-0-name">
+              <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+              <option value="De-Laet">Prof. Tinne De Laet</option>
+              <option value="Rijmen">Prof. Vincent Rijmen</option>
+              <option value="Smets">Prof. Ilse Smets</option>
+              <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+              <option value="Van-hamme">Prof. Hugo Van hamme</option>
+              <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+              <option value="Vandebril">Prof. Raf Vandebril</option>
+              <option value="Vandepitte">Prof. Dirk Vandepitte</option>
+              <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+              <option value="Geraedts">Dr. Ir. Kathleen Geraedts</option>
+          </select>
+            </div>
+            <div style="grid-column: 3; grid-row: 5;">
+              <select id="sequention-0-name">
+                <option value="Analyse">Analyse</option>
+              <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+              <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+              <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+              <option value="Bedrijfskunde-en-ondernemen">Bedrijfskunde en ondernemen</option>
+              <option value="Elektrische-netwerken">Elektrische netwerken</option>
+              <option value="Methodiek-van-de-informatica">Methodiek van de informatica</option>
+              <option value="Inleiding-tot-materiaalkunde">Inleiding tot materiaalkunde</option>
+              </select>
+            </div>
+            <div style="grid-column: 4; grid-row: 5;">
+              <select id="sequention-0-color-combination">
+                <option value="0">Zwart/Zwart</option>
+                <option value="1">Zwart/Rood</option>
+                <option value="2">Zwart/Blauw</option>
+                <option value="3">Zwart/Groen</option>
+                <option value="4">Zwart/Wit</option>
+                <option value="5">Rood/Rood</option>
+                <option value="6">Rood/Blauw</option>
+                <option value="7">Rood/Groen</option>
+                <option value="8">Rood/Wit</option>
+                <option value="9">Blauw/Blauw</option>
+                <option value="10">Blauw/Groen</option>
+                <option value="11">Blauw/Wit</option>
+                <option value="12">Groen/Groen</option>
+                <option value="13">Groen/Wit</option>
+                <option value="14">Wit/Wit</option>
+              </select>
+            </div>
+
+          <div style="grid-column: 1; grid-row: 6;">
+            <img src="{{ url_for('static', filename='images/prof_Vandewalle.JPG') }}" style=" height: 100px; object-fit: cover;">
+            </div>
+
+            <div style="grid-column: 2; grid-row: 6;">
+              <select id="sequention-0-name">
+                <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+              <option value="De-Laet">Prof. Tinne De Laet</option>
+              <option value="Rijmen">Prof. Vincent Rijmen</option>
+              <option value="Smets">Prof. Ilse Smets</option>
+              <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+              <option value="Van-hamme">Prof. Hugo Van hamme</option>
+              <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+              <option value="Vandebril">Prof. Raf Vandebril</option>
+              <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+              <option value="Braem">Prof. Annabel Braem</option>
+              <option value="Vandepitte">Prof. Drik Vandepitte</option>
+              <option value="Geraedts">Dr. Kathleen Geraedts</option>
+              <option value="Jacobs">Prof. Bart Jacobs</option>
+              <option value="Dehaene">Prof. Wim Dehaene</option>
+              <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
+            </select>
+            </div>
+            <div style="grid-column: 3; grid-row: 6;">
+              <select id="sequention-0-name">
+                <option value="Analyse">Analyse</option>
+              <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+              <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+              <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+              <option value="Bedrijfskunde-en-ondernemen">Bedrijfskunde en ondernemen</option>
+              <option value="Elektrische-netwerken">Elektrische netwerken</option>
+              <option value="Methodiek-van-de-informatica">Methodiek van de informatica</option>
+              <option value="Inleiding-tot-materiaalkunde">Inleiding tot materiaalkunde</option>
+              </select>
+            </div>
+            <div style="grid-column: 4; grid-row: 6;">
+              <select id="sequention-0-color-combination">
+                <option value="0">Zwart/Zwart</option>
+                <option value="1">Zwart/Rood</option>
+                <option value="2">Zwart/Blauw</option>
+                <option value="3">Zwart/Groen</option>
+                <option value="4">Zwart/Wit</option>
+                <option value="5">Rood/Rood</option>
+                <option value="6">Rood/Blauw</option>
+                <option value="7">Rood/Groen</option>
+                <option value="8">Rood/Wit</option>
+                <option value="9">Blauw/Blauw</option>
+                <option value="10">Blauw/Groen</option>
+                <option value="11">Blauw/Wit</option>
+                <option value="12">Groen/Groen</option>
+                <option value="13">Groen/Wit</option>
+                <option value="14">Wit/Wit</option>
+              </select>
+            </div>
+
+          <div style="grid-column: 1; grid-row: 7;">
+            <img src="{{ url_for('static', filename='images/JVDS.png') }}" style=" height: 100px; object-fit: cover;">
+            </div>
+
+            <div style="grid-column: 2; grid-row: 7;">
+              <select id="sequention-0-name">
+                <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+              <option value="De-Laet">Prof. Tinne De Laet</option>
+              <option value="Rijmen">Prof. Vincent Rijmen</option>
+              <option value="Smets">Prof. Ilse Smets</option>
+              <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+              <option value="Van-hamme">Prof. Hugo Van hamme</option>
+              <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+              <option value="Vandebril">Prof. Raf Vandebril</option>
+              <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+              <option value="Braem">Prof. Annabel Braem</option>
+              <option value="Vandepitte">Prof. Drik Vandepitte</option>
+              <option value="Geraedts">Dr. Kathleen Geraedts</option>
+              <option value="Jacobs">Prof. Bart Jacobs</option>
+              <option value="Dehaene">Prof. Wim Dehaene</option>
+              <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
+            </select>
+            </div>
+            <div style="grid-column: 3; grid-row: 7;">
+              <select id="sequention-0-name">
+                <option value="Analyse">Analyse</option>
+              <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+              <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+              <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+              <option value="Bedrijfskunde-en-ondernemen">Bedrijfskunde en ondernemen</option>
+              <option value="Elektrische-netwerken">Elektrische netwerken</option>
+              <option value="Methodiek-van-de-informatica">Methodiek van de informatica</option>
+              <option value="Inleiding-tot-materiaalkunde">Inleiding tot materiaalkunde</option>
+              </select>
+            </div>
+            <div style="grid-column: 4; grid-row: 7;">
+              <select id="sequention-0-color-combination">
+                <option value="0">Zwart/Zwart</option>
+                <option value="1">Zwart/Rood</option>
+                <option value="2">Zwart/Blauw</option>
+                <option value="3">Zwart/Groen</option>
+                <option value="4">Zwart/Wit</option>
+                <option value="5">Rood/Rood</option>
+                <option value="6">Rood/Blauw</option>
+                <option value="7">Rood/Groen</option>
+                <option value="8">Rood/Wit</option>
+                <option value="9">Blauw/Blauw</option>
+                <option value="10">Blauw/Groen</option>
+                <option value="11">Blauw/Wit</option>
+                <option value="12">Groen/Groen</option>
+                <option value="13">Groen/Wit</option>
+                <option value="14">Wit/Wit</option>
+              </select>
+            </div>
+
+
+          <div style="grid-column: 1; grid-row: 8;">
+            <img src="{{ url_for('static', filename='images/prof_vandebril.png') }}" style=" height: 100px; object-fit: cover;">
+            </div>
+
+            <div style="grid-column: 2; grid-row: 8;">
+              <select id="sequention-0-name">
+                <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+              <option value="De-Laet">Prof. Tinne De Laet</option>
+              <option value="Rijmen">Prof. Vincent Rijmen</option>
+              <option value="Smets">Prof. Ilse Smets</option>
+              <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+              <option value="Van-hamme">Prof. Hugo Van hamme</option>
+              <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+              <option value="Vandebril">Prof. Raf Vandebril</option>
+              <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+              <option value="Braem">Prof. Annabel Braem</option>
+              <option value="Vandepitte">Prof. Drik Vandepitte</option>
+              <option value="Geraedts">Dr. Kathleen Geraedts</option>
+              <option value="Jacobs">Prof. Bart Jacobs</option>
+              <option value="Dehaene">Prof. Wim Dehaene</option>
+              <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
+            </select>
+            </div>
+            <div style="grid-column: 3; grid-row: 8;">
+              <select id="sequention-0-name">
+                <option value="Analyse">Analyse</option>
+              <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+              <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+              <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+              <option value="Bedrijfskunde-en-ondernemen">Bedrijfskunde en ondernemen</option>
+              <option value="Elektrische-netwerken">Elektrische netwerken</option>
+              <option value="Methodiek-van-de-informatica">Methodiek van de informatica</option>
+              <option value="Inleiding-tot-materiaalkunde">Inleiding tot materiaalkunde</option>
+              </select>
+            </div>
+            <div style="grid-column: 4; grid-row: 8;">
+              <select id="sequention-0-color-combination">
+                <option value="0">Zwart/Zwart</option>
+                <option value="1">Zwart/Rood</option>
+                <option value="2">Zwart/Blauw</option>
+                <option value="3">Zwart/Groen</option>
+                <option value="4">Zwart/Wit</option>
+                <option value="5">Rood/Rood</option>
+                <option value="6">Rood/Blauw</option>
+                <option value="7">Rood/Groen</option>
+                <option value="8">Rood/Wit</option>
+                <option value="9">Blauw/Blauw</option>
+                <option value="10">Blauw/Groen</option>
+                <option value="11">Blauw/Wit</option>
+                <option value="12">Groen/Groen</option>
+                <option value="13">Groen/Wit</option>
+                <option value="14">Wit/Wit</option>
+              </select>
+            </div>
+            
+
+          <div style="grid-column: 1; grid-row: 9;">
+            <img src="{{ url_for('static', filename='images/prof_rijmen.jpg') }}" style=" height: 100px; object-fit: cover;">
+            </div>
+
+            <div style="grid-column: 2; grid-row: 9;">
+              <select id="sequention-0-name">
+                <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+              <option value="De-Laet">Prof. Tinne De Laet</option>
+              <option value="Rijmen">Prof. Vincent Rijmen</option>
+              <option value="Smets">Prof. Ilse Smets</option>
+              <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+              <option value="Van-hamme">Prof. Hugo Van hamme</option>
+              <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+              <option value="Vandebril">Prof. Raf Vandebril</option>
+              <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+              <option value="Braem">Prof. Annabel Braem</option>
+              <option value="Vandepitte">Prof. Drik Vandepitte</option>
+              <option value="Geraedts">Dr. Kathleen Geraedts</option>
+              <option value="Jacobs">Prof. Bart Jacobs</option>
+              <option value="Dehaene">Prof. Wim Dehaene</option>
+              <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
+            </select>
+            </div>
+            <div style="grid-column: 3; grid-row: 9;">
+              <select id="sequention-0-name">
+                <option value="Analyse">Analyse</option>
+              <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+              <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+              <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+              <option value="Bedrijfskunde-en-ondernemen">Bedrijfskunde en ondernemen</option>
+              <option value="Elektrische-netwerken">Elektrische netwerken</option>
+              <option value="Methodiek-van-de-informatica">Methodiek van de informatica</option>
+              <option value="Inleiding-tot-materiaalkunde">Inleiding tot materiaalkunde</option>
+              </select>
+            </div>
+            <div style="grid-column: 4; grid-row: 9;">
+              <select id="sequention-0-color-combination">
+                <option value="0">Zwart/Zwart</option>
+                <option value="1">Zwart/Rood</option>
+                <option value="2">Zwart/Blauw</option>
+                <option value="3">Zwart/Groen</option>
+                <option value="4">Zwart/Wit</option>
+                <option value="5">Rood/Rood</option>
+                <option value="6">Rood/Blauw</option>
+                <option value="7">Rood/Groen</option>
+                <option value="8">Rood/Wit</option>
+                <option value="9">Blauw/Blauw</option>
+                <option value="10">Blauw/Groen</option>
+                <option value="11">Blauw/Wit</option>
+                <option value="12">Groen/Groen</option>
+                <option value="13">Groen/Wit</option>
+                <option value="14">Wit/Wit</option>
+              </select>
+            </div>
+            
+
+          <!-- TB.png ; prof_jacobs.jpg ; prof_smets.jpg ;prof_Van hamme.jpg ; PVP.jpg ; prof_dehaene.jpg ; JVDS.png ; MH.png ; prof_rijmen.jpg; blanpain.png ; DVDP.png; TDL.jpg ; prof_Vandewalle.JPG ; prof_moelans.jpg ; prof_vandebril.png ; prof_Beernaert.jpg ; TH.png ; KVM.png -->
+         
+          <div style="grid-column: 1; grid-row: 10;">
+            <img src="{{ url_for('static', filename='images/1517746575013.jpeg') }}" style=" height: 100px; object-fit: cover;">
+            </div>
+
+            <div style="grid-column: 2; grid-row: 10;">
+              <select id="sequention-0-name">
+                <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+              <option value="De-Laet">Prof. Tinne De Laet</option>
+              <option value="Rijmen">Prof. Vincent Rijmen</option>
+              <option value="Smets">Prof. Ilse Smets</option>
+              <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+              <option value="Van-hamme">Prof. Hugo Van hamme</option>
+              <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+              <option value="Vandebril">Prof. Raf Vandebril</option>
+              <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+              <option value="Braem">Prof. Annabel Braem</option>
+              <option value="Vandepitte">Prof. Drik Vandepitte</option>
+              <option value="Geraedts">Dr. Kathleen Geraedts</option>
+              <option value="Jacobs">Prof. Bart Jacobs</option>
+              <option value="Dehaene">Prof. Wim Dehaene</option>
+              <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
+            </select>
+            </div>
+            <div style="grid-column: 3; grid-row: 10;">
+              <select id="sequention-0-name">
+                <option value="Analyse">Analyse</option>
+              <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+              <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+              <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+              <option value="Bedrijfskunde-en-ondernemen">Bedrijfskunde en ondernemen</option>
+              <option value="Elektrische-netwerken">Elektrische netwerken</option>
+              <option value="Methodiek-van-de-informatica">Methodiek van de informatica</option>
+              <option value="Inleiding-tot-materiaalkunde">Inleiding tot materiaalkunde</option>
+              </select>
+            </div>
+            <div style="grid-column: 4; grid-row: 10;">
+              <select id="sequention-0-color-combination">
+                <option value="0">Zwart/Zwart</option>
+                <option value="1">Zwart/Rood</option>
+                <option value="2">Zwart/Blauw</option>
+                <option value="3">Zwart/Groen</option>
+                <option value="4">Zwart/Wit</option>
+                <option value="5">Rood/Rood</option>
+                <option value="6">Rood/Blauw</option>
+                <option value="7">Rood/Groen</option>
+                <option value="8">Rood/Wit</option>
+                <option value="9">Blauw/Blauw</option>
+                <option value="10">Blauw/Groen</option>
+                <option value="11">Blauw/Wit</option>
+                <option value="12">Groen/Groen</option>
+                <option value="13">Groen/Wit</option>
+                <option value="14">Wit/Wit</option>
+              </select>
+            </div>
+            
+
+          <div style="grid-column: 1; grid-row: 11;">
+            <img src="{{ url_for('static', filename='images/1696972997560.jpeg') }}" style=" height: 100px; object-fit: cover;">
+            </div>
+
+            <div style="grid-column: 2; grid-row: 11;">
+              <select id="sequention-0-name">
+                <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+              <option value="De-Laet">Prof. Tinne De Laet</option>
+              <option value="Rijmen">Prof. Vincent Rijmen</option>
+              <option value="Smets">Prof. Ilse Smets</option>
+              <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+              <option value="Van-hamme">Prof. Hugo Van hamme</option>
+              <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+              <option value="Vandebril">Prof. Raf Vandebril</option>
+              <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+              <option value="Braem">Prof. Annabel Braem</option>
+              <option value="Vandepitte">Prof. Drik Vandepitte</option>
+              <option value="Geraedts">Dr. Kathleen Geraedts</option>
+              <option value="Jacobs">Prof. Bart Jacobs</option>
+              <option value="Dehaene">Prof. Wim Dehaene</option>
+              <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
+            </select>
+            </div>
+            <div style="grid-column: 3; grid-row: 11;">
+              <select id="sequention-0-name">
+                <option value="Analyse">Analyse</option>
+              <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+              <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+              <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+              <option value="Bedrijfskunde-en-ondernemen">Bedrijfskunde en ondernemen</option>
+              <option value="Elektrische-netwerken">Elektrische netwerken</option>
+              <option value="Methodiek-van-de-informatica">Methodiek van de informatica</option>
+              <option value="Inleiding-tot-materiaalkunde">Inleiding tot materiaalkunde</option>
+              </select>
+            </div>
+            <div style="grid-column: 4; grid-row: 11;">
+              <select id="sequention-0-color-combination">
+                <option value="0">Zwart/Zwart</option>
+                <option value="1">Zwart/Rood</option>
+                <option value="2">Zwart/Blauw</option>
+                <option value="3">Zwart/Groen</option>
+                <option value="4">Zwart/Wit</option>
+                <option value="5">Rood/Rood</option>
+                <option value="6">Rood/Blauw</option>
+                <option value="7">Rood/Groen</option>
+                <option value="8">Rood/Wit</option>
+                <option value="9">Blauw/Blauw</option>
+                <option value="10">Blauw/Groen</option>
+                <option value="11">Blauw/Wit</option>
+                <option value="12">Groen/Groen</option>
+                <option value="13">Groen/Wit</option>
+                <option value="14">Wit/Wit</option>
+              </select>
+            </div>
+          
+
+
+
+              <div style="grid-column: 1; grid-row: 12;">
+                <img src="{{ url_for('static', filename='images/prof_smets.jpg') }}" style=" height: 100px; object-fit: cover;">
+                </div>
+    
+                <div style="grid-column: 2; grid-row: 12;">
+                  <select id="sequention-0-name">
+                    <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+                  <option value="De-Laet">Prof. Tinne De Laet</option>
+                  <option value="Rijmen">Prof. Vincent Rijmen</option>
+                  <option value="Smets">Prof. Ilse Smets</option>
+                  <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+                  <option value="Van-hamme">Prof. Hugo Van hamme</option>
+                  <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+                  <option value="Vandebril">Prof. Raf Vandebril</option>
+                  <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+                  <option value="Braem">Prof. Annabel Braem</option>
+                  <option value="Vandepitte">Prof. Drik Vandepitte</option>
+              <option value="Geraedts">Dr. Kathleen Geraedts</option>
+                  <option value="Jacobs">Prof. Bart Jacobs</option>
+                  <option value="Dehaene">Prof. Wim Dehaene</option>
+                  <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
+                </select>
+                </div>
+                <div style="grid-column: 3; grid-row: 12;">
+                  <select id="sequention-0-name">
+                    <option value="Analyse">Analyse</option>
+                  <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+                  <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+                  <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+                  <option value="Bedrijfskunde-en-ondernemen">Bedrijfskunde en ondernemen</option>
+                  <option value="Elektrische-netwerken">Elektrische netwerken</option>
+                  <option value="Methodiek-van-de-informatica">Methodiek van de informatica</option>
+                  <option value="Inleiding-tot-materiaalkunde">Inleiding tot materiaalkunde</option>
+                  </select>
+                </div>
+                <div style="grid-column: 4; grid-row: 12;">
+                  <select id="sequention-0-color-combination">
+                    <option value="0">Zwart/Zwart</option>
+                    <option value="1">Zwart/Rood</option>
+                    <option value="2">Zwart/Blauw</option>
+                    <option value="3">Zwart/Groen</option>
+                    <option value="4">Zwart/Wit</option>
+                    <option value="5">Rood/Rood</option>
+                    <option value="6">Rood/Blauw</option>
+                    <option value="7">Rood/Groen</option>
+                    <option value="8">Rood/Wit</option>
+                    <option value="9">Blauw/Blauw</option>
+                    <option value="10">Blauw/Groen</option>
+                    <option value="11">Blauw/Wit</option>
+                    <option value="12">Groen/Groen</option>
+                    <option value="13">Groen/Wit</option>
+                    <option value="14">Wit/Wit</option>
+                  </select>
+                </div>
+
+                <div style="grid-column: 1; grid-row: 13;">
+                  <img src="{{ url_for('static', filename='images/DVDP.png') }}" style=" height: 100px; object-fit: cover;">
+                  </div>
+      
+                  <div style="grid-column: 2; grid-row: 13;">
+                    <select id="sequention-0-name">
+                      <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+                    <option value="De-Laet">Prof. Tinne De Laet</option>
+                    <option value="Rijmen">Prof. Vincent Rijmen</option>
+                    <option value="Smets">Prof. Ilse Smets</option>
+                    <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+                    <option value="Van-hamme">Prof. Hugo Van hamme</option>
+                    <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+                    <option value="Vandebril">Prof. Raf Vandebril</option>
+                    <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+                    <option value="Braem">Prof. Annabel Braem</option>
+                    <option value="Vandepitte">Prof. Drik Vandepitte</option>
+              <option value="Geraedts">Dr. Kathleen Geraedts</option>
+                    <option value="Jacobs">Prof. Bart Jacobs</option>
+                    <option value="Dehaene">Prof. Wim Dehaene</option>
+                    <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
+                  </select>
+                  </div>
+                  <div style="grid-column: 3; grid-row: 13;">
+                    <select id="sequention-0-name">
+                      <option value="Analyse">Analyse</option>
+                    <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+                    <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+                    <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+                    <option value="Bedrijfskunde-en-ondernemen">Bedrijfskunde en ondernemen</option>
+                    <option value="Elektrische-netwerken">Elektrische netwerken</option>
+                    <option value="Methodiek-van-de-informatica">Methodiek van de informatica</option>
+                    <option value="Inleiding-tot-materiaalkunde">Inleiding tot materiaalkunde</option>
+                    </select>
+                  </div>
+                  <div style="grid-column: 4; grid-row: 13;">
+                    <select id="sequention-0-color-combination">
+                      <option value="0">Zwart/Zwart</option>
+                      <option value="1">Zwart/Rood</option>
+                      <option value="2">Zwart/Blauw</option>
+                      <option value="3">Zwart/Groen</option>
+                      <option value="4">Zwart/Wit</option>
+                      <option value="5">Rood/Rood</option>
+                      <option value="6">Rood/Blauw</option>
+                      <option value="7">Rood/Groen</option>
+                      <option value="8">Rood/Wit</option>
+                      <option value="9">Blauw/Blauw</option>
+                      <option value="10">Blauw/Groen</option>
+                      <option value="11">Blauw/Wit</option>
+                      <option value="12">Groen/Groen</option>
+                      <option value="13">Groen/Wit</option>
+                      <option value="14">Wit/Wit</option>
+                    </select>
+                  </div>
+                  
+
+                  <div style="grid-column: 1; grid-row: 14;">
+                    <img src="{{ url_for('static', filename='images/fotoKG.jpg') }}" style=" height: 100px; object-fit: cover;">
+                    </div>
+        
+                    <div style="grid-column: 2; grid-row: 14;">
+                      <select id="sequention-0-name">
+                        <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+                      <option value="De-Laet">Prof. Tinne De Laet</option>
+                      <option value="Rijmen">Prof. Vincent Rijmen</option>
+                      <option value="Smets">Prof. Ilse Smets</option>
+                      <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+                      <option value="Van-hamme">Prof. Hugo Van hamme</option>
+                      <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+                      <option value="Vandebril">Prof. Raf Vandebril</option>
+                      <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+                      <option value="Braem">Prof. Annabel Braem</option>
+                      <option value="Vandepitte">Prof. Drik Vandepitte</option>
+                      <option value="Geraedts">Dr. Kathleen Geraedts</option>
+                      <option value="Jacobs">Prof. Bart Jacobs</option>
+                      <option value="Dehaene">Prof. Wim Dehaene</option>
+                      <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
+                    </select>
+                    </div>
+                    <div style="grid-column: 3; grid-row: 14;">
+                      <select id="sequention-0-name">
+                        <option value="Analyse">Analyse</option>
+                      <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+                      <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+                      <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+                      <option value="Bedrijfskunde-en-ondernemen">Bedrijfskunde en ondernemen</option>
+                      <option value="Elektrische-netwerken">Elektrische netwerken</option>
+                      <option value="Methodiek-van-de-informatica">Methodiek van de informatica</option>
+                      <option value="Inleiding-tot-materiaalkunde">Inleiding tot materiaalkunde</option>
+                      </select>
+                    </div>
+                    <div style="grid-column: 4; grid-row: 14;">
+                      <select id="sequention-0-color-combination">
+                        <option value="0">Zwart/Zwart</option>
+                        <option value="1">Zwart/Rood</option>
+                        <option value="2">Zwart/Blauw</option>
+                        <option value="3">Zwart/Groen</option>
+                        <option value="4">Zwart/Wit</option>
+                        <option value="5">Rood/Rood</option>
+                        <option value="6">Rood/Blauw</option>
+                        <option value="7">Rood/Groen</option>
+                        <option value="8">Rood/Wit</option>
+                        <option value="9">Blauw/Blauw</option>
+                        <option value="10">Blauw/Groen</option>
+                        <option value="11">Blauw/Wit</option>
+                        <option value="12">Groen/Groen</option>
+                        <option value="13">Groen/Wit</option>
+                        <option value="14">Wit/Wit</option>
+                      </select>
+                    </div>
+
+                    <div style="grid-column: 1; grid-row: 15;">
+                      <img src="{{ url_for('static', filename='images/prof_jacobs.jpg') }}" style=" height: 100px; object-fit: cover;">
+                      </div>
+          
+                      <div style="grid-column: 2; grid-row: 15;">
+                        <select id="sequention-0-name">
+                          <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+                        <option value="De-Laet">Prof. Tinne De Laet</option>
+                        <option value="Rijmen">Prof. Vincent Rijmen</option>
+                        <option value="Smets">Prof. Ilse Smets</option>
+                        <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+                        <option value="Van-hamme">Prof. Hugo Van hamme</option>
+                        <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+                        <option value="Vandebril">Prof. Raf Vandebril</option>
+                        <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+                        <option value="Braem">Prof. Annabel Braem</option>
+                        <option value="Vandepitte">Prof. Drik Vandepitte</option>
+              <option value="Geraedts">Dr. Kathleen Geraedts</option>
+                        <option value="Jacobs">Prof. Bart Jacobs</option>
+                        <option value="Dehaene">Prof. Wim Dehaene</option>
+                        <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
+                      </select>
+                      </div>
+                      <div style="grid-column: 3; grid-row: 15;">
+                        <select id="sequention-0-name">
+                          <option value="Analyse">Analyse</option>
+                        <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+                        <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+                        <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+                        <option value="Bedrijfskunde-en-ondernemen">Bedrijfskunde en ondernemen</option>
+                        <option value="Elektrische-netwerken">Elektrische netwerken</option>
+                        <option value="Methodiek-van-de-informatica">Methodiek van de informatica</option>
+                        <option value="Inleiding-tot-materiaalkunde">Inleiding tot materiaalkunde</option>
+                        </select>
+                      </div>
+                      <div style="grid-column: 4; grid-row: 15;">
+                        <select id="sequention-0-color-combination">
+                          <option value="0">Zwart/Zwart</option>
+                          <option value="1">Zwart/Rood</option>
+                          <option value="2">Zwart/Blauw</option>
+                          <option value="3">Zwart/Groen</option>
+                          <option value="4">Zwart/Wit</option>
+                          <option value="5">Rood/Rood</option>
+                          <option value="6">Rood/Blauw</option>
+                          <option value="7">Rood/Groen</option>
+                          <option value="8">Rood/Wit</option>
+                          <option value="9">Blauw/Blauw</option>
+                          <option value="10">Blauw/Groen</option>
+                          <option value="11">Blauw/Wit</option>
+                          <option value="12">Groen/Groen</option>
+                          <option value="13">Groen/Wit</option>
+                          <option value="14">Wit/Wit</option>
+                        </select>
+                      </div>
+
+                      <div style="grid-column: 1; grid-row: 16;">
+                        <img src="{{ url_for('static', filename='images/prof_dehaene.jpg') }}" style=" height: 100px; object-fit: cover;">
+                        </div>
+            
+                        <div style="grid-column: 2; grid-row: 16;">
+                          <select id="sequention-0-name">
+                            <option value="Beernaert">Prof. Lutgarde Beernaert </option>
+                          <option value="De-Laet">Prof. Tinne De Laet</option>
+                          <option value="Rijmen">Prof. Vincent Rijmen</option>
+                          <option value="Smets">Prof. Ilse Smets</option>
+                          <option value="Vandewalle">Prof. Stefan Vandewalle</option>
+                          <option value="Van-hamme">Prof. Hugo Van hamme</option>
+                          <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
+                          <option value="Vandebril">Prof. Raf Vandebril</option>
+                          <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
+                          <option value="Braem">Prof. Annabel Braem</option>
+                          <option value="Vandepitte">Prof. Drik Vandepitte</option>
+              <option value="Geraedts">Dr. Kathleen Geraedts</option>
+                          <option value="Jacobs">Prof. Bart Jacobs</option>
+                          <option value="Dehaene">Prof. Wim Dehaene</option>
+                          <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
+                        </select>
+                        </div>
+                        <div style="grid-column: 3; grid-row: 16;">
+                          <select id="sequention-0-name">
+                            <option value="Analyse">Analyse</option>
+                          <option value="Toegepaste-Mechanica">Toegepaste Mechanica, deel 1</option>
+                          <option value="Toegepaste-Algebra">Toegepaste Algebra</option>
+                          <option value="Algemene-en-Technische-Scheikunde">Algemene en Technische Scheikunde</option>
+                          <option value="Bedrijfskunde-en-ondernemen">Bedrijfskunde en ondernemen</option>
+                          <option value="Elektrische-netwerken">Elektrische netwerken</option>
+                          <option value="Methodiek-van-de-informatica">Methodiek van de informatica</option>
+                          <option value="Inleiding-tot-materiaalkunde">Inleiding tot materiaalkunde</option>
+                          </select>
+                        </div>
+                        <div style="grid-column: 4; grid-row: 16;">
+                          <select id="sequention-0-color-combination">
+                            <option value="0">Zwart/Zwart</option>
+                            <option value="1">Zwart/Rood</option>
+                            <option value="2">Zwart/Blauw</option>
+                            <option value="3">Zwart/Groen</option>
+                            <option value="4">Zwart/Wit</option>
+                            <option value="5">Rood/Rood</option>
+                            <option value="6">Rood/Blauw</option>
+                            <option value="7">Rood/Groen</option>
+                            <option value="8">Rood/Wit</option>
+                            <option value="9">Blauw/Blauw</option>
+                            <option value="10">Blauw/Groen</option>
+                            <option value="11">Blauw/Wit</option>
+                            <option value="12">Groen/Groen</option>
+                            <option value="13">Groen/Wit</option>
+                            <option value="14">Wit/Wit</option>
+                          </select>
+                        </div>
+
+
+
+
+
+                
+          </div>
+      

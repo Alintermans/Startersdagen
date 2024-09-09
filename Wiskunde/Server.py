@@ -12,7 +12,7 @@ from FaceRecognition import FaceRecognition
 current_state = 0
 current_page = 'home' 
 
-nb_steps = 11
+nb_steps = 13
 
 retries = 0 
 
@@ -266,7 +266,7 @@ def gen_frames():
     global recognized_prof
     global current_camera_choice
     global camera_ready
-    while current_state == 8 or current_state == 12 or current_state == 11 or current_state == 10 or current_state == 9:
+    while current_state == 10 or current_state == 12 or current_state == 11 or current_state == 10 or current_state == 13:
         if camera_on:
             time.sleep(0.02)
             try:

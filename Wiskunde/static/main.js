@@ -4,7 +4,7 @@ var nb_steps = 1;
 
 var caemra_on = false;
 
-var profs = ['prof. Beernaert', 'prof. De-Laet', 'prof. Van-Hamme', 'prof. Van-Puyvelde', 'prof. Van-De-Walle', 'prof. Vander-Sloten', 'prof. Vandebril', 'prof. Rijmen', 'prof. Vansteenwegen', 'prof. Braem', 'prof. Smets', 'prof. Houssa', 'prof. Holvoet', 'prof. Jacobs', 'prof. Dehaene']
+var profs = ['prof. Beernaert', 'prof. De-Laet', 'prof. Van-Hamme', 'prof. Van-Puyvelde', 'prof. Van-De-Walle', 'prof. Vander-Sloten', 'prof. Vandebril', 'prof. Rijmen', 'prof. Vansteenwegen', 'prof. Braem', 'prof. Smets', 'prof. Vandepitte', 'Dr. Geraedts', 'prof. Jacobs', 'prof. Dehaene']
 
 var colors = ["#000000", "#ff0000", "#00ff00", "#0000ff",   "#00ffff", "#ff00ff", "#ffff00","#ffffff"];
 var options = ["Koffie", "Koffie met suiker", "Koffie met melk en suiker", "Koffie met melk", "Thee", "Thee met melk", "Thee met melk en suiker", "Thee met suiker"];
@@ -16,6 +16,7 @@ var savedOptions = [];
 var savedColors = [];
 
 var correctly_answered = false;
+var correct_answered_q2 = false;
 
 
 //------------------------------------------- Buttons -------------------------------------------//
@@ -41,7 +42,12 @@ function next() {
         return;
     }
 
-    if (state == 10) {
+    if ((state == 10) && (correct_answered_q2 == false)) {
+        alert("Please answer the questions first");
+        return;
+    }
+
+    if (state == 12) {
         if (!checkEveryThirdOptionIsDifferent()) {
             return;
         }
@@ -64,7 +70,7 @@ function next() {
     });}
 
 function back() {
-    if (state == 10) {
+    if (state == 12) {
         saveOptions();
     }
     // if (state == 11) {
@@ -717,6 +723,25 @@ function check_q1() {
 
 }
 
+function check_q2() {
+    const q1 = document.getElementById('q1');
+    const q2 = document.getElementById('q2');
+    const q3 = document.getElementById('q3');
+
+    const result = document.getElementById('result_q2');
+
+    if (q1.checked && q2.checked && !q3.checked) {
+        result.innerHTML = "<div class='correct'>Correct!</div>";
+        correct_answered_q2 = true;
+    } else {
+        result.innerHTML = "<div class='incorrect'>Fout! probeer opnieuw</div>";
+        correct_answered_q2 = false;
+    }
+    q1.checked = false;
+    q2.checked = false;
+    q3.checked = false;
+}
+
 
 
 
@@ -835,7 +860,7 @@ function loadPage(pageUrl) {
                 initializeAlgorithm();
             }
             
-            else if (state == 10 && savedOptions.length > 0) {
+            else if (state == 12 && savedOptions.length > 0) {
                 loadOptions();
             } 
             // else if (state == 11 && savedColors.length > 0) {
