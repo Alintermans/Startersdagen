@@ -35,6 +35,7 @@ arduino_send_queue = []
 
 
 DC_result = None
+DC_pending = False
 
 def find_arduino():
     global arduino
@@ -85,6 +86,7 @@ def disconnect_from_arduino():
 def run_arduino_messenger():
     global arduino_send_queue
     global DC_result
+    global DC_pending
 
     while True:
         if len(arduino_send_queue) > 0:
@@ -103,14 +105,18 @@ def send_message(x):
 def send_detect_color_request():
     global arduino_send_queue
     global DC_result
+    global DC_pending
+    DC_pending = True
     DC_result = None
-    time.sleep(0.5)
+    time.sleep(0.2)
     arduino_send_queue.append('DC')
     time.sleep(0.1)
-    while DC_result == None:
+    start_time = time.time()
+    while DC_result == None and time.time() - start_time < 1:
         time.sleep(0.1)
     result = DC_result
     DC_result = None
+    DC_pending = False
     return result
 
 
@@ -390,39 +396,50 @@ def run_sequention():
 @app.route('/test')
 def test():
     global retries
-    color_1, color_2 = sample_color_combinations()
-    while color_1 == None:
-        if retries > 3:
-            retries = 0
-            return jsonify({'status': 'detect-color', 'detected_color': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
-        time.sleep(0.1)
-        retries += 1
+    try: 
         color_1, color_2 = sample_color_combinations()
-    retries = 0
-    index = color_combination_to_index(int_color_to_string(color_1)+'/'+int_color_to_string(color_1))
+        while color_1 == None:
+            if retries > 3:
+                retries = 0
+                return jsonify({'status': 'detect-color', 'detected_color': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
+            time.sleep(0.1)
+            retries += 1
+            color_1, color_2 = sample_color_combinations()
+        print('hello')
+        retries = 0
+    except:
+        return jsonify({'status': 'detect-color', 'detected_color': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
+    if color_1 > 4 or color_2 > 4:
+        return jsonify({'status': 'detect-color', 'detected_color_combination': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
+    index = color_combination_to_index(int_color_to_string(color_1)+'/'+int_color_to_string(color_2))
     run_sequention(index)
     send_voltage_to_pico(index)
 
-    return jsonify({'status': 'detect-color', 'detected_color_combination': int_color_to_string(color_1)+'/'+int_color_to_string(color_1)})
+    return jsonify({'status': 'detect-color', 'detected_color_combination': int_color_to_string(color_1)+'/'+int_color_to_string(color_2)})
 
 @app.route('/run')
 def run():
     global retries
-    color_1, color_2 = sample_color_combinations()
-    while color_1 == None:
-        if retries > 3:
-            retries = 0
-            return jsonify({'status': 'detect-color', 'detected_color_combination': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
-        time.sleep(0.1)
-        retries += 1
+    try: 
         color_1, color_2 = sample_color_combinations()
-    retries = 0
-    index = color_combination_to_index(int_color_to_string(color_1)+'/'+int_color_to_string(color_1))
+        while color_1 == None:
+            if retries > 3:
+                retries = 0
+                return jsonify({'status': 'detect-color', 'detected_color_combination': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
+            time.sleep(0.1)
+            retries += 1
+            color_1, color_2 = sample_color_combinations()
+        retries = 0
+    except:
+        return jsonify({'status': 'detect-color', 'detected_color_combination': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
+    if color_1 > 4 or color_2 > 4:
+        return jsonify({'status': 'detect-color', 'detected_color_combination': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
+    index = color_combination_to_index(int_color_to_string(color_1)+'/'+int_color_to_string(color_2))
     run_sequention(index)
     send_voltage_to_pico(index)
     name = sequentions[index]["name"]
 
-    return jsonify({'status': 'detect-color', 'detected_color_combination': int_color_to_string(color), 'red_value': red, 'green_value': green, 'blue_value': blue, 'name': name})
+    return jsonify({'status': 'detect-color', 'detected_color_combination': int_color_to_string(color_1)+'/'+int_color_to_string(color_2),'name': name})
 
 ##Arduino commands
 @app.route('/rgb-led')
@@ -547,25 +564,40 @@ def send_voltage_to_pico(index):
 
 #Make a function where the colorsensor checks the color each second for 10 seconds and then returns the two most common colors
 def sample_color_combinations():
-    color_combinations = []
+    color_combinations = {}
     for i in range(10):
+        start_time = time.time()
+        print('test1')
+        while DC_pending:
+            time.sleep(0.1)
         color = send_detect_color_request()
+        print('test2')
+        if color == 'ERROR' and len(color) != 5:
+            continue
+        color = int(color[0])
         if color == None:
             continue
-        if color in color_combinations:
-            color_combinations[color] += 1
+        
+        if color > 4:
+            continue
+        if str(color) in color_combinations.keys():
+            color_combinations[str(color)] += 1
         else:
-            color_combinations[color] = 1
-        time.sleep(1)
+            color_combinations[str(color)] = 1
+        while time.time() - start_time < 0.8:
+            time.sleep(0.1)
+    print(color_combinations)
+
     color_combinations = sorted(color_combinations.items(), key=lambda x: x[1], reverse=True)
 
     if len(color_combinations) == 0:
         return None, None
 
     if len(color_combinations) < 2:
-        return color_combinations[0][0], color_combinations[0][0]
+        print('hello')
+        return int(color_combinations[0][0]),int(color_combinations[0][0])
 
-    return color_combinations[0][0], color_combinations[1][0]
+    return int(color_combinations[0][0]), int(color_combinations[1][0])
 
 # zwart = (4500, 7000, 6500)
 # rood = (400, 1800, 1100)
@@ -695,33 +727,33 @@ def int_color_to_string(color):
 
 
 def color_combination_to_index(combo):
-    if combo == 'Zwart/Zwart':
+    if combo == 'Zwart/Zwart' :
         return 0
-    elif combo == 'Zwart/Rood':
+    elif combo == 'Zwart/Rood' or combo == 'Rood/Zwart':
         return 1
-    elif combo == 'Zwart/Blauw':
+    elif combo == 'Zwart/Blauw' or combo == 'Blauw/Zwart':
         return 2
-    elif combo == 'Zwart/Groen':
+    elif combo == 'Zwart/Groen' or combo == 'Groen/Zwart':
         return 3
-    elif combo == 'Zwart/Wit':
+    elif combo == 'Zwart/Wit' or combo == 'Wit/Zwart':
         return 4
-    elif combo == 'Rood/Rood':
+    elif combo == 'Rood/Rood' or combo == 'Rood/Rood':
         return 5
-    elif combo == 'Rood/Blauw':
+    elif combo == 'Rood/Blauw' or combo == 'Blauw/Rood':
         return 6
-    elif combo == 'Rood/Groen':
+    elif combo == 'Rood/Groen' or combo == 'Groen/Rood':
         return 7
-    elif combo == 'Rood/Wit':
+    elif combo == 'Rood/Wit' or combo == 'Wit/Rood':
         return 8
     elif combo == 'Blauw/Blauw':
         return 9
-    elif combo == 'Blauw/Groen':
+    elif combo == 'Blauw/Groen' or combo == 'Groen/Blauw':
         return 10
-    elif combo == 'Blauw/Wit':
+    elif combo == 'Blauw/Wit' or combo == 'Wit/Blauw':
         return 11
-    elif combo == 'Groen/Groen':
+    elif combo == 'Groen/Groen' or combo == 'Groen/Groen':
         return 12
-    elif combo == 'Groen/Wit':
+    elif combo == 'Groen/Wit' or combo == 'Wit/Groen':
         return 13
     elif combo == 'Wit/Wit':
         return 14

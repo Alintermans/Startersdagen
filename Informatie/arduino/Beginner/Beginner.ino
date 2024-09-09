@@ -59,11 +59,12 @@ int roos_b = 500;
 int geel_r = 400;
 int geel_g = 500;
 int geel_b = 450;
+*/
 
 int wit_r = 400;
 int wit_g = 500;
 int wit_b = 450;
-*/
+
 
 void setup() {
   pinMode(LED_BUILTIN,OUTPUT);
@@ -194,10 +195,10 @@ int detectColor() {
   }
   else if ((rood < geel_r) && (groen <geel_g) && (blauw >geel_b)) {
     return 6;//Geel
-  }
-  else if ((rood < wit_r) && (groen <wit_g) && (blauw <wit_b)) {
-    return 7; //Wit
   }*/
+  else if ((rood < wit_r) && (groen <wit_g) && (blauw <wit_b)) {
+    return 4; //Wit
+  }
   else {
     return 8; //Geen Idee
   }

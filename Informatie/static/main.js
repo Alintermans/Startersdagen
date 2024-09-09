@@ -170,7 +170,7 @@ function removeAngle(sequention) {
 }
 
 function saveSequentions() {
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < 15; i++) {
         for (var j = 0; j < document.getElementById("sequention-" + i).childElementCount; j++) {
             if((document.getElementById("sequention-" + i + "-angle-" + j).value) < 0 || (document.getElementById("sequention-" + i + "-angle-" + j).value) > 180) {
                 alert("De hoek moet tussen 0 en 180 liggen");
@@ -181,14 +181,14 @@ function saveSequentions() {
 
     picked_names = [];
 
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < 15; i++) {
         if (document.getElementById("sequention-" + i + "-name").value in picked_names) {
             alert("Eén kleur per optie!");}
         picked_names.push(document.getElementById("sequention-" + i + "-name").value);
     }
 
     var sequentions = [];
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < 15; i++) {
         var sequention = {
             name: document.getElementById("sequention-" + i + "-name").value,
             angles: []
