@@ -286,7 +286,7 @@ function runColorBox() {
         secondColor = 'blue';
     } else if (colorCombination.value == 3) {
         firstColor = 'black';
-        secondColor = 'green';
+        secondColor = '#00FF00';
     } else if (colorCombination.value == 4) {
         firstColor = 'black';
         secondColor = 'white';
@@ -298,7 +298,7 @@ function runColorBox() {
         secondColor = 'blue';
     } else if (colorCombination.value == 7) {
         firstColor = 'red';
-        secondColor = 'green';
+        secondColor = '#00FF00';
     } else if (colorCombination.value == 8) {
         firstColor = 'red';
         secondColor = 'white';
@@ -307,15 +307,15 @@ function runColorBox() {
         secondColor = 'blue';
     } else if (colorCombination.value == 10) {
         firstColor = 'blue';
-        secondColor = 'green';
+        secondColor = '#00FF00';
     } else if (colorCombination.value == 11) {
         firstColor = 'blue';
         secondColor = 'white';
     } else if (colorCombination.value == 12) {
-        firstColor = 'green';
-        secondColor = 'green';
+        firstColor = '#00FF00';
+        secondColor = '#00FF00';
     } else if (colorCombination.value == 13) {
-        firstColor = 'green';
+        firstColor = '#00FF00';
         secondColor = 'white';
     } else if (colorCombination.value == 14) {
         firstColor = 'white';
