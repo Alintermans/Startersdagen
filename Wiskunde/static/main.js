@@ -4,7 +4,7 @@ var nb_steps = 1;
 
 var caemra_on = false;
 
-var profs = ['prof. Beernaert', 'prof. De-Laet', 'prof. Van-Hamme', 'prof. Van-Puyvelde', 'prof. Van-De-Walle', 'prof. Vander-Sloten', 'prof. Vandebril', 'prof. Rijmen', 'prof. Vansteenwegen', 'prof. Braem', 'prof. Smets', 'prof. Vandepitte', 'Dr. Geraedts', 'prof. Jacobs', 'prof. Dehaene']
+var profs = ['prof. Beernaert', 'prof. De-Laet', 'prof. Van-Hamme', 'prof. Van-Puyvelde', 'prof. Van-De-Walle', 'prof. Vander-Sloten', 'prof. Vandebril', 'prof. Rijmen', 'prof. Vansteenwegen', 'prof. Braem', 'prof. Smets', 'prof. Vandepitte', 'prof. Geraedts', 'prof. Jacobs', 'prof. Dehaene']
 
 var colors = ["#000000", "#ff0000", "#00ff00", "#0000ff",   "#00ffff", "#ff00ff", "#ffff00","#ffffff"];
 var options = ["Koffie", "Koffie met suiker", "Koffie met melk en suiker", "Koffie met melk", "Thee", "Thee met melk", "Thee met melk en suiker", "Thee met suiker"];
@@ -814,9 +814,13 @@ function detect_face(){
     .then(data => {
         console.log(data);
         if (profs.includes(data.result)) {
+            result = data.result;
+            if (data.result == "prof. Geraedts") {
+                result = "Dr. Geraedts";
+            }
             const index = profs.indexOf(data.result);
-            console.log(preferences_profs[data.result]);
-            detected_prof.innerHTML = `${data.result}`;
+            console.log(preferences_profs[result]);
+            detected_prof.innerHTML = `${result}`;
             runColorBox(index);
             // const option = options[preferences_profs[data.result][0]];
             // const colorIndex = savedColors.indexOf(option);
