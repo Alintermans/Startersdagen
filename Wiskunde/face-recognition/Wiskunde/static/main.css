@@ -1,0 +1,506 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    color: #333333;
+  }
+  
+  .header {
+    width: 100%;
+    height: 60px;
+    background-color: #2e86de;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 2px solid #1c67b6;
+    font-size: 24px;
+  }
+  
+  .container {
+    width: calc(100% - 40px);
+    margin: 20px;
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .box-header {
+    background-color: #ff6b6b;
+    padding: 15px;
+    border-bottom: 1px solid #ccc;
+    color: #ffffff;
+    text-align: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    font-size: 18px;
+  }
+  
+  .columns {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    overflow: auto;
+  }
+  
+  .column {
+    flex: 1;
+    padding: 15px;
+    font-size: 14px;
+    line-height: 1.2;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    margin: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: auto; 
+    text-align: justify;
+  }
+  
+  .buttons {
+    display: flex;
+    justify-content: center;
+    padding: 0 20px;
+  }
+  
+  .button {
+    padding: 15px 30px;
+    background-color: #ff6b6b;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    margin: 0 20px 20px 0;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+  
+  .button:hover {
+    background-color: #ff8f8f;
+  }
+
+.disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+.disabled:hover {
+    background-color: #cccccc;
+}
+
+#reset-button {
+    margin: 10px;
+    padding: 10px;
+    background-color: #c8d6e5;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    color: #636363;
+    
+}
+
+#reset-button:hover {
+    background-color: #dfe4ea;
+}
+
+#intro-div {
+    padding: 10px 80px 10px 80px;
+}
+
+#intro-div .button {
+    font-size: large;
+    font-weight: bold;
+}
+
+.code-container {
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+.hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 0.5em;
+    color: #333;
+    background: white;
+}
+
+img {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+
+#rgb-slider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    margin: 0;
+  }
+#detectedColorBox {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  #rgb-slider-inner-div {
+    display: flex;
+    flex-direction: row;
+    height: 50%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #inner-div-calibration {
+    width: 50%;
+    text-align: center;
+    padding: 20px;
+  }
+
+  #inner-div-sliders {
+    width: 50%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+
+  }
+
+  label {
+    font-size: 16px;
+    margin-right: 10px;
+  }
+
+  .color-box {
+    width: 500px;
+    height: 300px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .slider-value {
+    font-size: 14px;
+    margin-left: 5px;
+    color: #666;
+  }
+
+  input[type="range"] {
+    width: 200px;
+    margin-bottom: 10px;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #ddd;
+    border-radius: 8px;
+    height: 8px;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  #redSlider::-webkit-slider-thumb {
+    background-color: rgb(255, 0, 0);
+    
+  }
+
+  #redSlider {
+    background-color: rgb(255, 0, 0);
+  }
+
+  #blackSlider::-webkit-slider-thumb {
+    background-color: rgb(0, 0, 0);
+    
+  }
+
+  #blackSlider {
+    background-color: rgb(0, 0, 0);
+    margin: 15px;
+  }
+
+  #greenSlider::-webkit-slider-thumb {
+    background-color: green;
+  }
+
+  #greenSlider {
+    background-color: green;
+  }
+
+  #blueSlider::-webkit-slider-thumb {
+    background-color: blue;
+  }
+
+    #blueSlider {
+        background-color: blue;
+    }
+
+
+
+    #colorForm {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+  }
+
+  .colorRow {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.colorLabel {
+    flex: 0 0 auto;
+    margin-right: 10px;
+}
+
+.colorInputsContainer {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+}
+
+.inputContainer {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.colorBox {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+}
+
+.updateColorButton {
+    margin-left: auto;
+    background-color: #ff6b6b;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.updateColorButton:hover {
+    background-color: #ff8f8f;
+}
+
+.colorRow h3 {
+    margin: 0;
+    margin-right: 10px;
+}
+
+.colorRow label {
+    margin-right: 5px;
+    font-size: 14px;
+} 
+
+.colorRow input {
+    width: 50px;
+    margin-right: 5px;
+}
+
+#servo_form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#servo_form label {
+    margin-right: 10px;
+}
+
+#servo_form input {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+#servo_form button {
+    margin-left: 10px;
+    background-color: #ff6b6b;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 5px 10px;
+    padding: 10px;
+}
+
+#servo_form button:hover {
+    background-color: #ff8f8f;
+}
+
+#servo_form input[type="number"] {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+#motor_button {
+    background-color: #ff6b6b;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 5px 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+#motor_button:hover {
+    background-color: #ff8f8f;
+}
+
+
+.sequention {
+  margin-bottom: 10px;
+}
+
+#sequentions-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#sequention-colors {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#sequention-names {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#sequention-angles {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#sequention-angles input {
+  width: 50px;
+  height: auto;
+  margin-right: 10px;
+}
+
+#sequention-buttons-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sequention-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.sequention-buttons button {
+  margin: 5px;
+}
+
+.sequention-buttons button i {
+  margin: 0px;
+}
+
+.sequention-buttons button i:hover {
+  color: #00d1b2;
+}
+
+.sequention-buttons button:hover {
+  background-color: #00d1b2;
+}
+
+.sequention-buttons button {
+  background-color: #3273dc;
+  color: white;
+}
+
+
+#saveSequentionsButton {
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+#saveSequentionsButton i {
+  margin-right: 5px;
+} 
+
+#saveSequentionsMessage {
+  transition: opacity 1s;
+}
+
+#camera_div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+#saveSequentionsButton {
+  padding: 10px;
+  margin: 0;
+  margin-left: 5px;
+  justify-content: center;
+}
+
+#saveSequentionsButton i {
+  margin-right: 5px;
+} 
+
+#saveSequentionsMessage {
+  transition: opacity 1s;
+}
+
+#servo_sequentions_title_div {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+}
+
+.alg-frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.alg-frame h3 {
+  margin-top: 0;
+}

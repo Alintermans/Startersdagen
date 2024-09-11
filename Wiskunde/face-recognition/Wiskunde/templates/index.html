@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Startersdagen - Wiskunde</title>
+	<link rel="icon" type="image/x-icon" href="{{url_for('static', filename='favicon.ico')}}">
+	<!-- <script src="{{url_for('static', filename='min_js/chart.min.js')}}"></script>
+	<script src="{{url_for('static', filename='min_js/d3.v7.min.js')}}"></script> -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/arduino-light.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/arduino.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.10.0/math.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	
+	
+	<link rel="stylesheet" href="{{url_for('static', filename='min_css/font_awesome_all.min.css')}}" />
+	<link rel="stylesheet" href="{{url_for('static', filename='main.css')}}" />
+</head>
+<body>
+	<div class="header">
+		Startersdagen - Wiskunde 
+		<button id="reset-button" onclick="reset()"><i class="fas fa-undo"></i> Reset</button>
+	</div>
+  <div class="container" id="content">
+    
+  </div>
+  <div class="buttons">
+    <button class="button" id="back_button" onclick="back()" >Vorige</button>
+    <button class="button" id="next_button" onclick="next()">Volgende</button>
+  </div>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+	<script src="{{url_for('static', filename='main.js')}}"></script>
+	
+	
+  </body>
+</html>

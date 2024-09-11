@@ -1,0 +1,53 @@
+<div class="box-header">Wiskunde: RGB naar grijstinten - 4/13</div>
+    <div class="columns">
+      <div class="column">
+          <h2>Grijswaarden</h2>
+          <p>
+            In een kleurenfoto wordt elke pixel voorgesteld door drie getallen tussen 0 en 255. 
+            In een zwart-wit afbeelding wordt elke pixel voorgesteld door één waarde tussen 0 en 255. 
+            Om een kleurenfoto om te vormen naar een foto in grijstinten berekenen we voor elke pixel de grijswaarde. Hiervoor nemen we een gewogen som van de waarden voor rood, groen en blauw. Voltooi de opdrachtjes hieronder een beter zicht te krijgen op dit proces en welke gewichten we kiezen.
+          </p>
+          <p>
+            <b>Opdracht 1:</b><br>
+            Converteer de twee rechtse afbeeldingen eerst naar grijswaarden door enkel rood, groen of blauw een waarde tussen 0 en 1 te geven. De andere twee geef je waarde 0.
+          </p>
+          <p>
+            <b>Opdracht 2:</b><br>
+            Probeer nu eens voor al de drie kleuren dezelfde waarde te kiezen. Wat merk je op?
+          </p>
+          <p>
+            <b>Opdracht 3:</b><br>
+            Zoek nu eens op wat de ideale percentages om altijd een goede grijswaarden foto te krijgen. Je kan eerst zelf wat met de waarden spelen, maar gebruik vervolgens Google om de juiste percentages te weten. TIP: Google - RGB to grayscale
+          </p>
+          
+      </div>
+      <div class="column">
+
+        <div style="display: flex; flex-direction: row; justify-content: space-evenly; margin-bottom: 20px; align-items: center; margin-top: 0px;">
+          <div>
+            
+            <label for="redPercentage"><b>Rood Percentage: </b></label>
+            <input type="number" id="redPercentage" placeholder="Rood Percentage" value="0" style="margin-bottom: 10px; margin-left: 5px;">
+            
+            <br>
+            <label for="greenPercentage"><b>Groen Percentage: </b></label>
+            <input type="number" id="greenPercentage" placeholder="Groen Percentage" value="0" style="margin-bottom: 10px;">
+            <br>
+            <label for="bluePercentage"><b>Blauw Percentage: </b></label>
+            <input type="number" id="bluePercentage" placeholder="Blauw Percentage" value="0" style="margin-bottom: 0px;">
+          </div>
+          <button class="button" onclick="convert_to_grey()" style="height: 60px;">Converteer naar grijswaarden</button>
+        </div>
+        
+    <div style="display: flex; flex-direction: row; justify-content: space-evenly; margin-bottom: 20px;">
+      <img src="{{url_for('static', filename='images/RGB.png')}}" alt="" height="200px">
+      <canvas id="outputCanvas" style="border-radius: 10px; height: 200px;"></canvas>
+    </div>
+
+    <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+      <img src="{{url_for('static', filename='images/Times-Square-New-York.jpeg')}}" alt="" height="200px">
+      <canvas id="outputCanvas2" style="border-radius: 10px; height: 200px;"></canvas>
+    </div>
+   
+      </div>
+    </div>

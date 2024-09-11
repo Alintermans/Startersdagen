@@ -1,0 +1,248 @@
+<div class="box-header">Wiskunde: Gezichtsherkenningsalgoritme implementeren - 6/13</div>
+<div class="columns">
+  <div class="column">
+    <h2>Algoritme</h2>
+    <p>
+      Je computer stockeert de gegevens van een afbeelding in een soort matrix waarvan elke waarde op een specifieke rij of kolom een bepaalde kleurintensiteit uitdrukt. Als de foto een kleurenfoto (in JPEG formaat) is, worden er drie lagen aan waardes toegekend (een laag voor elk van de drie kleuren: rood, groen en blauw).
+    </p>
+    <br>
+    <p>
+    Om het gezichtsherkenningsalgoritme te implementeren starten we met een database van kleurenfoto's van 18 professoren van het eerste jaar burgerlijk ingenieur. Enkele van deze professoren zullen op het einde van deze workshop ook langskomen om je werk van vandaag te bekijken.
+    </p>
+    <br>
+    <p>
+  STAP 1
+</p>
+<br>
+<p>
+    Foto's bevatten meer gegevens dan enkel het gezicht van een professor. In een eerste stap selecteren we daarom een specifiek stukje van de foto’s. Dit stukje is telkens een rechthoek met hoogte=115 en breedte=80 die enkel het aangezicht van de persoon toont. 
+    </p>
+    <br>
+    <p>
+      STAP 2
+</p>
+<br>
+<p>
+    Als we nu verderwerkten met de drie-lagige matrices van deze 18 foto's zouden we een gigantische hoeveelheid data krijgen. Daarom reduceren we deze data tot een 2D-matrix (een matrix zoals voorgesteld op pagina 1/12 van deze tutorial). De foto wordt m.a.w. omgezet in een foto die enkel uit grijswaardes bestaat door een gewogen gemiddelde te maken van de waardes voor rood, groen en blauw.
+  Het algoritme voert stap 1 en stap 2 uit voor elke foto in onze database.  
+  </p>
+    <br>
+    <p>
+
+      STAP 3
+</p>
+<br>
+<p>
+     In een volgende stap vormen we de matrices met de grijswaardes van de foto’s om naar zogenaamde kolommatrices. Waar we tot nu toe per foto een 80x115 matrix hadden, vormen we deze matrix nu om naar een 9200x1 matrix. We noemen dit een kolomvector.
+      <br>
+      We krijgen telkens één vector \( v_{1} \) die één gezicht voorstelt. Deze bewerking voeren we uit voor alle afbeeldingen uit de database. 
+    </p>
+    <br>
+    <p>
+
+      Zo krijg je een set van M vectoren (waarbij in ons geval M=18):
+      $$ {\left\{v_1, v_2, ..., v_M\right\}} $$
+      <br>
+
+      
+      Van al deze vectoren nemen we de gemiddelde vector. Die ziet eruit als volgt:
+      $$ {\psi = \frac{1}{M} \sum_{i=1}^M v_i} $$
+
+      <br>
+      STAP 4
+    </p>
+    <br>
+    <p>
+      Nu berekenen we voor elke vector \( v_{i} \) het verschil met de gemiddelde vector \(\psi\).
+      $${ \Phi_i = v_i - \psi }$$
+      <br>
+      STAP 5
+    </p>
+    <br>
+    <p>
+
+      Deze stap bevat heel wat op het eerste zicht moeilijke wiskundige bewerkingen. Hierover leer je binnenkort alle details in het vak Toegepaste Algebra. Voor nu is het voldoende dat je dit eens doorneemt en simpelweg weet dat we matrixbewerkingen aan het uitvoeren zijn.
+    </p>
+    <br>
+    <p>
+
+      We stellen de zogenaamde <i>covariantiematrix</i> \(C\) op. Die definiëren we als volgt:
+      $${C = \frac{1}{M} \sum_{i=0}^M \Phi_i \Phi_i^T  }$$
+      <br>
+      We berekenen nu de zogenaamde eigenwaarden \( \Lambda \) en eigenvectoren \(U\) van deze covariantiematrix \(C\). Wat eigenwaarden en eigenvectoren precies zijn, leer je binnenkort bij Toegepaste Algebra.
+      <br>
+    </p>
+    <br>
+    <p>
+
+      Hiermee krijgen we nu een collectie van eigenvectoren. In deze context van gezichtsherkenning noemen we deze eigenvectoren de <i>eigenfaces</i> \(U = \left\{u_i \right\}\). Met deze eigenfaces gaan we aan de slag om andere gezichten te herkennen. 
+      <br>
+    </p>
+    <br>
+    <p>
+
+      Voor elk gezicht \( v_{i} \) uit de database kunnen we een zogenaamde gewichtsvector \( \Omega_{i} \) bepalen als volgt: 
+      $${ \Omega_{i} =  U^T (v_{i} - \psi) }$$
+    </p>
+    <br>
+    <p>
+Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichtsvectoren op, want een gewichtsvector is uniek voor elke foto. Met deze gewichtsvector en de eigenfaces kunnen we een foto reconstrueren. We maken dan een lineaire combinatie van de eigenfaces, dat wil zeggen een som van (scalaire) veelvouden van elke eigenface. We vermenigvuldigen elke eigenface met zijn bijhorende waarde uit de gewichtsvector.
+    	<br>
+    </p>
+    <br>
+    <p>
+      STAP 6
+    </p>
+    <br>
+    <p>
+      Waartoe hebben we al het voorgaande nodig? We willen bekijken of een nieuwe foto (of een nieuw gezicht) overeenkomt met iemand uit onze database. Hiervoor voeren we de eerste drie stappen op deze nieuwe foto uit en bekomen we opnieuw een kolomvector \( v_{nieuw} \). 
+      Dan voeren we de bewerking van stap 5 uit. Die stap berekent voor de nieuwe foto de bijhorende gewichtsvector:
+      $${ \Omega_{nieuw} =  U^T (v_{nieuw} - \psi) }$$
+
+    </p>
+    <br>
+    <p>
+      We vergelijken de nieuwe foto met de foto's in de database door de nieuwe gewichtsvector te vergelijken met de gewichtsvectoren in de database.
+	  Wiskundig gebruiken we hiervoor de Euclidische afstand tussen vectoren. We berekenen telkens de norm van de Euclidische afstand tussen één van de 18 gewichtsvectoren \( \Omega_{i} \) en de gewichtsvector van de nieuwe foto \( \Omega_{nieuw} \).
+      $${ \epsilon_{i} =  \|\Omega_{i} - \Omega_{nieuw} \|  }$$
+      
+      Als \( \epsilon_{i} \) klein is, lijken de gewichtsvectoren op elkaar. We zoeken dus de gewichtsvector \( \Omega_{i} \) waarvoor deze \( \epsilon_{i} \) het kleinst is. De persoon wiens gewichtsvector dit is, lijkt het meest op de persoon in de nieuwe foto. Als die norm \( \epsilon_{i} \) klein genoeg is, kunnen we met voldoende zekerheid stellen dat de persoon op de nieuwe foto overeenkomt met een persoon uit de database en dat de persoon geïdentificeerd is. Op de bepaling van deze grens gaan we hier niet dieper in.
+    </p>
+    
+
+    
+    </div>
+  <div class="column" style="display: flex; flex-direction: column; align-items: center; justify-content: space-around;">
+    <h2 style="text-align: center; margin-bottom: 0;">Leer het algoritme visueel kennen!<button style="margin-left: 10px;" onclick="reset_alg()"><i class="fas fa-undo"></i></button></h2> 
+    <!-- <h3>
+      Database maken
+    </h3>
+    <li>Afbeelding omzetten in grijstinten</li>
+    <li>Afbeelding omvormen naar 60x80 pixels</li>
+    <li>Matrix van afbeelding omvormen tot een kolomvector</li>
+    <li>Set van kolomvectoren maken</li>
+    <li>Gemiddelde vector berekenen</li>
+    <li>Voor elke vector het verschil met gemiddelde vector berekenen</li>
+    <li>covariantie matrix berekenen</li>
+    <li>Eigenwaarden en eigenvectoren berekenen</li>
+    <li>Gewichten ten opzichte van gezichtsruimte bepalen</li>
+
+    <h3>
+      Nieuwe foto herkennen
+    </h3>
+    <li>Afbeelding omzetten in grijstinten</li>
+    <li>Afbeelding omvormen naar 60x80 pixels</li>
+    <li>Matrix omvormen tot een kolomvector</li>
+    <li>Verschil met gemiddelde vector berekenen</li>
+    <li>Projectie op gezichtsruimte</li>
+    <li>Norm van de euclidische afstand bepalen tussen de kolommen van Omega en vector Omega_nieuw</li>
+    <li>Minimum zoeken</li> -->
+    <!-- <input type="file" id="fileInput" multiple>
+    <div id="output"></div> -->
+
+    <div id="alg-0" class="alg-frame" >
+      <div style="text-align: center;">
+        <h3>Stap 1: Knip afbeelding uit en vorm om naar juiste resolutie</h3>
+        <p style="padding-left: 20px; padding-right: 20px;" > 
+          Om ervoor te zorgen dat het algoritme goed werkt, moeten alle afbeeldingen in de database dezelfde resolutie hebben en enkel het gezicht bevatten. Daarom moet je alle afbeeldingen eerst bijsnijden en omvormen naar een specifieke resolutie (in ons voorbeeld nemen we 115x80 pixels). 
+          Als je op de knop hieronder drukt zal je de bewerking zien gebeuren bij prof. Vander Sloten. Hij is de vice-decaan van onze faculteit én een van de professoren voor het vak <i>Toegepaste Mechanica, deel 1</i>. Achter de schermen gebeurt deze stap nu voor alle afbeeldingen van de proffen. Later in deze tutorial ga je nog afbeeldingen tegenkomen van docenten die in de database zitten. 
+        </p>
+      </div>
+      
+      <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
+        <canvas id="cnv_alg_0" style="border-radius: 10px; height: 200px;"></canvas>
+        <button class="button" onclick="alg_crop_and_scale()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Knip uit</button>
+      </div>
+      
+    </div>
+
+    <div id="alg-1" class="alg-frame" style="display: none;">
+      
+      <div style="text-align: center;">
+        <h3>Stap 2: Zet afbeelding om in grijswaarden</h3>
+        <p style="padding-left: 20px; padding-right: 20px;" > 
+          Het algoritme werkt enkel met grijswaarden. Daarom moet je de afbeeldingen eerst omzetten naar grijswaarden. Hieronder zie je hoe dit gebeurt bij prof. Vander Sloten.
+        </p>
+      </div>
+      <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
+        <canvas id="cnv_alg_1" style="border-radius: 10px; height: 200px;"></canvas>
+        <button class="button" onclick="alg_to_grey()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Naar grijswaarden</button>
+      </div>
+      
+    </div>
+
+    <div id="alg-2" class="alg-frame" style="display: none;">
+      <div style="text-align: center;">
+        <h3>Stap 3: Gemiddeld gezicht maken</h3>
+      <p style="padding-left: 20px; padding-right: 20px;" > 
+        Om het algoritme te laten werken, moet je eerst een gemiddeld gezicht maken. Dit doe je door alle gezichten in de database op te tellen en te delen door het aantal gezichten. Hieronder kan je het gezicht van prof. Vander Sloten vergelijken met het gemiddelde gezicht.
+        </p>  
+      </div>
+      
+
+      <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
+        <canvas id="cnv_alg_2" style="border-radius: 10px; height: 200px;"></canvas>
+        <button class="button" onclick="alg_to_mean()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Naar gemiddeld gezicht</button>
+      </div>
+    </div>
+
+    <div id="alg-3" class="alg-frame" style="display: none;">
+      <div style="text-align: center;">
+        <h3>Stap 4: Verschil met gemiddeld gezicht</h3>
+      <p style="padding-left: 20px; padding-right: 20px;" > 
+        Zoals ook hiernaast staat uitgelegd, berekenen we per gezicht het verschil met het gemiddelde gezicht. Dit doen we door van elk gezicht het gemiddelde gezicht af te trekken. Hieronder kan je zien hoe dit gebeurt bij prof. Vander Sloten.
+      </p> 
+      </div>
+      <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
+        <canvas id="cnv_alg_3" style="border-radius: 10px; height: 200px;"></canvas>
+        <button class="button" onclick="alg_to_diff()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Verschil met gemiddeld gezicht</button>
+      </div>
+    </div>
+
+    <div id="alg-4" class="alg-frame" style="display: none;">
+      
+      <div style="text-align: center;">
+        <h3>Stap 5: Eigenfaces Berekenen</h3>
+      <p style="padding-left: 20px; padding-right: 20px;" > 
+        Eens de verschillen met het gemiddelde gezicht berekend zijn, kunnen we de zogenaamde <i>eigenfaces</i> berekenen. Dit doen we door de zogenaamde <i>covariantie matrix</i> te berekenen en de eigenwaarden en eigenvectoren te bepalen. Eens we de eigenvectoren en eigenwaarden hebben bepaald, houden we enkel de eigenvectoren bij die de grootste eigenwaarden hebben. Deze eigenvectoren noemen we de eigenfaces. Hieronder kan je de eigenface horende bij de grootste eigenwaarde vergelijken met het verschil van prof. Vander Sloten.
+        Nadat alle eigenfaces zijn berekend, maken we per persoon een gewichtsvector, zoals hiernaast uitgelegd. Deze gewichtsvectoren kunnen we gebruiken om nieuwe gezichten te herkennen.
+        </p>
+      </div>
+      <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
+        <canvas id="cnv_alg_4" style="border-radius: 10px; height: 200px;"></canvas>
+        <button class="button" onclick="alg_to_eigenfaces()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Eigenfaces berekenen</button>
+      </div>
+    </div>
+
+    <div id="alg-5" class="alg-frame" style="display: none;">
+      
+      <div style="text-align: center;">
+        <h3>Stap 6: Gezichten vergelijken</h3>
+      <p style="padding-left: 20px; padding-right: 20px;" > 
+        Nu alles is berekend, kunnen we het algoritme gebruiken om nieuwe gezichten te herkennen. Dit doen we door de gewichtsvector te berekenen van het nieuwe gezicht en de norm van de Euclidische afstand te berekenen tussen de gewichtsvector van het nieuwe gezicht en de gewichtsvectoren van de gezichten in de database. De gewichtsvector uit de database met de kleinste Euclidische afstand tot de nieuwe gewichtsvector hoort bij de persoon die het meest overeenkomt met het nieuwe gezicht.</p><p></p> We kunnen dit proces ook gebruiken met een totaal nieuw en onbekend persoon. Op wie uit de database lijkt deze nieuwe persoon wiskundig gezien het meest?
+		Op welke professor lijkt bijvoorbeeld Mr. Bean het meest? Kom het te weten door op de knop te drukken!
+      </p>
+      </div>
+      <button class="button" onclick="alg_compare()" style="margin-top: 10px; padding: 10px; height: 40px; margin-left: 20px;">Vergelijk!</button>
+      <div style="display: flex; flex-direction: row; justify-content: center; width:100%; align-items: center;">
+        <img src="{{ url_for('static', filename='images/mr_bean_cut.png') }}" style="border-radius: 10px; height: 200px;">
+        <img src="{{ url_for('static', filename='images/closest_match.png') }}" style="display: none; border-radius: 10px; height: 200px; margin-left: 20px;" id="closest_match">
+      </div>
+       <br>De top 5 van gezichten die het meest overeenkomen met Mr. Bean zijn:
+        <ol id="closest_matches" style="display: none;">
+          <li>Prof. Rijmen (Toegepaste Algebra)</li>
+          <li>Prof. Vander Sloten (Toegepaste Mechanica)</li>
+          <li>Prof. Baelmans (Thermodynamica)</li>
+          <li>Prof. Van Hamme (Toegepaste Algebra)</li>
+          <li>Prof. De Laet (Toegepaste Mechanica)</li>
+        </ol>
+
+    </div>
+
+    
+    
+
+    <button class="button" onclick="next_step_alg()" id="next_step_alg_btn"  style="margin-top: 10px; padding: 10px; align-self: center;"><i class="fas fa-arrow-right"></i> Volgende stap</button>
+  </div>
+</div>
+

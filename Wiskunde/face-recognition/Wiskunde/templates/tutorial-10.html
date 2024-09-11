@@ -1,0 +1,49 @@
+<div class="box-header">Wiskunde: Een neuraal netwerk trainen - 10/13</div>
+    <div class="columns">
+      <div class="column">
+          <h2>Train je neuraal netwerk</h2>
+          <p>
+            Nu train je zelf een neuraal netwerk! Gebruik hiervoor <a href="https://colab.research.google.com/drive/1OiIhnKQUwNguW9GZwwR9B6Br1egxLIC3?usp=sharing" target="_blank">deze zogenaamde Google Colab <i>Notebook</i></a>. De notebook bevat veel pythoncode, maar geen schrik! 
+            Je moet enkel op de pijltjes drukken om een <i>cell</i> code te runnen. Om Colab Notebook uit te kunnen voeren moet iemand van jullie een Google account gebruiken om in te loggen.
+          </p> 
+          <p>
+            In stap 1 initialiseer je de python bibliotheken of <i>libraries</i>. Een library is een kant-en-klare code die je kan gebruiken om het programmeren makkelijker en sneller te maken. 
+            De library is toegankelijk voor iedereen, en wordt typisch aan het begin van de programmeercode ingeladen zodat ze in de rest van het document bruikbaar is. 
+          </p>
+          <P>In stap 2 creëer je zelf afbeeldingen als data om een bestaand model op te trainen. Je maakt 50 afbeeldingen van semi-willekeurige cirkels en 50 afbeeldingen van semi-willekeurige veelhoeken. 
+            Als deze stap is uitgevoerd kan je in de mappenstructuur links twee nieuwe mappen zien, "Circles" en "Polygons", met daarin de afbeeldingen. 
+          </P>
+          <p>In stappen 3 en 4 voer je de typische stappen uit van het trainen van een neuraal netwerkmodel: een deel van de data (20%) wordt apart gehouden om later het getraind model op te testen, de rest wordt 
+            gebruikt om het model te trainen. Stap 4 duurt het langst om uit te voeren, omdat hier het trainen zelf gebeurt. 
+          </p>
+          <p>In stap 5 wordt het model getoetst adhv de testdata. Stap 6 visualiseert dit resultaat. 
+          </p>
+          <p>De resolutie van de gebruikte afbeeldingen is 200 op 200 pixels. Met stappen 7 en 8 kan je de beperkingen van de resolutie aftasten. Stap 7 maakt een regelmatige tienhoek. Bij angles =... kan je de 
+            10 aanpassen om een andere regelmatige veelhoek te vormen. In stap 8 controleer je zoals in stap 6 wat het resultaat is van het model. Vanaf een zekere hoek (ongeveer 11, 12 of 13) kan het model het 
+            onderscheid niet meer maken tussen een regelmatige veelhoek en een cirkel. Aangezien de sample data semi-willekeurig gegereerd is in stap 2 kan dit variëren. Vanaf welke hoek is dit het geval bij jullie?
+          </p>
+          <p>
+            <b>Opdracht: welke uitspraken zijn coorect?</b><br>
+            <form>
+    
+              <input type="radio" id="q1" name="q1" value="1">
+              <label for="1" style="font-size: small;">Het voorgetrainde model dat hier gebruikt wordt heet MobileNetV2.</label><br>
+              <input type="radio" id="q2" name="q2" value="2">
+              <label for="2" style="font-size: small;">Minder lagen en neuronen gebruiken in het model zal het trainen sneller maken.</label><br>
+              <input type="radio" id="q3" name="q3" value="3">
+              <label for="3" style="font-size: small;">Als de <i>confidence</i> van de voorspelling zeer hoog ligt, is de voorspelling correct.</label><br>
+            </form>
+            <div style="display: flex; flex-direction: row; align-items: center;" >
+              <button class="button" onclick="check_q2()" style="margin-top: 10px; padding:15px; " >Controleer je antwoorden</button> <b><span id="result_q2"></span></b>
+            </div>
+          </p>
+      </div>
+      <div class="column">
+        <div style="display: flex; justify-content: center; align-items: center; ">
+          <img src="{{url_for('static', filename='images/colab2.png')}}" alt="" style="width: 100%; height: auto;" id="picture_resolution_img">
+        </div>
+        
+       
+       
+      </div>
+    </div>

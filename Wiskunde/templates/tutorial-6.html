@@ -7,7 +7,7 @@
     </p>
     <br>
     <p>
-    Om het gezichtsherkenningsalgoritme te implementeren starten we met een database van kleurenfoto's van 18 professoren van het eerste jaar burgerlijk ingenieur. Enkele van deze professoren zullen op het einde van deze workshop ook langskomen om je werk van vandaag te bekijken.
+    Om het gezichtsherkenningsalgoritme te implementeren starten we met een database van kleurenfoto's van 15 professoren van het eerste jaar burgerlijk ingenieur. Enkele van deze professoren zullen op het einde van deze workshop ook langskomen om je werk van vandaag te bekijken.
     </p>
     <br>
     <p>
@@ -23,7 +23,7 @@
 </p>
 <br>
 <p>
-    Als we nu verderwerkten met de drie-lagige matrices van deze 18 foto's zouden we een gigantische hoeveelheid data krijgen. Daarom reduceren we deze data tot een 2D-matrix (een matrix zoals voorgesteld op pagina 1/12 van deze tutorial). De foto wordt m.a.w. omgezet in een foto die enkel uit grijswaardes bestaat door een gewogen gemiddelde te maken van de waardes voor rood, groen en blauw.
+    Als we nu verderwerkten met de drie-lagige matrices van deze 15 foto's zouden we een gigantische hoeveelheid data krijgen. Daarom reduceren we deze data tot een 2D-matrix (een matrix zoals voorgesteld op pagina 1/12 van deze tutorial). De foto wordt m.a.w. omgezet in een foto die enkel uit grijswaardes bestaat door een gewogen gemiddelde te maken van de waardes voor rood, groen en blauw.
   Het algoritme voert stap 1 en stap 2 uit voor elke foto in onze database.  
   </p>
     <br>
@@ -40,7 +40,7 @@
     <br>
     <p>
 
-      Zo krijg je een set van M vectoren (waarbij in ons geval M=18):
+      Zo krijg je een set van M vectoren (waarbij in ons geval M=15):
       $$ {\left\{v_1, v_2, ..., v_M\right\}} $$
       <br>
 
@@ -86,7 +86,7 @@
     </p>
     <br>
     <p>
-Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichtsvectoren op, want een gewichtsvector is uniek voor elke foto. Met deze gewichtsvector en de eigenfaces kunnen we een foto reconstrueren. We maken dan een lineaire combinatie van de eigenfaces, dat wil zeggen een som van (scalaire) veelvouden van elke eigenface. We vermenigvuldigen elke eigenface met zijn bijhorende waarde uit de gewichtsvector.
+Dit levert ons dan voor de 15 personen uit de database 15 verschillende gewichtsvectoren op, want een gewichtsvector is uniek voor elke foto. Met deze gewichtsvector en de eigenfaces kunnen we een foto reconstrueren. We maken dan een lineaire combinatie van de eigenfaces, dat wil zeggen een som van (scalaire) veelvouden van elke eigenface. We vermenigvuldigen elke eigenface met zijn bijhorende waarde uit de gewichtsvector.
     	<br>
     </p>
     <br>
@@ -103,7 +103,7 @@ Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichts
     <br>
     <p>
       We vergelijken de nieuwe foto met de foto's in de database door de nieuwe gewichtsvector te vergelijken met de gewichtsvectoren in de database.
-	  Wiskundig gebruiken we hiervoor de Euclidische afstand tussen vectoren. We berekenen telkens de norm van de Euclidische afstand tussen één van de 18 gewichtsvectoren \( \Omega_{i} \) en de gewichtsvector van de nieuwe foto \( \Omega_{nieuw} \).
+	  Wiskundig gebruiken we hiervoor de Euclidische afstand tussen vectoren. We berekenen telkens de norm van de Euclidische afstand tussen één van de 15 gewichtsvectoren \( \Omega_{i} \) en de gewichtsvector van de nieuwe foto \( \Omega_{nieuw} \).
       $${ \epsilon_{i} =  \|\Omega_{i} - \Omega_{nieuw} \|  }$$
       
       Als \( \epsilon_{i} \) klein is, lijken de gewichtsvectoren op elkaar. We zoeken dus de gewichtsvector \( \Omega_{i} \) waarvoor deze \( \epsilon_{i} \) het kleinst is. De persoon wiens gewichtsvector dit is, lijkt het meest op de persoon in de nieuwe foto. Als die norm \( \epsilon_{i} \) klein genoeg is, kunnen we met voldoende zekerheid stellen dat de persoon op de nieuwe foto overeenkomt met een persoon uit de database en dat de persoon geïdentificeerd is. Op de bepaling van deze grens gaan we hier niet dieper in.
@@ -145,7 +145,7 @@ Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichts
         <h3>Stap 1: Knip afbeelding uit en vorm om naar juiste resolutie</h3>
         <p style="padding-left: 20px; padding-right: 20px;" > 
           Om ervoor te zorgen dat het algoritme goed werkt, moeten alle afbeeldingen in de database dezelfde resolutie hebben en enkel het gezicht bevatten. Daarom moet je alle afbeeldingen eerst bijsnijden en omvormen naar een specifieke resolutie (in ons voorbeeld nemen we 115x80 pixels). 
-          Als je op de knop hieronder drukt zal je de bewerking zien gebeuren bij prof. Vander Sloten. Hij is de vice-decaan van onze faculteit én een van de professoren voor het vak <i>Toegepaste Mechanica, deel 1</i>. Achter de schermen gebeurt deze stap nu voor alle afbeeldingen van de proffen. Later in deze tutorial ga je nog afbeeldingen tegenkomen van docenten die in de database zitten. 
+          Als je op de knop hieronder drukt zal je de bewerking zien gebeuren bij prof. Vander Sloten. Hij is de decaan van onze faculteit én een van de professoren voor het vak <i>Toegepaste Mechanica, deel 1</i>. Achter de schermen gebeurt deze stap nu voor alle afbeeldingen van de proffen. Later in deze tutorial ga je nog afbeeldingen tegenkomen van docenten die in de database zitten. 
         </p>
       </div>
       
@@ -232,7 +232,7 @@ Dit levert ons dan voor de 18 personen uit de database 18 verschillende gewichts
         <ol id="closest_matches" style="display: none;">
           <li>Prof. Rijmen (Toegepaste Algebra)</li>
           <li>Prof. Vander Sloten (Toegepaste Mechanica)</li>
-          <li>Prof. Baelmans (Thermodynamica)</li>
+          <li>Prof. Braem (Materiaalkunde)</li>
           <li>Prof. Van Hamme (Toegepaste Algebra)</li>
           <li>Prof. De Laet (Toegepaste Mechanica)</li>
         </ol>

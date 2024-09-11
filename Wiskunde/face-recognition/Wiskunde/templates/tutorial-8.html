@@ -1,0 +1,68 @@
+<div class="box-header">Wiskunde: Gezichtsherkenning met Machine Learning - 8/13</div>
+    <div class="columns">
+      <div class="column">
+      <p>
+        Het voorgaande gezichtsherkenningsalgoritme werkte enkel op basis van de eigenfaces. Deze zijn de basis voor alle gezichtsherkenningsalgoritmes. In die (relatief eenvoudige) vorm geeft het algoritme echter nog te veel misidentificaties. Het is mogelijk dat het algoritme een persoon denkt te herkennen terwijl het om iemand anders gaat (<i>vals positief</i>) of een persoon uit de database toch niet herkent (<i>vals negatief</i>).
+        <br> <p>Hoe denk je dat dit komt? Bespreek met elkaar en duid de juiste antwoorden aan. Er zijn meerdere antwoorden die gelden.</p>
+        <form>
+
+          <input type="radio" id="q1" name="q1" value="1">
+          <label for="1" style="font-size: small;">Het algoritme maakt enkel gebruik van grijstinten</label><br>
+          <input type="radio" id="q2" name="q2" value="2">
+          <label for="2" style="font-size: small;">De personen moeten allemaal op dezelfde manier kijken</label><br>
+          <input type="radio" id="q3" name="q3" value="3">
+          <label for="3" style="font-size: small;">De gezichten op de afbeeldingen moeten allemaal even groot zijn</label><br>
+          <input type="radio" id="q4" name="q4" value="4">
+          <label for="4" style="font-size: small;">Het maakt gebruik van de euclidische afstand</label><br>
+          <input type="radio" id="q5" name="q5" value="5">
+          <label for="5" style="font-size: small;">Alle afbeeldingen worden omgezet in kolomvectoren</label><br>
+          
+        </form>
+        <div style="display: flex; flex-direction: row; align-items: center;" >
+          <button class="button" onclick="check_q1()" style="margin-top: 10px; padding:15px; " >Controleer je antwoorden</button> <b><span id="result_q1"></span></b>
+        </div>
+      </p>
+      <div class="correct_answer" style="display:none;">
+        <h3>Een nieuwe aanpak</h3>
+          Om de performantie te verbeteren gaan we verschillende stappen toevoegen en gebruik maken van <i>Machine Learning</i>.
+          <br> <br>
+          <ul>
+            <li><b>Stap 1:</b> Detecteer de gezichten op de foto's en verwijder de achtergrond, zodat alle foto's allemaal het formaat hebben.</li>
+            <li><b>Stap 2:</b> Detecteer de specifieke gezichtskenmerken en transformeer de gezichten zodat ze allemaal op dezelfde manier kijken.</li>
+            <li><b>Stap 3:</b> Encodeer de gezichten naar een 128-dimensionale kolomvector op basis van een neuraal netwerk.</li>
+            <li><b>Stap 4:</b> Gebruik een neuraal netwerk om te bepalen of twee gezichten bij dezelfde persoon horen.</li>
+          </ul>
+
+
+      </div>
+      </div>
+      
+      <div class="column">
+        <div class="correct_answer" style="display:none;">
+          <h3>Stap 1: Gezichten detecteren</h3>
+          Om de gezichten te detecteren maken we gebruik van het HOG-algoritme. 
+          Het HOG (Histogram of Oriented Gradients) algoritme is een methode om objecten, zoals gezichten in afbeeldingen, te detecteren. Het werkt door de richtingen van helderheidsveranderingen in kleine delen van de afbeelding vast te leggen. Deze richtingen worden samengevat in histogrammen en gecombineerd tot 'blokken' voor patroonherkenning. Het algoritme zoekt naar deze patronen om objecten te detecteren, zoals gezichtskenmerken, en onderscheidt ze van de achtergrond.
+          Op de afbeelding hieronder kan je de gradiënten zien van een afbeelding en het patroon waarnaar het zoekt. De gradiënten zijn de richtingen van de helderheidsveranderingen.
+          <br> 
+          <p>
+          Na de detectie wordt het gezicht uitgeknipt en gebruikt in stap 2.</p>
+          <div style="display: flex; justify-content: center;"><img src="{{ url_for('static', filename='images/HOG.jpg') }}" alt="HOG gradienten" style=" width:50%;"></div>
+          <h3>Stap 2: Specifieke gezichtskenmerken detecteren en het gezicht transformeren</h3>
+          Nadat we de gezichten in onze afbeelding hebben geïsoleerd, staan we voor een probleem: gezichten die in verschillende richtingen zijn gedraaid, lijken voor computers helemaal anders, in tegenstelling tot menselijke herkenning. Om dit aan te pakken, maken we gebruik van gezichtskenmerkenschatting. Deze techniek houdt in dat we 68 belangrijke punten op elk gezicht identificeren, zoals de bovenkant van de kin, de hoeken van de ogen en de randen van de wenkbrauwen. 
+          Een machine learning-algoritme wordt getraind om deze punten op elk gezicht te vinden. 
+          Door deze aanpak kunnen we afbeeldingen uitlijnen door ze te roteren, schalen en vervormen, zodat de ogen en mond gecentreerd worden. Dit zorgt ervoor dat, ongeacht de oriëntatie van het gezicht, de belangrijke kenmerken redelijk consistent blijven. 
+          Deze stap, die eenvoudige beeldtransformaties gebruikt, verbetert de nauwkeurigheid voor verdere verwerking.
+          <br>
+          <div style="display: flex; justify-content: center;"><img src="{{ url_for('static', filename='images/face-landmarks.webp') }}" alt="HOG gradienten" style=" width:80%;"></div>
+          <h3>Stap 3: Gezichten encoderen</h3>
+        
+          Nadat we de gezichten hebben uitgelijnd, kunnen we ze coderen in een 128-dimensionale vector. Deze vector is uniek per foto en per persoon. We stellen deze vector op met een neuraal netwerk, dat al op voorhand op meer dan 3 miljoen verschillende gezichten is getraind. Voor meer informatie over de specifieke werking van het neuraal netwerk, kan je <a href="https://medium.com/@ageitgey/machine-learning-is-fun-part-4-modern-face-recognition-with-deep-learning-c3cffc121d78">dit artikel</a> lezen. 
+          
+          <br>
+          <h3>Stap 4: Gezichten vergelijken</h3>
+          Nu we de gezichten hebben gecodeerd, kunnen we ze vergelijken. Dit doen we door gebruik te maken van een ander soort neuraal netwerk dat wederom getraind is op miljoenen gezichten. Dit netwerk gaat de 128-dimensionale vector van twee gezichten vergelijken en een waarde tussen 0 en 1 geven. Deze waarde drukt de waarschijnlijkheid uit dat beide gezichten van dezelfde persoon zijn. Hoe dichter de waarde bij 1 ligt, hoe groter de waarschijnlijkheid.
+          <br>
+        </div>
+      </div>
+          
+    </div>
