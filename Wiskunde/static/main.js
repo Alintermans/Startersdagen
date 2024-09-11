@@ -819,9 +819,10 @@ function detect_face(){
                 result = "Dr. Geraedts";
             }
             const index = profs.indexOf(data.result);
-            console.log(preferences_profs[result]);
+            const color = savedOptions[index*3+2];
             detected_prof.innerHTML = `${result}`;
-            runColorBox(index);
+
+            runColorBox(parseInt(color));
             // const option = options[preferences_profs[data.result][0]];
             // const colorIndex = savedColors.indexOf(option);
             // const color = colors[colorIndex];
