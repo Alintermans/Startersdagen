@@ -10,7 +10,7 @@
             <a href="/static/arduino_code/Motor_template.zip">
               dit bestand</a> en upload de code naar de Arduino. 
             Laat nu de DC-motor draaien door in de Serial Monitor 'd' te versturen naar de Arduino.
-            Stop de DC-motor door in de Serial Monitor 'o' te versturen.
+            Stop de DC-motor door in de Serial Monitor 'o' te versturen. Als de motor niet draait, kan je in het bestand de code op lijn xx aanpassen van 50 naar 100. 
           </p>
           <h3>
             Opdracht 4.2
@@ -25,14 +25,13 @@
             Download
             <a href="/static/arduino_code/template_servo.zip">
               dit bestand</a>.
-            Laat de servomotor een hoek van 30° aannemen door je code te uploaden naar de Arduino. Probeer vervolgens andere hoeken in te stellen.
+            Pas de code aan zodat de servomotor start bij een hoek van 70° en gaat tot een hoek van 150°.
           </p>
           <h3>
             Opdracht 4.4
           </h3>
           <p>
-            Pas je code nu aan zodat de servomotor start bij een hoek van 90°. Vervolgens moet hij langzaam draaien naar 120° om daarna terug naar 90° te draaien. 
-            Hieronder kan je een beetje inspiratie opdoen. 
+            Pas de code verder aan zodat de servomotor beweegt aan de helft van de snelheid. 
            <pre>
               <code class="language-arduino code-container">
 void loop() {
@@ -59,19 +58,14 @@ void loop() {
           Opdracht 4.5
         </h3>
         <p>
-          Pas je code uit 4.3 en 4.4 aan zodat de Arduino start bij een hoek van 50° en opeenvolgend langzaam draait naar 120°, 30° en 50°.
-        </p>
-        <h3>
-          Opdracht 4.6
-        </h3>
-        <p>
           Download
           <a href="/static/arduino_code/template_test_pico.zip">
             dit bestand</a>.
-          Het Chemisch team hebben een opstelling waarmee zij met hun batterij een pico microcontroller kunnnen voeden. Deze pico is verbonden met een OLED scherm en een buzzer.
+          Team Energie heeft een opstelling waarmee zij met hun batterij een pico microcontroller kunnnen voeden. Deze pico is verbonden met een oled scherm en een buzzer.
           De pico heeft een analoge input die afhankelijk van de waarde van de input een bepaald liedje afspeelt. Er zijn er 8 in totaal. Laad de code op de arduino en probeer de verschillende liedjes af te spelen.
-          Dit kan je doen door 's' te versturen op de serial monitor en vervolgens na de vraag een waarde tussen 0 en 164 te versturen, wat overeenkomt met 0 en 3.3V. Zoek dus de 8 waardes die nodig zijn om de 8 liedjes af te spelen.
-          Deze zal je moeten onthouden voor de volgende opdracht.
+          Dit kan je doen door 's' te versturen op de serial monitor en vervolgens na de vraag een waarde tussen 0 en 164 te versturen, wat overeenkomt met 0 en 3.3V. Als richtwaarde kan je respectievelijk 0.5, 0.9, 1.3, 1.7, 2.0, 2.4, 2.8 en 3.3 V nemen voor liedjes 1 tot en met 8. Let op, als je alle waardes gaat willen uitproberen, ga je veel geduld moeten hebben. De pico is zo geprogrammeerd dat het volledige liedje afspeelt (duur +/- 3 minuten per liedje) vooraleer hij zal merken dat er al een volgend liedje (= een ander voltage) gevraagd is. Eventueel kan je de buzzer ontkoppelen (= de grond losmaken van het breadboard) en kijk je wat er verandert op het schermpje.  
+        </p>
+          Deze zal je moeten onthouden voor de volgende opdracht, waarbij je de juiste waardes gaat moeten koppelen aan de juiste kleurencombinatie (= de juiste prof).
         </div>
       </div>
     </div>

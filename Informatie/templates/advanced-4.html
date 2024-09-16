@@ -5,13 +5,13 @@
           Download
           <a href="/static/arduino_code/template_kleurensensor.zip">
             dit bestand</a> en upload de code naar de Arduino. 
-          Bevestig de kleurensensor op het zwarte vakje. 
+          Hou de kleurensensor met de kartonnen flapjes opengesperd zo dicht mogelijk tegen het scherm op het zwarte vakje. 
         </p>
         <h3>
           Opdracht 2.1
         </h3>
         <p>
-          Open de 'Serial Monitor' en lees daarin de rode, groene en blauwe waarde af.
+          Open via Tools de 'Serial Monitor' en lees daarin de rode, groene en blauwe waarde af.
           Normaal verwachten we voor zwart de RGB-waarden 0 0 0. 
           De waarden die jullie aflezen in de Serial Monitor komen hier niet mee overeen.
           Deze sensor gebruikt niet de standaard RGB-waarden, maar werkt wel op een gelijkaardige manier. 
@@ -33,15 +33,15 @@ int match_kleur(int rood_waarde, int groen_waarde, int blauw_waarde) {
   kleur_ID = 0;
   if ((rood_waarde > ...) && (groen_waarde > ...) && (blauw_waarde > ...)) {
       Serial.println(" Zwart");
-      kleur_ID = zwart;
+      kleur_ID = 0;
     }
   // else if ((rood_waarde < ...) && (groen_waarde >...) && (blauw_waarde > ...)) {
   //   Serial.println("Rood");
-  //   kleur_ID = rood;  
+  //   kleur_ID = 1;  
   </code> 
           </pre>
         <p>
-          Om de kleur zwart te herkennen moet je op lijn 62 '...' vervangen door de juiste waarden voor rood, groen en blauw.
+          Om de kleur zwart te herkennen moet je verderop in het programma, lijn 67 - 70 de code uit commentaar halen en aanpassen. Vervang de '...' door de juiste waarden voor rood, groen en blauw.
           <br>
           <b>Tip: </b> zorg voor voldoende marge! Als je voor rood, groen en blauw waarden rond de 4000 meet, geef dan kleinere waarden in. 
          <br>
@@ -57,8 +57,8 @@ int match_kleur(int rood_waarde, int groen_waarde, int blauw_waarde) {
         <p>
           Maak het vak nu rood door de schuifknoppen te bewegen. 
           Wanneer je vervolgens op de Serial monitor kijkt mag de Arduino niet meer zeggen dat het vakje zwart is. 
-          Als de Arduino toch nog steeds zwart aangeeft, herhaal je opdracht 2.2 en pas je de waarden op lijn 62 aan. 
-          Haal daarna lijn 66 tot en met 69 uit commentaar en zoek zelf goede grenzen voor rood, groen en blauw zodat je rood kan herkennen.
+          Als de Arduino toch nog steeds zwart aangeeft, herhaal je opdracht 2.2 en pas je de waarden aan. 
+          Haal daarna lijn 71 tot en met 74 uit commentaar en zoek zelf goede grenzen voor rood, groen en blauw zodat je rood kan herkennen.
           Als dit lukt, herkent de Arduino nu zowel zwart als rood. 
         </p>
 
@@ -66,7 +66,7 @@ int match_kleur(int rood_waarde, int groen_waarde, int blauw_waarde) {
           Opdracht 2.4
         </h3>
         <p>
-          Herhaal opdracht 2.3 voor zowel groen (lijn 70 tot en met 73) als blauw (lijn 74 tem 77). 
+          Herhaal opdracht 2.3 voor zowel groen (lijn 75 tot en met 78) als blauw (lijn 79 tem 82). 
         </p>
 
         <h3>
