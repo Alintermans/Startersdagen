@@ -13,20 +13,25 @@
 
         <h2>Code</h2>
         <p>
-          Voor de geïnteresseerden kan je hieronder al eens een ander voorbeeld van code vinden. Deze code laat het ledje blinken. Door de pin 13 op hoog te zetten zal het ledje branden, door de pin op laag te zetten zal het ledje uitgaan. De delay zorgt ervoor dat de code 1000ms (1 seconde) wacht vooraleer de volgende regel code uitgevoerd wordt. Dit zorgt ervoor dat het ledje 1 seconde aan en 1 seconde uit staat.
+          Voor de geïnteresseerden kan je hieronder al een stukje Arduino code vinden. De globale code is omvangrijker, maar dit stukje toont kort enkele specifieke details uit die volledige code. 
         </p>
         <pre>
 <code class="language-arduino code-container">void setup() {
-  // put your setup code here, to run once:
-  pinMode(13, OUTPUT);
-}
+ built_in_led = false  // eenmalige initialisatie van de variable built_in_led, deze bepaalt de status van de pin (en van de led!).
 
-void loop() {
-  // put your main code here, to run repeatedly:
-  digitalWrite(13, HIGH);
-  delay(1000);
-  digitalWrite(13, LOW);
-  delay(1000);
+// hier staat de code die in een oneindige loop wordt uitgevoerd
+void loop{
+...
+// hiertussen staat er code om na te gaan of er op het scherm op het knopje is gedrukt - indien wel zal de de variable built_in_led van status veranderen (false wordt true, true wordt false).
+...
+if (built_in_led) {  // hier wordt er nagegaan of de waarde van built_in_led true geworden is
+      digitalWrite(LED_BUILTIN, HIGH);   // Arduino code om een pin onder spanning te zetten, waardoor het ledje zal branden
+      built_in_led = true;
+    } else {
+      digitalWrite(LED_BUILTIN, LOW);  // Arduino code om op een pin geen spanning te zetten, waardoor het ledje zal uitgaan
+      built_in_led = false;
+    }
+}
 }</code>
         </pre>
         </div>
