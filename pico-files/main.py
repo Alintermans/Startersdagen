@@ -1,4 +1,5 @@
-
+from machine import UART, Pin
+import time
 from buzzer_music import music
 from time import sleep
 from machine import Pin, I2C, ADC
@@ -102,12 +103,12 @@ the end and "Online Sequencer:120233:" from the start
 
 #Four buzzers
 #mySong = music(song, pins=[Pin(0),Pin(1),Pin(2),Pin(3)])
+uart = UART(1, baudrate=9600, tx=Pin(4), rx=Pin(5))
 
-
-def show_song(song_nb):
+def show_name(name):
     oled.fill(0)
     oled.text("Goedemorgen Prof", 0, 0)
-    oled.text(songs_text[song_nb], 0, 40)
+    oled.text(name, 0, 40)
     oled.show()
 
 
@@ -128,25 +129,21 @@ def play_song(song_nb):
        
     mySong.stop()
 
-def calc_level(value, ref_value):
-    print(value, ref_value)
-    #value = value*MAX_V/ref_value
-    print(value)
-    return min(int(value / (MAX_V/(NB_LEVELS+1))), NB_LEVELS)
-
-
 show_default_text()
 
 while True:
-    value = input_pin.read_u16()*MAX_V/65535
-    ref_value = MAX_V
-    ref_value = reference_pin.read_u16()*MAX_V/65535 
-    level = calc_level(value, ref_value)
-    if level > 0:
-        show_song(level-1) #-1 is done because computer starts counting at 0
-        play_song(level-1)
-        show_default_text()
-    sleep(0.2)
+    if uart.any():
+        data = uart.readline()
+        if data:  # kan None zijn
+            print(data.decode('utf-8').strip())
+            show_name(data)
+            show_song(level-1) #-1 is done because computer starts counting at 0
+            play_song(level-1)
+            show_default_text()
+    time.sleep(0.5)
+    
+    
+    
     
     
 
