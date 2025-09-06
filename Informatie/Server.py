@@ -17,7 +17,12 @@ nb_steps_beginner = 11
 
 retries = 0 
 
+# Legacy analog voltage mapping (used elsewhere)
 pico_voltages = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+# Digital UART mapping (Beginner-8): song (1..10) and professor code (a..m) per index 0..14
+pico_songs = [0 for _ in range(15)]
+pico_profs = ['' for _ in range(15)]
 
 sequentions = [{"name": "Koffie", "angles": ["90"]}, {"name": "Thee", "angles": ["90"]},{"name": "Koffie met suiker", "angles": ["90"]}, {"name": "Thee met suiker", "angles": ["90"]},{"name": "Koffie met melk", "angles": ["90"]}, {"name": "Thee met melk", "angles": ["90"]},{"name": "Koffie met melk en suiker", "angles": ["90"]}, {"name": "Thee met melk en suiker", "angles": ["90"]}, {"name": "Koffie", "angles": ["90"]}, {"name": "Thee", "angles": ["90"]},{"name": "Koffie met suiker", "angles": ["90"]}, {"name": "Thee met suiker", "angles": ["90"]},{"name": "Koffie met melk", "angles": ["90"]}, {"name": "Thee met melk", "angles": ["90"]},{"name": "Koffie met melk en suiker", "angles": ["90"]}, {"name": "Thee met melk en suiker", "angles": ["90"]}, {"name": "Koffie", "angles": ["90"]}, {"name": "Thee", "angles": ["90"]},{"name": "Koffie met suiker", "angles": ["90"]}, {"name": "Thee met suiker", "angles": ["90"]},{"name": "Koffie met melk", "angles": ["90"]}, {"name": "Thee met melk", "angles": ["90"]},{"name": "Koffie met melk en suiker", "angles": ["90"]}, {"name": "Thee met melk en suiker", "angles": ["90"]}, {"name": "Koffie", "angles": ["90"]}, {"name": "Thee", "angles": ["90"]},{"name": "Koffie met suiker", "angles": ["90"]}, {"name": "Thee met suiker", "angles": ["90"]},{"name": "Koffie met melk", "angles": ["90"]}, {"name": "Thee met melk", "angles": ["90"]},{"name": "Koffie met melk en suiker", "angles": ["90"]}]
 
@@ -413,7 +418,7 @@ def test():
         return jsonify({'status': 'detect-color', 'detected_color_combination': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
     index = color_combination_to_index(int_color_to_string(color_1)+'/'+int_color_to_string(color_2))
     run_sequention(index)
-    send_voltage_to_pico(index)
+    send_index_to_pico(index)
 
     return jsonify({'status': 'detect-color', 'detected_color_combination': int_color_to_string(color_1)+'/'+int_color_to_string(color_2)})
 
@@ -436,7 +441,7 @@ def run():
         return jsonify({'status': 'detect-color', 'detected_color_combination': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
     index = color_combination_to_index(int_color_to_string(color_1)+'/'+int_color_to_string(color_2))
     run_sequention(index)
-    send_voltage_to_pico(index)
+    send_index_to_pico(index)
     name = sequentions[index]["name"]
 
     return jsonify({'status': 'detect-color', 'detected_color_combination': int_color_to_string(color_1)+'/'+int_color_to_string(color_2),'name': name})
@@ -535,7 +540,7 @@ def servo():
     send_message('S' + position_int_to_3_charachters(position) + '\n')
     return jsonify({'status': 'servo'})
 
-################################# Pico Volt #############################################
+################################# Pico Volt (Legacy) #############################################
 
 @app.route('/pico_volt')
 def pivo_volt():
@@ -557,6 +562,98 @@ def load_voltages():
 
 def send_voltage_to_pico(index):
     send_message('V' + position_int_to_3_charachters(pico_voltages[index]) + '\n')
+
+
+################################# Pico UART Mapping (song/prof) #############################################
+
+# Map professor option values (as used in the UI) to letters a..m
+PROF_TO_LETTER = {
+    'Beernaert': 'a',
+    'De-Laet': 'b',
+    'Rijmen': 'c',
+    'Smets': 'd',
+    'Van-hamme': 'e',
+    'Van-Puyvelde': 'f',
+    'Vandebril': 'g',
+    'Vander-Sloten': 'h',
+    'Jacobs': 'i',
+    'Dehaene': 'j',
+    'Vansteenwegen': 'k',
+    'Vanmeensel': 'l',
+    'Geraedts': 'm',
+}
+
+LETTER_TO_PROF = {v: k for k, v in PROF_TO_LETTER.items()}
+
+def _normalize_prof_code(prof_code_or_name):
+    if not prof_code_or_name:
+        return ''
+    prof = str(prof_code_or_name)
+    # Already a letter a..m
+    if len(prof) == 1 and 'a' <= prof <= 'm':
+        return prof
+    # Try known names to letter
+    return PROF_TO_LETTER.get(prof, '')
+
+def _validate_index(i):
+    return isinstance(i, int) and 0 <= i <= 14
+
+def _validate_song(s):
+    return isinstance(s, int) and 1 <= s <= 10
+
+@app.route('/pico_mapping_load')
+def pico_mapping_load():
+    return jsonify({
+        'status': 'pico-mapping-load',
+        'songs': pico_songs,
+        'profs': pico_profs,
+    })
+
+@app.route('/pico_mapping_save')
+def pico_mapping_save():
+    try:
+        index = int(request.args.get('index'))
+        song = int(request.args.get('song'))
+        prof = _normalize_prof_code(request.args.get('prof'))
+    except Exception:
+        return jsonify({'status': 'error', 'message': 'invalid parameters'}), 400
+
+    if not _validate_index(index):
+        return jsonify({'status': 'error', 'message': 'index out of range'}), 400
+    if not _validate_song(song):
+        return jsonify({'status': 'error', 'message': 'song out of range'}), 400
+    if prof == '':
+        return jsonify({'status': 'error', 'message': 'invalid professor'}), 400
+
+    pico_songs[index] = song
+    pico_profs[index] = prof
+    return jsonify({'status': 'pico-mapping-saved', 'index': index, 'song': song, 'prof': prof})
+
+@app.route('/pico_mapping_save_bulk', methods=['POST'])
+def pico_mapping_save_bulk():
+    data = request.get_json(silent=True) or {}
+    mappings = data.get('mappings', [])
+    if not isinstance(mappings, list):
+        return jsonify({'status': 'error', 'message': 'mappings must be a list'}), 400
+
+    updated = []
+    for entry in mappings:
+        try:
+            index = int(entry.get('index'))
+            song = int(entry.get('song'))
+            prof = _normalize_prof_code(entry.get('professor'))
+        except Exception:
+            continue
+        if not (_validate_index(index) and _validate_song(song) and prof != ''):
+            continue
+        pico_songs[index] = song
+        pico_profs[index] = prof
+        updated.append(index)
+
+    return jsonify({'status': 'pico-mapping-saved-bulk', 'updated': updated})
+
+def send_index_to_pico(index):
+    send_message('P' + pico_profs[index] + '\n')
 
 
 ################################# Color Sensor #############################################

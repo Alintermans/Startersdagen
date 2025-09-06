@@ -1,4 +1,5 @@
 #include <Servo.h>
+#include <SoftwareSerial.h>
 
 #define battery_led 2
 
@@ -12,7 +13,7 @@
 #define sensor 48
 #define motor 10
 #define servo_pin 12
-#define pico_pin 11
+SoftwareSerial mySerial(10, 11);  
 
 Servo myServo;
 
@@ -71,7 +72,6 @@ void setup() {
   pinMode(green_led, OUTPUT);
   pinMode(blue_led,OUTPUT);
   pinMode(battery_led,OUTPUT);
-  pinMode(pico_pin, OUTPUT);
   
   pinMode(S0, OUTPUT);
   pinMode(S1, OUTPUT);
@@ -139,8 +139,11 @@ void loop() {
   } else if (x.indexOf("V") == 0 && x.length() == 5) {
     int pico_value = x.substring(1,4).toInt();
     if (pico_value < 165) {
-      analogWrite(pico_pin, pico_value);
+      // analogWrite(pico_pin, pico_value);
     }
+  } else if (x.indexOf("P") == 0 && x.length() == 3) {
+    String pico_value = x.substring(1,2);
+     mySerial.println(pico_value);
   }
 
   Serial.println(x.length());
@@ -260,7 +263,23 @@ void setServoPosition(int position) {
   } else if (position > 180) {
     position = 180;
   }
+  // Move slowly in small steps to the target position
+  int current = myServo.read();
+  if (current < 0 || current > 180) {
+    current = 90; // sensible default if unreadable
+  }
+
+  if (current != position) {
+    int step = (position > current) ? 1 : -1; // 1 degree steps
+    const int stepDelayMs = 20; // increase for slower motion
+
+    for (int pos = current; pos != position; pos += step) {
+      myServo.write(pos);
+      delay(stepDelayMs);
+    }
+  }
+  // Ensure exact target is written
   myServo.write(position);
-  delay(200);
+  delay(20);
   digitalWrite(battery_led, HIGH);
 }
