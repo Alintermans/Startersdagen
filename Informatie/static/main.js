@@ -170,7 +170,8 @@ function removeAngle(sequention) {
 }
 
 function saveSequentions() {
-    for (var i = 0; i < 15; i++) {
+    var N = 8;
+    for (var i = 0; i < N; i++) {
         for (var j = 0; j < document.getElementById("sequention-" + i).childElementCount; j++) {
             if((document.getElementById("sequention-" + i + "-angle-" + j).value) < 0 || (document.getElementById("sequention-" + i + "-angle-" + j).value) > 180) {
                 alert("De hoek moet tussen 0 en 180 liggen");
@@ -181,14 +182,14 @@ function saveSequentions() {
 
     picked_names = [];
 
-    for (var i = 0; i < 15; i++) {
+    for (var i = 0; i < N; i++) {
         if (document.getElementById("sequention-" + i + "-name").value in picked_names) {
             alert("Eén kleur per optie!");}
         picked_names.push(document.getElementById("sequention-" + i + "-name").value);
     }
 
     var sequentions = [];
-    for (var i = 0; i < 15; i++) {
+    for (var i = 0; i < N; i++) {
         var sequention = {
             name: document.getElementById("sequention-" + i + "-name").value,
             angles: []
@@ -220,8 +221,12 @@ function loadSequentions() {
     .then(response => response.json())
     .then(data => {
         console.log(data);
-        for (var i = 0; i < 15; i++) {
-            document.getElementById("sequention-" + i + "-name").value = data.sequentions[i].name;
+        var N = Math.min(8, data.sequentions.length);
+        for (var i = 0; i < N; i++) {
+            var nameEl = document.getElementById("sequention-" + i + "-name");
+            if (nameEl && nameEl.type !== 'hidden') {
+                nameEl.value = data.sequentions[i].name;
+            }
             for (var j = 0; j < data.sequentions[i].angles.length; j++) {
                 if (j == 0) {
                     document.getElementById("sequention-" + i + "-angle-" + j).value = data.sequentions[i].angles[j];
@@ -567,7 +572,7 @@ function loadPage(pageUrl) {
             }
 
             if ((choice === 'beginner' && state == 8) ) {
-                loadVoltages();
+                initBeginner8();
             }
             
 
@@ -623,6 +628,91 @@ function loadContent() {
 }
 
 window.onload = loadContent;
+// ------------------------------------------- Beginner-8 (UART mapping) -------------------------------------------//
+
+function initBeginner8() {
+    // Professor letter/name mapping
+    const letterToName = {
+        a: 'Beernaert', b: 'De-Laet', c: 'Rijmen', d: 'Smets', e: 'Van-hamme', f: 'Van-Puyvelde',
+        g: 'Vandebril', h: 'Vander-Sloten', i: 'Jacobs', j: 'Dehaene', k: 'Vansteenwegen', l: 'Vanmeensel', m: 'Geraedts'
+    };
+    const nameToLetter = Object.fromEntries(Object.entries(letterToName).map(([k,v]) => [v, k]));
+
+    // Restore selections from localStorage if available (fallback)
+    try {
+        const saved = localStorage.getItem('beginner8_mapping');
+        if (saved) {
+            const mapping = JSON.parse(saved);
+            if (Array.isArray(mapping)) {
+                mapping.forEach(entry => {
+                    if (entry && typeof entry.index === 'number') {
+                        const s = document.getElementById('song_' + entry.index);
+                        const p = document.getElementById('prof_' + entry.index);
+                        if (s && typeof entry.song !== 'undefined') s.value = String(entry.song);
+                        if (p && typeof entry.professor !== 'undefined') {
+                            const profVal = String(entry.professor);
+                            const name = (profVal.length === 1 && letterToName[profVal]) ? letterToName[profVal] : profVal;
+                            p.value = name;
+                        }
+                    }
+                });
+            }
+        }
+    } catch (e) {
+        console.warn('Kon opgeslagen keuzes niet laden:', e);
+    }
+
+    // Load from backend (overrides localStorage if present)
+    fetch('/pico_mapping_load').then(r => r.json()).then(data => {
+        if (Array.isArray(data.songs) && Array.isArray(data.profs)) {
+            for (let i = 0; i < 15; i++) {
+                const s = document.getElementById('song_' + i);
+                const p = document.getElementById('prof_' + i);
+                if (s && typeof data.songs[i] !== 'undefined' && data.songs[i] !== null) {
+                    const val = parseInt(data.songs[i], 10);
+                    if (!isNaN(val) && val > 0) s.value = String(val);
+                }
+                if (p && typeof data.profs[i] === 'string' && data.profs[i].length) {
+                    const letter = data.profs[i];
+                    const name = letterToName[letter] || '';
+                    if (name) p.value = name;
+                }
+            }
+        }
+    }).catch(() => {});
+
+    const btn = document.getElementById('save_beginner8_btn');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+        const mapping = [];
+        for (let i = 0; i < 15; i++) {
+            const songEl = document.getElementById('song_' + i);
+            const profEl = document.getElementById('prof_' + i);
+            if (songEl && profEl) {
+                const songVal = parseInt(songEl.value, 10);
+                const profSel = profEl.value;
+                const profLetter = nameToLetter[profSel] || (profSel && profSel.length === 1 ? profSel : '');
+                mapping.push({ index: i, song: songVal, professor: profLetter });
+            }
+        }
+        try {
+            localStorage.setItem('beginner8_mapping', JSON.stringify(mapping));
+            // Save to backend (bulk)
+            fetch('/pico_mapping_save_bulk', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mappings: mapping })
+            }).then(r => r.json()).then(() => {
+                alert('Keuzes opgeslagen.');
+            }).catch(() => {
+                alert('Lokaal opgeslagen. Server-opslag mislukt.');
+            });
+        } catch (e) {
+            alert('Opslaan mislukt. Probeer opnieuw.');
+            console.error('Opslaan mislukt:', e);
+        }
+    });
+}
 //------------------------------------------- Error Box  -------------------------------------------//
 
 // var error_box_visible = false;

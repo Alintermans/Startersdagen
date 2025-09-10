@@ -7,200 +7,37 @@
             
         </div>
         <p>
-            Om de verschillende ingrediënten in het kopje te verzamelen, gebruiken jullie een servomotor. De servomotor kan draaien tussen 0° en 180°. Om meerdere ingrediënten te verzamelen in de koffietas, bepalen jullie een opeenvolging van hoeken die de servomotor moet draaien. De teamleden van opdracht 'Materie' hebben ondertussen normaal gesproken al een volgorde bepaald, maar jullie moeten dit nog vertalen naar opeenvolgende hoeken die de servo aanneemt. 
+            Om de verschillende ingrediënten in het kopje te verzamelen, gebruiken jullie een servomotor. De servomotor kan draaien tussen 0° en 180°. Om meerdere ingrediënten te verzamelen in de koffietas, bepalen jullie een opeenvolging van hoeken die de servomotor moet draaien. De teamleden van opdracht 'Materie' hebben ondertussen normaal gesproken al een volgorde bepaald, maar jullie vertalen dit naar opeenvolgende hoeken.
             <br>
-            Koppel bij elke kleurcombinatie (= een prof) een van de opties en voeg vervolgens een sequentie van hoeken toe. Tussen elke hoekdraaiing zit een pauze van 1 seconde. Je kan een extra hoekdraaing toevoegen door op de plus-knop te drukken. Door op de min-knop te drukken verwijder je de laatste hoekdraaiing. Er zijn in totaal 15 sequenties beschikbaar, zorg er dus voor dat je voor elke sequentie een keuze maakt en een sequentie van hoeken toevoegt.
-            <br>
-            
-
-
+            We werken hier met 8 vaste opties (drankjes) en maken per optie een sequentie. Kies per optie het juiste drankje en vul de hoeken in. Tussen elke hoekdraaiing zit een pauze van 1 seconde. Met de plus‑knop voeg je een hoek toe; met de min‑knop verwijder je de laatste hoek.
         </p>
 
         <div id="sequentions-div">
-            <div id="sequention-colors">
-                <h3>Zwart/Zwart: </h3>
-                <h3>Zwart/Rood: </h3>
-                <h3>Zwart/Blauw: </h3>
-                <h3>Zwart/Groen: </h3>
-                <h3>Zwart/Wit: </h3>
-                <h3>Rood/Rood:</h3>
-                <h3>Rood/Blauw:</h3>
-                <h3>Rood/Groen:</h3>
-                <h3>Rood/Wit:</h3>
-                <h3>Blauw/Blauw:</h3>
-                <h3>Blauw/Groen:</h3>
-                <h3>Blauw/Wit:</h3>
-                <h3>Groen/Groen:</h3>
-                <h3>Groen/Wit:</h3>
-                <h3>Wit/Wit:</h3>
-                
-            </div>
+            
             <div id="sequention-names">
-                <select id="sequention-0-name">
-                    <option value="Koffie">Koffie</option>
-                    <option value="Thee">Thee</option>
-                    <option value="Koffie met suiker">Koffie met suiker</option>
-                    <option value="Thee met suiker">Thee met suiker</option>
-                    <option value="Koffie met melk">Koffie met melk</option>
-                    <option value="Thee met melk">Thee met melk</option>
-                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-                </select>
+                <div class="sequention-label">Koffie</div>
+                <input type="hidden" id="sequention-0-name" value="0">
 
-                <select id="sequention-1-name">
-                    <option value="Koffie">Koffie</option>
-                    <option value="Thee">Thee</option>
-                    <option value="Koffie met suiker">Koffie met suiker</option>
-                    <option value="Thee met suiker">Thee met suiker</option>
-                    <option value="Koffie met melk">Koffie met melk</option>
-                    <option value="Thee met melk">Thee met melk</option>
-                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-                </select>
+                <div class="sequention-label">Thee</div>
+                <input type="hidden" id="sequention-1-name" value="1">
 
-                <select id="sequention-2-name">
-                    <option value="Koffie">Koffie</option>
-                    <option value="Thee">Thee</option>
-                    <option value="Koffie met suiker">Koffie met suiker</option>
-                    <option value="Thee met suiker">Thee met suiker</option>
-                    <option value="Koffie met melk">Koffie met melk</option>
-                    <option value="Thee met melk">Thee met melk</option>
-                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-                </select>
+                <div class="sequention-label">Koffie met suiker</div>
+                <input type="hidden" id="sequention-2-name" value="2">
 
-                <select id="sequention-3-name">
-                    <option value="Koffie">Koffie</option>
-                    <option value="Thee">Thee</option>
-                    <option value="Koffie met suiker">Koffie met suiker</option>
-                    <option value="Thee met suiker">Thee met suiker</option>
-                    <option value="Koffie met melk">Koffie met melk</option>
-                    <option value="Thee met melk">Thee met melk</option>
-                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-                </select>
-                
-                
-                <select id="sequention-4-name">
-                    <option value="Koffie">Koffie</option>
-                    <option value="Thee">Thee</option>
-                    <option value="Koffie met suiker">Koffie met suiker</option>
-                    <option value="Thee met suiker">Thee met suiker</option>
-                    <option value="Koffie met melk">Koffie met melk</option>
-                    <option value="Thee met melk">Thee met melk</option>
-                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-                </select>
+                <div class="sequention-label">Thee met suiker</div>
+                <input type="hidden" id="sequention-3-name" value="3">
 
-                <select id="sequention-5-name">
-                    <option value="Koffie">Koffie</option>
-                    <option value="Thee">Thee</option>
-                    <option value="Koffie met suiker">Koffie met suiker</option>
-                    <option value="Thee met suiker">Thee met suiker</option>
-                    <option value="Koffie met melk">Koffie met melk</option>
-                    <option value="Thee met melk">Thee met melk</option>
-                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-                </select>
+                <div class="sequention-label">Koffie met melk</div>
+                <input type="hidden" id="sequention-4-name" value="4">
 
-                <select id="sequention-6-name">
-                    <option value="Koffie">Koffie</option>
-                    <option value="Thee">Thee</option>
-                    <option value="Koffie met suiker">Koffie met suiker</option>
-                    <option value="Thee met suiker">Thee met suiker</option>
-                    <option value="Koffie met melk">Koffie met melk</option>
-                    <option value="Thee met melk">Thee met melk</option>
-                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-                </select>
+                <div class="sequention-label">Thee met melk</div>
+                <input type="hidden" id="sequention-5-name" value="5">
 
-                <select id="sequention-7-name">
-                    <option value="Koffie">Koffie</option>
-                    <option value="Thee">Thee</option>
-                    <option value="Koffie met suiker">Koffie met suiker</option>
-                    <option value="Thee met suiker">Thee met suiker</option>
-                    <option value="Koffie met melk">Koffie met melk</option>
-                    <option value="Thee met melk">Thee met melk</option>
-                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-                </select>
+                <div class="sequention-label">Koffie met melk en suiker</div>
+                <input type="hidden" id="sequention-6-name" value="6">
 
-                <select id="sequention-8-name">
-                    <option value="Koffie">Koffie</option>
-                    <option value="Thee">Thee</option>
-                    <option value="Koffie met suiker">Koffie met suiker</option>
-                    <option value="Thee met suiker">Thee met suiker</option>
-                    <option value="Koffie met melk">Koffie met melk</option>
-                    <option value="Thee met melk">Thee met melk</option>
-                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-                </select>
-
-                <select id="sequention-9-name">
-                    <option value="Koffie">Koffie</option>
-                    <option value="Thee">Thee</option>
-                    <option value="Koffie met suiker">Koffie met suiker</option>
-                    <option value="Thee met suiker">Thee met suiker</option>
-                    <option value="Koffie met melk">Koffie met melk</option>
-                    <option value="Thee met melk">Thee met melk</option>
-                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-                </select>   
-
-                <select id="sequention-10-name">
-                    <option value="Koffie">Koffie</option>
-                    <option value="Thee">Thee</option>
-                    <option value="Koffie met suiker">Koffie met suiker</option>
-                    <option value="Thee met suiker">Thee met suiker</option>
-                    <option value="Koffie met melk">Koffie met melk</option>
-                    <option value="Thee met melk">Thee met melk</option>
-                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-                </select>
-
-                <select id="sequention-11-name">
-                    <option value="Koffie">Koffie</option>
-                    <option value="Thee">Thee</option>
-                    <option value="Koffie met suiker">Koffie met suiker</option>
-                    <option value="Thee met suiker">Thee met suiker</option>
-                    <option value="Koffie met melk">Koffie met melk</option>
-                    <option value="Thee met melk">Thee met melk</option>
-                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-                </select>
-
-                <select id="sequention-12-name">
-                    <option value="Koffie">Koffie</option>
-                    <option value="Thee">Thee</option>
-                    <option value="Koffie met suiker">Koffie met suiker</option>
-                    <option value="Thee met suiker">Thee met suiker</option>
-                    <option value="Koffie met melk">Koffie met melk</option>
-                    <option value="Thee met melk">Thee met melk</option>
-                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-                </select>
-
-                <select id="sequention-13-name">
-                    <option value="Koffie">Koffie</option>
-                    <option value="Thee">Thee</option>
-                    <option value="Koffie met suiker">Koffie met suiker</option>
-                    <option value="Thee met suiker">Thee met suiker</option>
-                    <option value="Koffie met melk">Koffie met melk</option>
-                    <option value="Thee met melk">Thee met melk</option>
-                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-                </select>
-
-                <select id="sequention-14-name">
-                    <option value="Koffie">Koffie</option>
-                    <option value="Thee">Thee</option>
-                    <option value="Koffie met suiker">Koffie met suiker</option>
-                    <option value="Thee met suiker">Thee met suiker</option>
-                    <option value="Koffie met melk">Koffie met melk</option>
-                    <option value="Thee met melk">Thee met melk</option>
-                    <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-                    <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-                </select>
+                <div class="sequention-label">Thee met melk en suiker</div>
+                <input type="hidden" id="sequention-7-name" value="7">
 
 
            
@@ -239,33 +76,7 @@
                     <input type="number" id="sequention-7-angle-0" min="0" max="180" value="90">
                 </div>
 
-                <div id="sequention-8">
-                    <input type="number" id="sequention-8-angle-0" min="0" max="180" value="90">
-                </div>
-
-                <div id="sequention-9">
-                    <input type="number" id="sequention-9-angle-0" min="0" max="180" value="90">
-                </div>
-
-                <div id="sequention-10">
-                    <input type="number" id="sequention-10-angle-0" min="0" max="180" value="90">
-                </div>
-
-                <div id="sequention-11">
-                    <input type="number" id="sequention-11-angle-0" min="0" max="180" value="90">
-                </div>
-
-                <div id="sequention-12">
-                    <input type="number" id="sequention-12-angle-0" min="0" max="180" value="90">
-                </div>
-
-                <div id="sequention-13">
-                    <input type="number" id="sequention-13-angle-0" min="0" max="180" value="90">
-                </div>
-
-                <div id="sequention-14">
-                    <input type="number" id="sequention-14-angle-0" min="0" max="180" value="90">
-                </div>
+                
 
            
             
@@ -345,47 +156,7 @@
                     <button class="button" onclick="runSequention(7)">Run</button>
                 </div>
 
-                <div class="sequention-buttons">
-                    <button class="button" onclick="addAngle(8)"><i class="fas fa-plus"></i></button>
-                    <button class="button" onclick="removeAngle(8)"><i class="fas fa-minus"></i></button>
-                    <button class="button" onclick="runSequention(8)">Run</button>
-                </div>
-
-                <div class="sequention-buttons">
-                    <button class="button" onclick="addAngle(9)"><i class="fas fa-plus"></i></button>
-                    <button class="button" onclick="removeAngle(9)"><i class="fas fa-minus"></i></button>
-                    <button class="button" onclick="runSequention(9)">Run</button>
-                </div>
-
-                <div class="sequention-buttons">
-                    <button class="button" onclick="addAngle(10)"><i class="fas fa-plus"></i></button>
-                    <button class="button" onclick="removeAngle(10)"><i class="fas fa-minus"></i></button>
-                    <button class="button" onclick="runSequention(10)">Run</button>
-                </div>
-
-                <div class="sequention-buttons">
-                    <button class="button" onclick="addAngle(11)"><i class="fas fa-plus"></i></button>
-                    <button class="button" onclick="removeAngle(11)"><i class="fas fa-minus"></i></button>
-                    <button class="button" onclick="runSequention(11)">Run</button>
-                </div>
-
-                <div class="sequention-buttons">
-                    <button class="button" onclick="addAngle(12)"><i class="fas fa-plus"></i></button>
-                    <button class="button" onclick="removeAngle(12)"><i class="fas fa-minus"></i></button>
-                    <button class="button" onclick="runSequention(12)">Run</button>
-                </div>
-
-                <div class="sequention-buttons">
-                    <button class="button" onclick="addAngle(13)"><i class="fas fa-plus"></i></button>
-                    <button class="button" onclick="removeAngle(13)"><i class="fas fa-minus"></i></button>
-                    <button class="button" onclick="runSequention(13)">Run</button>
-                </div>
-
-                <div class="sequention-buttons">
-                    <button class="button" onclick="addAngle(14)"><i class="fas fa-plus"></i></button>
-                    <button class="button" onclick="removeAngle(14)"><i class="fas fa-minus"></i></button>
-                    <button class="button" onclick="runSequention(14)">Run</button>
-                </div>
+                
 
             </div>
 

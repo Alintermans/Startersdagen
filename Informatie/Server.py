@@ -17,9 +17,65 @@ nb_steps_beginner = 11
 
 retries = 0 
 
+# Legacy analog voltage mapping (used elsewhere)
 pico_voltages = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-sequentions = [{"name": "Koffie", "angles": ["90"]}, {"name": "Thee", "angles": ["90"]},{"name": "Koffie met suiker", "angles": ["90"]}, {"name": "Thee met suiker", "angles": ["90"]},{"name": "Koffie met melk", "angles": ["90"]}, {"name": "Thee met melk", "angles": ["90"]},{"name": "Koffie met melk en suiker", "angles": ["90"]}, {"name": "Thee met melk en suiker", "angles": ["90"]}, {"name": "Koffie", "angles": ["90"]}, {"name": "Thee", "angles": ["90"]},{"name": "Koffie met suiker", "angles": ["90"]}, {"name": "Thee met suiker", "angles": ["90"]},{"name": "Koffie met melk", "angles": ["90"]}, {"name": "Thee met melk", "angles": ["90"]},{"name": "Koffie met melk en suiker", "angles": ["90"]}, {"name": "Thee met melk en suiker", "angles": ["90"]}, {"name": "Koffie", "angles": ["90"]}, {"name": "Thee", "angles": ["90"]},{"name": "Koffie met suiker", "angles": ["90"]}, {"name": "Thee met suiker", "angles": ["90"]},{"name": "Koffie met melk", "angles": ["90"]}, {"name": "Thee met melk", "angles": ["90"]},{"name": "Koffie met melk en suiker", "angles": ["90"]}, {"name": "Thee met melk en suiker", "angles": ["90"]}, {"name": "Koffie", "angles": ["90"]}, {"name": "Thee", "angles": ["90"]},{"name": "Koffie met suiker", "angles": ["90"]}, {"name": "Thee met suiker", "angles": ["90"]},{"name": "Koffie met melk", "angles": ["90"]}, {"name": "Thee met melk", "angles": ["90"]},{"name": "Koffie met melk en suiker", "angles": ["90"]}]
+# Digital UART mapping (Beginner-8): song (1..10) and professor code (a..m) per index 0..14
+pico_songs = [0 for _ in range(15)]
+pico_profs = ['' for _ in range(15)]
+
+# Beginner-7: fixed options (0..7) and professor→option assignment.
+# OPTION_NAMES are the labels for each fixed option. PROF_TO_OPTION maps each
+# professor code (a..m) to the chosen option index (0..7). Multiple professors
+# may map to the same option.
+OPTION_NAMES = [
+    'Koffie',
+    'Thee',
+    'Koffie met suiker',
+    'Thee met suiker',
+    'Koffie met melk',
+    'Thee met melk',
+    'Koffie met melk en suiker',
+    'Thee met melk en suiker',
+]
+
+# Map each professor letter ('a'..'m') to the option index (0..7) they select.
+# Edit this mapping as needed. Multiple letters may point to the same option.
+PROF_TO_OPTION = {
+    'a': 0,  # Beernaert -> Koffie
+    'b': 1,  # De-Laet -> Thee
+    'c': 2,  # Rijmen -> Koffie met suiker
+    'd': 3,  # Smets -> Thee met suiker
+    'e': 4,  # Van-hamme -> Koffie met melk
+    'f': 5,  # Van-Puyvelde -> Thee met melk
+    'g': 6,  # Vandebril -> Koffie met melk en suiker
+    'h': 7,  # Vander-Sloten -> Thee met melk en suiker
+    'i': 0,  # Jacobs
+    'j': 1,  # Dehaene
+    'k': 2,  # Vansteenwegen
+    'l': 3,  # Vanmeensel
+    'm': 4,  # Geraedts
+}
+
+# Map professor option values  to letters a..m
+PROF_TO_LETTER = {
+    'Beernaert': 'a',
+    'De-Laet': 'b',
+    'Rijmen': 'c',
+    'Smets': 'd',
+    'Van-hamme': 'e',
+    'Van-Puyvelde': 'f',
+    'Vandebril': 'g',
+    'Vander-Sloten': 'h',
+    'Jacobs': 'i',
+    'Dehaene': 'j',
+    'Vansteenwegen': 'k',
+    'Vanmeensel': 'l',
+    'Geraedts': 'm',
+}
+
+# Only 8 sequences are used in Beginner-7 (one per fixed option)
+sequentions = [{"name": name, "angles": ["90"]} for name in OPTION_NAMES]
 
 sequentions_saved = False
 
@@ -375,8 +431,20 @@ def advanced_7():
 @app.route('/save-sequentions')
 def save_sequentions():
     global sequentions
-    sequentions = request.args.get('sequentions')
-    sequentions = eval(sequentions)
+    sequentions_raw = request.args.get('sequentions')
+    sequentions = eval(sequentions_raw)
+    # Normalize Beginner-7 option names: if numeric 0..7, map to human-readable label
+    for i, seq in enumerate(sequentions):
+        try:
+            name = seq.get('name')
+            if isinstance(name, str) and name.isdigit():
+                code = int(name)
+                if 0 <= code < len(OPTION_NAMES):
+                    seq['name'] = OPTION_NAMES[code]
+            elif isinstance(name, int) and 0 <= name < len(OPTION_NAMES):
+                seq['name'] = OPTION_NAMES[name]
+        except Exception:
+            continue
     global sequentions_saved
     sequentions_saved = True
     return jsonify({'status': 'save-sequentions'})
@@ -412,8 +480,11 @@ def test():
     if color_1 > 4 or color_2 > 4:
         return jsonify({'status': 'detect-color', 'detected_color_combination': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
     index = color_combination_to_index(int_color_to_string(color_1)+'/'+int_color_to_string(color_2))
-    run_sequention(index)
-    send_voltage_to_pico(index)
+    # Map color-combination index -> professor letter -> fixed option index (0..7)
+    prof_letter = pico_profs[index] if index is not None and 0 <= index < len(pico_profs) else ''
+    option_index = PROF_TO_OPTION.get(prof_letter, 0)
+    run_sequention(option_index)
+    send_index_to_pico(index)
 
     return jsonify({'status': 'detect-color', 'detected_color_combination': int_color_to_string(color_1)+'/'+int_color_to_string(color_2)})
 
@@ -435,11 +506,14 @@ def run():
     if color_1 > 4 or color_2 > 4:
         return jsonify({'status': 'detect-color', 'detected_color_combination': 'ERROR', 'red_value': 'ERROR', 'green_value': 'ERROR', 'blue_value': 'ERROR'})
     index = color_combination_to_index(int_color_to_string(color_1)+'/'+int_color_to_string(color_2))
-    run_sequention(index)
-    send_voltage_to_pico(index)
-    name = sequentions[index]["name"]
+    prof_letter = pico_profs[index] if index is not None and 0 <= index < len(pico_profs) else ''
+    option_index = PROF_TO_OPTION.get(prof_letter, 0)
+    run_sequention(option_index)
+    send_index_to_pico(index)
+    # Return the human-readable option name
+    option_name = OPTION_NAMES[option_index] if 0 <= option_index < len(OPTION_NAMES) else str(option_index)
 
-    return jsonify({'status': 'detect-color', 'detected_color_combination': int_color_to_string(color_1)+'/'+int_color_to_string(color_2),'name': name})
+    return jsonify({'status': 'detect-color', 'detected_color_combination': int_color_to_string(color_1)+'/'+int_color_to_string(color_2), 'name': option_name, 'prof': LETTER_TO_PROF.get(prof_letter, prof_letter), 'option_index': option_index})
 
 ##Arduino commands
 @app.route('/rgb-led')
@@ -535,7 +609,7 @@ def servo():
     send_message('S' + position_int_to_3_charachters(position) + '\n')
     return jsonify({'status': 'servo'})
 
-################################# Pico Volt #############################################
+################################# Pico Volt (Legacy) #############################################
 
 @app.route('/pico_volt')
 def pivo_volt():
@@ -557,6 +631,102 @@ def load_voltages():
 
 def send_voltage_to_pico(index):
     send_message('V' + position_int_to_3_charachters(pico_voltages[index]) + '\n')
+
+
+################################# Pico UART Mapping (song/prof) #############################################
+
+
+
+LETTER_TO_PROF = {v: k for k, v in PROF_TO_LETTER.items()}
+
+def _normalize_prof_code(prof_code_or_name):
+    if not prof_code_or_name:
+        return ''
+    prof = str(prof_code_or_name)
+    # Already a letter a..m
+    if len(prof) == 1 and 'a' <= prof <= 'm':
+        return prof
+    # Try known names to letter
+    return PROF_TO_LETTER.get(prof, '')
+
+def _validate_index(i):
+    return isinstance(i, int) and 0 <= i <= 14
+
+def _validate_song(s):
+    return isinstance(s, int) and 1 <= s <= 10
+
+@app.route('/pico_mapping_load')
+def pico_mapping_load():
+    return jsonify({
+        'status': 'pico-mapping-load',
+        'songs': pico_songs,
+        'profs': pico_profs,
+    })
+
+@app.route('/pico_mapping_save')
+def pico_mapping_save():
+    try:
+        index = int(request.args.get('index'))
+        song = int(request.args.get('song'))
+        prof = _normalize_prof_code(request.args.get('prof'))
+    except Exception:
+        return jsonify({'status': 'error', 'message': 'invalid parameters'}), 400
+
+    if not _validate_index(index):
+        return jsonify({'status': 'error', 'message': 'index out of range'}), 400
+    if not _validate_song(song):
+        return jsonify({'status': 'error', 'message': 'song out of range'}), 400
+    if prof == '':
+        return jsonify({'status': 'error', 'message': 'invalid professor'}), 400
+
+    pico_songs[index] = song
+    pico_profs[index] = prof
+    return jsonify({'status': 'pico-mapping-saved', 'index': index, 'song': song, 'prof': prof})
+
+@app.route('/pico_mapping_save_bulk', methods=['POST'])
+def pico_mapping_save_bulk():
+    data = request.get_json(silent=True) or {}
+    mappings = data.get('mappings', [])
+    if not isinstance(mappings, list):
+        return jsonify({'status': 'error', 'message': 'mappings must be a list'}), 400
+
+    updated = []
+    for entry in mappings:
+        try:
+            index = int(entry.get('index'))
+            song = int(entry.get('song'))
+            prof = _normalize_prof_code(entry.get('professor'))
+        except Exception:
+            continue
+        if not (_validate_index(index) and _validate_song(song) and prof != ''):
+            continue
+        pico_songs[index] = song
+        pico_profs[index] = prof
+        updated.append(index)
+
+    return jsonify({'status': 'pico-mapping-saved-bulk', 'updated': updated})
+
+@app.route('/option_prof_map')
+def option_prof_map():
+    # Build reverse view: for each option, list profs (letters+names) assigned to it
+    option_view = [
+        {
+            'option_index': i,
+            'option_name': OPTION_NAMES[i] if i < len(OPTION_NAMES) else str(i),
+            'profs': []
+        }
+        for i in range(len(OPTION_NAMES))
+    ]
+    for letter, opt in PROF_TO_OPTION.items():
+        if isinstance(opt, int) and 0 <= opt < len(option_view):
+            option_view[opt]['profs'].append({
+                'prof_letter': letter,
+                'prof_name': LETTER_TO_PROF.get(letter, letter)
+            })
+    return jsonify({'status': 'option-prof-map', 'options': option_view, 'prof_to_option': PROF_TO_OPTION})
+
+def send_index_to_pico(index):
+    send_message('P' + pico_profs[index] + '\n')
 
 
 ################################# Color Sensor #############################################
