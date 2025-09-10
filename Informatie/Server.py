@@ -42,37 +42,39 @@ OPTION_NAMES = [
 # Map each professor letter ('a'..'m') to the option index (0..7) they select.
 # Edit this mapping as needed. Multiple letters may point to the same option.
 PROF_TO_OPTION = {
-    'a': 0,  
-    'b': 1,  
-    'c': 2,  
-    'd': 3,  
-    'e': 4,  
-    'f': 5,  
-    'g': 6,  
-    'h': 7,  
-    'i': 0, 
-    'j': 1,  
-    'k': 2,  
-    'l': 3,  
-    'm': 4,  
+    'a': 0,  #Vandebril
+    'b': 1,  #Van-hamme
+    'c': 2,  #Smets
+    'd': 3,  #Vansteenwegen
+    'e': 4,  #Dehaene
+    'f': 5,  #Jacobs
+    'g': 0,  #Beernaert
+    'h': 7,  #De-Laet
+    'i': 0,  #Rijmen
+    'j': 1,  #Vanmeensel
+    'k': 2,  #Van-Puyvelde
+    'l': 3,  #Vander-Sloten
+    'm': 4,  #Geraedts
 }
 
 # Map professor option values  to letters a..m
 PROF_TO_LETTER = {
-    'Beernaert': 'a',
-    'De-Laet': 'b',
-    'Rijmen': 'c',
-    'Smets': 'd',
-    'Van-hamme': 'e',
-    'Van-Puyvelde': 'f',
-    'Vandebril': 'g',
-    'Vander-Sloten': 'h',
-    'Jacobs': 'i',
-    'Dehaene': 'j',
-    'Vansteenwegen': 'k',
-    'Vanmeensel': 'l',
+    'Vandebril': 'a',
+    'Van-hamme': 'b',
+    'Smets': 'c',
+    'Vansteenwegen': 'd',
+    'Dehaene': 'e',
+    'Jacobs': 'f',
+    'Beernaert': 'g',
+    'De-Laet': 'h',
+    'Rijmen': 'i',
+    'Vanmeensel': 'j',
+    'Van-Puyvelde': 'k',
+    'Vander-Sloten': 'l',
     'Geraedts': 'm',
 }
+
+
 
 # Only 8 sequences are used in Beginner-7 (one per fixed option)
 sequentions = [{"name": name, "angles": ["90"]} for name in OPTION_NAMES]

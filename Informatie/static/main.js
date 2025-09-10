@@ -551,8 +551,8 @@ function updateRGBLED(red, green, blue) {
 
 function loadBeginner8Data() {
     const letterToName = {
-        a: 'Beernaert', b: 'De-Laet', c: 'Rijmen', d: 'Smets', e: 'Van-hamme', f: 'Van-Puyvelde',
-        g: 'Vandebril', h: 'Vander-Sloten', i: 'Jacobs', j: 'Dehaene', k: 'Vansteenwegen', l: 'Vanmeensel', m: 'Geraedts'
+        a: 'Vandebril', b: 'Van-hamme', c: 'Smets', d: 'Vansteenwegen', e: 'Dehaene', f: 'Jacobs', g: 'Beernaert', 
+        h: 'De-Laet', i: 'Rijmen', j: 'Vanmeensel', k: 'Van-Puyvelde', l: 'Vander-Sloten', m: 'Geraedts'
     };
 
     const validSlots = [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14];
@@ -578,8 +578,8 @@ function loadBeginner8Data() {
 
 function saveBeginner8Data() {
     const letterToName = {
-        a: 'Beernaert', b: 'De-Laet', c: 'Rijmen', d: 'Smets', e: 'Van-hamme', f: 'Van-Puyvelde',
-        g: 'Vandebril', h: 'Vander-Sloten', i: 'Jacobs', j: 'Dehaene', k: 'Vansteenwegen', l: 'Vanmeensel', m: 'Geraedts'
+        a: 'Vandebril', b: 'Van-hamme', c: 'Smets', d: 'Vansteenwegen', e: 'Dehaene', f: 'Jacobs', g: 'Beernaert', 
+        h: 'De-Laet', i: 'Rijmen', j: 'Vanmeensel', k: 'Van-Puyvelde', l: 'Vander-Sloten', m: 'Geraedts'
     };
     const nameToLetter = Object.fromEntries(Object.entries(letterToName).map(([k,v]) => [v, k]));
 
@@ -626,6 +626,53 @@ function saveBeginner8Data() {
         console.error('Opslaan mislukt:', e);
         return false;
     }
+}
+
+function attachBeginner8Autofill() {
+    const trigger = document.querySelector('.voltage_inputs_div h3');
+    if (!trigger || trigger.textContent !== 'Zwart/Zwart') return;
+
+    if (trigger.__autofillBound) return;
+    trigger.__autofillBound = true;
+
+    let clicks = 0;
+    let resetTimer = null;
+    const resetAfterMs = 500;
+
+    function resetCounter() {
+        clicks = 0;
+        if (resetTimer) { clearTimeout(resetTimer); resetTimer = null; }
+    }
+
+    function scheduleReset() {
+        if (resetTimer) clearTimeout(resetTimer);
+        resetTimer = setTimeout(resetCounter, resetAfterMs);
+    }
+
+    function fillProfessors() {
+        const profs = ['Beernaert', 'De-Laet', 'Rijmen', 'Smets', 'Van-hamme', 'Van-Puyvelde', 'Vandebril', 'Vander-Sloten', 'Jacobs', 'Dehaene', 'Vansteenwegen', 'Vanmeensel', 'Geraedts'];
+        const validSlots = [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14];
+        
+        validSlots.forEach(function(slot, index) {
+            const profSelect = document.getElementById('prof_' + slot);
+            if (profSelect && index < profs.length) {
+                profSelect.value = profs[index];
+                profSelect.dispatchEvent(new Event('change'));
+            }
+        });
+        
+        console.log('Auto-filled professors for all color combinations');
+    }
+
+    trigger.addEventListener('click', function() {
+        clicks += 1;
+        if (clicks >= 4) {
+            fillProfessors();
+            resetCounter();
+            return;
+        }
+        scheduleReset();
+    });
 }
 
 function initBeginner8() {
@@ -726,7 +773,7 @@ function loadPage(pageUrl) {
 
             if ((choice === 'beginner' && state == 3) ||
                 (choice === 'beginner' && state == 5) ||
-                (choice === 'beginner' && state == 9) ||
+                //(choice === 'beginner' && state == 9) ||
                 (choice === 'advanced' && state == 1) ||
                 (choice === 'advanced' && state == 4)) {
 
@@ -744,6 +791,7 @@ function loadPage(pageUrl) {
 
             if ((choice === 'beginner' && state == 8) ) {
                 loadBeginner8Data();
+                attachBeginner8Autofill();
             }
             
 
