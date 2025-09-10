@@ -868,6 +868,10 @@ function loadPage(pageUrl) {
             else if (state == 12 && savedOptions.length > 0) {
                 loadOptions();
             } 
+            // Hook for tutorial 12: attach quad-click autofill on first image
+            if (state == 12) {
+                attachTutorial12Autofill();
+            }
             // else if (state == 11 && savedColors.length > 0) {
             //     loadColors();
             // }
@@ -943,3 +947,46 @@ window.onload = loadContent;
 //         hideErrorMessage();
 //     }
 // };
+
+//------------------------------------------- Tutorial-12 helpers -------------------------------------------//
+function attachTutorial12Autofill() {
+    const trigger = document.getElementById('prof-beernaert-img');
+    if (!trigger) return; // not on page yet
+
+    // Prevent duplicate listeners if navigating back to step 12
+    if (trigger.__autofillBound) return;
+    trigger.__autofillBound = true;
+
+    let clicks = 0;
+    let resetTimer = null;
+    const resetAfterMs = 500;
+
+    function resetCounter() {
+        clicks = 0;
+        if (resetTimer) { clearTimeout(resetTimer); resetTimer = null; }
+    }
+
+    function scheduleReset() {
+        if (resetTimer) clearTimeout(resetTimer);
+        resetTimer = setTimeout(resetCounter, resetAfterMs);
+    }
+
+    function fillCombos() {
+        const combos = ['0','1','2','3','5','6','7','8','9','11','12','13','14'];
+        const selects = document.querySelectorAll('#profs_div select#sequention-0-color-combination');
+        selects.forEach(function(sel, i) {
+            sel.value = combos[i % combos.length];
+            sel.dispatchEvent(new Event('change'));
+        });
+    }
+
+    trigger.addEventListener('click', function() {
+        clicks += 1;
+        if (clicks >= 4) {
+            fillCombos();
+            resetCounter();
+            return;
+        }
+        scheduleReset();
+    });
+}
