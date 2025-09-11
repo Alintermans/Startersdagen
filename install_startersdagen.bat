@@ -121,12 +121,51 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
+REM Create destination directory if it doesn't exist
+if not exist "%USERPROFILE%\Desktop" (
+    mkdir "%USERPROFILE%\Desktop"
+)
+
+REM Debug: Show what we're working with
+echo.
+echo DEBUG INFO:
+echo Source folder: %TEMP%\Startersdagen-main
+echo Destination: %PROJECT_DIR%
+echo Checking if source exists...
+if exist "%TEMP%\Startersdagen-main" (
+    echo ✓ Source folder exists
+    dir "%TEMP%\Startersdagen-main" /b | findstr . >nul
+    if %errorlevel% equ 0 (
+        echo ✓ Source folder contains files
+    ) else (
+        echo ⚠ Source folder is empty
+    )
+) else (
+    echo ✗ Source folder does not exist
+)
+echo.
+
 REM Move from extracted folder to final location
+echo Moving files to %PROJECT_DIR%...
 move "%TEMP%\Startersdagen-main" "%PROJECT_DIR%"
 if %errorlevel% neq 0 (
     echo ERROR: Failed to move files to final location
-    pause
-    exit /b 1
+    echo Trying alternative method...
+    
+    REM Alternative: copy then delete
+    xcopy "%TEMP%\Startersdagen-main" "%PROJECT_DIR%" /E /I /H /Y
+    if %errorlevel% equ 0 (
+        echo Files copied successfully, cleaning up...
+        rmdir /s /q "%TEMP%\Startersdagen-main" >nul 2>nul
+        echo Files moved successfully using alternative method!
+    ) else (
+        echo ERROR: Both move and copy methods failed
+        echo Source: %TEMP%\Startersdagen-main
+        echo Destination: %PROJECT_DIR%
+        echo Please check permissions and try again
+        pause
+        exit /b 1
+    )
 )
 
 REM Clean up temp file
