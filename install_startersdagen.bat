@@ -1,7 +1,72 @@
 @echo off
+
+REM Check if we're already running in an Anaconda environment
+if defined CONDA_DEFAULT_ENV (
+    goto :main
+)
+
+REM If not in Anaconda environment, find and restart in Anaconda Prompt
 echo ============================================
 echo    Startersdagen Installation Script
 echo ============================================
+echo.
+echo Detecting Anaconda installation...
+
+REM Try to find Anaconda installation and restart in Anaconda environment
+if exist "%USERPROFILE%\Anaconda3\Scripts\activate.bat" (
+    echo Found Anaconda at %USERPROFILE%\Anaconda3
+    echo Restarting in Anaconda environment...
+    call "%USERPROFILE%\Anaconda3\Scripts\activate.bat" && "%~f0" anaconda_mode
+    exit /b
+) else if exist "%USERPROFILE%\Miniconda3\Scripts\activate.bat" (
+    echo Found Miniconda at %USERPROFILE%\Miniconda3
+    echo Restarting in Anaconda environment...
+    call "%USERPROFILE%\Miniconda3\Scripts\activate.bat" && "%~f0" anaconda_mode
+    exit /b
+) else if exist "C:\Anaconda3\Scripts\activate.bat" (
+    echo Found Anaconda at C:\Anaconda3
+    echo Restarting in Anaconda environment...
+    call "C:\Anaconda3\Scripts\activate.bat" && "%~f0" anaconda_mode
+    exit /b
+) else if exist "C:\Miniconda3\Scripts\activate.bat" (
+    echo Found Miniconda at C:\Miniconda3
+    echo Restarting in Anaconda environment...
+    call "C:\Miniconda3\Scripts\activate.bat" && "%~f0" anaconda_mode
+    exit /b
+) else if exist "%LOCALAPPDATA%\Continuum\anaconda3\Scripts\activate.bat" (
+    echo Found Anaconda at %LOCALAPPDATA%\Continuum\anaconda3
+    echo Restarting in Anaconda environment...
+    call "%LOCALAPPDATA%\Continuum\anaconda3\Scripts\activate.bat" && "%~f0" anaconda_mode
+    exit /b
+) else if exist "C:\ProgramData\Anaconda3\Scripts\activate.bat" (
+    echo Found Anaconda at C:\ProgramData\Anaconda3
+    echo Restarting in Anaconda environment...
+    call "C:\ProgramData\Anaconda3\Scripts\activate.bat" && "%~f0" anaconda_mode
+    exit /b
+) else (
+    echo ERROR: Anaconda or Miniconda installation not found
+    echo.
+    echo Please install Anaconda or Miniconda first from:
+    echo https://www.anaconda.com/products/distribution
+    echo.
+    echo Installation locations checked:
+    echo - %USERPROFILE%\Anaconda3\
+    echo - %USERPROFILE%\Miniconda3\
+    echo - C:\Anaconda3\
+    echo - C:\Miniconda3\
+    echo - %LOCALAPPDATA%\Continuum\anaconda3\
+    echo - C:\ProgramData\Anaconda3\
+    echo.
+    pause
+    exit /b 1
+)
+
+:main
+echo ============================================
+echo    Startersdagen Installation Script
+echo ============================================
+echo.
+echo ✓ Running in Anaconda environment
 echo.
 
 REM Set variables
@@ -11,19 +76,6 @@ set TEMP_ZIP=%TEMP%\Startersdagen-main.zip
 
 echo Installing Startersdagen to: %PROJECT_DIR%
 echo.
-
-REM Check if Anaconda/Miniconda is installed
-where conda >nul 2>nul
-if %errorlevel% neq 0 (
-    echo ERROR: Anaconda or Miniconda is not installed or not in PATH
-    echo Please install Anaconda or Miniconda first:
-    echo https://www.anaconda.com/products/distribution
-    echo.
-    pause
-    exit /b 1
-)
-
-echo Git not required - will download ZIP file instead
 
 echo Checking for existing installation...
 if exist "%PROJECT_DIR%" (
