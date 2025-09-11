@@ -23,7 +23,9 @@ REM Initialize Anaconda for this session
 echo Initializing Anaconda environment...
 
 REM Try common Anaconda installation paths
-if exist "%USERPROFILE%\Anaconda3\Scripts\activate.bat" (
+if exist "C:\Program Files\Anaconda3\Scripts\activate.bat" (
+    call "C:\Program Files\Anaconda3\Scripts\activate.bat"
+) else if exist "%USERPROFILE%\Anaconda3\Scripts\activate.bat" (
     call "%USERPROFILE%\Anaconda3\Scripts\activate.bat"
 ) else if exist "%USERPROFILE%\Miniconda3\Scripts\activate.bat" (
     call "%USERPROFILE%\Miniconda3\Scripts\activate.bat"
@@ -43,6 +45,7 @@ if exist "%USERPROFILE%\Anaconda3\Scripts\activate.bat" (
     echo ERROR: Could not find Anaconda/Miniconda installation
     echo Please make sure Anaconda or Miniconda is properly installed.
     echo Common installation locations checked:
+    echo   - C:\Program Files\Anaconda3\
     echo   - %USERPROFILE%\Anaconda3\
     echo   - %USERPROFILE%\Miniconda3\
     echo   - C:\Anaconda3\

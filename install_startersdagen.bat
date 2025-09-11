@@ -13,7 +13,12 @@ echo.
 echo Detecting Anaconda installation...
 
 REM Try to find Anaconda installation and restart in Anaconda environment
-if exist "%USERPROFILE%\Anaconda3\Scripts\activate.bat" (
+if exist "C:\Program Files\Anaconda3\Scripts\activate.bat" (
+    echo Found Anaconda at C:\Program Files\Anaconda3
+    echo Restarting in Anaconda environment...
+    call "C:\Program Files\Anaconda3\Scripts\activate.bat" && "%~f0" anaconda_mode
+    exit /b
+) else if exist "%USERPROFILE%\Anaconda3\Scripts\activate.bat" (
     echo Found Anaconda at %USERPROFILE%\Anaconda3
     echo Restarting in Anaconda environment...
     call "%USERPROFILE%\Anaconda3\Scripts\activate.bat" && "%~f0" anaconda_mode
@@ -50,6 +55,7 @@ if exist "%USERPROFILE%\Anaconda3\Scripts\activate.bat" (
     echo https://www.anaconda.com/products/distribution
     echo.
     echo Installation locations checked:
+    echo - C:\Program Files\Anaconda3\
     echo - %USERPROFILE%\Anaconda3\
     echo - %USERPROFILE%\Miniconda3\
     echo - C:\Anaconda3\
@@ -179,7 +185,9 @@ echo echo ======================================= >> "%PROJECT_DIR%\Start_Inform
 echo echo. >> "%PROJECT_DIR%\Start_Informatie.bat"
 echo echo Initializing Anaconda environment... >> "%PROJECT_DIR%\Start_Informatie.bat"
 echo REM Try common Anaconda installation paths >> "%PROJECT_DIR%\Start_Informatie.bat"
-echo if exist "%%USERPROFILE%%\Anaconda3\Scripts\activate.bat" ^( >> "%PROJECT_DIR%\Start_Informatie.bat"
+echo if exist "C:\Program Files\Anaconda3\Scripts\activate.bat" ^( >> "%PROJECT_DIR%\Start_Informatie.bat"
+echo     call "C:\Program Files\Anaconda3\Scripts\activate.bat" >> "%PROJECT_DIR%\Start_Informatie.bat"
+echo ^) else if exist "%%USERPROFILE%%\Anaconda3\Scripts\activate.bat" ^( >> "%PROJECT_DIR%\Start_Informatie.bat"
 echo     call "%%USERPROFILE%%\Anaconda3\Scripts\activate.bat" >> "%PROJECT_DIR%\Start_Informatie.bat"
 echo ^) else if exist "%%USERPROFILE%%\Miniconda3\Scripts\activate.bat" ^( >> "%PROJECT_DIR%\Start_Informatie.bat"
 echo     call "%%USERPROFILE%%\Miniconda3\Scripts\activate.bat" >> "%PROJECT_DIR%\Start_Informatie.bat"
@@ -213,7 +221,9 @@ echo echo ==================================== >> "%PROJECT_DIR%\Start_Wiskunde.
 echo echo. >> "%PROJECT_DIR%\Start_Wiskunde.bat"
 echo echo Initializing Anaconda environment... >> "%PROJECT_DIR%\Start_Wiskunde.bat"
 echo REM Try common Anaconda installation paths >> "%PROJECT_DIR%\Start_Wiskunde.bat"
-echo if exist "%%USERPROFILE%%\Anaconda3\Scripts\activate.bat" ^( >> "%PROJECT_DIR%\Start_Wiskunde.bat"
+echo if exist "C:\Program Files\Anaconda3\Scripts\activate.bat" ^( >> "%PROJECT_DIR%\Start_Wiskunde.bat"
+echo     call "C:\Program Files\Anaconda3\Scripts\activate.bat" >> "%PROJECT_DIR%\Start_Wiskunde.bat"
+echo ^) else if exist "%%USERPROFILE%%\Anaconda3\Scripts\activate.bat" ^( >> "%PROJECT_DIR%\Start_Wiskunde.bat"
 echo     call "%%USERPROFILE%%\Anaconda3\Scripts\activate.bat" >> "%PROJECT_DIR%\Start_Wiskunde.bat"
 echo ^) else if exist "%%USERPROFILE%%\Miniconda3\Scripts\activate.bat" ^( >> "%PROJECT_DIR%\Start_Wiskunde.bat"
 echo     call "%%USERPROFILE%%\Miniconda3\Scripts\activate.bat" >> "%PROJECT_DIR%\Start_Wiskunde.bat"
