@@ -174,28 +174,42 @@ del "%TEMP_ZIP%" >nul 2>nul
 echo Repository downloaded and extracted successfully!
 echo.
 
+REM Initialize conda properly for this session
+echo Initializing conda for this session...
+call conda init cmd.exe >nul 2>nul
+
 REM Check if startersdagen environment exists
 echo Checking for Anaconda environment...
-conda info --envs | findstr "startersdagen" >nul 2>nul
+call conda info --envs | findstr "startersdagen" >nul 2>nul
 if %errorlevel% equ 0 (
     echo Startersdagen environment already exists. Using existing environment.
+    call conda activate startersdagen
 ) else (
     echo Creating new Anaconda environment 'startersdagen'...
-    conda create -n startersdagen python=3.8 -y
+    echo This may take a few minutes...
+    call conda create -n startersdagen python=3.8 -y
     if %errorlevel% neq 0 (
         echo ERROR: Failed to create Anaconda environment
+        echo Make sure you're running this script with sufficient permissions
+        pause
+        exit /b 1
+    )
+    echo Environment created successfully!
+    call conda activate startersdagen
+    if %errorlevel% neq 0 (
+        echo ERROR: Failed to activate startersdagen environment
         pause
         exit /b 1
     )
 )
 
 echo.
-echo Activating environment and installing dependencies...
-call conda activate startersdagen
+echo Current environment: %CONDA_DEFAULT_ENV%
+echo Installing dependencies...
 
 REM Install basic dependencies
-echo Installing basic dependencies...
-pip install pyserial flask
+echo Installing basic dependencies (pyserial, flask)...
+call pip install pyserial flask
 if %errorlevel% neq 0 (
     echo ERROR: Failed to install basic dependencies
     pause
@@ -203,13 +217,21 @@ if %errorlevel% neq 0 (
 )
 
 REM Install face recognition dependencies (for Wiskunde module)
+echo.
 echo Installing face recognition dependencies...
-echo This may take several minutes...
-conda install -c conda-forge dlib=19.22 -y
-pip install face_recognition opencv-python numpy
+echo This may take several minutes - please be patient...
+call conda install -c conda-forge dlib=19.22 -y
+if %errorlevel% neq 0 (
+    echo WARNING: Failed to install dlib via conda, trying pip...
+    call pip install dlib
+)
+
+call pip install face_recognition opencv-python numpy
 if %errorlevel% neq 0 (
     echo WARNING: Face recognition dependencies installation failed
     echo The Informatie module will work, but Wiskunde module may not function properly
+) else (
+    echo ✓ All dependencies installed successfully!
 )
 
 echo.

@@ -1,5 +1,3 @@
-$envs = conda info --envs
-
 if ($envs -like "*startersdagen*") {
     conda activate startersdagen
     echo "Startersdagen environment already exists"
@@ -16,9 +14,7 @@ if ($envs -like "*startersdagen*") {
 
 }
 
-echo "cd C:\Users\Public\startersdagen\Wiskunde"
-cd C:\Users\Public\Desktop\Startersdagen\Wiskunde
-echo "python C:\Users\Public\startersdagen\Wiskunde\Server.py"
+echo "cd H:\Startersdagen\Informatie"
+cd H:\Startersdagen\Informatie
+echo "python H:\Startersdagen\Informatie\Server.py"
 python Server.py
-
-
