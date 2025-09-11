@@ -22,7 +22,7 @@ pico_voltages = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 # Digital UART mapping (Beginner-8): song (1..10) and professor code (a..m) per index 0..14
 pico_songs = [0 for _ in range(15)]
-pico_profs = ['' for _ in range(15)]
+pico_profs = ['Beernaert' for _ in range(15)]
 
 # Beginner-7: fixed options (0..7) and professor→option assignment.
 # OPTION_NAMES are the labels for each fixed option. PROF_TO_OPTION maps each
@@ -42,37 +42,39 @@ OPTION_NAMES = [
 # Map each professor letter ('a'..'m') to the option index (0..7) they select.
 # Edit this mapping as needed. Multiple letters may point to the same option.
 PROF_TO_OPTION = {
-    'a': 0,  # Beernaert -> Koffie
-    'b': 1,  # De-Laet -> Thee
-    'c': 2,  # Rijmen -> Koffie met suiker
-    'd': 3,  # Smets -> Thee met suiker
-    'e': 4,  # Van-hamme -> Koffie met melk
-    'f': 5,  # Van-Puyvelde -> Thee met melk
-    'g': 6,  # Vandebril -> Koffie met melk en suiker
-    'h': 7,  # Vander-Sloten -> Thee met melk en suiker
-    'i': 0,  # Jacobs
-    'j': 1,  # Dehaene
-    'k': 2,  # Vansteenwegen
-    'l': 3,  # Vanmeensel
-    'm': 4,  # Geraedts
+    'a': 0,  #Vandebril
+    'b': 1,  #Van-hamme
+    'c': 2,  #Smets
+    'd': 3,  #Vansteenwegen
+    'e': 4,  #Dehaene
+    'f': 5,  #Jacobs
+    'g': 0,  #Beernaert
+    'h': 7,  #De-Laet
+    'i': 0,  #Rijmen
+    'j': 1,  #Vanmeensel
+    'k': 2,  #Van-Puyvelde
+    'l': 3,  #Vander-Sloten
+    'm': 4,  #Geraedts
 }
 
 # Map professor option values  to letters a..m
 PROF_TO_LETTER = {
-    'Beernaert': 'a',
-    'De-Laet': 'b',
-    'Rijmen': 'c',
-    'Smets': 'd',
-    'Van-hamme': 'e',
-    'Van-Puyvelde': 'f',
-    'Vandebril': 'g',
-    'Vander-Sloten': 'h',
-    'Jacobs': 'i',
-    'Dehaene': 'j',
-    'Vansteenwegen': 'k',
-    'Vanmeensel': 'l',
+    'Vandebril': 'a',
+    'Van-hamme': 'b',
+    'Smets': 'c',
+    'Vansteenwegen': 'd',
+    'Dehaene': 'e',
+    'Jacobs': 'f',
+    'Beernaert': 'g',
+    'De-Laet': 'h',
+    'Rijmen': 'i',
+    'Vanmeensel': 'j',
+    'Van-Puyvelde': 'k',
+    'Vander-Sloten': 'l',
     'Geraedts': 'm',
 }
+
+
 
 # Only 8 sequences are used in Beginner-7 (one per fixed option)
 sequentions = [{"name": name, "angles": ["90"]} for name in OPTION_NAMES]
@@ -701,7 +703,7 @@ def pico_mapping_save_bulk():
         if not (_validate_index(index) and _validate_song(song) and prof != ''):
             continue
         pico_songs[index] = song
-        pico_profs[index] = prof
+        pico_profs[index] = prof    
         updated.append(index)
 
     return jsonify({'status': 'pico-mapping-saved-bulk', 'updated': updated})
@@ -845,7 +847,7 @@ def run_sequention(sequention):
     time.sleep(1)
     for angle in sequentions[sequention]["angles"]:
         send_message('S' + position_int_to_3_charachters(int(angle)) + '\n')
-        time.sleep(1)
+        time.sleep(5)
     
 
 

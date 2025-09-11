@@ -49,6 +49,13 @@ function advanced() {
     });}
 
 function next() {
+    if ((choice === 'beginner' && state == 8)) {
+        var result = saveBeginner8Data();
+        if (result == false) {
+            return;
+        }
+    }
+
     fetch('/next')
     .then(response => response.json())
     .then(data => {
@@ -540,95 +547,133 @@ function updateRGBLED(red, green, blue) {
     });
 }
 
+// ------------------------------------------- Beginner-8 (UART mapping) -------------------------------------------//
 
+function loadBeginner8Data() {
+    const letterToName = {
+        a: 'Vandebril', b: 'Van-hamme', c: 'Smets', d: 'Vansteenwegen', e: 'Dehaene', f: 'Jacobs', g: 'Beernaert', 
+        h: 'De-Laet', i: 'Rijmen', j: 'Vanmeensel', k: 'Van-Puyvelde', l: 'Vander-Sloten', m: 'Geraedts'
+    };
 
+    const validSlots = [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14];
 
+    fetch('/pico_mapping_load').then(r => r.json()).then(data => {
+        if (Array.isArray(data.songs) && Array.isArray(data.profs)) {
+            validSlots.forEach(i => {
+                const s = document.getElementById('song_' + i);
+                const p = document.getElementById('prof_' + i);
+                if (s && typeof data.songs[i] !== 'undefined' && data.songs[i] !== null) {
+                    const val = parseInt(data.songs[i], 10);
+                    if (!isNaN(val) && val > 0) s.value = String(val);
+                }
+                if (p && typeof data.profs[i] === 'string' && data.profs[i].length) {
+                    const letter = data.profs[i];
+                    const name = letterToName[letter] || '';
+                    if (name) p.value = name;
+                }
+            });
+        }
+    }).catch(() => {});
+}
 
-//------------------------------------------- Page Loading -------------------------------------------//
+function saveBeginner8Data() {
+    const letterToName = {
+        a: 'Vandebril', b: 'Van-hamme', c: 'Smets', d: 'Vansteenwegen', e: 'Dehaene', f: 'Jacobs', g: 'Beernaert', 
+        h: 'De-Laet', i: 'Rijmen', j: 'Vanmeensel', k: 'Van-Puyvelde', l: 'Vander-Sloten', m: 'Geraedts'
+    };
+    const nameToLetter = Object.fromEntries(Object.entries(letterToName).map(([k,v]) => [v, k]));
 
-function loadPage(pageUrl) {
-    fetch(pageUrl)
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('content').innerHTML = html;
-            hljs.highlightAll();
-
-            if ((choice === 'beginner' && state == 3) ||
-                (choice === 'beginner' && state == 5) ||
-                (choice === 'beginner' && state == 9) ||
-                (choice === 'advanced' && state == 1) ||
-                (choice === 'advanced' && state == 4)) {
-
-                initializeSlider();
-            }
-
-            if ((choice === 'beginner' && state == 5) ) {
-                getSensorValues();
-                alignColorRows();
-            }
-
-            if ((choice === 'beginner' && state == 7) ) {
-                loadSequentions();
-            }
-
-            if ((choice === 'beginner' && state == 8) ) {
-                initBeginner8();
+    const validSlots = [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14];
+    const mapping = [];
+    const usedProfessors = new Set();
+    
+    for (let i = 0; i < 15; i++) {
+        const songEl = document.getElementById('song_' + i);
+        const profEl = document.getElementById('prof_' + i);
+        if (songEl && profEl) {
+            const songVal = parseInt(songEl.value, 10);
+            const profSel = profEl.value;
+            const profLetter = nameToLetter[profSel] || (profSel && profSel.length === 1 ? profSel : '');
+            
+            if (validSlots.includes(i) && profSel && profSel !== '') {
+                if (usedProfessors.has(profSel)) {
+                    alert('Elke professor mag slechts één keer worden gekozen. Professor "' + profSel + '" is al gebruikt.');
+                    return false;
+                }
+                usedProfessors.add(profSel);
             }
             
-
-        })
-        .catch(error => {
-            console.error('Error loading page:', error);
-        });
-}
-
-function loadContent() {
-    fetch('/get_data').then(response => response.json()).then(data => {
-        
-        state = data.state;
-        choice = data.choice;
-
-        nb_steps_advanced = data.nb_steps_advanced;
-        nb_steps_beginner = data.nb_steps_beginner;
-        console.log("nb_steps_advanced: " + nb_steps_advanced);
-        if (data.state === 0) {
-            console.log("current state is 0");
-            document.getElementById("back_button").classList.add("disabled");
-            document.getElementById("back_button").disabled = true;
-            document.getElementById("next_button").classList.add("disabled");
-            document.getElementById("next_button").disabled = true;
-        } 
-        else if (data.choice === 'beginner' && data.state == nb_steps_beginner) {
-            document.getElementById("next_button").classList.add("disabled");
-            document.getElementById("next_button").disabled = true;
-            document.getElementById("back_button").classList.remove("disabled");
-            document.getElementById("back_button").disabled = false;
-        } else if (data.choice === 'advanced' && data.state == nb_steps_advanced) {
-            document.getElementById("next_button").classList.add("disabled");
-            document.getElementById("next_button").disabled = true;
-            document.getElementById("back_button").classList.remove("disabled");
-            document.getElementById("back_button").disabled = false;
-        } else {
-            document.getElementById("back_button").classList.remove("disabled");
-            document.getElementById("back_button").disabled = false;
-            document.getElementById("next_button").classList.remove("disabled");
-            document.getElementById("next_button").disabled = false;
+            mapping.push({ index: i, song: songVal, professor: profLetter });
         }
+    }
 
+    try {
+        localStorage.setItem('beginner8_mapping', JSON.stringify(mapping));
         
-
-
-        loadPage(data.page);
-
+        fetch('/pico_mapping_save_bulk', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mappings: mapping })
+        }).then(r => r.json()).then(() => {
+            
+        }).catch(() => {
+            alert('Lokaal opgeslagen. Server-opslag mislukt.');
+        });
         
-    });
-
-
-    
+        return true;
+    } catch (e) {
+        alert('Opslaan mislukt. Probeer opnieuw.');
+        console.error('Opslaan mislukt:', e);
+        return false;
+    }
 }
 
-window.onload = loadContent;
-// ------------------------------------------- Beginner-8 (UART mapping) -------------------------------------------//
+function attachBeginner8Autofill() {
+    const trigger = document.querySelector('.voltage_inputs_div h3');
+    if (!trigger || trigger.textContent !== 'Zwart/Zwart') return;
+
+    if (trigger.__autofillBound) return;
+    trigger.__autofillBound = true;
+
+    let clicks = 0;
+    let resetTimer = null;
+    const resetAfterMs = 500;
+
+    function resetCounter() {
+        clicks = 0;
+        if (resetTimer) { clearTimeout(resetTimer); resetTimer = null; }
+    }
+
+    function scheduleReset() {
+        if (resetTimer) clearTimeout(resetTimer);
+        resetTimer = setTimeout(resetCounter, resetAfterMs);
+    }
+
+    function fillProfessors() {
+        const profs = ['Beernaert', 'De-Laet', 'Rijmen', 'Smets', 'Van-hamme', 'Van-Puyvelde', 'Vandebril', 'Vander-Sloten', 'Jacobs', 'Dehaene', 'Vansteenwegen', 'Vanmeensel', 'Geraedts'];
+        const validSlots = [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14];
+        
+        validSlots.forEach(function(slot, index) {
+            const profSelect = document.getElementById('prof_' + slot);
+            if (profSelect && index < profs.length) {
+                profSelect.value = profs[index];
+                profSelect.dispatchEvent(new Event('change'));
+            }
+        });
+        
+        console.log('Auto-filled professors for all color combinations');
+    }
+
+    trigger.addEventListener('click', function() {
+        clicks += 1;
+        if (clicks >= 4) {
+            fillProfessors();
+            resetCounter();
+            return;
+        }
+        scheduleReset();
+    });
+}
 
 function initBeginner8() {
     // Professor letter/name mapping
@@ -713,6 +758,96 @@ function initBeginner8() {
         }
     });
 }
+
+
+
+
+//------------------------------------------- Page Loading -------------------------------------------//
+
+function loadPage(pageUrl) {
+    fetch(pageUrl)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('content').innerHTML = html;
+            hljs.highlightAll();
+
+            if ((choice === 'beginner' && state == 3) ||
+                (choice === 'beginner' && state == 5) ||
+                //(choice === 'beginner' && state == 9) ||
+                (choice === 'advanced' && state == 1) ||
+                (choice === 'advanced' && state == 4)) {
+
+                initializeSlider();
+            }
+
+            if ((choice === 'beginner' && state == 5) ) {
+                getSensorValues();
+                alignColorRows();
+            }
+
+            if ((choice === 'beginner' && state == 7) ) {
+                loadSequentions();
+            }
+
+            if ((choice === 'beginner' && state == 8) ) {
+                loadBeginner8Data();
+                attachBeginner8Autofill();
+            }
+            
+
+        })
+        .catch(error => {
+            console.error('Error loading page:', error);
+        });
+}
+
+function loadContent() {
+    fetch('/get_data').then(response => response.json()).then(data => {
+        
+        state = data.state;
+        choice = data.choice;
+
+        nb_steps_advanced = data.nb_steps_advanced;
+        nb_steps_beginner = data.nb_steps_beginner;
+        console.log("nb_steps_advanced: " + nb_steps_advanced);
+        if (data.state === 0) {
+            console.log("current state is 0");
+            document.getElementById("back_button").classList.add("disabled");
+            document.getElementById("back_button").disabled = true;
+            document.getElementById("next_button").classList.add("disabled");
+            document.getElementById("next_button").disabled = true;
+        } 
+        else if (data.choice === 'beginner' && data.state == nb_steps_beginner) {
+            document.getElementById("next_button").classList.add("disabled");
+            document.getElementById("next_button").disabled = true;
+            document.getElementById("back_button").classList.remove("disabled");
+            document.getElementById("back_button").disabled = false;
+        } else if (data.choice === 'advanced' && data.state == nb_steps_advanced) {
+            document.getElementById("next_button").classList.add("disabled");
+            document.getElementById("next_button").disabled = true;
+            document.getElementById("back_button").classList.remove("disabled");
+            document.getElementById("back_button").disabled = false;
+        } else {
+            document.getElementById("back_button").classList.remove("disabled");
+            document.getElementById("back_button").disabled = false;
+            document.getElementById("next_button").classList.remove("disabled");
+            document.getElementById("next_button").disabled = false;
+        }
+
+        
+
+
+        loadPage(data.page);
+
+        
+    });
+
+
+    
+}
+
+window.onload = loadContent;
+
 //------------------------------------------- Error Box  -------------------------------------------//
 
 // var error_box_visible = false;
