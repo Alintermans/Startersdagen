@@ -778,7 +778,7 @@ def sample_color_combinations():
 zwart = (20000, 20000,20000)
 rood = (20000, 20000, 20000)
 groen = (750, 500, 800)
-blauw = (3000, 1700, 700)
+blauw = (3000, 500, 700)
 licht_blauw = (700, 500, 500)
 roos = (400, 700, 500)
 geel = (400, 500, 450)

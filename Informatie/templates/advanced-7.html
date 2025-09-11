@@ -22,10 +22,17 @@
           <p>
             Download
             <a href="/static/arduino_code/template_final_file.zip">
-              dit bestand</a>, gebruik de waardes voor 'match_kleur()' uit opdracht 2 en  pas de functie 'stuur_servo()' aan zodat de servomotor de juiste beweging maakt om voor elk van de 15 mogelijke personen het juiste drankje te maken.
-              Ook moeten jullie voor elke persoon het juiste liedje laten afspelen door via de funtie 'sendPico()' een waarde tussen 0 en 164 te versturen. De juiste waardes voor de liedjes vind je terug in opdracht 4.5.
-            <br>
-            <b>Tip:</b> Gebruik de code uit oefening 4 om de servomotor naar bepaalde hoeken te laten draaien. 
+              dit bestand</a>, gebruik de waardes voor 'match_kleur()' uit opdracht 2 en vul de template aan:
+              <br><br>
+              <b>Stap 1:</b> Vul de 8 servo sequentie functies in (maak_koffie(), maak_thee(), etc.) met de juiste moveServo() aanroepen voor elk drankje.
+              <br><br>
+              <b>Stap 2:</b> Bepaal zelf welke van de 13 kleurencombinaties bij welke professor hoort. Elke professor letter (a-m) correspondeert met een specifieke professor:
+              <br>
+              a=Vandebril, b=Van-hamme, c=Smets, d=Vansteenwegen, e=Dehaene, f=Jacobs, g=Beernaert, h=De-Laet, i=Rijmen, j=Vanmeensel, k=Van-Puyvelde, l=Vander-Sloten, m=Geraedts
+              <br><br>
+              <b>Stap 3:</b> Bepaal welke professor welk van de 8 drankjes wil en vul dit in de functie 'stuur_servo()' in door de juiste sendLetterToPico() en maak_xxx() functies aan te roepen.
+              <br><br>
+              <b>Tip:</b> De functie moveServo() zorgt al voor langzame servo beweging. Gebruik sendLetterToPico(letter) om een professor letter naar de pico te sturen via UART communicatie.
           </p>
 
           

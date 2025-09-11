@@ -187,7 +187,7 @@ int detectColor() {
   else if ((rood > groen_r) && (groen < groen_g) && (blauw > groen_b)) {
     return 2; //Groen
   }
-  else if ((rood > blauw_r) && (groen < blauw_g) && (blauw <blauw_b)) {
+  else if ((rood > blauw_r) && (groen > blauw_g) && (blauw <blauw_b)) {
     return 3; //Blauw
   }
   /*
