@@ -13,7 +13,7 @@
 #define sensor 48
 #define motor 10
 #define servo_pin 12
-SoftwareSerial mySerial(10, 11);  
+SoftwareSerial mySerial(12, 11);  
 
 Servo myServo;
 
@@ -86,6 +86,8 @@ void setup() {
 
   myServo.attach(servo_pin);
 
+  mySerial.begin(9600);
+
   Serial.begin(230400);
   Serial.setTimeout(1);
 }
@@ -143,6 +145,7 @@ void loop() {
     }
   } else if (x.indexOf("P") == 0 && x.length() == 3) {
     String pico_value = x.substring(1,2);
+     Serial.println("Pico value sent " + pico_value);
      mySerial.println(pico_value);
   }
 

@@ -485,8 +485,9 @@ def test():
     # Map color-combination index -> professor letter -> fixed option index (0..7)
     prof_letter = pico_profs[index] if index is not None and 0 <= index < len(pico_profs) else ''
     option_index = PROF_TO_OPTION.get(prof_letter, 0)
-    run_sequention(option_index)
     send_index_to_pico(index)
+    run_sequention(option_index)
+    
 
     return jsonify({'status': 'detect-color', 'detected_color_combination': int_color_to_string(color_1)+'/'+int_color_to_string(color_2)})
 
@@ -510,8 +511,9 @@ def run():
     index = color_combination_to_index(int_color_to_string(color_1)+'/'+int_color_to_string(color_2))
     prof_letter = pico_profs[index] if index is not None and 0 <= index < len(pico_profs) else ''
     option_index = PROF_TO_OPTION.get(prof_letter, 0)
-    run_sequention(option_index)
     send_index_to_pico(index)
+    run_sequention(option_index)
+    
     # Return the human-readable option name
     option_name = OPTION_NAMES[option_index] if 0 <= option_index < len(OPTION_NAMES) else str(option_index)
 
