@@ -81,7 +81,16 @@ sequentions = [{"name": name, "angles": ["90"]} for name in OPTION_NAMES]
 
 sequentions_saved = False
 
-
+# zwart = (4500, 7000, 6500)
+# rood = (400, 1800, 1100)
+zwart = (20000, 20000,20000)
+rood = (20000, 20000, 20000)
+groen = (200, 200, 200)
+blauw = (200, 200, 200)
+licht_blauw = (200, 200, 200)
+roos = (200, 200, 200)
+geel = (200, 200, 200)
+wit = (100, 100, 100)
 
 
 
@@ -773,16 +782,7 @@ def sample_color_combinations():
 
     return int(color_combinations[0][0]), int(color_combinations[1][0])
 
-# zwart = (4500, 7000, 6500)
-# rood = (400, 1800, 1100)
-zwart = (20000, 20000,20000)
-rood = (20000, 20000, 20000)
-groen = (750, 500, 800)
-blauw = (3000, 1700, 700)
-licht_blauw = (700, 500, 500)
-roos = (400, 700, 500)
-geel = (400, 500, 450)
-wit = (400, 500, 450)
+
 
 def color_int_to_rgb(color):
     if (color == 0):

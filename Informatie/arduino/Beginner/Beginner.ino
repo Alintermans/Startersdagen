@@ -40,13 +40,13 @@ int rood_r = 20000;
 int rood_g = 20000;
 int rood_b = 20000;
 
-int groen_r = 750;
-int groen_g = 500;
-int groen_b = 800;
+int groen_r = 200;
+int groen_g = 200;
+int groen_b = 200;
 
-int blauw_r = 3000;
-int blauw_g = 1700;
-int blauw_b = 700;
+int blauw_r = 200;
+int blauw_g = 200;
+int blauw_b = 200;
 /*
 int licht_blauw_r = 700;
 int licht_blauw_g = 500;
@@ -61,9 +61,9 @@ int geel_g = 500;
 int geel_b = 450;
 */
 
-int wit_r = 400;
-int wit_g = 500;
-int wit_b = 450;
+int wit_r = 100;
+int wit_g = 100;
+int wit_b = 100;
 
 
 void setup() {
@@ -187,7 +187,7 @@ int detectColor() {
   else if ((rood > groen_r) && (groen < groen_g) && (blauw > groen_b)) {
     return 2; //Groen
   }
-  else if ((rood > blauw_r) && (groen < blauw_g) && (blauw <blauw_b)) {
+  else if ((rood > blauw_r) && (groen > blauw_g) && (blauw <blauw_b)) {
     return 3; //Blauw
   }
   /*
