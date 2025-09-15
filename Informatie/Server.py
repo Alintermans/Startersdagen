@@ -29,14 +29,14 @@ pico_profs = ['Beernaert' for _ in range(15)]
 # professor code (a..m) to the chosen option index (0..7). Multiple professors
 # may map to the same option.
 OPTION_NAMES = [
-    'Koffie',
-    'Thee',
-    'Koffie met suiker',
-    'Thee met suiker',
-    'Koffie met melk',
-    'Thee met melk',
-    'Koffie met melk en suiker',
-    'Thee met melk en suiker',
+    'Koffie', #0 
+    'Thee', #1
+    'Koffie met suiker', #2
+    'Thee met suiker', #3
+    'Koffie met melk', #4
+    'Thee met melk', #5
+    'Koffie met melk en suiker', #6
+    'Thee met melk en suiker', #7
 ]
 
 # Map each professor letter ('a'..'m') to the option index (0..7) they select.
@@ -44,17 +44,17 @@ OPTION_NAMES = [
 PROF_TO_OPTION = {
     'a': 0,  #Vandebril
     'b': 1,  #Van-hamme
-    'c': 2,  #Smets
-    'd': 3,  #Vansteenwegen
-    'e': 4,  #Dehaene
-    'f': 5,  #Jacobs
-    'g': 0,  #Beernaert
-    'h': 7,  #De-Laet
-    'i': 0,  #Rijmen
-    'j': 1,  #Vanmeensel
-    'k': 2,  #Van-Puyvelde
-    'l': 3,  #Vander-Sloten
-    'm': 4,  #Geraedts
+    'c': 3,  #Smets
+    'd': 7,  #Vansteenwegen
+    'e': 5,  #Dehaene
+    'f': 0,  #Jacobs
+    'g': 4,  #Beernaert
+    'h': 2,  #De-Laet
+    'i': 3,  #Rijmen
+    'j': 4,  #Vanmeensel
+    'k': 0,  #Van-Puyvelde
+    'l': 4,  #Vander-Sloten
+    'm': 5,  #Geraedts
 }
 
 # Map professor option values  to letters a..m
