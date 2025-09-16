@@ -1,8 +1,8 @@
 @echo off
-title Run Setup Wiskunde - Anaconda PowerShell
-echo ==============================================
-echo    Running Setup Wiskunde in Anaconda PowerShell
-echo ==============================================
+title Run Setup Informatie - Anaconda PowerShell
+echo ================================================
+echo    Running Setup Informatie in Anaconda PowerShell
+echo ================================================
 echo.
 
 REM Get the current directory where this batch file is located
@@ -35,11 +35,11 @@ if exist "C:\Program Files\Anaconda3\Scripts\activate.bat" (
 )
 
 echo Found Anaconda at: %ANACONDA_PATH%
-echo Starting Anaconda PowerShell and running setup_wiskunde.ps1...
+echo Starting Anaconda PowerShell and running setup_informatie.ps1...
 echo.
 
 REM Create a temporary PowerShell script that initializes conda and runs the PS1 file
-set TEMP_PS1=%TEMP%\run_setup_wiskunde_temp.ps1
+set TEMP_PS1=%TEMP%\run_setup_informatie_temp.ps1
 
 echo # Initialize Conda for PowerShell > "%TEMP_PS1%"
 echo $env:CONDA_EXE = '%ANACONDA_PATH%\Scripts\conda.exe' >> "%TEMP_PS1%"
@@ -53,7 +53,7 @@ echo. >> "%TEMP_PS1%"
 echo # Change to script directory >> "%TEMP_PS1%"
 echo Set-Location '%SCRIPT_DIR%' >> "%TEMP_PS1%"
 echo. >> "%TEMP_PS1%"
-echo # Embedded setup_wiskunde.ps1 content >> "%TEMP_PS1%"
+echo # Embedded setup_informatie.ps1 content >> "%TEMP_PS1%"
 echo $envs = conda info --envs >> "%TEMP_PS1%"
 echo if ($envs -like "*startersdagen*") { >> "%TEMP_PS1%"
 echo     conda activate startersdagen >> "%TEMP_PS1%"
@@ -70,9 +70,9 @@ echo     pip install opencv-python >> "%TEMP_PS1%"
 echo     pip install numpy >> "%TEMP_PS1%"
 echo } >> "%TEMP_PS1%"
 echo. >> "%TEMP_PS1%"
-echo Write-Host "cd H:\Startersdagen\Wiskunde" >> "%TEMP_PS1%"
-echo Set-Location "H:\Startersdagen\Wiskunde" >> "%TEMP_PS1%"
-echo Write-Host "python H:\Startersdagen\Wiskunde\Server.py" >> "%TEMP_PS1%"
+echo Write-Host "cd H:\Startersdagen\Informatie" >> "%TEMP_PS1%"
+echo Set-Location "H:\Startersdagen\Informatie" >> "%TEMP_PS1%"
+echo Write-Host "python H:\Startersdagen\Informatie\Server.py" >> "%TEMP_PS1%"
 echo python Server.py >> "%TEMP_PS1%"
 
 REM Launch PowerShell with the temporary script

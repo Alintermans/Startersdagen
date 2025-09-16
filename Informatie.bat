@@ -70,9 +70,9 @@ echo     pip install opencv-python >> "%TEMP_PS1%"
 echo     pip install numpy >> "%TEMP_PS1%"
 echo } >> "%TEMP_PS1%"
 echo. >> "%TEMP_PS1%"
-echo Write-Host "cd H:\Startersdagen\Informatie" >> "%TEMP_PS1%"
-echo Set-Location "H:\Startersdagen\Informatie" >> "%TEMP_PS1%"
-echo Write-Host "python H:\Startersdagen\Informatie\Server.py" >> "%TEMP_PS1%"
+echo Write-Host "cd C:\Users\InfosessieSD\Desktop\Startersdagen\Informatie" >> "%TEMP_PS1%"
+echo Set-Location "C:\Users\InfosessieSD\Desktop\Startersdagen\Informatie" >> "%TEMP_PS1%"
+echo Write-Host "python C:\Users\InfosessieSD\Desktop\Startersdagen\Informatie\Server.py" >> "%TEMP_PS1%"
 echo python Server.py >> "%TEMP_PS1%"
 
 REM Launch PowerShell with the temporary script
