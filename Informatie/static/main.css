@@ -468,7 +468,31 @@ img {
 
 .voltage_inputs_div {
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.voltage_inputs_div h3 {
+  margin: 0 0 10px 0;
+  padding: 0;
+}
+
+select {
+  width: 200px;
+  min-width: 150px;
+  padding: 5px;
+  margin: 0 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 14px;
+}
+
+/* Special layout for beginner page 8 only */
+.beginner-8-layout .column:first-child {
+  flex: 1;
+}
+
+.beginner-8-layout .column:last-child {
+  flex: 3;
 }

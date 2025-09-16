@@ -629,8 +629,17 @@ function saveBeginner8Data() {
 }
 
 function attachBeginner8Autofill() {
-    const trigger = document.querySelector('.voltage_inputs_div h3');
-    if (!trigger || trigger.textContent !== 'Zwart/Zwart') return;
+    const triggers = document.querySelectorAll('h3');
+    let trigger = null;
+    
+    for (let i = 0; i < triggers.length; i++) {
+        if (triggers[i].textContent.trim() === 'Zwart/Zwart') {
+            trigger = triggers[i];
+            break;
+        }
+    }
+    
+    if (!trigger) return;
 
     if (trigger.__autofillBound) return;
     trigger.__autofillBound = true;
@@ -792,6 +801,17 @@ function loadPage(pageUrl) {
             if ((choice === 'beginner' && state == 8) ) {
                 loadBeginner8Data();
                 attachBeginner8Autofill();
+                // Apply special layout for page 8
+                const columnsDiv = document.querySelector('.columns');
+                if (columnsDiv) {
+                    columnsDiv.classList.add('beginner-8-layout');
+                }
+            } else {
+                // Remove special layout for other pages
+                const columnsDiv = document.querySelector('.columns');
+                if (columnsDiv) {
+                    columnsDiv.classList.remove('beginner-8-layout');
+                }
             }
             
 
