@@ -103,7 +103,7 @@ def show_default_text():
     
 def show_waiting_text():
     oled.fill(0)
-    oled.text("Herken-modus", 0, 0)
+    oled.text("Klaar om te herkennen", 0, 0)
     oled.text("", 0, 40)
     oled.show()
 
@@ -127,15 +127,14 @@ while True:
         show_default_text()
         play_song(7,200)
     else: 
-        print("Checkpin is LOW")
+        #print("Checkpin is LOW")
         show_waiting_text()
         if uart.any():
             data = uart.readline()
-            #print("checking data")
             if data:  # kan None zijn
                 # decodeer en verwijder witruimte
                 line = data.decode('utf-8').strip()
-                #print(line)
+                print(line)
                 
                             # splits de naam en het cijfer (veronderstel dat ze gescheiden zijn door een komma)
                 try:
