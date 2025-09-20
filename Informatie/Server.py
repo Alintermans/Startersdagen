@@ -11,6 +11,7 @@ current_choice = 'None' # 'None', 'beginner', 'advanced'
 current_page = 'home' # 'home', 'game', 'settings'
 
 arduino_connected = False
+arduino_reconnecting = False
 
 nb_steps_advanced = 7
 nb_steps_beginner = 11
@@ -111,6 +112,9 @@ def find_arduino():
         if "2341" in port.hwid:
             try:
                 arduino = serial.Serial(port=port.device,   baudrate=230400, timeout=0.01)
+                time.sleep(2) # wait for the serial connection to initialize
+                #test connection
+                
             except:
                 print("Arduino is busy, make sure that the Arduino IDE is closed! Restart the program")
                 return False
@@ -144,11 +148,53 @@ def connect_to_arduino():
         print("")
         tries += 1
 
+def test_arduino_connection():
+    arduino.flushInput()
+    arduino.flushOutput()
+    arduino.write(bytes('H\n',   'utf-8'))
+    time.sleep(0.1)
+    data = arduino.readline()
+    if data.decode('utf-8').strip() != '2':
+        print("Error: could not connect to arduino, received: " + data.decode('utf-8').strip())
+        return False
+    return True
+
+
+
+def arduino_reconnect_after_error():
+    global arduino_connected
+    global arduino_reconnecting
+    if arduino_reconnecting:
+        return
+    arduino_reconnecting = True
+    arduino_connected = False
+    disconnect_from_arduino()
+    time.sleep(2)
+    connect_to_arduino()
+    result = test_arduino_connection()
+    if not result:
+        arduino_connected = False
+        print("Error: could not reconnect to arduino, please reset it and try again")
+    else:
+        arduino_connected = True
+        print("Arduino reconnected")
+    arduino_reconnecting = False
+
+
 def disconnect_from_arduino():
     global arduino
     global arduino_connected
     arduino_connected = False
-    arduino.close()
+    if arduino != "":
+        try :
+            arduino.flushInput()
+            arduino.flushOutput()
+            arduino.close()
+        except:
+            print("Error: could not close arduino")
+    arduino = ""
+
+
 
 def run_arduino_messenger():
     global arduino_send_queue
@@ -159,10 +205,14 @@ def run_arduino_messenger():
         if len(arduino_send_queue) > 0:
             message = arduino_send_queue[0]
             arduino_send_queue.pop(0)
-            if message == 'DC':
-                DC_result = send_dc_request_to_arduino()
-            else:
-                write_read(message)
+            try:
+                if message == 'DC':
+                    DC_result = send_dc_request_to_arduino()
+                else:
+                    write_read(message)
+            except:
+                print("Error: could not send message to arduino, trying to reconnect")
+                arduino_reconnect_after_error()
         time.sleep(0.01)
 
 def send_message(x):
@@ -555,12 +605,17 @@ def detect_color():
     #     time.sleep(0.1)
     #     retries += 1
     #     result = send_detect_color_request()
-    
-    color = result[0]
-    red = result[1]
-    green = result[2]
-    blue = result[3]
-    retries = 0
+    try:
+        color = result[0]
+        red = result[1]
+        green = result[2]
+        blue = result[3]
+        retries = 0
+    except:
+        color = 0
+        red = 'ERROR'
+        green = 'ERROR'
+        blue = 'ERROR'
     return jsonify({'status': 'detect-color', 'detected_color': int_color_to_string(color), 'red_value': red, 'green_value': green, 'blue_value': blue})
 
 @app.route('/change-sensor-color-values')
@@ -965,6 +1020,22 @@ if __name__ == '__main__':
     arduino_send_threaad = threading.Thread(target=run_arduino_messenger)
     arduino_send_threaad.start()
     print("✅ Arduino is communicating!")
+
+    # Keep alive thread
+    def keep_alive():
+        while True:
+            time.sleep(30)
+            if arduino_connected:
+                try:
+                    write_read('H\n')
+                except:
+                    print("Error: could not send keep-alive to arduino, trying to reconnect")
+                    arduino_reconnect_after_error()
+    keep_alive_thread = threading.Thread(target=keep_alive)
+    keep_alive_thread.start()
+    print("✅ Keep-alive thread started!")
+
+
 
     print("")
     print("Starting server...")
