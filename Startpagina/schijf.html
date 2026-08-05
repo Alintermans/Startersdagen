@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Startdagen – Schijf</title>
+  <link rel="icon" type="image/svg+xml" href="static/kuleuven-logo.svg">
+  <style>
+    :root {
+      --kul-donkerblauw: #00407A;
+      --kul-lichtblauw: #54BCEB;
+      --tekst: #333333;
+      --tekst-licht: #666666;
+      --rand: #dfe3e6;
+      --achtergrond: #f5f7f9;
+      --snij-rood: #d40000;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--tekst);
+      background: var(--achtergrond);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--rand);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .header-inner img { height: 48px; display: block; }
+    .site-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--kul-donkerblauw);
+      border-left: 1px solid var(--rand);
+      padding-left: 20px;
+      line-height: 1.2;
+    }
+    .site-title small {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--tekst-licht);
+    }
+    .terug {
+      margin-left: auto;
+      color: var(--kul-donkerblauw);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .terug:hover { color: var(--kul-lichtblauw); }
+
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 24px 56px;
+    }
+    h1 {
+      color: var(--kul-donkerblauw);
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .intro {
+      color: var(--tekst-licht);
+      max-width: 760px;
+      margin-bottom: 24px;
+    }
+
+    .layout {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .schijf-paneel {
+      flex: 1 1 480px;
+      background: #ffffff;
+      border: 1px solid var(--rand);
+      border-top: 4px solid var(--kul-lichtblauw);
+      padding: 16px;
+    }
+    .schijf-paneel svg { width: 100%; height: auto; display: block; }
+
+    .zijpaneel {
+      flex: 0 1 340px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .blok {
+      background: #ffffff;
+      border: 1px solid var(--rand);
+      border-top: 4px solid var(--kul-lichtblauw);
+      padding: 18px;
+    }
+    .blok h2 {
+      color: var(--kul-donkerblauw);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    label { font-size: 0.9rem; }
+    input[type="text"] {
+      width: 100%;
+      padding: 9px 10px;
+      border: 1px solid var(--rand);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+    .optie {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+    .teller {
+      font-size: 0.95rem;
+      margin-top: 12px;
+    }
+    .teller b { color: var(--kul-donkerblauw); }
+
+    .knoppen { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+    button {
+      font: inherit;
+      padding: 10px 16px;
+      border: 1px solid var(--kul-donkerblauw);
+      cursor: pointer;
+    }
+    .primair {
+      background: var(--kul-donkerblauw);
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .primair:hover { background: #005ea8; }
+    .secundair {
+      background: #ffffff;
+      color: var(--kul-donkerblauw);
+    }
+    .secundair:hover { background: var(--achtergrond); }
+
+    .legende { list-style: none; font-size: 0.85rem; }
+    .legende li { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .bolletje {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 2px solid transparent;
+    }
+    .b-vast { border-color: var(--kul-donkerblauw); }
+    .b-kandidaat { border-color: #b6bfc7; border-style: dashed; }
+    .b-gekozen { border-color: var(--snij-rood); background: rgba(212, 0, 0, 0.15); }
+
+    .regels { font-size: 0.85rem; color: var(--tekst-licht); }
+    .regels li { margin: 0 0 6px 18px; }
+
+    /* SVG-onderdelen */
+    .schijfrand { fill: none; stroke: var(--kul-donkerblauw); stroke-width: 1.2; }
+    .vastgat { fill: none; stroke: var(--kul-donkerblauw); stroke-width: 1; }
+    .gat {
+      fill: rgba(0, 0, 0, 0);
+      stroke: #b6bfc7;
+      stroke-width: 1;
+      stroke-dasharray: 3 3;
+      cursor: pointer;
+    }
+    .gat:hover { stroke: var(--kul-lichtblauw); stroke-width: 2; }
+    .gat.gekozen {
+      fill: rgba(212, 0, 0, 0.15);
+      stroke: var(--snij-rood);
+      stroke-width: 2;
+      stroke-dasharray: none;
+    }
+
+    footer {
+      background: var(--kul-donkerblauw);
+      color: #d6e4f0;
+      font-size: 0.85rem;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <img src="static/kuleuven-logo.svg" alt="KU Leuven">
+      <div class="site-title">
+        Startdagen
+        <small>Probleemoplossen en Ontwerpen</small>
+      </div>
+      <a class="terug" href="/">&lsaquo; Terug naar de startpagina</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Schijf voor het mechanische deel</h1>
+    <p class="intro">
+      Klik de gaten aan die in jullie schijf gesneden moeten worden. De rand van de schijf
+      (&Oslash;295&nbsp;mm), het asgat en de vier montagegaatjes worden altijd meegesneden.
+      Download daarna de SVG en lever die rechtstreeks in bij het FabLab &mdash; openen in
+      Inkscape is niet meer nodig.
+    </p>
+
+    <div class="layout">
+      <div class="schijf-paneel">
+        <svg id="schijf" viewBox="-158 -158 316 316" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+
+      <div class="zijpaneel">
+        <div class="blok">
+          <h2>Jullie schijf</h2>
+          <label for="teamnaam">Teamnaam (voor de bestandsnaam)
+            <input type="text" id="teamnaam" placeholder="bv. team01">
+          </label>
+          <div class="optie">
+            <input type="checkbox" id="twee_schijven" checked>
+            <label for="twee_schijven">Twee schijven op &eacute;&eacute;n plaat (aangeraden)</label>
+          </div>
+          <div class="teller"><b id="aantal">0</b> van de 66 gaten geselecteerd</div>
+          <div class="knoppen">
+            <button class="primair" onclick="downloadSvg()">&#11015; Download SVG</button>
+            <button class="secundair" onclick="wisAlles()">Alles wissen</button>
+          </div>
+        </div>
+
+        <div class="blok">
+          <h2>Legende</h2>
+          <ul class="legende">
+            <li><span class="bolletje b-vast"></span> Wordt altijd gesneden (rand, asgat, montagegaatjes)</li>
+            <li><span class="bolletje b-kandidaat"></span> Mogelijk gat &mdash; klik om te selecteren</li>
+            <li><span class="bolletje b-gekozen"></span> Geselecteerd &mdash; wordt gesneden (&Oslash;25&nbsp;mm)</li>
+          </ul>
+        </div>
+
+        <div class="blok">
+          <h2>Klaar voor het FabLab</h2>
+          <ul class="regels">
+            <li>Snijlijnen in rood (#FF0000), lijndikte 0,1&nbsp;mm</li>
+            <li>Ware grootte: plaat van 600&times;300&nbsp;mm (of 300&times;300&nbsp;mm bij &eacute;&eacute;n schijf), 3&nbsp;mm MDF</li>
+            <li>Alleen vectoren, geen vulkleuren</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>KU Leuven &middot; Startdagen &middot; Probleemoplossen en Ontwerpen</span>
+      <span>startdagen.peno1.be</span>
+    </div>
+  </footer>
+
+  <script>
+    // Geometrie in mm, overgenomen uit inkscape/Cirkel-team01.svg
+    // (posities relatief t.o.v. het middelpunt van de schijf)
+    const SCHIJF_RADIUS = 147.5;
+    const GAT_RADIUS = 12.5;
+    const VASTE_GATEN = [[-15.0, 0.0, 2.0], [0.0, 15.0, 2.0], [0.0, -15.0, 2.0], [0.0, 0.0, 2.0], [15.0, 0.0, 2.0]];
+    const GATEN = [[-26.248, -26.078], [-0.12, -37.0], [26.078, -26.248], [37.0, -0.12], [26.248, 26.078], [0.12, 37.0], [-26.078, 26.248], [-37.0, 0.12], [-57.778, -27.529], [-40.112, -49.871], [-14.501, -62.336], [13.982, -62.455], [39.695, -50.203], [57.546, -28.008], [64.0, -0.266], [57.778, 27.529], [40.112, 49.871], [14.501, 62.336], [-13.982, 62.455], [-39.695, 50.203], [-57.546, 28.008], [-64.0, 0.266], [-86.707, -27.626], [-73.926, -53.068], [-53.909, -73.315], [-28.615, -86.385], [-0.52, -91.0], [27.626, -86.707], [53.068, -73.926], [73.315, -53.909], [86.385, -28.615], [91.0, -0.52], [86.707, 27.626], [73.926, 53.068], [53.909, 73.315], [28.615, 86.385], [0.52, 91.0], [-27.626, 86.707], [-53.068, 73.926], [-73.315, 53.909], [-86.385, 28.615], [-91.0, 0.52], [-120.875, -31.85], [-108.513, -62.05], [-88.756, -88.021], [-62.95, -107.993], [-32.855, -120.606], [-0.52, -125.0], [31.85, -120.875], [62.05, -108.513], [88.021, -88.756], [107.993, -62.95], [120.606, -32.855], [125.0, -0.52], [120.875, 31.85], [108.513, 62.05], [88.756, 88.021], [62.95, 107.993], [32.855, 120.606], [0.52, 125.0], [-31.85, 120.875], [-62.05, 108.513], [-88.021, 88.756], [-107.993, 62.95], [-120.606, 32.855], [-125.0, 0.52]];
+
+    const geselecteerd = new Set();
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+
+    function bouwSchijf() {
+      const svg = document.getElementById('schijf');
+
+      const rand = document.createElementNS(SVG_NS, 'circle');
+      rand.setAttribute('r', SCHIJF_RADIUS);
+      rand.setAttribute('class', 'schijfrand');
+      svg.appendChild(rand);
+
+      for (const [x, y, r] of VASTE_GATEN) {
+        const c = document.createElementNS(SVG_NS, 'circle');
+        c.setAttribute('cx', x);
+        c.setAttribute('cy', y);
+        c.setAttribute('r', r);
+        c.setAttribute('class', 'vastgat');
+        svg.appendChild(c);
+      }
+
+      GATEN.forEach(([x, y], index) => {
+        const c = document.createElementNS(SVG_NS, 'circle');
+        c.setAttribute('cx', x);
+        c.setAttribute('cy', y);
+        c.setAttribute('r', GAT_RADIUS);
+        c.setAttribute('class', 'gat');
+        c.addEventListener('click', () => toggleGat(index, c));
+        svg.appendChild(c);
+      });
+    }
+
+    function toggleGat(index, element) {
+      if (geselecteerd.has(index)) {
+        geselecteerd.delete(index);
+        element.classList.remove('gekozen');
+      } else {
+        geselecteerd.add(index);
+        element.classList.add('gekozen');
+      }
+      document.getElementById('aantal').textContent = geselecteerd.size;
+    }
+
+    function wisAlles() {
+      geselecteerd.clear();
+      document.querySelectorAll('#schijf .gat').forEach(c => c.classList.remove('gekozen'));
+      document.getElementById('aantal').textContent = '0';
+    }
+
+    // Bouwt de lasersnij-SVG volgens de FabLab-regels: ware grootte in mm,
+    // snijlijnen rood #FF0000 met dikte 0,1 mm, geen vulling.
+    function maakSnijSvg() {
+      const twee = document.getElementById('twee_schijven').checked;
+      const breedte = twee ? 600 : 300;
+      const centra = twee ? [[150, 150], [450, 150]] : [[150, 150]];
+      const stijl = 'fill:none;stroke:#ff0000;stroke-width:0.1';
+
+      const cirkel = (cx, cy, r) =>
+        `  <circle cx="${cx.toFixed(3)}" cy="${cy.toFixed(3)}" r="${r}" style="${stijl}" />`;
+
+      const regels = [];
+      for (const [mx, my] of centra) {
+        regels.push(cirkel(mx, my, SCHIJF_RADIUS));
+        for (const [x, y, r] of VASTE_GATEN) {
+          regels.push(cirkel(mx + x, my + y, r));
+        }
+        for (const index of [...geselecteerd].sort((a, b) => a - b)) {
+          regels.push(cirkel(mx + GATEN[index][0], my + GATEN[index][1], GAT_RADIUS));
+        }
+      }
+
+      return '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n'
+        + `<svg xmlns="${SVG_NS}" width="${breedte}mm" height="300mm" viewBox="0 0 ${breedte} 300" version="1.1">\n`
+        + regels.join('\n')
+        + '\n</svg>\n';
+    }
+
+    function downloadSvg() {
+      if (geselecteerd.size === 0) {
+        if (!confirm('Je hebt nog geen gaten geselecteerd. Toch downloaden?')) {
+          return;
+        }
+      }
+      const naam = document.getElementById('teamnaam').value.trim()
+        .replace(/[^a-zA-Z0-9_-]+/g, '-').replace(/^-+|-+$/g, '');
+      const bestandsnaam = naam ? `Schijf-${naam}.svg` : 'Schijf.svg';
+
+      const blob = new Blob([maakSnijSvg()], {type: 'image/svg+xml'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = bestandsnaam;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    bouwSchijf();
+  </script>
+</body>
+</html>
