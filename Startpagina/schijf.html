@@ -236,10 +236,6 @@
           <label for="teamnaam">Teamnaam (voor de bestandsnaam)
             <input type="text" id="teamnaam" placeholder="bv. team01">
           </label>
-          <div class="optie">
-            <input type="checkbox" id="twee_schijven" checked>
-            <label for="twee_schijven">Twee schijven op &eacute;&eacute;n plaat (aangeraden)</label>
-          </div>
           <div class="teller"><b id="aantal">0</b> van de 66 gaten geselecteerd</div>
           <div class="knoppen">
             <button class="primair" onclick="downloadSvg()">&#11015; Download SVG</button>
@@ -260,7 +256,7 @@
           <h2>Klaar voor het FabLab</h2>
           <ul class="regels">
             <li>Snijlijnen in rood (#FF0000), lijndikte 0,1&nbsp;mm</li>
-            <li>Ware grootte: plaat van 600&times;300&nbsp;mm (of 300&times;300&nbsp;mm bij &eacute;&eacute;n schijf), 3&nbsp;mm MDF</li>
+            <li>Ware grootte: &eacute;&eacute;n schijf op 300&times;300&nbsp;mm, 3&nbsp;mm MDF</li>
             <li>Alleen vectoren, geen vulkleuren</li>
           </ul>
         </div>
@@ -334,27 +330,22 @@
     // Bouwt de lasersnij-SVG volgens de FabLab-regels: ware grootte in mm,
     // snijlijnen rood #FF0000 met dikte 0,1 mm, geen vulling.
     function maakSnijSvg() {
-      const twee = document.getElementById('twee_schijven').checked;
-      const breedte = twee ? 600 : 300;
-      const centra = twee ? [[150, 150], [450, 150]] : [[150, 150]];
       const stijl = 'fill:none;stroke:#ff0000;stroke-width:0.1';
+      const mx = 150, my = 150;
 
       const cirkel = (cx, cy, r) =>
         `  <circle cx="${cx.toFixed(3)}" cy="${cy.toFixed(3)}" r="${r}" style="${stijl}" />`;
 
-      const regels = [];
-      for (const [mx, my] of centra) {
-        regels.push(cirkel(mx, my, SCHIJF_RADIUS));
-        for (const [x, y, r] of VASTE_GATEN) {
-          regels.push(cirkel(mx + x, my + y, r));
-        }
-        for (const index of [...geselecteerd].sort((a, b) => a - b)) {
-          regels.push(cirkel(mx + GATEN[index][0], my + GATEN[index][1], GAT_RADIUS));
-        }
+      const regels = [cirkel(mx, my, SCHIJF_RADIUS)];
+      for (const [x, y, r] of VASTE_GATEN) {
+        regels.push(cirkel(mx + x, my + y, r));
+      }
+      for (const index of [...geselecteerd].sort((a, b) => a - b)) {
+        regels.push(cirkel(mx + GATEN[index][0], my + GATEN[index][1], GAT_RADIUS));
       }
 
       return '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n'
-        + `<svg xmlns="${SVG_NS}" width="${breedte}mm" height="300mm" viewBox="0 0 ${breedte} 300" version="1.1">\n`
+        + `<svg xmlns="${SVG_NS}" width="300mm" height="300mm" viewBox="0 0 300 300" version="1.1">\n`
         + regels.join('\n')
         + '\n</svg>\n';
     }
