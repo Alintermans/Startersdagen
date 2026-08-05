@@ -10,10 +10,12 @@ root bouwt het geheel. Nieuwe onderdelen kunnen later in `wsgi.py` onder een
 eigen pad gemount worden (en dan op de startpagina een kaart erbij zetten,
 zie [Startpagina/README.md](Startpagina/README.md)).
 
-De studenten gebruiken hun eigen laptop. De camera draait in hun browser;
-de server doet enkel de gezichtsherkenning. Elke groep heeft een eigen
-sessie (voortgang + toegevoegde gezichten), dus meerdere groepen kunnen
-tegelijk werken.
+De studenten gebruiken hun eigen laptop. De camera én de live
+gezichtsherkenning (kenmerken, make-up, eigen gezichten) draaien volledig
+in hun browser met face-api.js — de server rekent daar niets aan. Enkel het
+herkennen van de prof (pagina 13) gebeurt op de server: één frame per klik.
+Elke groep heeft een eigen sessie, dus veel groepen tegelijk is geen
+probleem.
 
 ## Stappen in Coolify
 
@@ -61,11 +63,11 @@ camera ook zonder HTTPS toe.
 
 ## Goed om te weten
 
-- Sessies en toegevoegde gezichten staan in de container en verdwijnen bij
-  een redeploy. Voor een startdag is dat prima; deploy alleen niet
-  middenin een sessie.
-- De gezichtsherkenning (dlib) is CPU-intensief. Eén frame kost grofweg
-  0,2-0,5 s per CPU-core. Met veel groepen die tegelijk de camera-effecten
-  aanzetten wordt de feed trager, maar alles blijft werken.
+- De voortgang van de groepen staat in sessie-cookies; bij een redeploy
+  verliezen ze hun stap. Deploy dus liever niet middenin een startdag.
+- De zware verwerking gebeurt op de laptops van de studenten zelf
+  (face-api.js). De server doet enkel de prof-herkenning: één dlib-frame
+  per klik op "Detecteer de prof" — dat schaalt makkelijk naar tientallen
+  groepen tegelijk.
 - De Wiskunde-app blijft ook standalone werken voor lokale ontwikkeling:
   `cd Wiskunde && python Server.py` (zie [Wiskunde/README.md](Wiskunde/README.md)).

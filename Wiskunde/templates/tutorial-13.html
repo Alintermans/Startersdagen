@@ -12,7 +12,7 @@
             <button class="button" id="start_camera_btn" onclick="start_camera()"><i class="fas fa-play"></i> Start Camera</button>
             <button class="button" onclick="stop_camera()"><i class="fas fa-stop"></i> Stop Camera</button>
           </div>
-          <img src="{{ url_for('static', filename='images/camera_uit.jpg') }}" height="75%" id="video_feed">
+          <canvas id="video_feed" style="width: 100%; max-width: 640px;"></canvas>
           <div>
             <button class="button" onclick="detect_face()" id="btn_detect_face" style="margin-top: 10px; padding: 10px;">Detecteer de prof!</button>
           </div>

@@ -748,15 +748,20 @@ function check_q2() {
 
 
 //------------------------------------------- Camera -------------------------------------------//
-// De camera draait in de browser van de student (getUserMedia). Frames worden
-// als JPEG naar de server gestuurd, die ze verwerkt en terugstuurt.
+// De camera én de gezichtsherkenning draaien volledig in de browser van de
+// student (face-api.js), zodat de server niet per frame moet rekenen. Enkel
+// het herkennen van de prof (pagina 13) gebeurt op de server: één frame per
+// klik op de knop.
 var localStream = null;
 var camVideo = null;
 var camCanvas = null;
 var currentMode = 'none';
-var lastFrameUrl = null;
+var modelsLoaded = false;
+var localFaces = [];        // gezichten die de studenten zelf toevoegen: {name, descriptor}
+var lastResult = null;      // laatste detectieresultaat, getekend door drawLoop
 
 const camSleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+const FACE_MATCH_THRESHOLD = 0.6;
 
 function getCamVideo() {
     if (!camVideo) {
@@ -782,43 +787,201 @@ function captureFrameBlob() {
     return new Promise(resolve => captureFrame().toBlob(resolve, 'image/jpeg', 0.8));
 }
 
-function showFrameBlob(img, blob) {
-    if (lastFrameUrl) {
-        URL.revokeObjectURL(lastFrameUrl);
+async function ensureModels() {
+    if (modelsLoaded) {
+        return;
     }
-    lastFrameUrl = URL.createObjectURL(blob);
-    img.src = lastFrameUrl;
+    const url = 'static/models';
+    await Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri(url),
+        faceapi.nets.faceLandmark68Net.loadFromUri(url),
+        faceapi.nets.faceRecognitionNet.loadFromUri(url),
+    ]);
+    modelsLoaded = true;
 }
 
-async function camLoop() {
+function detectorOptions() {
+    return new faceapi.TinyFaceDetectorOptions({inputSize: 320, scoreThreshold: 0.4});
+}
+
+// Zelfde formule als in FaceRecognition.py zodat de getoonde percentages
+// overeenkomen met de oude (server-)versie.
+function faceConfidence(distance) {
+    const range = 1.0 - FACE_MATCH_THRESHOLD;
+    const linearVal = (1.0 - distance) / (range * 2.0);
+    if (distance > FACE_MATCH_THRESHOLD) {
+        return (linearVal * 100).toFixed(2) + '%';
+    }
+    const value = (linearVal + ((1.0 - linearVal) * Math.pow((linearVal - 0.5) * 2, 0.2))) * 100;
+    return value.toFixed(2) + '%';
+}
+
+async function detectLoop() {
     while (caemra_on) {
-        const img = document.getElementById('video_feed');
-        if (!img) {
-            stop_camera();
-            break;
-        }
         if (currentMode === 'none') {
-            // Geen bewerking nodig: toon het lokale camerabeeld rechtstreeks.
-            img.src = captureFrame().toDataURL('image/jpeg', 0.8);
+            lastResult = null;
             await camSleep(100);
-        } else {
-            const mode = currentMode;
-            try {
-                const blob = await captureFrameBlob();
-                const response = await fetch('process_frame?mode=' + mode, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'image/jpeg'},
-                    body: blob
-                });
-                if (response.ok && caemra_on && currentMode === mode) {
-                    showFrameBlob(img, await response.blob());
-                }
-            } catch (error) {
-                console.log(error);
-                await camSleep(500);
-            }
-            await camSleep(50);
+            continue;
         }
+        try {
+            if (currentMode === 'face_recognition') {
+                lastResult = await faceapi.detectAllFaces(camVideo, detectorOptions()).withFaceLandmarks().withFaceDescriptors();
+            } else {
+                lastResult = await faceapi.detectAllFaces(camVideo, detectorOptions()).withFaceLandmarks();
+            }
+        } catch (error) {
+            console.log(error);
+            lastResult = null;
+            await camSleep(300);
+        }
+        await camSleep(30);
+    }
+}
+
+function drawLoop() {
+    if (!caemra_on) {
+        return;
+    }
+    const canvas = document.getElementById('video_feed');
+    if (!canvas) {
+        stop_camera();
+        return;
+    }
+    const video = getCamVideo();
+    if (video.videoWidth) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        if (lastResult && currentMode !== 'none') {
+            drawOverlays(ctx, lastResult, currentMode);
+        }
+    }
+    requestAnimationFrame(drawLoop);
+}
+
+// Indeling van de 68 gezichtspunten (zelfde als dlib)
+const LANDMARK_GROUPS = [
+    {from: 0, to: 16, closed: false},   // kaaklijn
+    {from: 17, to: 21, closed: false},  // linkerwenkbrauw
+    {from: 22, to: 26, closed: false},  // rechterwenkbrauw
+    {from: 27, to: 30, closed: false},  // neusbrug
+    {from: 31, to: 35, closed: false},  // onderkant neus
+    {from: 36, to: 41, closed: true},   // linkeroog
+    {from: 42, to: 47, closed: true},   // rechteroog
+    {from: 48, to: 59, closed: true},   // buitenrand lippen
+    {from: 60, to: 67, closed: true},   // binnenrand lippen
+];
+
+function tracePoints(ctx, points, closed) {
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+    }
+    if (closed) {
+        ctx.closePath();
+    }
+}
+
+function strokePoints(ctx, points, closed, color, width) {
+    if (points.length < 2) {
+        return;
+    }
+    tracePoints(ctx, points, closed);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.stroke();
+}
+
+function fillPoints(ctx, points, color) {
+    if (points.length < 3) {
+        return;
+    }
+    tracePoints(ctx, points, true);
+    ctx.fillStyle = color;
+    ctx.fill();
+}
+
+function drawOverlays(ctx, results, mode) {
+    for (const result of results) {
+        const landmarks = result.landmarks ? result.landmarks.positions : null;
+        if (mode === 'face_landmarks' && landmarks) {
+            for (const group of LANDMARK_GROUPS) {
+                strokePoints(ctx, landmarks.slice(group.from, group.to + 1), group.closed, '#00ff00', 4);
+            }
+        } else if (mode === 'makeup' && landmarks) {
+            drawMakeup(ctx, landmarks);
+        } else if (mode === 'face_recognition') {
+            drawRecognition(ctx, result);
+        }
+    }
+}
+
+function drawMakeup(ctx, pts) {
+    // Zelfde punt-indeling voor de lippen als de face_recognition library
+    const topLip = [48, 49, 50, 51, 52, 53, 54, 64, 63, 62, 61, 60].map(i => pts[i]);
+    const bottomLip = [54, 55, 56, 57, 58, 59, 48, 60, 67, 66, 65, 64].map(i => pts[i]);
+    const leftBrow = pts.slice(17, 22);
+    const rightBrow = pts.slice(22, 27);
+    const leftEye = pts.slice(36, 42);
+    const rightEye = pts.slice(42, 48);
+
+    // Wenkbrauwen
+    fillPoints(ctx, leftBrow, 'rgb(68, 54, 39)');
+    fillPoints(ctx, rightBrow, 'rgb(68, 54, 39)');
+    strokePoints(ctx, leftBrow, true, 'rgb(68, 54, 39)', 5);
+    strokePoints(ctx, rightBrow, true, 'rgb(68, 54, 39)', 5);
+
+    // Lippen
+    fillPoints(ctx, topLip, 'rgb(150, 0, 0)');
+    fillPoints(ctx, bottomLip, 'rgb(150, 0, 0)');
+    strokePoints(ctx, topLip, true, 'rgb(150, 0, 0)', 8);
+    strokePoints(ctx, bottomLip, true, 'rgb(150, 0, 0)', 8);
+
+    // Ogen wit met eyeliner
+    fillPoints(ctx, leftEye, '#ffffff');
+    fillPoints(ctx, rightEye, '#ffffff');
+    strokePoints(ctx, leftEye, true, '#000000', 6);
+    strokePoints(ctx, rightEye, true, '#000000', 6);
+}
+
+function drawRecognition(ctx, result) {
+    const box = result.detection.box;
+    let name = 'Unknown';
+    let confidence = '100.0';
+    if (localFaces.length > 0 && result.descriptor) {
+        let best = null;
+        for (const face of localFaces) {
+            const distance = faceapi.euclideanDistance(face.descriptor, result.descriptor);
+            if (best === null || distance < best.distance) {
+                best = {name: face.name, distance: distance};
+            }
+        }
+        name = best.name;
+        confidence = faceConfidence(best.distance);
+    }
+    ctx.strokeStyle = '#ff0000';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(box.x, box.y, box.width, box.height);
+    ctx.fillStyle = '#ff0000';
+    ctx.fillRect(box.x, box.y + box.height - 35, box.width, 35);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '20px sans-serif';
+    ctx.fillText(name + ' (' + confidence + ')', box.x + 6, box.y + box.height - 10);
+}
+
+function showCameraOffImage() {
+    const canvas = document.getElementById('video_feed');
+    if (!canvas) {
+        return;
+    }
+    const image = new Image();
+    image.src = 'static/images/camera_uit.jpg';
+    image.onload = function () {
+        canvas.width = image.width;
+        canvas.height = image.height;
+        canvas.getContext('2d').drawImage(image, 0, 0);
     }
 }
 
@@ -834,6 +997,7 @@ async function start_camera(){
     start_camera_button.classList.add("disabled");
     start_camera_button.disabled = true;
     try {
+        await ensureModels();
         localStream = await navigator.mediaDevices.getUserMedia({
             video: {width: {ideal: 640}, height: {ideal: 480}},
             audio: false
@@ -843,7 +1007,8 @@ async function start_camera(){
         await video.play();
         caemra_on = true;
         currentMode = 'none';
-        camLoop();
+        detectLoop();
+        drawLoop();
     } catch (error) {
         console.log(error);
         alert("De camera kon niet gestart worden. Geef je browser toestemming om de camera te gebruiken en probeer opnieuw.");
@@ -855,6 +1020,7 @@ async function start_camera(){
 function stop_camera(){
     caemra_on = false;
     currentMode = 'none';
+    lastResult = null;
     if (localStream) {
         localStream.getTracks().forEach(track => track.stop());
         localStream = null;
@@ -862,14 +1028,7 @@ function stop_camera(){
     if (camVideo) {
         camVideo.srcObject = null;
     }
-    if (lastFrameUrl) {
-        URL.revokeObjectURL(lastFrameUrl);
-        lastFrameUrl = null;
-    }
-    const img = document.getElementById('video_feed');
-    if (img) {
-        img.src = 'static/images/camera_uit.jpg';
-    }
+    showCameraOffImage();
 }
 
 function toggle_mode(mode){
@@ -898,19 +1057,13 @@ async function add_face(){
         alert("Start eerst de camera!");
         return;
     }
-    const blob = await captureFrameBlob();
-    fetch('add_face?name=' + encodeURIComponent(name), {
-        method: 'POST',
-        headers: {'Content-Type': 'image/jpeg'},
-        body: blob
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        if (data.status !== 'ok') {
-            alert("Er werd geen gezicht gevonden. Kijk recht in de camera en probeer opnieuw!");
-        }
-    });
+    const detection = await faceapi.detectSingleFace(camVideo, detectorOptions()).withFaceLandmarks().withFaceDescriptor();
+    if (!detection) {
+        alert("Er werd geen gezicht gevonden. Kijk recht in de camera en probeer opnieuw!");
+        return;
+    }
+    localFaces.push({name: name, descriptor: detection.descriptor});
+    console.log(localFaces.map(face => face.name));
 }
 
 async function detect_face(){
@@ -986,6 +1139,10 @@ function loadPage(pageUrl) {
             // Hook for tutorial 12: attach quad-click autofill on first image
             if (state == 12) {
                 attachTutorial12Autofill();
+            }
+            // Camera-pagina's: toon de "camera uit"-afbeelding op het canvas
+            if (state == 11 || state == 13) {
+                showCameraOffImage();
             }
             // else if (state == 11 && savedColors.length > 0) {
             //     loadColors();

@@ -2,22 +2,21 @@
 ##
 ## Deze versie is gemaakt om gehost te worden (bv. in een Docker container op
 ## Coolify) terwijl de studenten hun eigen laptop gebruiken:
-##  - De camera draait in de browser van de student (getUserMedia). De browser
-##    stuurt losse JPEG-frames naar /process_frame, de server verwerkt ze en
-##    stuurt het bewerkte frame terug.
-##  - De voortgang in de tutorial en de toegevoegde gezichten zijn per sessie
-##    (per groepje), zodat meerdere groepen tegelijk kunnen werken zonder
-##    elkaars stap of database te veranderen.
+##  - De camera én de live gezichtsherkenning draaien volledig in de browser
+##    van de student (face-api.js in static/main.js), zodat de server niet
+##    per frame moet rekenen en veel groepen tegelijk kunnen werken.
+##  - Enkel het herkennen van de prof (pagina 13) gebeurt op de server met
+##    dlib: één frame per klik op de knop, via POST /detect_face.
+##  - De voortgang in de tutorial is per sessie (per groepje).
 ##
 ## Lokaal starten:   python Server.py         (http://localhost:3000)
-## In productie:     gunicorn ... Server:app  (zie Dockerfile)
+## In productie:     gunicorn ... wsgi:app    (zie Dockerfile in de root)
 import os
 import secrets
-import uuid
 
 import cv2
 import numpy as np
-from flask import Flask, Response, jsonify, render_template, request, session
+from flask import Flask, jsonify, render_template, request, session
 
 from FaceRecognition import FaceRecognition
 
@@ -58,12 +57,6 @@ def _secret_key():
 
 app.secret_key = _secret_key()
 
-# Encodings van toegevoegde gezichten zijn te groot voor de sessie-cookie en
-# moeten gedeeld worden tussen de gunicorn workers, dus die staan per sessie
-# in een klein bestand op schijf.
-FACE_STORE_DIR = os.environ.get('FACE_STORE_DIR', os.path.join(BASE_DIR, 'face-store'))
-os.makedirs(FACE_STORE_DIR, exist_ok=True)
-
 print("Starting face recognition engine...")
 fr = FaceRecognition()
 
@@ -84,45 +77,12 @@ def page_for(state):
     return 'tutorial-' + str(state)
 
 
-def _session_id():
-    sid = session.get('sid')
-    if sid is None:
-        sid = uuid.uuid4().hex
-        session['sid'] = sid
-    return sid
-
-
-def _face_file(sid):
-    return os.path.join(FACE_STORE_DIR, sid + '.npz')
-
-
-def load_session_faces():
-    path = _face_file(_session_id())
-    if not os.path.isfile(path):
-        return [], []
-    data = np.load(path, allow_pickle=False)
-    return list(data['encodings']), list(data['names'])
-
-
-def save_session_faces(encodings, names):
-    path = _face_file(_session_id())
-    tmp_path = path + '.tmp'
-    with open(tmp_path, 'wb') as f:
-        np.savez(f, encodings=np.array(encodings), names=np.array(names))
-    os.replace(tmp_path, path)
-
-
 def _read_frame():
     data = request.get_data()
     if not data:
         return None
     frame = cv2.imdecode(np.frombuffer(data, dtype=np.uint8), cv2.IMREAD_COLOR)
     return frame
-
-
-def _jpeg_response(frame):
-    ret, buffer = cv2.imencode('.jpg', frame)
-    return Response(buffer.tobytes(), mimetype='image/jpeg')
 
 
 #########Pages############
@@ -225,44 +185,8 @@ def rgb_led():
 
 
 #########Camera############
-# De browser van de student stuurt JPEG-frames; de server verwerkt en antwoordt.
-
-@app.route('/process_frame', methods=['POST'])
-def process_frame():
-    mode = request.args.get('mode', 'none')
-    frame = _read_frame()
-    if frame is None:
-        return jsonify({'status': 'bad_frame'}), 400
-
-    if mode == 'face_landmarks':
-        frame = fr.annotate_landmarks(frame)
-    elif mode == 'makeup':
-        frame = fr.annotate_makeup(frame)
-    elif mode == 'face_recognition':
-        encodings, names = load_session_faces()
-        frame = fr.recognize(frame, encodings, names)
-
-    return _jpeg_response(frame)
-
-
-@app.route('/add_face', methods=['POST'])
-def add_face():
-    name = request.args.get('name') or 'Onbekend'
-    frame = _read_frame()
-    if frame is None:
-        return jsonify({'status': 'bad_frame'}), 400
-
-    encoding = fr.encode_face(frame)
-    if encoding is None:
-        return jsonify({'status': 'no_face'})
-
-    encodings, names = load_session_faces()
-    encodings.append(encoding)
-    names.append(name)
-    save_session_faces(encodings, names)
-    print(names)
-    return jsonify({'status': 'ok'})
-
+# De live camera-effecten draaien in de browser; de server doet enkel de
+# prof-herkenning met dlib, één frame per klik op de knop.
 
 @app.route('/detect_face', methods=['POST'])
 def detect_face():

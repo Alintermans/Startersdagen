@@ -1,7 +1,6 @@
-## Gezichtsherkenning op basis van dlib / face_recognition.
-## Deze klasse is stateless per verzoek: elke methode verwerkt één frame.
-## De gezichten die studenten zelf toevoegen worden per sessie bijgehouden in
-## Server.py en meegegeven aan recognize().
+## Herkenning van de proffen op basis van dlib / face_recognition.
+## Wordt enkel gebruikt voor recognize_prof() (één frame per klik vanuit de
+## browser); de live camera-effecten draaien client-side met face-api.js.
 import math
 import os
 
@@ -71,14 +70,6 @@ class FaceRecognition:
 
                 self.known_face_names.append('prof. ' + path.split("/")[-2])
 
-    def encode_face(self, frame):
-        """Geeft de encoding van het eerste gezicht in het frame, of None."""
-        image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        encodings = face_recognition.face_encodings(image)
-        if len(encodings) == 0:
-            return None
-        return encodings[0]
-
     def calculate_average_face_distance(self, face_distances, matches):
         #calculate the average face distance of each person, one person can have multiple faces
         faces = {}
@@ -114,66 +105,6 @@ class FaceRecognition:
 
             font = cv2.FONT_HERSHEY_DUPLEX
             cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-
-    def annotate_landmarks(self, frame):
-        small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-        face_landmarks_list = face_recognition.face_landmarks(small_frame)
-        cv_image = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-        for face_landmarks in face_landmarks_list:
-            for facial_feature in face_landmarks.keys():
-                points = np.array(face_landmarks[facial_feature], dtype=np.int32) * 4
-                cv2.polylines(cv_image, [points], isClosed=False, color=(0, 255, 0), thickness=5)
-
-        cv_image_rgb = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
-        return cv_image_rgb
-
-    def annotate_makeup(self, frame):
-        small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-        face_landmarks_list = face_recognition.face_landmarks(small_frame)
-        cv_image = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-        for face_landmarks in face_landmarks_list:
-            # Make the eyebrows into a nightmare
-            cv2.fillPoly(cv_image, [np.array(face_landmarks['left_eyebrow']) * 4], (68, 54, 39))
-            cv2.fillPoly(cv_image, [np.array(face_landmarks['right_eyebrow']) * 4], (68, 54, 39))
-            cv2.polylines(cv_image, [np.array(face_landmarks['left_eyebrow']) * 4], isClosed=True, color=(68, 54, 39), thickness=5)
-            cv2.polylines(cv_image, [np.array(face_landmarks['right_eyebrow']) * 4], isClosed=True, color=(68, 54, 39), thickness=5)
-
-            # Gloss the lips
-            cv2.fillPoly(cv_image, [np.array(face_landmarks['top_lip']) * 4], (150, 0, 0))
-            cv2.fillPoly(cv_image, [np.array(face_landmarks['bottom_lip']) * 4], (150, 0, 0))
-            cv2.polylines(cv_image, [np.array(face_landmarks['top_lip']) * 4], isClosed=True, color=(150, 0, 0), thickness=8)
-            cv2.polylines(cv_image, [np.array(face_landmarks['bottom_lip']) * 4], isClosed=True, color=(150, 0, 0), thickness=8)
-
-            # Sparkle the eyes
-            cv2.fillPoly(cv_image, [np.array(face_landmarks['left_eye']) * 4], (255, 255, 255))
-            cv2.fillPoly(cv_image, [np.array(face_landmarks['right_eye']) * 4], (255, 255, 255))
-
-            # Apply some eyeliner
-            cv2.polylines(cv_image, [np.array(face_landmarks['left_eye']) * 4], isClosed=True, color=(0, 0, 0), thickness=6)
-            cv2.polylines(cv_image, [np.array(face_landmarks['right_eye']) * 4], isClosed=True, color=(0, 0, 0), thickness=6)
-
-        cv_image_rgb = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
-        return cv_image_rgb
-
-    def recognize(self, frame, known_encodings, known_names):
-        """Herkent de gezichten die de studenten zelf hebben toegevoegd."""
-        face_locations, face_encodings = self._detect_faces(frame)
-
-        face_names = []
-        for face_encoding in face_encodings:
-            name = "Unknown"
-            confidance = 100.0
-            if len(known_encodings) > 0:
-                face_distances = face_recognition.face_distance(known_encodings, face_encoding)
-                if len(face_distances) > 0:
-                    best_match_index = np.argmin(face_distances)
-                    name = known_names[best_match_index]
-                    confidance = face_confidence(face_distances[best_match_index])
-
-            face_names.append(f'{name} ({confidance})')
-
-        self._draw_boxes(frame, face_locations, face_names)
-        return frame
 
     def recognize_prof(self, frame):
         """Zoekt een gekende prof in het frame. Geeft (frame, prof) terug,
