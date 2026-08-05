@@ -756,7 +756,7 @@ var localStream = null;
 var camVideo = null;
 var camCanvas = null;
 var currentMode = 'none';
-var modelsLoaded = false;
+var modelsPromise = null;
 var localFaces = [];        // gezichten die de studenten zelf toevoegen: {name, descriptor}
 var lastResult = null;      // laatste detectieresultaat, getekend door drawLoop
 
@@ -787,17 +787,22 @@ function captureFrameBlob() {
     return new Promise(resolve => captureFrame().toBlob(resolve, 'image/jpeg', 0.8));
 }
 
-async function ensureModels() {
-    if (modelsLoaded) {
-        return;
+function ensureModels() {
+    // Eén gedeelde promise: ook als de prefetch (bij het laden van de
+    // pagina) en "Start Camera" tegelijk lopen, worden de modellen maar
+    // één keer geladen.
+    if (!modelsPromise) {
+        const url = 'static/models';
+        modelsPromise = Promise.all([
+            faceapi.nets.tinyFaceDetector.loadFromUri(url),
+            faceapi.nets.faceLandmark68Net.loadFromUri(url),
+            faceapi.nets.faceRecognitionNet.loadFromUri(url),
+        ]).catch(error => {
+            modelsPromise = null;  // bij een mislukte laad kan het opnieuw geprobeerd worden
+            throw error;
+        });
     }
-    const url = 'static/models';
-    await Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri(url),
-        faceapi.nets.faceLandmark68Net.loadFromUri(url),
-        faceapi.nets.faceRecognitionNet.loadFromUri(url),
-    ]);
-    modelsLoaded = true;
+    return modelsPromise;
 }
 
 function detectorOptions() {
@@ -903,6 +908,55 @@ function fillPoints(ctx, points, color) {
     ctx.fill();
 }
 
+// Vloeiend pad door de punten (Catmull-Rom spline), zodat de make-up niet
+// hoekig wordt door de rechte lijnen tussen de 68 landmark-punten.
+function traceSmooth(ctx, pts, closed) {
+    const n = pts.length;
+    if (n < 3) {
+        tracePoints(ctx, pts, closed);
+        return;
+    }
+    const pt = i => pts[((i % n) + n) % n];
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    const segments = closed ? n : n - 1;
+    for (let i = 0; i < segments; i++) {
+        const p0 = closed ? pt(i - 1) : pts[Math.max(i - 1, 0)];
+        const p1 = pt(i);
+        const p2 = pt(i + 1);
+        const p3 = closed ? pt(i + 2) : pts[Math.min(i + 2, n - 1)];
+        ctx.bezierCurveTo(
+            p1.x + (p2.x - p0.x) / 6, p1.y + (p2.y - p0.y) / 6,
+            p2.x - (p3.x - p1.x) / 6, p2.y - (p3.y - p1.y) / 6,
+            p2.x, p2.y
+        );
+    }
+    if (closed) {
+        ctx.closePath();
+    }
+}
+
+function fillSmooth(ctx, points, color) {
+    if (points.length < 3) {
+        return;
+    }
+    traceSmooth(ctx, points, true);
+    ctx.fillStyle = color;
+    ctx.fill();
+}
+
+function strokeSmooth(ctx, points, closed, color, width) {
+    if (points.length < 2) {
+        return;
+    }
+    traceSmooth(ctx, points, closed);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.stroke();
+}
+
 function drawOverlays(ctx, results, mode) {
     for (const result of results) {
         const landmarks = result.landmarks ? result.landmarks.positions : null;
@@ -911,14 +965,16 @@ function drawOverlays(ctx, results, mode) {
                 strokePoints(ctx, landmarks.slice(group.from, group.to + 1), group.closed, '#00ff00', 4);
             }
         } else if (mode === 'makeup' && landmarks) {
-            drawMakeup(ctx, landmarks);
+            drawMakeup(ctx, landmarks, result.detection.box.width);
         } else if (mode === 'face_recognition') {
             drawRecognition(ctx, result);
         }
     }
 }
 
-function drawMakeup(ctx, pts) {
+function drawMakeup(ctx, pts, faceWidth) {
+    // Lijndiktes schalen mee met de grootte van het gezicht in beeld
+    const scale = (faceWidth || 150) / 150;
     // Zelfde punt-indeling voor de lippen als de face_recognition library
     const topLip = [48, 49, 50, 51, 52, 53, 54, 64, 63, 62, 61, 60].map(i => pts[i]);
     const bottomLip = [54, 55, 56, 57, 58, 59, 48, 60, 67, 66, 65, 64].map(i => pts[i]);
@@ -927,23 +983,22 @@ function drawMakeup(ctx, pts) {
     const leftEye = pts.slice(36, 42);
     const rightEye = pts.slice(42, 48);
 
-    // Wenkbrauwen
-    fillPoints(ctx, leftBrow, 'rgb(68, 54, 39)');
-    fillPoints(ctx, rightBrow, 'rgb(68, 54, 39)');
-    strokePoints(ctx, leftBrow, true, 'rgb(68, 54, 39)', 5);
-    strokePoints(ctx, rightBrow, true, 'rgb(68, 54, 39)', 5);
+    // Wenkbrauwen: een dikke, ronde lijn langs de brauwpunten in plaats van
+    // een opgevuld (puntig) vlak
+    strokeSmooth(ctx, leftBrow, false, 'rgb(68, 54, 39)', 9 * scale);
+    strokeSmooth(ctx, rightBrow, false, 'rgb(68, 54, 39)', 9 * scale);
 
     // Lippen
-    fillPoints(ctx, topLip, 'rgb(150, 0, 0)');
-    fillPoints(ctx, bottomLip, 'rgb(150, 0, 0)');
-    strokePoints(ctx, topLip, true, 'rgb(150, 0, 0)', 8);
-    strokePoints(ctx, bottomLip, true, 'rgb(150, 0, 0)', 8);
+    fillSmooth(ctx, topLip, 'rgb(150, 0, 0)');
+    fillSmooth(ctx, bottomLip, 'rgb(150, 0, 0)');
+    strokeSmooth(ctx, topLip, true, 'rgb(150, 0, 0)', 2 * scale);
+    strokeSmooth(ctx, bottomLip, true, 'rgb(150, 0, 0)', 2 * scale);
 
-    // Ogen wit met eyeliner
-    fillPoints(ctx, leftEye, '#ffffff');
-    fillPoints(ctx, rightEye, '#ffffff');
-    strokePoints(ctx, leftEye, true, '#000000', 6);
-    strokePoints(ctx, rightEye, true, '#000000', 6);
+    // Ogen wit met een dunne eyeliner (dik maakte de ogen helemaal zwart)
+    fillSmooth(ctx, leftEye, '#ffffff');
+    fillSmooth(ctx, rightEye, '#ffffff');
+    strokeSmooth(ctx, leftEye, true, '#000000', 2.5 * scale);
+    strokeSmooth(ctx, rightEye, true, '#000000', 2.5 * scale);
 }
 
 function drawRecognition(ctx, result) {
