@@ -675,6 +675,12 @@ function runColorBox(colorCombination) {
     document.getElementById("btn_detect_face").classList.add("disabled");
 
     var interval = setInterval(function() {
+        // Als er intussen weggenavigeerd is (Vorige/Volgende), bestaat de
+        // kleurbox niet meer op de pagina: stop dan de animatie.
+        if (!document.body.contains(colorBox)) {
+            clearInterval(interval);
+            return;
+        }
         if (i % 2 == 0) {
             colorBox.style.backgroundColor = firstColor;
         } else {
@@ -683,8 +689,11 @@ function runColorBox(colorCombination) {
         i++;
         if (i == 20) {
             clearInterval(interval);
-            document.getElementById("btn_detect_face").disabled = false;
-            document.getElementById("btn_detect_face").classList.remove("disabled");
+            const btn = document.getElementById("btn_detect_face");
+            if (btn) {
+                btn.disabled = false;
+                btn.classList.remove("disabled");
+            }
             colorBox.style.backgroundColor = '#f9f9f9';
         }
     }, 1000);
