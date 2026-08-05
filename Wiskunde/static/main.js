@@ -998,6 +998,14 @@ async function start_camera(){
     start_camera_button.disabled = true;
     try {
         await ensureModels();
+    } catch (error) {
+        console.error('Laden van de herkenningsmodellen mislukt:', error);
+        alert("De herkenningsmodellen konden niet geladen worden. Herlaad de pagina en probeer opnieuw.");
+        start_camera_button.classList.remove("disabled");
+        start_camera_button.disabled = false;
+        return;
+    }
+    try {
         localStream = await navigator.mediaDevices.getUserMedia({
             video: {width: {ideal: 640}, height: {ideal: 480}},
             audio: false
@@ -1010,8 +1018,16 @@ async function start_camera(){
         detectLoop();
         drawLoop();
     } catch (error) {
-        console.log(error);
-        alert("De camera kon niet gestart worden. Geef je browser toestemming om de camera te gebruiken en probeer opnieuw.");
+        console.error('Camera starten mislukt:', error);
+        if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+            alert("De browser heeft geen toestemming om de camera te gebruiken. Klik op het camera-icoontje in de adresbalk, sta de camera toe en probeer opnieuw.");
+        } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
+            alert("De camera is al in gebruik door een ander programma (bv. Teams of Zoom) of wordt geblokkeerd door Windows. Sluit andere programma's die de camera gebruiken en probeer opnieuw.");
+        } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+            alert("Er werd geen camera gevonden op deze computer.");
+        } else {
+            alert("De camera kon niet gestart worden (" + error.name + "): " + error.message);
+        }
     }
     start_camera_button.classList.remove("disabled");
     start_camera_button.disabled = false;
@@ -1141,8 +1157,10 @@ function loadPage(pageUrl) {
                 attachTutorial12Autofill();
             }
             // Camera-pagina's: toon de "camera uit"-afbeelding op het canvas
+            // en laad de modellen alvast, dan reageert "Start Camera" meteen.
             if (state == 11 || state == 13) {
                 showCameraOffImage();
+                ensureModels().catch(error => console.error('Laden van de herkenningsmodellen mislukt:', error));
             }
             // else if (state == 11 && savedColors.length > 0) {
             //     loadColors();
