@@ -1,0 +1,18 @@
+# Alleen wat de gecombineerde app nodig heeft gaat mee in de build context.
+*
+!wsgi.py
+!Startpagina
+!Wiskunde
+
+# En daarbinnen geen rommel:
+**/__pycache__
+**/*.pyc
+Wiskunde/.secret_key
+Wiskunde/face-store
+Wiskunde/export
+Wiskunde/SimpleFRDatabase
+Wiskunde/SimpleFR.py
+Wiskunde/Start_Server.bat
+Wiskunde/README.md
+Wiskunde/DEPLOY.md
+Startpagina/README.md

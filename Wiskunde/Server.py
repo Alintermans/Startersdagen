@@ -1,50 +1,135 @@
-import threading
-from flask import Flask, render_template, jsonify, Response, request
-import serial 
-from serial.tools import list_ports
-import time 
-import sys
+## Webserver voor het Wiskunde-deel (gezichtsherkenning).
+##
+## Deze versie is gemaakt om gehost te worden (bv. in een Docker container op
+## Coolify) terwijl de studenten hun eigen laptop gebruiken:
+##  - De camera draait in de browser van de student (getUserMedia). De browser
+##    stuurt losse JPEG-frames naar /process_frame, de server verwerkt ze en
+##    stuurt het bewerkte frame terug.
+##  - De voortgang in de tutorial en de toegevoegde gezichten zijn per sessie
+##    (per groepje), zodat meerdere groepen tegelijk kunnen werken zonder
+##    elkaars stap of database te veranderen.
+##
+## Lokaal starten:   python Server.py         (http://localhost:3000)
+## In productie:     gunicorn ... Server:app  (zie Dockerfile)
+import os
+import secrets
+import uuid
+
 import cv2
+import numpy as np
+from flask import Flask, Response, jsonify, render_template, request, session
+
 from FaceRecognition import FaceRecognition
 
-
-################################# Global Variables ######################################
-current_state = 0
-current_page = 'home' 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 nb_steps = 13
-
-retries = 0 
-
-camera = None
-camera_on = False
-fr = None
-current_camera_choice = 'None'
-add_face_name = None
-adding_face = False
-recognized_prof = None
-
-camera_ready = False
-
-
-
 
 
 ################################# Flask Server #############################################
 
-app = Flask(__name__)    # Create Flask app
+app = Flask(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024  # max grootte van één frame
 
 
-def run_server():
-    app.run(host='0.0.0.0', port=3000, debug=True)    # Run Flask web server (HTTP
+def _secret_key():
+    # De sessies zitten in een cookie die ondertekend wordt met deze key. Alle
+    # gunicorn workers moeten dezelfde key gebruiken, dus zet SECRET_KEY als
+    # environment variabele of laat het hier eenmalig genereren in een bestand.
+    key = os.environ.get('SECRET_KEY')
+    if key:
+        return key
+    key_file = os.path.join(BASE_DIR, '.secret_key')
+    try:
+        with open(key_file) as f:
+            key = f.read().strip()
+            if key:
+                return key
+    except OSError:
+        pass
+    key = secrets.token_hex(32)
+    try:
+        with open(key_file, 'w') as f:
+            f.write(key)
+    except OSError:
+        pass
+    return key
 
-# Flask route to display device data
+
+app.secret_key = _secret_key()
+
+# Encodings van toegevoegde gezichten zijn te groot voor de sessie-cookie en
+# moeten gedeeld worden tussen de gunicorn workers, dus die staan per sessie
+# in een klein bestand op schijf.
+FACE_STORE_DIR = os.environ.get('FACE_STORE_DIR', os.path.join(BASE_DIR, 'face-store'))
+os.makedirs(FACE_STORE_DIR, exist_ok=True)
+
+print("Starting face recognition engine...")
+fr = FaceRecognition()
+
+
+################################# Sessie helpers ############################################
+
+def get_state():
+    return session.get('state', 0)
+
+
+def set_state(state):
+    session['state'] = state
+
+
+def page_for(state):
+    if state == 0:
+        return 'home'
+    return 'tutorial-' + str(state)
+
+
+def _session_id():
+    sid = session.get('sid')
+    if sid is None:
+        sid = uuid.uuid4().hex
+        session['sid'] = sid
+    return sid
+
+
+def _face_file(sid):
+    return os.path.join(FACE_STORE_DIR, sid + '.npz')
+
+
+def load_session_faces():
+    path = _face_file(_session_id())
+    if not os.path.isfile(path):
+        return [], []
+    data = np.load(path, allow_pickle=False)
+    return list(data['encodings']), list(data['names'])
+
+
+def save_session_faces(encodings, names):
+    path = _face_file(_session_id())
+    tmp_path = path + '.tmp'
+    with open(tmp_path, 'wb') as f:
+        np.savez(f, encodings=np.array(encodings), names=np.array(names))
+    os.replace(tmp_path, path)
+
+
+def _read_frame():
+    data = request.get_data()
+    if not data:
+        return None
+    frame = cv2.imdecode(np.frombuffer(data, dtype=np.uint8), cv2.IMREAD_COLOR)
+    return frame
+
+
+def _jpeg_response(frame):
+    ret, buffer = cv2.imencode('.jpg', frame)
+    return Response(buffer.tobytes(), mimetype='image/jpeg')
+
 
 #########Pages############
 
 @app.route('/')
 def index():
-    return render_template('index.html', data= {'current_state': current_state})
+    return render_template('index.html', data={'current_state': get_state()})
 
 @app.route('/home')
 def home():
@@ -102,246 +187,95 @@ def tutorial_12():
 def tutorial_13():
     return render_template('tutorial-13.html')
 
-@app.route('/tutorial-14')
-def tutorial_14():
-    return render_template('tutorial-14.html')
-
-
-
-
 
 #########Data############
 
 @app.route('/get_data')
 def get_data():
-    return jsonify({'page': current_page, 'state': current_state,  'nb_steps': str(nb_steps)})
+    state = get_state()
+    return jsonify({'page': page_for(state), 'state': state, 'nb_steps': str(nb_steps)})
 
 
 @app.route('/next')
-def next():
-    global current_state
-    global current_page
-    global current_camera_choice
-    global camera_on
-    current_state += 1
-    if  current_state > nb_steps:
-        current_state = nb_steps
-    else:
-        current_page = 'tutorial-' + str(current_state)
-    if camera_on:
-        stop_camera()
-        current_camera_choice = 'None'
-        camera_on = False
-
+def next_step():
+    state = min(get_state() + 1, nb_steps)
+    set_state(state)
     return jsonify({'status': 'next'})
+
 
 @app.route('/back')
 def back():
-    global current_state
-    global current_page
-    global current_camera_choice
-    global camera_on
-    current_state -= 1
-    if current_state == 0:
-        current_choice = 'None'
-        current_page = 'home'
-    else:
-        current_page = 'tutorial-' + str(current_state)
-    if camera_on:
-        stop_camera()
-        current_camera_choice = 'None'
-        camera_on = False
+    state = max(get_state() - 1, 0)
+    set_state(state)
     return jsonify({'status': 'previous'})
 
 
 @app.route('/reset')
 def reset():
-    global current_page
-    global current_state
-    current_state = 0
-    current_page = 'home'
+    set_state(0)
     return jsonify({'status': 'reset'})
 
-@app.route('/video_feed')
-def video_feed():
-    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/start_camera')
-def start_camera_route():
-    global camera_ready
-    camera_ready = False
-    start_camera()
-    while not camera_ready:
-        time.sleep(0.1)
-    return jsonify({'status': 'started'})
-
-@app.route('/stop_camera')
-def stop_camera_route():
-    stop_camera()
-    return jsonify({'status': 'stopped'})
-
-@app.route('/face_landmarks')
-def face_landmarks():
-    global current_camera_choice
-    if current_camera_choice == 'face_landmarks':
-        current_camera_choice = 'None'
-    else:
-        current_camera_choice = 'face_landmarks'
-    return jsonify({'status': 'face_landmarks'})
-
-@app.route('/makeup')
-def makeup():
-    global current_camera_choice
-    if current_camera_choice == 'makeup':
-        current_camera_choice = 'None'
-    else:
-        current_camera_choice = 'makeup'
-    return jsonify({'status': 'makeup'})
-
-@app.route('/face_recognition')
-def face_recognition():
-    global current_camera_choice
-    if current_camera_choice == 'face_recognition':
-        current_camera_choice = 'None'
-    else:
-        current_camera_choice = 'face_recognition'
-    return jsonify({'status': 'face_recognition'})
+@app.route('/rgb-led')
+def rgb_led():
+    # Op de oude opstelling stuurde dit een RGB-led aan via de Arduino. In de
+    # gehoste versie is er geen Arduino, maar de slider op pagina 3 roept dit
+    # nog aan, dus antwoord gewoon met ok.
+    return jsonify({'status': 'ok'})
 
 
-@app.route('/add_face')
+#########Camera############
+# De browser van de student stuurt JPEG-frames; de server verwerkt en antwoordt.
+
+@app.route('/process_frame', methods=['POST'])
+def process_frame():
+    mode = request.args.get('mode', 'none')
+    frame = _read_frame()
+    if frame is None:
+        return jsonify({'status': 'bad_frame'}), 400
+
+    if mode == 'face_landmarks':
+        frame = fr.annotate_landmarks(frame)
+    elif mode == 'makeup':
+        frame = fr.annotate_makeup(frame)
+    elif mode == 'face_recognition':
+        encodings, names = load_session_faces()
+        frame = fr.recognize(frame, encodings, names)
+
+    return _jpeg_response(frame)
+
+
+@app.route('/add_face', methods=['POST'])
 def add_face():
-    global adding_face
-    global add_face_name
-    name = request.args.get('name')
-    if not adding_face:
-        add_face_name = name
-        adding_face = True
-        return jsonify({'status': 'started'})
-    else:
-        return jsonify({'status': 'failed'})
+    name = request.args.get('name') or 'Onbekend'
+    frame = _read_frame()
+    if frame is None:
+        return jsonify({'status': 'bad_frame'}), 400
 
-@app.route('/detect_face')
+    encoding = fr.encode_face(frame)
+    if encoding is None:
+        return jsonify({'status': 'no_face'})
+
+    encodings, names = load_session_faces()
+    encodings.append(encoding)
+    names.append(name)
+    save_session_faces(encodings, names)
+    print(names)
+    return jsonify({'status': 'ok'})
+
+
+@app.route('/detect_face', methods=['POST'])
 def detect_face():
-    global current_camera_choice
-    global current_state
-    global recognized_prof
-    recognized_prof = None
-    current_camera_choice = 'recognize_prof'
-    while recognized_prof == None:
-        time.sleep(0.1)
-    result = str(recognized_prof)
-    recognized_prof = None
-    return jsonify({'status': 'detect_face', 'result': result})
+    frame = _read_frame()
+    if frame is None:
+        return jsonify({'status': 'bad_frame'}), 400
 
-    
-    
-
-
-
-
-################################# Camera #############################################
-def start_camera():
-    global camera
-    global camera_on
-    if not camera_on:
-        #camera = cv2.VideoCapture(0)
-        camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-        #camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        time.sleep(1.5)
-        camera_on = True
-
-def stop_camera():
-    global camera
-    global camera_on
-    if camera_on:
-        camera_on = False
-        time.sleep(0.5)
-        camera.release()
-        global current_camera_choice
-        current_camera_choice = 'None'
-
-def gen_frames():  
-    global adding_face
-    global add_face_name
-    global recognized_prof
-    global current_camera_choice
-    global camera_ready
-    while current_state == 10 or current_state == 12 or current_state == 11 or current_state == 10 or current_state == 13:
-        if camera_on:
-            time.sleep(0.02)
-            try:
-                success, frame = camera.read()  # read the camera frame
-            except:
-                print('Failed to read frame')
-                break
-            if not success:
-                print('Failed to read frame - success')
-                break
-            else:
-                try: 
-                    camera_ready = True
-                    if adding_face:
-                        fr.add_face(frame, add_face_name)
-                        adding_face = False
-                        add_face_name = None
-                    if current_camera_choice == 'face_landmarks':
-                        frame = fr.process_frame_with_facial_features(frame)
-                    elif current_camera_choice == 'makeup':
-                        frame = fr.process_frame_with_makeup(frame)
-                    elif current_camera_choice == 'face_recognition':
-                        frame = fr.process_frame(frame)
-                    elif current_camera_choice == 'recognize_prof':
-                        frame = fr.process_frame_with_prof(frame)
-                        frame = fr.process_frame_with_prof(frame)
-                        recognized_prof = fr.prof_found
-                        current_camera_choice = 'None'
-
-                    ret, buffer = cv2.imencode('.jpg', frame)
-                    frame = buffer.tobytes()
-                    yield (b'--frame\r\n'
-                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
-                except Exception as e:
-                    print('Failed to process frame - exception')
-                    print(e)
-                    break
-        else:
-            img = cv2.imread('static/images/camera_uit.jpg')
-            ret, buffer = cv2.imencode('.jpg', img)
-            frame = buffer.tobytes()
-            
-            yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-            
-    img = cv2.imread('static/images/camera_uit.jpg')
-    ret, buffer = cv2.imencode('.jpg', img)
-    frame = buffer.tobytes()
-    yield (b'--frame\r\n'
-            b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
-
-
-################################# Face Recognition - Neuralnet #############################################
-
-
+    frame, prof = fr.recognize_prof(frame)
+    return jsonify({'status': 'detect_face', 'result': str(prof)})
 
 
 ################################# Main #############################################
 
 if __name__ == '__main__':
-    print("Starting...")
-    # Create and start the thread to sample data
-    # data_thread = threading.Thread(target=sample_data)
-    # data_thread.start()
-
-    print("Starting face recognition engine...")
-    fr = FaceRecognition()
-
     print("Starting server...")
-
-    # Create and start the thread to run Flask web server
-    # server_thread = threading.Thread(target=run_server)
-    # server_thread.start()
-    run_server()
-
-
-
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 3000)), debug=os.environ.get('FLASK_DEBUG') == '1')

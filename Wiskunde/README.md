@@ -1,61 +1,53 @@
-# Informatie
+# Wiskunde
 
-## Requirements
-- Python 3.6+
-- PySerial
-- Flask
+Webtutorial over gezichtsherkenning. De studenten volgen de tutorial op hun
+eigen laptop; de server draait in een Docker container (bv. op Coolify).
+De camera draait in de browser van de student en de frames worden naar de
+server gestuurd voor de gezichtsherkenning (dlib / face_recognition).
 
-Deze kunnen makkelijk geinstalleerd worden met pip:
+## Deployment
+
+Deze app wordt samen met de startpagina als één container gedeployed op
+`https://startdagen.peno1.be/wiskunde/` — zie [../DEPLOY.md](../DEPLOY.md).
+Let op: de camera werkt in de browser alleen over **HTTPS** (of op localhost).
+
+## Lokaal draaien
+
+Met Docker (aangeraden, geen dlib-installatie nodig; bouwt de volledige
+site inclusief startpagina, vanuit de root van de repo):
 ```bash
-pip install pyserial flask
+docker build -t startdagen .. && docker run --rm -p 3000:3000 startdagen
 ```
 
-## Gebruik
-Het enigste wat je eigenlijk moet doen is de server starten. De server zal dan automatisch de Arduino vinden en de webserver starten. De webserver is te bereiken op http://localhost/
-
-Om de server te starten zorg dat jouw terminal zich bevindt in de map waar de Server.py file zich bevindt en voer dan volgend commando uit:
+Of rechtstreeks met Python 3.11 (enkel de Wiskunde-app, op de root):
 ```bash
+pip install -r requirements.txt
 python Server.py
 ```
 
-Voor de beginner tutorial moet op de arduino ook het juiste programma geupload worden. Dit kan met de Arduino IDE. Het programma is te vinden in de map Arduino/BeginnerTutorial/BeginnerTutorial.ino
-
-Om de server te stoppen moet je ctrl+c duwen in de terminal waar de server draait.
-
-
-Je kan ook een clickable file maken om de server te starten. Dit kan door de in de Start_Server.bat file de twee paden te vervangen door die van Python en die van de Server.py file zoals bijvoorbeeld:
-```bash
-@echo off
-"C:\Users\Ron\AppData\Local\Programs\Python\Python39\python.exe" "C:\Users\Ron\Desktop\Startersdagen\Informatie\Server.py"
-pause
-```
-Deze file kan je dan op je bureaublad zetten en dan kan je de server starten door erop te dubbelklikken.
-
+De site is daarna te bereiken op http://localhost:3000
 
 ## Structuur
-- Arduino: De code voor de Arduino
-- Server.py: De server die de Arduino aanstuurt en de webserver start
-- templates: De HTML templates voor de webserver
-- static: De statische bestanden voor de webserver (CSS, JS, etc.)
 
-## Instructies
-- De studenten kiezen eerst tussen de beginner en gevorderde tutorial
-- De studenten volgen vervolgens de stappen van de tutorial 
-- Ze kunnen altijd nog van tutorial veranderen door op de reset knop te duwen
-- Als de beginner tutorial bezig is mag de Arduino IDE niet open staan, anders zal kan de server niet met de Arduino communiceren.
-- Wanneer de server voor de eerste keer wordt gestart zal deze opzoek gaan naar de Arduino. Als de Arduino niet gevonden wordt zal de server niet starten. Dus dan mahg de Arduino IDE ook niet open staan. Zolang de Arduino verbonden is met de computer en niet verbonden is met de Arduino IDE zal de server de Arduino vinden en starten.
-- Als de gevorderde tutorial bezig is mag de Arduino IDE wel open staan
-- Het is niet erg als de webpagina wordt gerefreshed, de server zal de huidige stap onthouden en de studenten kunnen gewoon verder doen waar ze gebleven waren. Hun waardes gaan niet verloren zolang de server aan staat. Moest de computer uitvallen gaan de waardes wel verloren. 
-- De server kan gestopt worden door op ctrl+c te duwen in de terminal waar de server draait.
-
-
+- `Server.py`: de Flask-server (sessie per groepje, verwerking van camera-frames)
+- `FaceRecognition.py`: de gezichtsherkenning (dlib / face_recognition)
+- `face-recognition/`: de foto's en opgeslagen encodings van de proffen
+- `templates/`: de HTML-pagina's van de tutorial (per stap één pagina)
+- `static/`: CSS, JavaScript en afbeeldingen
+- `requirements.txt`: de Python-dependencies (gebruikt door de Dockerfile in de root)
 
 ## Werking
-De server staat in contact met de Arduino via serial en stuurt commando's naar de Arduino. De Arduino stuurt dan weer data terug naar de server. De server stuurt deze data dan weer door naar de webserver. De webserver stuurt de data dan weer door naar de client. De client is de webbrowser. 
 
-Er wordt eigenlijk één webpagina voortdurend getoond namelijk index.html, waarin een box zit, waarin de verschillende stappen van de tutorial worden getoond. Voor elke stap is er dus één aparte html pagina, te vinden onder templates. 
+Eén pagina (index.html) wordt voortdurend getoond; daarin worden de
+verschillende stappen van de tutorial geladen. De voortgang zit in een
+sessie-cookie, dus elke groep heeft zijn eigen voortgang en eigen
+gezichten-database, en een refresh is geen probleem.
 
-## Auteurs 
+Op de camera-pagina's vraagt de browser toegang tot de webcam van de laptop
+(getUserMedia). De frames worden als JPEG naar `/process_frame` gestuurd,
+de server tekent er de gezichtskenmerken/make-up/herkenning op en stuurt het
+frame terug.
+
+## Auteurs
 - Anton Lintermans
 - Gilles Belmans
-

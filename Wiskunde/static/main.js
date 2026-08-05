@@ -27,12 +27,12 @@ var correct_answered_q2 = false;
 
 
 function reset() {
-    fetch('/reset')
+    fetch('reset')
     .then(response => response.json())
     .then(data => {
         console.log(data);
         loadContent();
-        caemra_on = false;
+        stop_camera();
     });}
 
 
@@ -61,12 +61,12 @@ function next() {
     // }
 
 
-    fetch('/next')
+    fetch('next')
     .then(response => response.json())
     .then(data => {
         console.log(data);
         loadContent();
-        caemra_on = false;
+        stop_camera();
     });}
 
 function back() {
@@ -77,12 +77,12 @@ function back() {
         
     //     saveColors();
     // }
-    fetch('/back')
+    fetch('back')
     .then(response => response.json())
     .then(data => {
         console.log(data);
         loadContent();
-        caemra_on = false;
+        stop_camera();
         if (audio != false) {
             audio.pause();
         }
@@ -566,7 +566,7 @@ function updatePicture() {
     const blackValueElement = document.getElementById('blackValue');
     const blackValue = values[blackSlider.value];
     const picture = document.getElementById('picture_resolution_img');
-    picture.src = "/static/images/scale-"+blackSlider.value+".jpg";
+    picture.src = "static/images/scale-"+blackSlider.value+".jpg";
     blackValueElement.textContent = blackValue;
 
 }
@@ -606,7 +606,7 @@ function updateColor() {
 }
 
 function updateRGBLED(red, green, blue) {
-    fetch('/rgb-led?red-value=' + red + '&green-value=' + green + '&blue-value=' + blue)
+    fetch('rgb-led?red-value=' + red + '&green-value=' + green + '&blue-value=' + blue)
     .then(response => response.json())
     .then(data => {
         console.log(data);
@@ -748,70 +748,183 @@ function check_q2() {
 
 
 //------------------------------------------- Camera -------------------------------------------//
-function start_camera(){
+// De camera draait in de browser van de student (getUserMedia). Frames worden
+// als JPEG naar de server gestuurd, die ze verwerkt en terugstuurt.
+var localStream = null;
+var camVideo = null;
+var camCanvas = null;
+var currentMode = 'none';
+var lastFrameUrl = null;
+
+const camSleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+function getCamVideo() {
+    if (!camVideo) {
+        camVideo = document.createElement('video');
+        camVideo.setAttribute('playsinline', '');
+        camVideo.muted = true;
+    }
+    return camVideo;
+}
+
+function captureFrame() {
+    const video = getCamVideo();
+    if (!camCanvas) {
+        camCanvas = document.createElement('canvas');
+    }
+    camCanvas.width = video.videoWidth || 640;
+    camCanvas.height = video.videoHeight || 480;
+    camCanvas.getContext('2d').drawImage(video, 0, 0, camCanvas.width, camCanvas.height);
+    return camCanvas;
+}
+
+function captureFrameBlob() {
+    return new Promise(resolve => captureFrame().toBlob(resolve, 'image/jpeg', 0.8));
+}
+
+function showFrameBlob(img, blob) {
+    if (lastFrameUrl) {
+        URL.revokeObjectURL(lastFrameUrl);
+    }
+    lastFrameUrl = URL.createObjectURL(blob);
+    img.src = lastFrameUrl;
+}
+
+async function camLoop() {
+    while (caemra_on) {
+        const img = document.getElementById('video_feed');
+        if (!img) {
+            stop_camera();
+            break;
+        }
+        if (currentMode === 'none') {
+            // Geen bewerking nodig: toon het lokale camerabeeld rechtstreeks.
+            img.src = captureFrame().toDataURL('image/jpeg', 0.8);
+            await camSleep(100);
+        } else {
+            const mode = currentMode;
+            try {
+                const blob = await captureFrameBlob();
+                const response = await fetch('process_frame?mode=' + mode, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'image/jpeg'},
+                    body: blob
+                });
+                if (response.ok && caemra_on && currentMode === mode) {
+                    showFrameBlob(img, await response.blob());
+                }
+            } catch (error) {
+                console.log(error);
+                await camSleep(500);
+            }
+            await camSleep(50);
+        }
+    }
+}
+
+async function start_camera(){
     const start_camera_button = document.getElementById('start_camera_btn');
+    if (caemra_on) {
+        return;
+    }
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert("De camera werkt enkel via een beveiligde (https) verbinding. Vraag een begeleider om hulp.");
+        return;
+    }
     start_camera_button.classList.add("disabled");
     start_camera_button.disabled = true;
-    fetch('/start_camera')
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
+    try {
+        localStream = await navigator.mediaDevices.getUserMedia({
+            video: {width: {ideal: 640}, height: {ideal: 480}},
+            audio: false
+        });
+        const video = getCamVideo();
+        video.srcObject = localStream;
+        await video.play();
         caemra_on = true;
-        start_camera_button.classList.remove("disabled");
+        currentMode = 'none';
+        camLoop();
+    } catch (error) {
+        console.log(error);
+        alert("De camera kon niet gestart worden. Geef je browser toestemming om de camera te gebruiken en probeer opnieuw.");
+    }
+    start_camera_button.classList.remove("disabled");
     start_camera_button.disabled = false;
-        // video_feed.src = "/video_feed"; 
-    });
 }
 
 function stop_camera(){
-    fetch('/stop_camera')
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        caemra_on = false;
-    });
+    caemra_on = false;
+    currentMode = 'none';
+    if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+        localStream = null;
+    }
+    if (camVideo) {
+        camVideo.srcObject = null;
+    }
+    if (lastFrameUrl) {
+        URL.revokeObjectURL(lastFrameUrl);
+        lastFrameUrl = null;
+    }
+    const img = document.getElementById('video_feed');
+    if (img) {
+        img.src = 'static/images/camera_uit.jpg';
+    }
+}
+
+function toggle_mode(mode){
+    if (!caemra_on) {
+        alert("Start eerst de camera!");
+        return;
+    }
+    currentMode = (currentMode === mode) ? 'none' : mode;
 }
 
 function toggle_face_landmarks(){
-    fetch('/face_landmarks')
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-    });
+    toggle_mode('face_landmarks');
 }
 
 function toggle_face_recognition(){
-    fetch('/face_recognition')
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-    });
+    toggle_mode('face_recognition');
 }
 
-function toggle_makeup(){  
-    fetch('/makeup')
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-    });
+function toggle_makeup(){
+    toggle_mode('makeup');
 }
 
-function add_face(){
+async function add_face(){
     const name = document.getElementById('add_face_name').value;
-    fetch('/add_face?name=' + name)
+    if (!caemra_on) {
+        alert("Start eerst de camera!");
+        return;
+    }
+    const blob = await captureFrameBlob();
+    fetch('add_face?name=' + encodeURIComponent(name), {
+        method: 'POST',
+        headers: {'Content-Type': 'image/jpeg'},
+        body: blob
+    })
     .then(response => response.json())
     .then(data => {
         console.log(data);
+        if (data.status !== 'ok') {
+            alert("Er werd geen gezicht gevonden. Kijk recht in de camera en probeer opnieuw!");
+        }
     });
 }
 
-function detect_face(){
+async function detect_face(){
     const detected_prof = document.getElementById('detected_prof');
     if (caemra_on==false) {
         alert("Please start the camera first");
-        return; 
+        return;
     }
-    fetch('/detect_face')
+    const blob = await captureFrameBlob();
+    fetch('detect_face', {
+        method: 'POST',
+        headers: {'Content-Type': 'image/jpeg'},
+        body: blob
+    })
     .then(response => response.json())
     .then(data => {
         console.log(data);
@@ -885,7 +998,7 @@ function loadPage(pageUrl) {
 }
 
 function loadContent() {
-    fetch('/get_data').then(response => response.json()).then(data => {
+    fetch('get_data').then(response => response.json()).then(data => {
         
         state = data.state;
 

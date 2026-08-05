@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Startdagen – PenO</title>
+  <link rel="icon" type="image/svg+xml" href="static/kuleuven-logo.svg">
+  <style>
+    :root {
+      /* Officiële KU Leuven huisstijlkleuren (uit het logo) */
+      --kul-donkerblauw: #00407A;
+      --kul-lichtblauw: #54BCEB;
+      --tekst: #333333;
+      --tekst-licht: #666666;
+      --rand: #dfe3e6;
+      --achtergrond: #f5f7f9;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--tekst);
+      background: var(--achtergrond);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---------- Header ---------- */
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--rand);
+    }
+    .header-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .header-inner img {
+      height: 56px;
+      display: block;
+    }
+    .site-title {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--kul-donkerblauw);
+      border-left: 1px solid var(--rand);
+      padding-left: 20px;
+      line-height: 1.2;
+    }
+    .site-title small {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--tekst-licht);
+    }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      background: var(--kul-donkerblauw);
+      color: #ffffff;
+      border-bottom: 4px solid var(--kul-lichtblauw);
+    }
+    .hero-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 56px 24px;
+    }
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      max-width: 640px;
+      color: #d6e4f0;
+    }
+
+    /* ---------- Onderdelen ---------- */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 40px 24px 64px;
+    }
+    main h2 {
+      color: var(--kul-donkerblauw);
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    /* auto-fill (i.p.v. auto-fit) zodat een enkele kaart niet wordt
+       uitgerekt over de volledige breedte */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #ffffff;
+      border: 1px solid var(--rand);
+      border-top: 4px solid var(--kul-lichtblauw);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+    }
+    a.card:hover {
+      box-shadow: 0 4px 14px rgba(0, 64, 122, 0.18);
+      transform: translateY(-2px);
+    }
+    .card h3 {
+      color: var(--kul-donkerblauw);
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    .card p {
+      font-size: 0.92rem;
+      color: var(--tekst-licht);
+      flex: 1;
+    }
+    .card .actie {
+      color: var(--kul-donkerblauw);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    a.card:hover .actie {
+      color: var(--kul-lichtblauw);
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      background: var(--kul-donkerblauw);
+      color: #d6e4f0;
+      font-size: 0.85rem;
+    }
+    .footer-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    @media (max-width: 560px) {
+      .hero h1 { font-size: 1.8rem; }
+      .header-inner img { height: 44px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <img src="static/kuleuven-logo.svg" alt="KU Leuven">
+      <div class="site-title">
+        Startdagen
+        <small>Probleemoplossen en Ontwerpen</small>
+      </div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <h1>Welkom bij de Startdagen</h1>
+      <p>Kies hieronder het onderdeel van jouw subteam om aan de slag te gaan. Veel succes!</p>
+    </div>
+  </div>
+
+  <main>
+    <h2>Onderdelen</h2>
+    <div class="cards">
+      <a class="card" href="/wiskunde/">
+        <h3>Wiskunde</h3>
+        <p>Ontdek hoe gezichtsherkenning werkt: van pixels en grijswaarden tot een algoritme dat de prof herkent.</p>
+        <span class="actie">Start de tutorial &rsaquo;</span>
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>KU Leuven &middot; Startdagen &middot; Probleemoplossen en Ontwerpen</span>
+      <span>startdagen.peno1.be</span>
+    </div>
+  </footer>
+</body>
+</html>
