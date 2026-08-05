@@ -84,50 +84,31 @@ class FaceRecognition:
             faces[name] = sum(faces[name]) / len(faces[name])
         return faces
 
-    def _detect_faces(self, frame):
-        small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-        rgb_small_frame = np.ascontiguousarray(small_frame[:, :, ::-1])
-
-        face_locations = face_recognition.face_locations(rgb_small_frame)
-        face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
-        return face_locations, face_encodings
-
-    def _draw_boxes(self, frame, face_locations, face_names):
-        for (top, right, bottom, left), name in zip(face_locations, face_names):
-            top *= 4
-            right *= 4
-            bottom *= 4
-            left *= 4
-
-            cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-
-            cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-
-            font = cv2.FONT_HERSHEY_DUPLEX
-            cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-
     def recognize_prof(self, frame):
         """Zoekt een gekende prof in het frame. Geeft (frame, prof) terug,
         waarbij prof 'None' is als er geen prof gevonden werd."""
-        face_locations, face_encodings = self._detect_faces(frame)
+        # Op volledige resolutie en met upsampling, zodat ook kleinere
+        # gezichten (laptop-webcam op normale afstand) gevonden worden.
+        # Dit draait maar één keer per klik, dus de extra rekentijd mag.
+        height, width = frame.shape[:2]
+        if width > 1000:
+            frame = cv2.resize(frame, (0, 0), fx=1000.0 / width, fy=1000.0 / width)
+        rgb_frame = np.ascontiguousarray(frame[:, :, ::-1])
+
+        face_locations = face_recognition.face_locations(rgb_frame, number_of_times_to_upsample=1)
+        face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
 
         prof_found = 'None'
-        face_names = []
         for face_encoding in face_encodings:
             matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding, tolerance=self.face_match_threshold)
             name = "Unknown"
-            confidance = 100.0
 
             face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
             average_faces = self.calculate_average_face_distance(face_distances, matches)
             if (len(average_faces) > 0):
                 name = min(average_faces, key=average_faces.get)
-                confidance = face_confidence(average_faces[name])
 
             if name in self.known_names:
                 prof_found = name
 
-            face_names.append(f'{name} ({confidance})')
-
-        self._draw_boxes(frame, face_locations, face_names)
         return frame, prof_found

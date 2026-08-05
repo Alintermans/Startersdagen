@@ -1152,6 +1152,7 @@ async function detect_face(){
     .then(response => response.json())
     .then(data => {
         console.log(data);
+        const colorBox = document.getElementById('detected_color_box');
         if (profs.includes(data.result)) {
             result = data.result;
             if (data.result == "prof. Geraedts") {
@@ -1159,25 +1160,24 @@ async function detect_face(){
             }
             const index = profs.indexOf(data.result);
             const color = savedOptions[index*3+2];
+            if (color === undefined) {
+                detected_prof.innerHTML = `${result} — maar vul eerst de kleurentabel op pagina 12 in!`;
+                return;
+            }
             detected_prof.innerHTML = `${result}`;
 
             runColorBox(parseInt(color));
-            // const option = options[preferences_profs[data.result][0]];
-            // const colorIndex = savedColors.indexOf(option);
-            // const color = colors[colorIndex];
-            // detected_color_box.style.backgroundColor = color;
-            // detected_song.innerHTML = `${preferences_profs[data.result][1]}`;
-            // detected_option.innerHTML = `${options[preferences_profs[data.result][0]]}`;
-            // if (audio != false) {
-            //     audio.pause();
-            // }
-            // audio = new Audio("/static/music/"+preferences_profs[data.result][1]);
-            // audio.play();
+        } else if (data.result && data.result != 'None') {
+            // Wel een gekende prof, maar die staat niet in de tabel van pagina 12
+            detected_prof.innerHTML = `${data.result} gedetecteerd, maar deze prof staat niet in de kleurentabel van pagina 12`;
+            if (colorBox) {
+                colorBox.style.backgroundColor = "#AAAAAA";
+            }
         } else {
             detected_prof.innerHTML = `Geen professor gedetecteerd, probeer opnieuw`;
-            detected_color_box.style.backgroundColor = "#AAAAAA";
-            detected_song.innerHTML = `None`;
-            detected_option.innerHTML = `None`;
+            if (colorBox) {
+                colorBox.style.backgroundColor = "#AAAAAA";
+            }
         }
     });
 }
