@@ -82,6 +82,24 @@
       margin-bottom: 24px;
     }
 
+    .simulatie-cta {
+      max-width: 760px;
+      margin-bottom: 24px;
+      padding: 10px 14px;
+      background: #ffffff;
+      border-left: 4px solid var(--kul-donkerblauw);
+      font-size: 0.95rem;
+    }
+    .simulatie-cta a {
+      color: var(--kul-donkerblauw);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .simulatie-cta a:hover {
+      color: var(--kul-lichtblauw);
+      text-decoration: underline;
+    }
+
     .layout {
       display: flex;
       gap: 24px;
@@ -225,6 +243,10 @@
       Inkscape is niet meer nodig.
     </p>
 
+    <p class="simulatie-cta">
+      <a href="simulatie">Eerst virtueel testen? Open de simulator &rarr;</a>
+    </p>
+
     <div class="layout">
       <div class="schijf-paneel">
         <svg id="schijf" viewBox="-158 -158 316 316" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -283,6 +305,38 @@
     const geselecteerd = new Set();
     const SVG_NS = 'http://www.w3.org/2000/svg';
 
+    // De simulator (simulatie.html) gebruikt dezelfde opslagsleutel: een
+    // JSON-array met de indices van de geselecteerde gaten, bv. "[3,17,42]".
+    const OPSLAG_SLEUTEL = 'schijf-gaten';
+
+    function bewaarSelectie() {
+      try {
+        localStorage.setItem(OPSLAG_SLEUTEL,
+          JSON.stringify([...geselecteerd].sort((a, b) => a - b)));
+      } catch (e) {
+        // opslag niet beschikbaar - stilzwijgend negeren
+      }
+    }
+
+    function laadSelectie() {
+      let indices;
+      try {
+        indices = JSON.parse(localStorage.getItem(OPSLAG_SLEUTEL));
+      } catch (e) {
+        return;
+      }
+      if (!Array.isArray(indices)) return;
+      for (const index of indices) {
+        if (Number.isInteger(index) && index >= 0 && index < GATEN.length) {
+          geselecteerd.add(index);
+        }
+      }
+    }
+
+    function werkTellerBij() {
+      document.getElementById('aantal').textContent = geselecteerd.size;
+    }
+
     function bouwSchijf() {
       const svg = document.getElementById('schijf');
 
@@ -305,7 +359,7 @@
         c.setAttribute('cx', x);
         c.setAttribute('cy', y);
         c.setAttribute('r', GAT_RADIUS);
-        c.setAttribute('class', 'gat');
+        c.setAttribute('class', geselecteerd.has(index) ? 'gat gekozen' : 'gat');
         c.addEventListener('click', () => toggleGat(index, c));
         svg.appendChild(c);
       });
@@ -319,13 +373,19 @@
         geselecteerd.add(index);
         element.classList.add('gekozen');
       }
-      document.getElementById('aantal').textContent = geselecteerd.size;
+      werkTellerBij();
+      bewaarSelectie();
     }
 
     function wisAlles() {
       geselecteerd.clear();
       document.querySelectorAll('#schijf .gat').forEach(c => c.classList.remove('gekozen'));
-      document.getElementById('aantal').textContent = '0';
+      werkTellerBij();
+      try {
+        localStorage.removeItem(OPSLAG_SLEUTEL);
+      } catch (e) {
+        // opslag niet beschikbaar - stilzwijgend negeren
+      }
     }
 
     // Bouwt de lasersnij-SVG volgens de FabLab-regels: ware grootte in mm,
@@ -372,7 +432,9 @@
       URL.revokeObjectURL(url);
     }
 
+    laadSelectie();
     bouwSchijf();
+    werkTellerBij();
   </script>
 </body>
 </html>

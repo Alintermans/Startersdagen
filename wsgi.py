@@ -32,6 +32,11 @@ def schijf():
     return send_file(os.path.join(BASE_DIR, 'Startpagina', 'schijf.html'))
 
 
+@landing.route('/simulatie')
+def simulatie():
+    return send_file(os.path.join(BASE_DIR, 'Startpagina', 'simulatie.html'))
+
+
 def _ensure_trailing_slash(wsgi_app):
     # Een bezoek aan /wiskunde (zonder slash) moet naar /wiskunde/ sturen,
     # anders resolven de relatieve URL's in de frontend tegen de root.

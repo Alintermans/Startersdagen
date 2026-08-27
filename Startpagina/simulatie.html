@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Startdagen – Simulator draaischijf</title>
+  <link rel="icon" type="image/svg+xml" href="static/kuleuven-logo.svg">
+  <style>
+    :root {
+      /* Officiële KU Leuven huisstijlkleuren (uit het logo) */
+      --kul-donkerblauw: #00407A;
+      --kul-lichtblauw: #54BCEB;
+      --tekst: #333333;
+      --tekst-licht: #666666;
+      --rand: #dfe3e6;
+      --achtergrond: #f5f7f9;
+      --snij-rood: #d40000;
+      --goed: #2E7D32;
+      --fout: #c62828;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--tekst);
+      background: var(--achtergrond);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---------- Header ---------- */
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--rand);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .header-inner img { height: 48px; display: block; }
+    .site-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--kul-donkerblauw);
+      border-left: 1px solid var(--rand);
+      padding-left: 20px;
+      line-height: 1.2;
+    }
+    .site-title small {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--tekst-licht);
+    }
+    .terug {
+      margin-left: auto;
+      color: var(--kul-donkerblauw);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .terug:hover { color: var(--kul-lichtblauw); }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      background: var(--kul-donkerblauw);
+      color: #ffffff;
+      border-bottom: 4px solid var(--kul-lichtblauw);
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+    .hero h1 {
+      font-size: 2.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .hero p {
+      font-size: 1.05rem;
+      max-width: 720px;
+      color: #d6e4f0;
+    }
+
+    /* ---------- Main ---------- */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 24px 56px;
+    }
+
+    .werkwijze {
+      background: #ffffff;
+      border: 1px solid var(--rand);
+      border-top: 4px solid var(--kul-lichtblauw);
+      padding: 18px 22px;
+      margin-bottom: 18px;
+    }
+    .werkwijze h2 {
+      color: var(--kul-donkerblauw);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .werkwijze ol { margin: 0 0 0 20px; font-size: 0.92rem; color: var(--tekst-licht); }
+    .werkwijze li { margin-bottom: 4px; }
+
+    .naar-configurator {
+      display: inline-block;
+      margin-bottom: 22px;
+      padding: 11px 16px;
+      background: #ffffff;
+      border: 1px solid var(--kul-donkerblauw);
+      border-left: 4px solid var(--kul-lichtblauw);
+      color: var(--kul-donkerblauw);
+      font-weight: 600;
+      font-size: 0.92rem;
+      text-decoration: none;
+    }
+    .naar-configurator:hover { background: var(--achtergrond); }
+
+    .layout {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .schijf-kolom {
+      flex: 1 1 520px;
+      min-width: 0;              /* anders duwt de SVG een horizontale scrollbar op smalle schermen */
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .zijpaneel {
+      flex: 1 1 340px;
+      min-width: 0;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    /* Sticky alleen als het venster ook echt hoog genoeg is voor de hele schijfkolom. */
+    @media (min-width: 1000px) and (min-height: 1100px) {
+      .schijf-kolom { position: sticky; top: 12px; }
+    }
+
+    .blok {
+      background: #ffffff;
+      border: 1px solid var(--rand);
+      border-top: 4px solid var(--kul-lichtblauw);
+      padding: 18px;
+    }
+    .blok h2 {
+      color: var(--kul-donkerblauw);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .stapnr {
+      background: var(--kul-donkerblauw);
+      color: #ffffff;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .blok .hint {
+      font-size: 0.82rem;
+      color: var(--tekst-licht);
+      margin-top: 10px;
+      line-height: 1.45;
+    }
+
+    .schijf-paneel { padding: 10px; }
+    .schijf-paneel svg { width: 100%; height: auto; display: block; max-width: 700px; margin: 0 auto; }
+
+    /* ---------- Gereedschapspalet ---------- */
+    .palet { display: flex; gap: 8px; flex-wrap: wrap; }
+    .gereedschap {
+      font: inherit;
+      font-size: 0.88rem;
+      padding: 9px 12px;
+      border: 1px solid var(--rand);
+      background: #ffffff;
+      color: var(--tekst);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .gereedschap:hover:not(:disabled) { background: var(--achtergrond); }
+    .gereedschap[aria-pressed="true"] {
+      border-color: var(--kul-donkerblauw);
+      background: var(--kul-donkerblauw);
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .stip {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      border: 1.5px solid #8a9099;
+      flex-shrink: 0;
+    }
+
+    /* ---------- Knoppen ---------- */
+    button {
+      font: inherit;
+      padding: 10px 16px;
+      border: 1px solid var(--kul-donkerblauw);
+      cursor: pointer;
+    }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    .primair {
+      background: var(--kul-donkerblauw);
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .primair:hover:not(:disabled) { background: #005ea8; }
+    .secundair { background: #ffffff; color: var(--kul-donkerblauw); }
+    .secundair:hover:not(:disabled) { background: var(--achtergrond); }
+    .klein { padding: 6px 10px; font-size: 0.85rem; }
+    .knoppen { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+
+    /* ---------- Formulieronderdelen ---------- */
+    label { font-size: 0.9rem; }
+    input[type="number"] {
+      padding: 8px 9px;
+      border: 1px solid var(--rand);
+      font: inherit;
+      font-size: 0.92rem;
+      width: 78px;
+    }
+    input[type="range"] { width: 100%; accent-color: var(--kul-donkerblauw); }
+    select {
+      font: inherit;
+      font-size: 0.92rem;
+      padding: 9px 8px;
+      border: 1px solid var(--rand);
+      background: #ffffff;
+      width: 100%;
+    }
+
+    .servo-uitlezing {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--kul-donkerblauw);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+    .servo-sub { font-size: 0.82rem; color: var(--tekst-licht); margin-bottom: 14px; }
+    .rij { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .rij + .rij { margin-top: 10px; }
+    .teller { font-size: 0.95rem; margin-top: 12px; }
+    .teller b { color: var(--kul-donkerblauw); }
+
+    /* ---------- Bakjesoverzicht ---------- */
+    .bakjes-lijst { display: flex; flex-direction: column; gap: 7px; margin-top: 12px; }
+    .bakje-rij { display: flex; align-items: center; gap: 9px; font-size: 0.88rem; }
+    .capsule-chip {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      border: 1.5px solid transparent;
+    }
+    .capsule-chip.leeg {
+      background: #ffffff;
+      border: 1.5px dashed #97a1ab;
+      color: #97a1ab;
+    }
+
+    /* ---------- Programma ---------- */
+    .stappen { display: flex; flex-direction: column; gap: 8px; }
+    .stap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.86rem;
+      color: var(--tekst-licht);
+    }
+    .stap .nr {
+      width: 20px;
+      text-align: right;
+      color: var(--kul-donkerblauw);
+      font-weight: 600;
+    }
+    .stap input[type="number"] { width: 62px; }
+    .verwijder {
+      border: 1px solid var(--rand);
+      background: #ffffff;
+      color: var(--fout);
+      padding: 5px 9px;
+      line-height: 1;
+      font-size: 0.95rem;
+    }
+    .verwijder:hover:not(:disabled) { background: #fdf0f0; }
+    .leeg-melding { font-size: 0.86rem; color: var(--tekst-licht); font-style: italic; }
+
+    pre {
+      background: #1e252b;
+      color: #e6edf3;
+      padding: 12px 14px;
+      font-family: "Cascadia Mono", Consolas, "Courier New", monospace;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      margin-top: 12px;
+      white-space: pre;
+    }
+
+    /* ---------- Kopje ---------- */
+    .kopje-lijst { display: flex; flex-direction: column; gap: 7px; }
+    .kopje-item { display: flex; align-items: center; gap: 9px; font-size: 0.9rem; }
+
+    .uitslag {
+      margin-top: 12px;
+      padding: 11px 13px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      border-left: 4px solid var(--rand);
+      background: var(--achtergrond);
+    }
+    .uitslag.goed { border-left-color: var(--goed); background: #eef7ee; }
+    .uitslag.fout { border-left-color: var(--fout); background: #fdf0f0; }
+
+    /* ---------- Logboek ---------- */
+    .log {
+      max-height: 220px;
+      overflow-y: auto;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      border: 1px solid var(--rand);
+      padding: 8px 10px;
+      background: var(--achtergrond);
+    }
+    .logregel { border-bottom: 1px dotted var(--rand); padding: 2px 0; }
+    .logregel:last-child { border-bottom: none; }
+    .logregel.stil { color: #99a2aa; }
+    .logregel.actie { color: var(--kul-donkerblauw); font-weight: 600; }
+    .logregel.waarschuwing { color: #a8590c; }
+
+    /* ---------- Legende ---------- */
+    .legende { list-style: none; font-size: 0.85rem; }
+    .legende li { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 9px; line-height: 1.4; }
+    .legende .staal {
+      width: 18px; height: 18px;
+      flex-shrink: 0;
+      margin-top: 1px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+    }
+    .legende .staal.blok { border-radius: 2px; }
+
+    /* ---------- Instellingen ---------- */
+    details.instellingen {
+      background: #ffffff;
+      border: 1px solid var(--rand);
+      border-top: 4px solid var(--kul-donkerblauw);
+      padding: 0;
+    }
+    details.instellingen > summary {
+      cursor: pointer;
+      padding: 16px 18px;
+      font-weight: 600;
+      color: var(--kul-donkerblauw);
+      font-size: 1.05rem;
+    }
+    .instellingen-inhoud { padding: 0 18px 18px; }
+    .instelling { margin-bottom: 16px; }
+    .instelling > label:first-child,
+    .instelling > .kop { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
+    .instelling .uitleg { font-size: 0.8rem; color: var(--tekst-licht); margin-top: 5px; line-height: 1.45; }
+    .radiorij { display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; }
+    .radiorij label { display: flex; align-items: center; gap: 7px; }
+
+    /* ---------- SVG-onderdelen ---------- */
+    .schaduw { fill: #dfe5ea; }
+    .schijfvlak { fill: #faf6ef; stroke: var(--kul-donkerblauw); stroke-width: 1.4; }
+    .vastgat { fill: none; stroke: #b6bfc7; stroke-width: 0.9; }
+
+    .gat { cursor: pointer; }
+    .gat.dicht {
+      fill: rgba(0, 0, 0, 0);
+      stroke: #cbd3da;
+      stroke-width: 0.9;
+      stroke-dasharray: 3 3;
+    }
+    .gat.open { fill: #e9eef3; stroke: var(--kul-donkerblauw); stroke-width: 1.6; }
+    /* Na de toestandsklassen, zodat hover/focus altijd wint (gelijke specificiteit). */
+    .gat:hover, .gat:focus { stroke: var(--kul-lichtblauw); stroke-width: 2.6; outline: none; }
+    .bezig .gat { cursor: default; }
+    .bezig #schijf { pointer-events: none; }
+
+    .brugvlak { fill: rgba(120, 132, 144, 0.34); stroke: #4d565f; stroke-width: 1.2; }
+    .hartlijn { stroke: var(--snij-rood); stroke-width: 1.4; stroke-dasharray: 5 3; }
+    .tolmarkering line { stroke: var(--snij-rood); stroke-width: 1.6; stroke-linecap: round; opacity: 0.85; }
+
+    .bakje { cursor: pointer; }
+    .bakje.leegbak { fill: rgba(255, 255, 255, 0.72); stroke: #4d565f; stroke-width: 1.3; stroke-dasharray: 4 3; }
+    .bakje.gevallen { fill: #c6ced6; stroke: #8b959f; stroke-width: 1.3; stroke-dasharray: 4 3; }
+    .bakje.ing-K { fill: #6F4E37; stroke: #4a3423; stroke-width: 1.8; }
+    .bakje.ing-T { fill: #2E7D32; stroke: #1f5622; stroke-width: 1.8; }
+    .bakje.ing-M { fill: #F2F2F2; stroke: #8a9099; stroke-width: 1.8; }
+    .bakje.ing-S { fill: #E8C39E; stroke: #b98d5f; stroke-width: 1.8; }
+    .bakje:hover, .bakje:focus { stroke: var(--kul-lichtblauw); stroke-width: 3; outline: none; }
+    .bakjeletter { pointer-events: none; font-weight: 700; }
+
+    .zone { fill: url(#arcering); stroke: rgba(0, 64, 122, 0.45); stroke-width: 0.9; stroke-dasharray: 6 4; }
+    .tick { stroke: #b6bfc7; stroke-width: 0.7; }
+    .tick.groot { stroke: #8a9099; stroke-width: 1.1; }
+    .ticklabel { fill: #8a9099; font-size: 8.5px; }
+    .moklijn { fill: #ffffff; stroke: #3a4249; stroke-width: 1.6; stroke-linejoin: round; }
+    .moklijn.handvat { fill: none; }
+    .moktekst { fill: var(--tekst-licht); font-size: 10px; font-weight: 600; }
+    .valeffect { transition: transform 0.55s ease-in, opacity 0.55s ease-in; pointer-events: none; }
+
+    /* ---------- Footer ---------- */
+    footer {
+      background: var(--kul-donkerblauw);
+      color: #d6e4f0;
+      font-size: 0.85rem;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    @media (max-width: 560px) {
+      .hero h1 { font-size: 1.6rem; }
+      .header-inner img { height: 40px; }
+      main { padding: 20px 14px 40px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <img src="static/kuleuven-logo.svg" alt="KU Leuven">
+      <div class="site-title">
+        Startdagen
+        <small>Probleemoplossen en Ontwerpen</small>
+      </div>
+      <a class="terug" href="/">&lsaquo; Terug naar de startpagina</a>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <h1>Simulator van de draaischijf</h1>
+      <p>
+        Boven de schijf ligt een vaste rechthoek met vier bakjes &mdash; &eacute;&eacute;n boven elke ring.
+        In elk bakje leg je een ingredi&euml;nt. De schijf eronder is de afsluiter: pas als een
+        uitgesneden cirkel van diezelfde ring onder een gevuld bakje draait, valt die capsule in het
+        kopje. Test hier jullie ontwerp v&oacute;&oacute;r het lasersnijden.
+      </p>
+    </div>
+  </div>
+
+  <main>
+    <div class="werkwijze">
+      <h2>Werkwijze</h2>
+      <ol>
+        <li>Leg de ingredi&euml;nten in de rechthoek: kies een ingredi&euml;nt en klik op een bakje.</li>
+        <li>Kies welke cirkels jullie uitsnijden: klik cirkels op de schijf aan of uit.</li>
+        <li>Programmeer de servostappen in graden (&eacute;&eacute;n stap = &eacute;&eacute;n <code>moveServo(start, eind)</code>) en voer ze uit.</li>
+        <li>Kijk wat er in het kopje valt en controleer het tegen het gewenste drankje. Klopt alles? Download dan de SVG in de configurator.</li>
+      </ol>
+    </div>
+
+    <a class="naar-configurator" href="schijf">Klaar met testen? Download de lasersnij-SVG in de schijf-configurator &rarr;</a>
+
+    <div class="layout">
+      <!-- ================= Linkerkolom: de machine ================= -->
+      <div class="schijf-kolom">
+        <div class="blok schijf-paneel">
+          <svg id="schijf" viewBox="-220 -220 440 440" xmlns="http://www.w3.org/2000/svg"
+               role="group" aria-label="Bovenaanzicht: de draaischijf met daarboven de vaste rechthoek en het kopje">
+            <defs>
+              <pattern id="arcering" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <rect width="7" height="7" fill="rgba(84,188,235,0.13)"></rect>
+                <line x1="0" y1="0" x2="0" y2="7" stroke="rgba(0,64,122,0.22)" stroke-width="1"></line>
+              </pattern>
+            </defs>
+            <g id="onderlaag"></g>
+            <g id="draaiend"></g>
+            <g id="bovenlaag"></g>
+          </svg>
+        </div>
+
+        <div class="blok">
+          <h2>Legende</h2>
+          <ul class="legende">
+            <li><span class="staal" style="border-color:#cbd3da;border-style:dashed"></span> Dichte cirkel &mdash; niet uitgesneden. De schijf sluit hier af, er valt niets door.</li>
+            <li><span class="staal" style="border-color:#00407A;background:#e9eef3"></span> Open cirkel (&Oslash;25&nbsp;mm, uitgesneden) &mdash; hierdoor kan een capsule vallen.</li>
+            <li><span class="staal blok" style="border-color:#4d565f;background:rgba(120,132,144,0.34)"></span> De vaste rechthoek boven de schijf, met vier bakjesposities (&eacute;&eacute;n per ring). Draait niet mee.</li>
+            <li><span class="staal" style="border-color:#4d565f;border-style:dashed;background:#ffffff"></span> Leeg bakje. Gevuld bakje krijgt de ingredi&euml;ntkleur met de letter K, T, M of S.</li>
+            <li><span class="staal" style="border-color:#8b959f;border-style:dashed;background:#c6ced6"></span> Grijs bakje: de capsule is al gevallen. &laquo;Reset simulatie&raquo; vult alles terug.</li>
+            <li><span class="staal blok" style="border-color:#d40000;background:#d40000"></span> De rode hartlijn is het midden van de rechthoek; de twee rode streepjes naast elk bakje zijn de uitlijnmarge van die ring. Komt het middelpunt van een open cirkel tussen die streepjes, dan valt de capsule uit dat bakje. De marge is een booglengte, dus in graden is ze op de binnenste ring veel ruimer dan op de buitenste.</li>
+            <li><span class="staal blok" style="border-color:rgba(0,64,122,0.45);background:rgba(84,188,235,0.18)"></span> Gearceerde <b>bereikbare zone</b>: alleen cirkels in deze zone kunnen ooit onder de rechthoek komen, want de servo haalt maar 180&deg;. De zone draait mee met de schijf; cirkels erbuiten worden vager getekend.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ================= Rechterkolom: bediening ================= -->
+      <div class="zijpaneel">
+        <div class="blok">
+          <h2><span class="stapnr">1</span> Ingredi&euml;nten in de rechthoek</h2>
+          <div class="palet" id="ingredientPalet">
+            <button class="gereedschap" type="button" data-tool="K" aria-pressed="true"><span class="stip" style="background:#6F4E37;border-color:#4a3423"></span>Koffie</button>
+            <button class="gereedschap" type="button" data-tool="T" aria-pressed="false"><span class="stip" style="background:#2E7D32;border-color:#1f5622"></span>Thee</button>
+            <button class="gereedschap" type="button" data-tool="M" aria-pressed="false"><span class="stip" style="background:#F2F2F2;border-color:#8a9099"></span>Melk</button>
+            <button class="gereedschap" type="button" data-tool="S" aria-pressed="false"><span class="stip" style="background:#E8C39E;border-color:#b98d5f"></span>Suiker</button>
+            <button class="gereedschap" type="button" data-tool="leeg" aria-pressed="false"><span class="stip" style="background:#ffffff;border-color:#c62828"></span>Bakje leegmaken</button>
+          </div>
+          <div class="bakjes-lijst" id="bakjesLijst"></div>
+          <p class="hint">
+            Klik op een bakje in de rechthoek om er het gekozen ingredi&euml;nt in te leggen. Een bakje
+            verplaatsen doe je door het ingredi&euml;nt gewoon op een andere positie te leggen; hetzelfde
+            ingredi&euml;nt mag in meerdere bakjes.
+          </p>
+        </div>
+
+        <div class="blok">
+          <h2><span class="stapnr">2</span> Cirkels uitsnijden</h2>
+          <p class="hint" style="margin-top:0">
+            Klik een cirkel op de schijf aan of uit. Open cirkels worden straks uitgesneden; dichte
+            cirkels blijven MDF en houden de capsule tegen. Ligt een cirkel net onder een bakje?
+            Draai de schijf een beetje, of gebruik Tab om hem met het toetsenbord te bereiken.
+          </p>
+          <div class="teller"><b id="aantal">0</b> van de 66 cirkels uitgesneden</div>
+          <div class="knoppen">
+            <button class="secundair klein" type="button" id="allesDichtKnop">Alle cirkels dicht</button>
+          </div>
+        </div>
+
+        <div class="blok">
+          <h2><span class="stapnr">3</span> Servo</h2>
+          <div class="servo-uitlezing" id="servoUitlezing">Servo: 90&deg;</div>
+          <div class="servo-sub" id="rotatieUitlezing">Schijfrotatie: 0&deg;</div>
+
+          <div class="rij">
+            <label for="doelHoek">Doelhoek</label>
+            <input type="number" id="doelHoek" min="0" max="180" step="1" value="90">
+            <span>&deg;</span>
+            <button class="primair klein" type="button" id="draaiKnop">Draai naar hoek</button>
+          </div>
+          <div class="rij">
+            <input type="range" id="doelSlider" min="0" max="180" step="1" value="90" aria-label="Doelhoek van de servo">
+          </div>
+          <p class="hint" id="mappingUitleg"></p>
+        </div>
+
+        <div class="blok">
+          <h2><span class="stapnr">3</span> Programma</h2>
+          <div class="stappen" id="stappen"></div>
+          <div class="knoppen">
+            <button class="secundair klein" type="button" id="stapToevoegen">+ stap toevoegen</button>
+            <button class="primair klein" type="button" id="uitvoerKnop">&#9654; Voer programma uit</button>
+          </div>
+          <pre id="codePreview">// nog geen stappen</pre>
+          <div class="knoppen">
+            <button class="secundair klein" type="button" id="kopieerKnop">Kopieer code</button>
+          </div>
+          <p class="hint">
+            <code>moveServo(start, eind)</code> beweegt eerst van de huidige hoek naar <i>start</i> en daarna
+            van <i>start</i> naar <i>eind</i>. Ook dat eerste stukje kan al capsules laten vallen &mdash;
+            precies zoals op de echte machine.
+          </p>
+        </div>
+
+        <div class="blok">
+          <h2><span class="stapnr">4</span> Kopje</h2>
+          <div class="kopje-lijst" id="kopjeLijst"></div>
+          <div class="knoppen">
+            <button class="secundair klein" type="button" id="resetKnop">Reset simulatie</button>
+          </div>
+          <p class="hint">
+            Reset vult alle bakjes terug volgens jullie ontwerp, maakt het kopje en het logboek leeg
+            en zet de servo terug op 90&deg;.
+          </p>
+        </div>
+
+        <div class="blok">
+          <h2><span class="stapnr">4</span> Drankjescheck</h2>
+          <label for="drankje">Welk drankje wilden jullie zetten?</label>
+          <select id="drankje"></select>
+          <div class="knoppen">
+            <button class="primair klein" type="button" id="checkKnop">Controleer kopje</button>
+          </div>
+          <div class="uitslag" id="uitslag">Nog niet gecontroleerd.</div>
+        </div>
+
+        <div class="blok">
+          <h2>Logboek</h2>
+          <div class="log" id="log"></div>
+        </div>
+
+        <details class="instellingen">
+          <summary>Instellingen (begeleiders)</summary>
+          <div class="instellingen-inhoud">
+            <div class="instelling">
+              <label for="setValopening">Positie van de rechthoek</label>
+              <div class="rij">
+                <input type="number" id="setValopening" min="0" max="359" step="1" value="270">
+                <span>&deg;</span>
+              </div>
+              <div class="uitleg">
+                Hoeken worden tegen de klok in gemeten vanaf 3&nbsp;uur: 0&deg;&nbsp;=&nbsp;rechts,
+                90&deg;&nbsp;=&nbsp;boven, 180&deg;&nbsp;=&nbsp;links, 270&deg;&nbsp;=&nbsp;onder (standaard).
+              </div>
+            </div>
+
+            <div class="instelling">
+              <label for="setTol">Uitlijnmarge</label>
+              <div class="rij">
+                <input type="number" id="setTol" min="1" max="14" step="1" value="10">
+                <span>mm</span>
+              </div>
+              <div class="uitleg" id="tolUitleg"></div>
+            </div>
+
+            <div class="instelling">
+              <span class="kop">Draairichting bij oplopende servohoek</span>
+              <div class="radiorij">
+                <label><input type="radio" name="richting" value="1" checked> Tegen de klok in (+1)</label>
+                <label><input type="radio" name="richting" value="-1"> Met de klok mee (&minus;1)</label>
+              </div>
+              <div class="uitleg">Hangt af van hoe de servo onder de schijf gemonteerd is.</div>
+            </div>
+
+            <div class="instelling">
+              <label for="setOffset">Montage-offset</label>
+              <div class="rij">
+                <input type="number" id="setOffset" min="-180" max="180" step="1" value="0">
+                <span>&deg;</span>
+              </div>
+              <div class="uitleg">
+                Hoe de schijf verdraaid op de servo-as gemonteerd is. Staat je cirkel n&eacute;t buiten
+                bereik? Monteer de schijf een fractie verdraaid op de as, of pas hier de offset aan.
+              </div>
+            </div>
+
+            <div class="instelling">
+              <label for="setSnelheid">Servosnelheid</label>
+              <div class="rij">
+                <input type="number" id="setSnelheid" min="0" max="200" step="1" value="20">
+                <span>ms per graad</span>
+              </div>
+              <div class="uitleg">De MG90S in de opstelling doet ongeveer 20&nbsp;ms per graad.</div>
+            </div>
+
+            <p class="uitleg" style="margin-bottom:12px">
+              Positie, draairichting en offset wijzigen verzet de schijf in &eacute;&eacute;n keer;
+              de simulatie wordt daarom automatisch gereset.
+            </p>
+            <div class="knoppen">
+              <button class="secundair klein" type="button" id="standaardKnop">Terug naar standaardinstellingen</button>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>KU Leuven &middot; Startdagen &middot; Probleemoplossen en Ontwerpen</span>
+      <span>startdagen.peno1.be</span>
+    </div>
+  </footer>
+
+  <script>
+  /*
+   * ============================================================
+   *  HOEKCONVENTIE  (alles in dit script houdt zich hieraan)
+   * ============================================================
+   *  Alle hoeken zijn "wiskundige" graden: tegen de klok in gemeten
+   *  vanaf de positieve x-as, zoals je de schijf op het scherm ziet.
+   *
+   *      0 graden = rechts (3 uur)
+   *     90 graden = boven  (12 uur)
+   *    180 graden = links  (9 uur)
+   *    270 graden = onder  (6 uur)   <- standaardstand van de rechthoek
+   *
+   *  De SVG-coordinaten zijn in mm en volgen de SVG-afspraak: x naar
+   *  rechts, y naar BENEDEN. Omrekenen gaat dus met een y-spiegeling:
+   *
+   *      punt(r, phi) = ( r*cos(phi) , -r*sin(phi) )
+   *      hoekVan(x, y) = atan2(-y, x)
+   *
+   *  En omdat SVG rotate() MET de klok mee draait, krijgt de draaiende
+   *  laag transform="rotate(-schijfRotatie)".
+   *
+   * ============================================================
+   *  HET MODEL
+   * ============================================================
+   *  De ingredienten zitten NIET in de schijf. Boven de schijf ligt een
+   *  vaste rechthoek (de brug) met vier bakjes, een per ring. De schijf
+   *  eronder is een draaiende afsluiter. Een capsule valt zodra een
+   *  UITGESNEDEN cirkel van diezelfde ring voldoende uitgelijnd onder het
+   *  gevulde bakje staat:
+   *
+   *      | basishoek(gat) + schijfrotatie - hoekRechthoek |  <=  tolGraden(ring)
+   *      tolGraden(ring) = graden( tolMm / ringstraal )
+   *
+   *  Dat is dus een BOOGLENGTE-marge: het gatmiddelpunt mag hoogstens
+   *  tolMm millimeter naast het bakjesmiddelpunt staan. De check loopt
+   *  continu (elke substap van de animatie en na elke wijziging), niet
+   *  alleen op het moment van passeren - anders zou een capsule die
+   *  stilvalt binnen de opening nooit vallen.
+   * ============================================================
+   */
+
+  // ---------- Geometrie in mm, letterlijk uit de schijf-configurator ----------
+  const SCHIJF_RADIUS = 147.5;
+  const GAT_RADIUS = 12.5;
+  const VASTE_GATEN = [[0.0, 0.0, 2.0], [-10.6, -10.605, 1.95], [0.0, -15.0, 2.0], [10.614, -10.605, 1.95], [15.0, 0.0, 2.0], [10.614, 10.608, 1.95], [0.0, 15.0, 2.0], [-10.6, 10.608, 1.95], [-15.0, 0.0, 2.0]];
+  const GATEN = [[-26.248, -26.078], [-0.12, -37.0], [26.078, -26.248], [37.0, -0.12], [26.248, 26.078], [0.12, 37.0], [-26.078, 26.248], [-37.0, 0.12], [-57.778, -27.529], [-40.112, -49.871], [-14.501, -62.336], [13.982, -62.455], [39.695, -50.203], [57.546, -28.008], [64.0, -0.266], [57.778, 27.529], [40.112, 49.871], [14.501, 62.336], [-13.982, 62.455], [-39.695, 50.203], [-57.546, 28.008], [-64.0, 0.266], [-86.707, -27.626], [-73.926, -53.068], [-53.909, -73.315], [-28.615, -86.385], [-0.52, -91.0], [27.626, -86.707], [53.068, -73.926], [73.315, -53.909], [86.385, -28.615], [91.0, -0.52], [86.707, 27.626], [73.926, 53.068], [53.909, 73.315], [28.615, 86.385], [0.52, 91.0], [-27.626, 86.707], [-53.068, 73.926], [-73.315, 53.909], [-86.385, 28.615], [-91.0, 0.52], [-120.875, -31.85], [-108.513, -62.05], [-88.756, -88.021], [-62.95, -107.993], [-32.855, -120.606], [-0.52, -125.0], [31.85, -120.875], [62.05, -108.513], [88.021, -88.756], [107.993, -62.95], [120.606, -32.855], [125.0, -0.52], [120.875, 31.85], [108.513, 62.05], [88.756, 88.021], [62.95, 107.993], [32.855, 120.606], [0.52, 125.0], [-31.85, 120.875], [-62.05, 108.513], [-88.021, 88.756], [-107.993, 62.95], [-120.606, 32.855], [-125.0, 0.52]];
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+
+  // Afmetingen van de vaste laag (mm)
+  const BRUG_BREEDTE = 30;           // iets breder dan een cirkel van 25 mm
+  const BRUG_MARGE = 15;             // hoever de rechthoek voorbij de binnen- en buitenring steekt
+  const ZONE_BINNEN = 20;
+  const ZONE_BUITEN = 143;
+  const MOK_RADIUS = 188;            // afstand van het midden tot het kopje-icoon
+  const BEREIK_MARGE = 0.5;          // graden speling: het gatenpatroon staat ~0,25 graad verdraaid
+
+  // ---------- Ingredienten ----------
+  const INGREDIENTEN = {
+    K: { naam: 'Koffie', vul: '#6F4E37', rand: '#4a3423', letter: '#ffffff', emoji: '☕' },
+    T: { naam: 'Thee',   vul: '#2E7D32', rand: '#1f5622', letter: '#ffffff', emoji: '🍵' },
+    M: { naam: 'Melk',   vul: '#F2F2F2', rand: '#8a9099', letter: '#333333', emoji: '🥛' },
+    S: { naam: 'Suiker', vul: '#E8C39E', rand: '#b98d5f', letter: '#4a3520', emoji: '🍬' }
+  };
+
+  const DRANKJES = [
+    { naam: 'Koffie',                    recept: ['K'] },
+    { naam: 'Thee',                      recept: ['T'] },
+    { naam: 'Koffie met suiker',         recept: ['K', 'S'] },
+    { naam: 'Thee met suiker',           recept: ['T', 'S'] },
+    { naam: 'Koffie met melk',           recept: ['K', 'M'] },
+    { naam: 'Thee met melk',             recept: ['T', 'M'] },
+    { naam: 'Koffie met melk en suiker', recept: ['K', 'M', 'S'] },
+    { naam: 'Thee met melk en suiker',   recept: ['T', 'M', 'S'] }
+  ];
+
+  // ---------- Kleine wiskundige helpers ----------
+  function graden(rad) { return rad * 180 / Math.PI; }
+  function radialen(deg) { return deg * Math.PI / 180; }
+  function normaliseer(hoek) { return ((hoek % 360) + 360) % 360; }
+  function begrens(v, min, max) { return Math.min(max, Math.max(min, v)); }
+  // Eén decimaal met een Nederlandse komma.
+  function getal(v) { return v.toFixed(1).replace('.', ','); }
+
+  // Normaliseert een hoekverschil naar het interval (-180, 180].
+  function hoekVerschil(hoek) {
+    let d = (((hoek + 180) % 360) + 360) % 360 - 180;
+    if (d === -180) { d = 180; }
+    return d;
+  }
+
+  // Wiskundige poolcoordinaten -> SVG-coordinaten (y naar beneden).
+  function punt(r, phi) {
+    const a = radialen(phi);
+    return { x: r * Math.cos(a), y: -r * Math.sin(a) };
+  }
+
+  // ---------- Ringen afleiden uit de GATEN-array ----------
+  // De gaten liggen in vier duidelijk gescheiden ringen; we clusteren de
+  // afstanden tot het middelpunt op een gat van meer dan 10 mm.
+  const basisHoek = GATEN.map(([x, y]) => normaliseer(graden(Math.atan2(-y, x))));
+  const gatStraal = GATEN.map(([x, y]) => Math.hypot(x, y));
+  const RINGEN = [];        // gemiddelde straal per ring, van binnen naar buiten
+  const ringVanGat = [];    // gatindex -> ringindex
+  const gatenPerRing = [];  // ringindex -> lijst gatindices
+
+  (function bepaalRingen() {
+    const groepen = [];
+    for (const r of [...gatStraal].sort((a, b) => a - b)) {
+      const laatste = groepen[groepen.length - 1];
+      if (laatste && r - laatste[laatste.length - 1] < 10) { laatste.push(r); }
+      else { groepen.push([r]); }
+    }
+    for (const groep of groepen) {
+      RINGEN.push(groep.reduce((som, v) => som + v, 0) / groep.length);
+      gatenPerRing.push([]);
+    }
+    gatStraal.forEach((r, i) => {
+      let beste = 0;
+      for (let k = 1; k < RINGEN.length; k++) {
+        if (Math.abs(r - RINGEN[k]) < Math.abs(r - RINGEN[beste])) { beste = k; }
+      }
+      ringVanGat[i] = beste;
+      gatenPerRing[beste].push(i);
+    });
+  })();
+
+  const BRUG_BINNEN = RINGEN[0] - BRUG_MARGE;
+  const BRUG_BUITEN = RINGEN[RINGEN.length - 1] + BRUG_MARGE;
+
+  // ---------- Toestand ----------
+  const STANDAARD = { valopening: 270, richting: 1, offset: 0, msPerGraad: 20, tolMm: 10 };
+  let I = Object.assign({}, STANDAARD);            // instellingen
+
+  const geselecteerd = new Set();                  // ontwerp: welke cirkels zijn uitgesneden
+  let bakjesOntwerp = {};                          // ontwerp: ringindex -> letter
+  let bakjesRuntime = [];                          // simulatie: wat ligt er nu nog in elk bakje
+  let kopje = [];                                  // gevallen capsules, in volgorde
+  let servoHoek = 90;                              // huidige servohoek in graden
+  let doelHoek = 90;
+  let ingredient = 'K';                            // actief gereedschap voor de bakjes
+  let stappen = [{ start: 90, eind: 180 }];
+  let bezig = false;
+  let stopGevraagd = false;
+  let laatsteUitvoerKlik = -Infinity;   // niet 0: anders slikt de guard de eerste klik na het laden
+
+  // ---------- Servo -> schijf ----------
+  function schijfRotatieVoor(hoek) { return I.richting * (hoek - 90) + I.offset; }
+  function schijfRotatie() { return schijfRotatieVoor(servoHoek); }
+
+  // Uitlijnmarge van een ring, omgerekend van millimeters booglengte naar graden.
+  function tolGraden(ring) { return graden(I.tolMm / RINGEN[ring]); }
+
+  // Bij welke servohoek staat dit gat precies onder de rechthoek?
+  // Uit rotatie = richting*(servo-90) + offset volgt servo = 90 + richting*(rotatie-offset),
+  // en de benodigde rotatie is (hoekRechthoek - basishoek), gekozen in [offset-90, offset+90].
+  function servoVoorGat(index) {
+    return 90 + I.richting * hoekVerschil(I.valopening - basisHoek[index] - I.offset);
+  }
+
+  // Hoeveel graden komt dit gat tekort om binnen het servobereik te vallen? (0 = haalbaar)
+  function tekortVoorGat(index) {
+    const s = servoVoorGat(index);
+    if (s < 0) { return -s; }
+    if (s > 180) { return s - 180; }
+    return 0;
+  }
+
+  function bereikbaar(index) { return tekortVoorGat(index) <= BEREIK_MARGE; }
+
+  // ---------- localStorage (mag nooit fataal zijn, bv. in private mode) ----------
+  function lees(sleutel) {
+    try {
+      const ruw = window.localStorage.getItem(sleutel);
+      return ruw === null ? null : JSON.parse(ruw);
+    } catch (e) {
+      return null;
+    }
+  }
+  function schrijf(sleutel, waarde) {
+    try {
+      window.localStorage.setItem(sleutel, JSON.stringify(waarde));
+    } catch (e) {
+      /* opslag niet beschikbaar: gewoon doorgaan */
+    }
+  }
+  function verwijder(sleutel) {
+    try {
+      window.localStorage.removeItem(sleutel);
+    } catch (e) {
+      /* opslag niet beschikbaar: gewoon doorgaan */
+    }
+  }
+
+  function laadOntwerp() {
+    const gaten = lees('schijf-gaten');
+    if (Array.isArray(gaten)) {
+      for (const index of gaten) {
+        if (Number.isInteger(index) && index >= 0 && index < GATEN.length) {
+          geselecteerd.add(index);
+        }
+      }
+    }
+    const bakjes = lees('brug-bakjes');
+    if (bakjes && typeof bakjes === 'object' && !Array.isArray(bakjes)) {
+      for (const sleutel of Object.keys(bakjes)) {
+        const ring = Number(sleutel);
+        const letter = bakjes[sleutel];
+        if (String(ring) === sleutel && ring >= 0 && ring < RINGEN.length && INGREDIENTEN[letter]) {
+          bakjesOntwerp[ring] = letter;
+        }
+      }
+    }
+    // Oude sleutel uit de vorige versie (capsules in de schijfgaten) opruimen.
+    verwijder('schijf-capsules');
+  }
+
+  function bewaarOntwerp() {
+    schrijf('schijf-gaten', [...geselecteerd].sort((a, b) => a - b));
+    schrijf('brug-bakjes', bakjesOntwerp);
+  }
+
+  function laadInstellingen() {
+    const opgeslagen = lees('simulatie-instellingen');
+    if (!opgeslagen || typeof opgeslagen !== 'object') { return; }
+    if (Number.isFinite(opgeslagen.valopening)) { I.valopening = normaliseer(opgeslagen.valopening); }
+    if (opgeslagen.richting === 1 || opgeslagen.richting === -1) { I.richting = opgeslagen.richting; }
+    if (Number.isFinite(opgeslagen.offset)) { I.offset = begrens(opgeslagen.offset, -180, 180); }
+    if (Number.isFinite(opgeslagen.msPerGraad)) { I.msPerGraad = begrens(opgeslagen.msPerGraad, 0, 200); }
+    if (Number.isFinite(opgeslagen.tolMm)) { I.tolMm = begrens(opgeslagen.tolMm, 1, 14); }
+  }
+
+  function bewaarInstellingen() { schrijf('simulatie-instellingen', I); }
+
+  // ---------- SVG-opbouw ----------
+  const svgOnder = document.getElementById('onderlaag');
+  const svgDraaiend = document.getElementById('draaiend');
+  const svgBoven = document.getElementById('bovenlaag');
+
+  const gatEls = [];
+  const bakjeEls = [];
+  const bakjeLetterEls = [];
+  let zonePad = null;
+  let brugGroep = null;
+  let brugVlak = null;
+  let hartlijn = null;
+  let tolMarkeringen = [];
+  let mokGroep = null;
+  let mokTeller = null;
+  let tickGroep = null;
+
+  function maak(naam, attributen) {
+    const el = document.createElementNS(SVG_NS, naam);
+    for (const sleutel of Object.keys(attributen || {})) {
+      el.setAttribute(sleutel, attributen[sleutel]);
+    }
+    return el;
+  }
+
+  // Maakt een SVG-element toetsenbordbedienbaar als knop.
+  function maakKlikbaar(el, handler) {
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('role', 'button');
+    el.addEventListener('click', handler);
+    el.addEventListener('keydown', gebeurtenis => {
+      if (gebeurtenis.key === 'Enter' || gebeurtenis.key === ' ' || gebeurtenis.key === 'Spacebar') {
+        gebeurtenis.preventDefault();
+        handler();
+      }
+    });
+  }
+
+  function bouwSvg() {
+    // --- onderlaag: subtiele schaduw onder de schijf ---
+    svgOnder.appendChild(maak('circle', { r: SCHIJF_RADIUS + 4, class: 'schaduw' }));
+
+    // --- draaiende laag: schijf, bereikbare zone, cirkels ---
+    svgDraaiend.appendChild(maak('circle', { r: SCHIJF_RADIUS, class: 'schijfvlak' }));
+
+    zonePad = maak('path', { class: 'zone' });
+    svgDraaiend.appendChild(zonePad);
+
+    for (const [x, y, r] of VASTE_GATEN) {
+      svgDraaiend.appendChild(maak('circle', { cx: x, cy: y, r: r, class: 'vastgat' }));
+    }
+
+    GATEN.forEach(([x, y], index) => {
+      const cirkel = maak('circle', { cx: x, cy: y, r: GAT_RADIUS, class: 'gat dicht' });
+      // De klik komt binnen op het gedraaide element zelf, dus de browser doet
+      // de inverse rotatie al voor ons: geen eigen hoekwiskunde nodig.
+      maakKlikbaar(cirkel, () => klikOpGat(index));
+      cirkel.appendChild(maak('title', {}));
+      svgDraaiend.appendChild(cirkel);
+      gatEls[index] = cirkel;
+    });
+
+    // --- bovenlaag: gradenboog, rechthoek met bakjes, kopje ---
+    tickGroep = maak('g', {});
+    svgBoven.appendChild(tickGroep);
+
+    brugGroep = maak('g', {});
+    brugVlak = maak('rect', {
+      x: BRUG_BINNEN, y: -BRUG_BREEDTE / 2,
+      width: BRUG_BUITEN - BRUG_BINNEN, height: BRUG_BREEDTE,
+      rx: 3, class: 'brugvlak'
+    });
+    brugGroep.appendChild(brugVlak);
+
+    hartlijn = maak('line', { x1: BRUG_BINNEN - 4, y1: 0, x2: BRUG_BUITEN + 4, y2: 0, class: 'hartlijn' });
+    brugGroep.appendChild(hartlijn);
+
+    RINGEN.forEach((straal, ring) => {
+      const cirkel = maak('circle', { cx: straal, cy: 0, r: GAT_RADIUS, class: 'bakje leegbak' });
+      maakKlikbaar(cirkel, () => klikOpBakje(ring));
+      cirkel.appendChild(maak('title', {}));
+      brugGroep.appendChild(cirkel);
+      bakjeEls[ring] = cirkel;
+
+      const letter = maak('text', {
+        x: straal, y: 0, class: 'bakjeletter',
+        'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 13
+      });
+      brugGroep.appendChild(letter);
+      bakjeLetterEls[ring] = letter;
+    });
+
+    // Per ring twee radiale streepjes op +/- de uitlijnmarge. Ze staan boven de
+    // bakjes: de marge is in millimeters smaller dan een bakje, dus een boogje
+    // eronder zou volledig schuilgaan achter het bakje zelf.
+    tolMarkeringen = RINGEN.map(() => {
+      const paar = maak('g', { class: 'tolmarkering' });
+      brugGroep.appendChild(paar);
+      paar.appendChild(maak('line', {}));
+      paar.appendChild(maak('line', {}));
+      return paar;
+    });
+    svgBoven.appendChild(brugGroep);
+
+    mokGroep = maak('g', {});
+    mokGroep.appendChild(maak('path', {
+      class: 'moklijn',
+      d: 'M -13 -11 L 9 -11 L 8 9 A 3 3 0 0 1 5 12 L -10 12 A 3 3 0 0 1 -13 9 Z'
+    }));
+    mokGroep.appendChild(maak('path', { class: 'moklijn handvat', d: 'M 9 -6 A 7 7 0 0 1 9 6' }));
+    mokGroep.appendChild(maak('ellipse', { cx: -2, cy: 15, rx: 19, ry: 3.5, class: 'moklijn' }));
+    mokTeller = maak('text', {
+      x: -2, y: 27, class: 'moktekst', 'text-anchor': 'middle', 'dominant-baseline': 'central'
+    });
+    mokTeller.textContent = 'kopje';
+    mokGroep.appendChild(mokTeller);
+    svgBoven.appendChild(mokGroep);
+  }
+
+  // Ringsector als polygoon (5 graden per segment; de afwijking is < 0,2 mm).
+  function ringSectorPad(rBinnen, rBuiten, phiStart, phiSpan) {
+    const n = Math.max(2, Math.round(Math.abs(phiSpan) / 5));
+    const stukken = [];
+    for (let i = 0; i <= n; i++) {
+      const p = punt(rBuiten, phiStart + phiSpan * (i / n));
+      stukken.push((i === 0 ? 'M ' : 'L ') + p.x.toFixed(2) + ' ' + p.y.toFixed(2));
+    }
+    for (let i = n; i >= 0; i--) {
+      const p = punt(rBinnen, phiStart + phiSpan * (i / n));
+      stukken.push('L ' + p.x.toFixed(2) + ' ' + p.y.toFixed(2));
+    }
+    stukken.push('Z');
+    return stukken.join(' ');
+  }
+
+  function tekenZone() {
+    // Een gat met basishoek phi0 komt onder de rechthoek als de schijfrotatie
+    // gelijk is aan (hoekRechthoek - phi0). De rotatie ligt altijd in
+    // [offset-90, offset+90] (servo 0..180), dus phi0 moet in
+    // [hoekRechthoek-offset-90, hoekRechthoek-offset+90] liggen. Die band ligt
+    // vast t.o.v. de schijf zelf, daarom tekenen we hem in de draaiende laag.
+    const halve = 90 + BEREIK_MARGE;
+    const start = I.valopening - I.offset - halve;
+    zonePad.setAttribute('d', ringSectorPad(ZONE_BINNEN, ZONE_BUITEN, start, 2 * halve));
+  }
+
+  function tekenVasteLaag() {
+    // SVG rotate() draait met de klok mee, wiskundige hoeken tegen de klok in.
+    brugGroep.setAttribute('transform', 'rotate(' + (-I.valopening) + ')');
+    // De letters in de bakjes weer rechtop zetten.
+    RINGEN.forEach((straal, ring) => {
+      bakjeLetterEls[ring].setAttribute('transform', 'rotate(' + I.valopening + ' ' + straal + ' 0)');
+      // Twee "poortjes" op +/- de marge, radiaal net iets langer dan het bakje.
+      const tol = tolGraden(ring);
+      const strepen = tolMarkeringen[ring].childNodes;
+      [-tol, tol].forEach((hoek, i) => {
+        const a = punt(straal - GAT_RADIUS - 2.5, hoek);
+        const b = punt(straal + GAT_RADIUS + 2.5, hoek);
+        strepen[i].setAttribute('x1', a.x.toFixed(2));
+        strepen[i].setAttribute('y1', a.y.toFixed(2));
+        strepen[i].setAttribute('x2', b.x.toFixed(2));
+        strepen[i].setAttribute('y2', b.y.toFixed(2));
+      });
+    });
+
+    const m = punt(MOK_RADIUS, I.valopening);
+    mokGroep.setAttribute('transform', 'translate(' + m.x.toFixed(2) + ',' + m.y.toFixed(2) + ')');
+
+    while (tickGroep.firstChild) { tickGroep.removeChild(tickGroep.firstChild); }
+    for (let phi = 0; phi < 360; phi += 10) {
+      const groot = (phi % 30 === 0);
+      const a = punt(SCHIJF_RADIUS + 3, phi);
+      const b = punt(SCHIJF_RADIUS + (groot ? 11 : 6), phi);
+      tickGroep.appendChild(maak('line', {
+        x1: a.x.toFixed(2), y1: a.y.toFixed(2), x2: b.x.toFixed(2), y2: b.y.toFixed(2),
+        class: groot ? 'tick groot' : 'tick'
+      }));
+      // Label weglaten waar het kopje-icoon staat.
+      if (groot && Math.abs(hoekVerschil(phi - I.valopening)) > 25) {
+        const p = punt(SCHIJF_RADIUS + 22, phi);
+        const t = maak('text', {
+          x: p.x.toFixed(2), y: p.y.toFixed(2), class: 'ticklabel',
+          'text-anchor': 'middle', 'dominant-baseline': 'central'
+        });
+        t.textContent = phi + '°';
+        tickGroep.appendChild(t);
+      }
+    }
+  }
+
+  // ---------- Weergave bijwerken ----------
+  function werkRotatieBij() {
+    const rot = schijfRotatie();
+    svgDraaiend.setAttribute('transform', 'rotate(' + (-rot).toFixed(3) + ')');
+    document.getElementById('servoUitlezing').textContent = 'Servo: ' + Math.round(servoHoek) + '°';
+    // Eerst afronden, dan pas normaliseren: zo staat er nooit "360°".
+    const ruw = Math.round(rot);
+    const gedraaid = normaliseer(ruw);
+    const tekst = String(ruw).replace('-', '−') + '°'
+      + (gedraaid === ruw ? '' : ' (= ' + gedraaid + '°)');
+    document.getElementById('rotatieUitlezing').textContent = 'Schijfrotatie: ' + tekst;
+  }
+
+  function werkGatenBij() {
+    GATEN.forEach((_, index) => {
+      const open = geselecteerd.has(index);
+      const cirkel = gatEls[index];
+      const kan = bereikbaar(index);
+      cirkel.setAttribute('class', open ? 'gat open' : 'gat dicht');
+      cirkel.setAttribute('opacity', kan ? 1 : 0.55);
+
+      const ring = ringVanGat[index];
+      const tekort = tekortVoorGat(index);
+      let titel = 'Cirkel ' + index + ' op ring ' + (ring + 1)
+        + ' – ' + (open ? 'uitgesneden' : 'dicht') + '. ';
+      if (tekort === 0) {
+        titel += 'Staat onder de rechthoek bij servo ' + getal(servoVoorGat(index)) + '°.';
+      } else if (kan) {
+        // Net buiten 0..180, maar op de uiterste servostand nog ruim binnen de uitlijnmarge.
+        titel += 'Staat op de uiterste servostand (' + (servoVoorGat(index) < 0 ? 0 : 180)
+          + '°) nog onder de rechthoek: ' + getal(tekort) + '° naast het midden, binnen de marge van '
+          + getal(tolGraden(ring)) + '°.';
+      } else {
+        titel += tekort < 10
+          ? getal(tekort) + '° buiten bereik – monteer de schijf een fractie'
+            + ' verdraaid of pas de offset aan.'
+          : 'Buiten servobereik (0–180°): de servo draait maar een halve slag.';
+      }
+      cirkel.setAttribute('aria-label', titel);
+      cirkel.querySelector('title').textContent = titel;
+    });
+    document.getElementById('aantal').textContent = geselecteerd.size;
+  }
+
+  function werkBakjesBij() {
+    RINGEN.forEach((straal, ring) => {
+      const letter = bakjesRuntime[ring];
+      const ontwerp = bakjesOntwerp[ring];
+      const cirkel = bakjeEls[ring];
+      const tekst = bakjeLetterEls[ring];
+
+      if (letter) {
+        cirkel.setAttribute('class', 'bakje ing-' + letter);
+        tekst.textContent = letter;
+        tekst.setAttribute('fill', INGREDIENTEN[letter].letter);
+      } else if (ontwerp) {
+        cirkel.setAttribute('class', 'bakje gevallen');
+        tekst.textContent = ontwerp;
+        tekst.setAttribute('fill', '#7d8790');
+      } else {
+        cirkel.setAttribute('class', 'bakje leegbak');
+        tekst.textContent = '';
+      }
+
+      let titel = 'Bakje op ring ' + (ring + 1) + ' (straal ' + Math.round(straal) + ' mm) – ';
+      if (letter) { titel += INGREDIENTEN[letter].naam + '.'; }
+      else if (ontwerp) { titel += INGREDIENTEN[ontwerp].naam + ', al gevallen.'; }
+      else { titel += 'leeg.'; }
+      cirkel.setAttribute('aria-label', titel);
+      cirkel.querySelector('title').textContent = titel;
+    });
+
+    const lijst = document.getElementById('bakjesLijst');
+    lijst.innerHTML = '';
+    RINGEN.forEach((straal, ring) => {
+      const letter = bakjesRuntime[ring];
+      const ontwerp = bakjesOntwerp[ring];
+      const rij = document.createElement('div');
+      rij.className = 'bakje-rij';
+      const chip = document.createElement('span');
+      if (letter) {
+        chip.className = 'capsule-chip';
+        chip.style.background = INGREDIENTEN[letter].vul;
+        chip.style.borderColor = INGREDIENTEN[letter].rand;
+        chip.style.color = INGREDIENTEN[letter].letter;
+        chip.textContent = letter;
+      } else {
+        chip.className = 'capsule-chip leeg';
+        chip.textContent = ontwerp || '–';
+      }
+      const naam = document.createElement('span');
+      naam.textContent = 'Ring ' + (ring + 1) + ' (r ' + Math.round(straal) + ' mm): '
+        + (letter ? INGREDIENTEN[letter].naam
+                  : (ontwerp ? INGREDIENTEN[ontwerp].naam + ' – gevallen' : 'leeg'))
+        + ' · marge ±' + getal(tolGraden(ring)) + '°';
+      rij.appendChild(chip);
+      rij.appendChild(naam);
+      lijst.appendChild(rij);
+    });
+  }
+
+  function werkKopjeBij() {
+    const lijst = document.getElementById('kopjeLijst');
+    lijst.innerHTML = '';
+    if (kopje.length === 0) {
+      const p = document.createElement('div');
+      p.className = 'leeg-melding';
+      p.textContent = 'Het kopje is nog leeg.';
+      lijst.appendChild(p);
+    } else {
+      kopje.forEach((letter, i) => {
+        const ing = INGREDIENTEN[letter];
+        const rij = document.createElement('div');
+        rij.className = 'kopje-item';
+        const chip = document.createElement('span');
+        chip.className = 'capsule-chip';
+        chip.style.background = ing.vul;
+        chip.style.borderColor = ing.rand;
+        chip.style.color = ing.letter;
+        chip.textContent = letter;
+        const naam = document.createElement('span');
+        naam.textContent = (i + 1) + '. ' + ing.naam;
+        rij.appendChild(chip);
+        rij.appendChild(naam);
+        lijst.appendChild(rij);
+      });
+    }
+    mokTeller.textContent = kopje.length === 0 ? 'kopje' : 'kopje (' + kopje.length + ')';
+  }
+
+  function logRegel(tekst, klasse) {
+    const log = document.getElementById('log');
+    const plaatshouder = log.querySelector('.plaatshouder');
+    if (plaatshouder) { log.removeChild(plaatshouder); }
+    const regel = document.createElement('div');
+    regel.className = 'logregel' + (klasse ? ' ' + klasse : '');
+    regel.textContent = tekst;
+    log.appendChild(regel);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function wisLog() {
+    const log = document.getElementById('log');
+    log.innerHTML = '';
+    const p = document.createElement('div');
+    p.className = 'logregel stil plaatshouder';
+    p.textContent = 'Nog niets gebeurd.';
+    log.appendChild(p);
+  }
+
+  // ---------- Interactie ----------
+  function klikOpGat(index) {
+    if (bezig) { return; }
+    if (geselecteerd.has(index)) { geselecteerd.delete(index); }
+    else { geselecteerd.add(index); }
+    bewaarOntwerp();
+    werkGatenBij();
+    controleerVal(true);          // een cirkel openen kan meteen een capsule laten vallen
+  }
+
+  function klikOpBakje(ring) {
+    if (bezig) { return; }
+    if (ingredient === 'leeg') {
+      delete bakjesOntwerp[ring];
+      bakjesRuntime[ring] = null;
+    } else {
+      bakjesOntwerp[ring] = ingredient;
+      bakjesRuntime[ring] = ingredient;
+    }
+    bewaarOntwerp();
+    werkBakjesBij();
+    controleerVal(true);          // vullen boven een open cirkel laat de capsule direct vallen
+  }
+
+  // ---------- Valfysica ----------
+  // Zoekt het best uitgelijnde uitgesneden gat van deze ring onder het bakje.
+  function uitgelijndGat(ring) {
+    const tol = tolGraden(ring);
+    const rot = schijfRotatie();
+    let beste = null;
+    let besteAfstand = Infinity;
+    for (const index of gatenPerRing[ring]) {
+      if (!geselecteerd.has(index)) { continue; }
+      const afstand = Math.abs(hoekVerschil(basisHoek[index] + rot - I.valopening));
+      if (afstand <= tol && afstand < besteAfstand) {
+        besteAfstand = afstand;
+        beste = index;
+      }
+    }
+    return beste;
+  }
+
+  // Continue valcheck: draait elke animatiesubstap en na elke toestandswijziging.
+  // stilstaand = true wanneer de check volgt op een handmatige wijziging in
+  // plaats van op een servobeweging; dan krijgt de gebruiker extra uitleg.
+  function controleerVal(stilstaand) {
+    for (let ring = 0; ring < RINGEN.length; ring++) {
+      const letter = bakjesRuntime[ring];
+      if (!letter) { continue; }
+      const index = uitgelijndGat(ring);
+      if (index === null) { continue; }
+      laatVallen(ring, letter, index, stilstaand);
+    }
+  }
+
+  function laatVallen(ring, letter, index, stilstaand) {
+    bakjesRuntime[ring] = null;   // per bakje valt er maar een capsule, tot reset of hervullen
+    kopje.push(letter);
+    const ing = INGREDIENTEN[letter];
+    logRegel(ing.emoji + ' ' + ing.naam + ' gevallen (servo '
+      + getal(servoHoek) + '°, door cirkel ' + index
+      + ', ring ' + (ring + 1) + ')');
+    if (stilstaand) {
+      logRegel('Capsule viel direct: er staat een open cirkel onder dit bakje in deze stand!', 'waarschuwing');
+    }
+    valEffect(ring, letter);
+    werkBakjesBij();
+    werkKopjeBij();
+  }
+
+  function valEffect(ring, letter) {
+    const ing = INGREDIENTEN[letter];
+    const van = punt(RINGEN[ring], I.valopening);
+    const naar = punt(MOK_RADIUS, I.valopening);
+    const g = maak('g', { class: 'valeffect' });
+    g.style.transform = 'translate(' + van.x.toFixed(2) + 'px,' + van.y.toFixed(2) + 'px)';
+    g.appendChild(maak('circle', { r: 10, fill: ing.vul, stroke: ing.rand, 'stroke-width': 1.4 }));
+    const t = maak('text', {
+      x: 0, y: 0, 'text-anchor': 'middle', 'dominant-baseline': 'central',
+      'font-size': 11, 'font-weight': 700, fill: ing.letter
+    });
+    t.textContent = letter;
+    g.appendChild(t);
+    svgBoven.appendChild(g);
+    requestAnimationFrame(() => {
+      g.style.transform = 'translate(' + naar.x.toFixed(2) + 'px,' + naar.y.toFixed(2) + 'px)';
+      g.style.opacity = '0';
+    });
+    window.setTimeout(() => { if (g.parentNode) { g.parentNode.removeChild(g); } }, 800);
+  }
+
+  // ---------- Servobeweging ----------
+  // Beweegt in substappen van maximaal 1 graad en controleert bij elke substap
+  // op vallende capsules, zodat een smal uitlijnvenster nooit wordt overgeslagen
+  // (ook niet bij 0 ms per graad).
+  function zetServoHoek(nieuweHoek) {
+    nieuweHoek = begrens(nieuweHoek, 0, 180);
+    const start = servoHoek;
+    const totaal = nieuweHoek - start;
+    const n = Math.max(1, Math.ceil(Math.abs(totaal)));
+    for (let i = 1; i <= n; i++) {
+      servoHoek = start + totaal * (i / n);
+      controleerVal(false);
+    }
+    servoHoek = nieuweHoek;
+    werkRotatieBij();
+  }
+
+  function animeerNaar(doel) {
+    return new Promise(resolve => {
+      doel = begrens(Math.round(doel), 0, 180);
+      const start = servoHoek;
+      const afstand = Math.abs(doel - start);
+      if (afstand < 1e-9) { resolve(); return; }
+      const duur = afstand * I.msPerGraad;
+      const t0 = performance.now();
+      function frame(nu) {
+        if (stopGevraagd) { resolve(); return; }
+        const t = duur > 0 ? Math.min(1, (nu - t0) / duur) : 1;
+        zetServoHoek(start + (doel - start) * t);
+        if (t < 1) { requestAnimationFrame(frame); } else { resolve(); }
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+
+  function zetBezig(waarde) {
+    bezig = waarde;
+    document.body.classList.toggle('bezig', waarde);
+    document.querySelectorAll('#ingredientPalet button, #allesDichtKnop, #draaiKnop, #doelHoek,'
+      + ' #doelSlider, #stapToevoegen, #resetKnop, .stap input, .stap button,'
+      + ' .instellingen-inhoud input, .instellingen-inhoud button')
+      .forEach(el => { el.disabled = waarde; });
+    document.getElementById('uitvoerKnop').textContent = waarde ? '⏹ Stop' : '▶ Voer programma uit';
+  }
+
+  async function voerProgrammaUit() {
+    const nu = performance.now();
+    if (nu - laatsteUitvoerKlik < 300) { return; }   // dubbelklik-guard
+    laatsteUitvoerKlik = nu;
+
+    if (bezig) { stopGevraagd = true; return; }
+    if (stappen.length === 0) {
+      logRegel('Geen stappen om uit te voeren – voeg eerst een moveServo-stap toe.', 'waarschuwing');
+      return;
+    }
+    stopGevraagd = false;
+    zetBezig(true);
+    logRegel('▸ Programma gestart (servo staat op ' + Math.round(servoHoek) + '°)', 'actie');
+    for (let i = 0; i < stappen.length && !stopGevraagd; i++) {
+      const stap = stappen[i];
+      logRegel('▸ moveServo(' + stap.start + ', ' + stap.eind + ')', 'actie');
+      await animeerNaar(stap.start);              // eerst naar de starthoek toe
+      if (stopGevraagd) { break; }
+      await animeerNaar(stap.eind);               // en dan de eigenlijke beweging
+    }
+    if (stopGevraagd) { logRegel('⏹ Gestopt op ' + Math.round(servoHoek) + '°', 'actie'); }
+    stopGevraagd = false;
+    controleerVal(false);                          // eindstand nog eens narekenen
+    zetBezig(false);
+  }
+
+  async function draaiNaarDoel() {
+    if (bezig) { return; }
+    stopGevraagd = false;
+    zetBezig(true);
+    logRegel('▸ Draaien naar ' + doelHoek + '°', 'actie');
+    await animeerNaar(doelHoek);
+    stopGevraagd = false;
+    controleerVal(false);
+    zetBezig(false);
+  }
+
+  // ---------- Programma-editor ----------
+  // Houdt de vorige waarde vast als het veld leeg of ongeldig is.
+  function leesGetal(el, huidig, min, max) {
+    const v = parseInt(el.value, 10);
+    return Number.isFinite(v) ? begrens(v, min, max) : huidig;
+  }
+
+  function tekenStappen() {
+    const houder = document.getElementById('stappen');
+    houder.innerHTML = '';
+    if (stappen.length === 0) {
+      const p = document.createElement('div');
+      p.className = 'leeg-melding';
+      p.textContent = 'Nog geen stappen. Voeg er een toe.';
+      houder.appendChild(p);
+    }
+    stappen.forEach((stap, i) => {
+      const rij = document.createElement('div');
+      rij.className = 'stap';
+
+      const nr = document.createElement('span');
+      nr.className = 'nr';
+      nr.textContent = (i + 1) + '.';
+      rij.appendChild(nr);
+
+      const label = document.createElement('span');
+      label.textContent = 'moveServo(';
+      rij.appendChild(label);
+
+      const invoerStart = document.createElement('input');
+      invoerStart.type = 'number';
+      invoerStart.min = 0; invoerStart.max = 180; invoerStart.step = 1;
+      invoerStart.value = stap.start;
+      invoerStart.setAttribute('aria-label', 'Stap ' + (i + 1) + ': starthoek in graden');
+      invoerStart.addEventListener('input', () => {
+        stap.start = leesGetal(invoerStart, stap.start, 0, 180);
+        tekenCode();
+      });
+      rij.appendChild(invoerStart);
+
+      const komma = document.createElement('span');
+      komma.textContent = ',';
+      rij.appendChild(komma);
+
+      const invoerEind = document.createElement('input');
+      invoerEind.type = 'number';
+      invoerEind.min = 0; invoerEind.max = 180; invoerEind.step = 1;
+      invoerEind.value = stap.eind;
+      invoerEind.setAttribute('aria-label', 'Stap ' + (i + 1) + ': eindhoek in graden');
+      invoerEind.addEventListener('input', () => {
+        stap.eind = leesGetal(invoerEind, stap.eind, 0, 180);
+        tekenCode();
+      });
+      rij.appendChild(invoerEind);
+
+      const sluit = document.createElement('span');
+      sluit.textContent = ');';
+      rij.appendChild(sluit);
+
+      const weg = document.createElement('button');
+      weg.className = 'verwijder';
+      weg.type = 'button';
+      weg.title = 'Stap verwijderen';
+      weg.setAttribute('aria-label', 'Stap ' + (i + 1) + ' verwijderen');
+      weg.textContent = '✕';
+      weg.addEventListener('click', () => {
+        stappen.splice(i, 1);
+        tekenStappen();
+        tekenCode();
+      });
+      rij.appendChild(weg);
+
+      houder.appendChild(rij);
+    });
+  }
+
+  function programmaCode() {
+    if (stappen.length === 0) { return '// nog geen stappen'; }
+    return stappen.map(s => 'moveServo(' + s.start + ', ' + s.eind + ');').join('\n');
+  }
+
+  function tekenCode() {
+    document.getElementById('codePreview').textContent = programmaCode();
+  }
+
+  // ---------- Reset & drankjescheck ----------
+  function resetSimulatie(stil) {
+    bakjesRuntime = RINGEN.map((_, ring) => bakjesOntwerp[ring] || null);
+    kopje = [];
+    servoHoek = 90;                 // de servo gaat mee terug naar de neutrale stand
+    wisLog();
+    werkGatenBij();
+    werkBakjesBij();
+    werkKopjeBij();
+    werkRotatieBij();
+    document.getElementById('uitslag').className = 'uitslag';
+    document.getElementById('uitslag').textContent = 'Nog niet gecontroleerd.';
+    if (!stil) { controleerVal(true); }
+  }
+
+  function tel(letters) {
+    const t = {};
+    for (const l of letters) { t[l] = (t[l] || 0) + 1; }
+    return t;
+  }
+
+  function omschrijf(telling) {
+    return Object.keys(telling)
+      .map(l => (telling[l] > 1 ? telling[l] + '× ' : '') + INGREDIENTEN[l].naam)
+      .join(', ');
+  }
+
+  function aantalIn(telling) {
+    return Object.keys(telling).reduce((som, l) => som + telling[l], 0);
+  }
+
+  function controleerKopje() {
+    const drank = DRANKJES[Number(document.getElementById('drankje').value)];
+    const inKopje = tel(kopje);
+    const nodig = tel(drank.recept);
+    const teveel = {};
+    const tekort = {};
+    for (const l of Object.keys(INGREDIENTEN)) {
+      const verschil = (inKopje[l] || 0) - (nodig[l] || 0);
+      if (verschil > 0) { teveel[l] = verschil; }
+      if (verschil < 0) { tekort[l] = -verschil; }
+    }
+    const vak = document.getElementById('uitslag');
+    if (Object.keys(teveel).length === 0 && Object.keys(tekort).length === 0) {
+      vak.className = 'uitslag goed';
+      vak.textContent = '✅ Klopt! Precies de juiste capsules voor ' + drank.naam.toLowerCase() + '.';
+    } else {
+      vak.className = 'uitslag fout';
+      const delen = ['❌ Dit is nog geen ' + drank.naam.toLowerCase() + '.'];
+      if (Object.keys(teveel).length > 0) {
+        delen.push((aantalIn(teveel) > 1 ? 'Er vielen ook: ' : 'Er viel ook: ') + omschrijf(teveel) + '.');
+      }
+      if (Object.keys(tekort).length > 0) {
+        delen.push((aantalIn(tekort) > 1 ? 'Er ontbreken: ' : 'Er ontbreekt: ') + omschrijf(tekort) + '.');
+      }
+      vak.textContent = delen.join(' ');
+    }
+  }
+
+  // ---------- Instellingen ----------
+  function pasInstellingenToe(herteken) {
+    tekenVasteLaag();
+    tekenZone();
+    tekenMappingUitleg();
+    bewaarInstellingen();
+    if (herteken === 'reset') {
+      // De schijf verspringt in een klap; de simulatie opnieuw opzetten houdt
+      // het model consistent (en doet meteen de continue valcheck).
+      resetSimulatie();
+    } else {
+      werkGatenBij();
+      werkBakjesBij();
+      werkRotatieBij();
+      controleerVal(true);
+    }
+  }
+
+  function tekenMappingUitleg() {
+    const teken = I.richting > 0 ? '+' : '−';
+    const richtingNaam = I.richting > 0 ? 'tegen de klok in' : 'met de klok mee';
+    document.getElementById('mappingUitleg').innerHTML =
+      'Mapping servo &rarr; schijf: <b>schijfrotatie = ' + teken + '(servohoek &minus; 90) + '
+      + I.offset + '&deg;</b>. Bij servo 90&deg; staat de schijf in de neutrale stand; een hogere '
+      + 'servohoek draait de schijf ' + richtingNaam + '. Hoeken worden tegen de klok in gemeten '
+      + 'vanaf 3&nbsp;uur (270&deg; = onderaan). De rechthoek ligt op ' + I.valopening + '&deg;.';
+    document.getElementById('tolUitleg').textContent =
+      'Hoe precies moet een uitgesneden cirkel onder het bakje staan voordat de capsule erdoor kan?'
+      + ' Het is een booglengte, dus ' + I.tolMm + ' mm komt neer op ±'
+      + RINGEN.map(r => getal(graden(I.tolMm / r)) + '°').join(' / ')
+      + ' op ring 1 tot 4.';
+  }
+
+  function vulInstellingenFormulier() {
+    document.getElementById('setValopening').value = I.valopening;
+    document.getElementById('setOffset').value = I.offset;
+    document.getElementById('setSnelheid').value = I.msPerGraad;
+    document.getElementById('setTol').value = I.tolMm;
+    document.querySelectorAll('input[name="richting"]').forEach(r => {
+      r.checked = Number(r.value) === I.richting;
+    });
+  }
+
+  // ---------- Opstarten ----------
+  function koppelGebeurtenissen() {
+    document.querySelectorAll('#ingredientPalet button').forEach(knop => {
+      knop.addEventListener('click', () => {
+        ingredient = knop.dataset.tool;
+        document.querySelectorAll('#ingredientPalet button').forEach(k => {
+          k.setAttribute('aria-pressed', k === knop ? 'true' : 'false');
+        });
+      });
+    });
+
+    document.getElementById('allesDichtKnop').addEventListener('click', () => {
+      if (bezig || geselecteerd.size === 0) { return; }
+      geselecteerd.clear();
+      bewaarOntwerp();
+      werkGatenBij();
+    });
+
+    const doelInvoer = document.getElementById('doelHoek');
+    const doelSlider = document.getElementById('doelSlider');
+    doelInvoer.addEventListener('input', () => {
+      doelHoek = leesGetal(doelInvoer, doelHoek, 0, 180);
+      doelSlider.value = doelHoek;
+    });
+    doelSlider.addEventListener('input', () => {
+      doelHoek = leesGetal(doelSlider, doelHoek, 0, 180);
+      doelInvoer.value = doelHoek;
+    });
+    document.getElementById('draaiKnop').addEventListener('click', draaiNaarDoel);
+
+    document.getElementById('stapToevoegen').addEventListener('click', () => {
+      const vorige = stappen[stappen.length - 1];
+      stappen.push({ start: vorige ? vorige.eind : 90, eind: 90 });
+      tekenStappen();
+      tekenCode();
+    });
+    document.getElementById('uitvoerKnop').addEventListener('click', voerProgrammaUit);
+
+    document.getElementById('kopieerKnop').addEventListener('click', async () => {
+      const knop = document.getElementById('kopieerKnop');
+      const tekst = programmaCode();
+      let gelukt = false;
+      try {
+        await navigator.clipboard.writeText(tekst);
+        gelukt = true;
+      } catch (e) {
+        const hulp = document.createElement('textarea');
+        hulp.value = tekst;
+        hulp.style.position = 'fixed';
+        hulp.style.opacity = '0';
+        document.body.appendChild(hulp);
+        hulp.select();
+        try { gelukt = document.execCommand('copy'); } catch (e2) { gelukt = false; }
+        hulp.remove();
+      }
+      knop.textContent = gelukt ? 'Gekopieerd!' : 'Kopiëren mislukt';
+      window.setTimeout(() => { knop.textContent = 'Kopieer code'; }, 1600);
+    });
+
+    document.getElementById('resetKnop').addEventListener('click', () => resetSimulatie());
+    document.getElementById('checkKnop').addEventListener('click', controleerKopje);
+
+    const setValopening = document.getElementById('setValopening');
+    setValopening.addEventListener('input', () => {
+      const v = parseInt(setValopening.value, 10);
+      if (!Number.isFinite(v)) { return; }
+      I.valopening = normaliseer(v);
+      pasInstellingenToe('reset');
+    });
+    const setOffset = document.getElementById('setOffset');
+    setOffset.addEventListener('input', () => {
+      I.offset = leesGetal(setOffset, I.offset, -180, 180);
+      pasInstellingenToe('reset');
+    });
+    const setSnelheid = document.getElementById('setSnelheid');
+    setSnelheid.addEventListener('input', () => {
+      I.msPerGraad = leesGetal(setSnelheid, I.msPerGraad, 0, 200);
+      bewaarInstellingen();
+    });
+    const setTol = document.getElementById('setTol');
+    setTol.addEventListener('input', () => {
+      I.tolMm = leesGetal(setTol, I.tolMm, 1, 14);
+      pasInstellingenToe();
+    });
+    document.querySelectorAll('input[name="richting"]').forEach(r => {
+      r.addEventListener('change', () => {
+        if (r.checked) { I.richting = Number(r.value); pasInstellingenToe('reset'); }
+      });
+    });
+    document.getElementById('standaardKnop').addEventListener('click', () => {
+      I = Object.assign({}, STANDAARD);
+      vulInstellingenFormulier();
+      pasInstellingenToe('reset');
+    });
+  }
+
+  function start() {
+    laadInstellingen();
+    laadOntwerp();
+
+    bouwSvg();
+    tekenVasteLaag();
+    tekenZone();
+
+    const keuze = document.getElementById('drankje');
+    DRANKJES.forEach((d, i) => {
+      const optie = document.createElement('option');
+      optie.value = i;
+      optie.textContent = d.naam + ' (' + d.recept.join('+') + ')';
+      keuze.appendChild(optie);
+    });
+
+    vulInstellingenFormulier();
+    tekenMappingUitleg();
+    koppelGebeurtenissen();
+    tekenStappen();
+    tekenCode();
+    resetSimulatie(true);          // bij het opstarten nog niets laten vallen
+    controleerVal(true);
+  }
+
+  start();
+  </script>
+</body>
+</html>
