@@ -62,11 +62,11 @@ void loop() {
           <a href="/static/arduino_code/template_test_pico.zip">
             dit bestand</a>.
           Team Energie heeft een opstelling waarmee zij met hun batterij een pico microcontroller kunnen voeden. Deze pico is verbonden met een OLED scherm en een buzzer.
-          De pico communiceert nu via UART (digitale communicatie) met de functie sendLetterToPico(). Elke letter (a-m) vertegenwoordigt één van de 13 professoren, en op de pico is al een vaste mapping geprogrammeerd van elke professor naar een specifiek liedje:
+          De pico communiceert nu via UART (digitale communicatie) met de functie sendLetterToPico(). Elke letter vertegenwoordigt één van de 12 professoren, en op de pico is al een vaste mapping geprogrammeerd van elke professor naar een specifiek liedje (de letters a, f en j worden niet meer gebruikt):
           <br><br>
-          a=Vandebril, b=Van-hamme, c=Smets, d=Vansteenwegen, e=Dehaene, f=Jacobs, g=Beernaert, h=De-Laet, i=Rijmen, j=Vanmeensel, k=Van-Puyvelde, l=Vander-Sloten, m=Geraedts
+          b=Van-hamme, c=Smets, d=Vansteenwegen, e=Dehaene, g=Beernaert, h=De-Laet, i=Rijmen, k=Van-Puyvelde, l=Vander-Sloten, m=Geraedts, n=Everaerts, o=Swolfs
           <br><br>
-          Je kan de verschillende professoren en hun bijhorende liedjes testen door een letter (a-m) te versturen via de Serial Monitor. Wanneer je een letter verstuurt, zal de pico automatisch het liedje van de corresponderende professor afspelen en diens naam tonen op het OLED scherm.
+          Je kan de verschillende professoren en hun bijhorende liedjes testen door een letter uit de lijst te versturen via de Serial Monitor. Wanneer je een letter verstuurt, zal de pico automatisch het liedje van de corresponderende professor afspelen en diens naam tonen op het OLED scherm.
         </p>
           Deze letter-naar-professor mapping zal je moeten onthouden voor de volgende opdracht, waarbij je de juiste letters gaat moeten koppelen aan de juiste kleurencombinaties in de functie stuur_servo().
         </div>

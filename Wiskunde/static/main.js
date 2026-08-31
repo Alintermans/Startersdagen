@@ -4,7 +4,7 @@ var nb_steps = 1;
 
 var caemra_on = false;
 
-var profs = ['prof. Beernaert', 'prof. De-Laet', 'prof. Van-Hamme', 'prof. Van-Puyvelde', 'prof. Vander-Sloten', 'prof. Vandebril', 'prof. Rijmen', 'prof. Vansteenwegen', 'prof. Vanmeensel', 'prof. Smets', 'prof. Geraedts', 'prof. Jacobs', 'prof. Dehaene']
+var profs = ['prof. Beernaert', 'prof. De-Laet', 'prof. Van-Hamme', 'prof. Van-Puyvelde', 'prof. Vander-Sloten', 'prof. Everaerts', 'prof. Rijmen', 'prof. Vansteenwegen', 'prof. Swolfs', 'prof. Smets', 'prof. Geraedts', 'prof. Dehaene']
 
 var colors = ["#000000", "#ff0000", "#00ff00", "#0000ff",   "#00ffff", "#ff00ff", "#ffff00","#ffffff"];
 var options = ["Koffie", "Koffie met suiker", "Koffie met melk en suiker", "Koffie met melk", "Thee", "Thee met melk", "Thee met melk en suiker", "Thee met suiker"];
@@ -1326,7 +1326,7 @@ function attachTutorial12Autofill() {
     }
 
     function fillCombos() {
-        const combos = ['0','1','2','3','5','6','7','8','9','11','12','13','14'];
+        const combos = ['0','1','3','5','6','7','8','9','11','12','13','14'];
         const selects = document.querySelectorAll('#profs_div select#sequention-0-color-combination');
         selects.forEach(function(sel, i) {
             sel.value = combos[i % combos.length];

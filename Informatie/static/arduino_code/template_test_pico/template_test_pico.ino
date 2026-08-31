@@ -28,19 +28,19 @@ int groen = 2;
 int blauw = 3;
 
 // Professor mapping naar letters (voor jullie referentie):
-// a = Vandebril
-// b = Van-hamme  
+// (de letters a, f en j worden niet meer gebruikt)
+// b = Van-hamme
 // c = Smets
 // d = Vansteenwegen
 // e = Dehaene
-// f = Jacobs
 // g = Beernaert
 // h = De-Laet
 // i = Rijmen
-// j = Vanmeensel
 // k = Van-Puyvelde
 // l = Vander-Sloten
 // m = Geraedts
+// n = Everaerts
+// o = Swolfs
 
 void setup() {
   pinMode(S0, OUTPUT);
@@ -62,10 +62,10 @@ void setup() {
 
   
   Serial.println("Template test pico - UART communicatie");
-  Serial.println("Verstuur een letter (a-m) om een professor te selecteren:");
-  Serial.println("a=Vandebril, b=Van-hamme, c=Smets, d=Vansteenwegen, e=Dehaene");
-  Serial.println("f=Jacobs, g=Beernaert, h=De-Laet, i=Rijmen, j=Vanmeensel");
-  Serial.println("k=Van-Puyvelde, l=Vander-Sloten, m=Geraedts");
+  Serial.println("Verstuur een letter om een professor te selecteren:");
+  Serial.println("b=Van-hamme, c=Smets, d=Vansteenwegen, e=Dehaene");
+  Serial.println("g=Beernaert, h=De-Laet, i=Rijmen, k=Van-Puyvelde");
+  Serial.println("l=Vander-Sloten, m=Geraedts, n=Everaerts, o=Swolfs");
 }
 
 void loop() {
@@ -75,19 +75,19 @@ void loop() {
     Serial.print("Ontvangen: ");
     Serial.println(input);
     
-    // Check of het een geldige letter is (a-m voor 13 professoren)
+    // Check of het een geldige letter is (zie lijst bovenaan, 12 professoren)
     if (input.length() == 1) {
       char c = input.charAt(0);
-      if (c >= 'a' && c <= 'm') {
+      if (c >= 'A' && c <= 'O') {
+        c = c + 32; // Ook hoofdletters accepteren: converteer naar lowercase
+      }
+      if (c >= 'b' && c <= 'o' && c != 'f' && c != 'j') {
         sendLetterToPico(c);
-      } else if (c >= 'A' && c <= 'M') {
-        // Ook hoofdletters accepteren
-        sendLetterToPico(c + 32); // converteer naar lowercase
       } else {
-        Serial.println("Ongeldige invoer. Gebruik letters a-m voor de 13 professoren.");
+        Serial.println("Ongeldige invoer. Gebruik een letter uit de lijst voor de 12 professoren.");
       }
     } else {
-      Serial.println("Ongeldige invoer. Gebruik één letter (a-m) voor de 13 professoren.");
+      Serial.println("Ongeldige invoer. Gebruik één letter uit de lijst voor de 12 professoren.");
     }
   }
   delay(200);

@@ -28,19 +28,19 @@ int groen = 2;
 int blauw = 3;
 
 // Professor mapping naar letters (voor jullie referentie):
-// a = Vandebril
-// b = Van-hamme  
+// (de letters a, f en j worden niet meer gebruikt)
+// b = Van-hamme
 // c = Smets
 // d = Vansteenwegen
 // e = Dehaene
-// f = Jacobs
 // g = Beernaert
 // h = De-Laet
 // i = Rijmen
-// j = Vanmeensel
 // k = Van-Puyvelde
 // l = Vander-Sloten
 // m = Geraedts
+// n = Everaerts
+// o = Swolfs
 
 void setup() {
   pinMode(S0, OUTPUT);
@@ -170,86 +170,84 @@ void stuur_servo(int kleur_ID) {
   // 2. Welke professor welke van de 8 drankopties wil
   // 3. Roep de juiste maak_xxx() functie aan voor het drankje
   //
-  // Professor letters: a=Vandebril, b=Van-hamme, c=Smets, d=Vansteenwegen, e=Dehaene, 
-  //                   f=Jacobs, g=Beernaert, h=De-Laet, i=Rijmen, j=Vanmeensel, 
-  //                   k=Van-Puyvelde, l=Vander-Sloten, m=Geraedts
+  // Professor letters: b=Van-hamme, c=Smets, d=Vansteenwegen, e=Dehaene,
+  //                   g=Beernaert, h=De-Laet, i=Rijmen, k=Van-Puyvelde,
+  //                   l=Vander-Sloten, m=Geraedts, n=Everaerts, o=Swolfs
 
   if (kleur_ID == 0) {
     //Zwart/Zwart -> Professor ? -> Drankje ?
     Serial.println("... wordt gemaakt, even geduld");
-    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (a-m)
+    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (zie lijst bovenaan)
     // maak_xxx(); // Vervang xxx door de juiste drankfunctie
   } 
   else if (kleur_ID == 1) {
     //Zwart/Rood -> Professor ? -> Drankje ?
     Serial.println("... wordt gemaakt, even geduld");
-    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (a-m)
+    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (zie lijst bovenaan)
     // maak_xxx(); // Vervang xxx door de juiste drankfunctie
   }
   else if (kleur_ID == 2) {
-    //Zwart/Blauw -> Professor ? -> Drankje ?
-    Serial.println("... wordt gemaakt, even geduld");
-    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (a-m)
-    // maak_xxx(); // Vervang xxx door de juiste drankfunctie
+    //Zwart/Blauw -> deze combinatie wordt niet meer gebruikt
+    Serial.println("Zwart/Blauw wordt niet meer gebruikt, kies een andere kleurencombinatie");
   }
   else if (kleur_ID == 3) {
     //Zwart/Groen -> Professor ? -> Drankje ?
     Serial.println("... wordt gemaakt, even geduld");
-    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (a-m)
+    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (zie lijst bovenaan)
     // maak_xxx(); // Vervang xxx door de juiste drankfunctie
   }
   else if (kleur_ID == 4) {
     //Rood/Rood -> Professor ? -> Drankje ?
     Serial.println("... wordt gemaakt, even geduld");
-    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (a-m)
+    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (zie lijst bovenaan)
     // maak_xxx(); // Vervang xxx door de juiste drankfunctie
   }
   else if (kleur_ID == 5) {
     //Rood/Blauw -> Professor ? -> Drankje ?
     Serial.println("... wordt gemaakt, even geduld");
-    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (a-m)
+    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (zie lijst bovenaan)
     // maak_xxx(); // Vervang xxx door de juiste drankfunctie
   }
   else if (kleur_ID == 6) {
     //Rood/Groen -> Professor ? -> Drankje ?
     Serial.println("... wordt gemaakt, even geduld");
-    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (a-m)
+    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (zie lijst bovenaan)
     // maak_xxx(); // Vervang xxx door de juiste drankfunctie
   }
   else if (kleur_ID == 7) {
     //Rood/Wit -> Professor ? -> Drankje ?
     Serial.println("... wordt gemaakt, even geduld");
-    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (a-m)
+    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (zie lijst bovenaan)
     // maak_xxx(); // Vervang xxx door de juiste drankfunctie
   }
   else if (kleur_ID == 8) {
     //Blauw/Blauw -> Professor ? -> Drankje ?
     Serial.println("... wordt gemaakt, even geduld");
-    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (a-m)
+    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (zie lijst bovenaan)
     // maak_xxx(); // Vervang xxx door de juiste drankfunctie
   }
   else if (kleur_ID == 9) {
     //Blauw/Wit -> Professor ? -> Drankje ?
     Serial.println("... wordt gemaakt, even geduld");
-    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (a-m)
+    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (zie lijst bovenaan)
     // maak_xxx(); // Vervang xxx door de juiste drankfunctie
   }
   else if (kleur_ID == 10) {
     //Groen/Groen -> Professor ? -> Drankje ?
     Serial.println("... wordt gemaakt, even geduld");
-    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (a-m)
+    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (zie lijst bovenaan)
     // maak_xxx(); // Vervang xxx door de juiste drankfunctie
   }
   else if (kleur_ID == 11) {
     //Groen/Wit -> Professor ? -> Drankje ?
     Serial.println("... wordt gemaakt, even geduld");
-    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (a-m)
+    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (zie lijst bovenaan)
     // maak_xxx(); // Vervang xxx door de juiste drankfunctie
   }
   else if (kleur_ID == 12) {
     //Wit/Wit -> Professor ? -> Drankje ?
     Serial.println("... wordt gemaakt, even geduld");
-    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (a-m)
+    // sendLetterToPico('?'); // Vervang ? door de juiste professor letter (zie lijst bovenaan)
     // maak_xxx(); // Vervang xxx door de juiste drankfunctie
   }
   else {
@@ -373,7 +371,7 @@ int detectColorCombination() {
     }
   }
 
-  //determine color combination - 13 combinaties totaal
+  //determine color combination - 12 combinaties in gebruik (Zwart/Blauw wordt niet meer gebruikt)
   int color_combination = 0;
 
   //Zwart/Zwart

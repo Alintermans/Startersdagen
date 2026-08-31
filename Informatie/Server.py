@@ -21,13 +21,14 @@ retries = 0
 # Legacy analog voltage mapping (used elsewhere)
 pico_voltages = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-# Digital UART mapping (Beginner-8): song (1..10) and professor code (a..m) per index 0..14
+# Digital UART mapping (Beginner-8): song (1..10) and professor code (b..o, zie
+# PROF_TO_LETTER; a/f/j zijn vervallen) per index 0..14
 pico_songs = [0 for _ in range(15)]
 pico_profs = ['Beernaert' for _ in range(15)]
 
 # Beginner-7: fixed options (0..7) and professor→option assignment.
 # OPTION_NAMES are the labels for each fixed option. PROF_TO_OPTION maps each
-# professor code (a..m) to the chosen option index (0..7). Multiple professors
+# professor code to the chosen option index (0..7). Multiple professors
 # may map to the same option.
 OPTION_NAMES = [
     'Koffie', #0 
@@ -40,39 +41,39 @@ OPTION_NAMES = [
     'Thee met melk en suiker', #7
 ]
 
-# Map each professor letter ('a'..'m') to the option index (0..7) they select.
+# Map each professor letter to the option index (0..7) they select.
 # Edit this mapping as needed. Multiple letters may point to the same option.
 PROF_TO_OPTION = {
-    'a': 0,  #Vandebril
     'b': 1,  #Van-hamme
     'c': 3,  #Smets
     'd': 7,  #Vansteenwegen
     'e': 5,  #Dehaene
-    'f': 0,  #Jacobs
     'g': 4,  #Beernaert
     'h': 2,  #De-Laet
     'i': 3,  #Rijmen
-    'j': 4,  #Vanmeensel
     'k': 0,  #Van-Puyvelde
     'l': 4,  #Vander-Sloten
     'm': 5,  #Geraedts
+    'n': 6,  #Everaerts
+    'o': 1,  #Swolfs
 }
 
-# Map professor option values  to letters a..m
+# Map professor option values to letters. De letters van de vertrokken
+# docenten (a=Vandebril, f=Jacobs, j=Vanmeensel) zijn bewust niet hergebruikt,
+# zodat oude Pico-firmware geen verkeerde naam toont.
 PROF_TO_LETTER = {
-    'Vandebril': 'a',
     'Van-hamme': 'b',
     'Smets': 'c',
     'Vansteenwegen': 'd',
     'Dehaene': 'e',
-    'Jacobs': 'f',
     'Beernaert': 'g',
     'De-Laet': 'h',
     'Rijmen': 'i',
-    'Vanmeensel': 'j',
     'Van-Puyvelde': 'k',
     'Vander-Sloten': 'l',
     'Geraedts': 'm',
+    'Everaerts': 'n',
+    'Swolfs': 'o',
 }
 
 

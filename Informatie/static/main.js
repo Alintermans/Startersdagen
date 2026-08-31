@@ -551,11 +551,12 @@ function updateRGBLED(red, green, blue) {
 
 function loadBeginner8Data() {
     const letterToName = {
-        a: 'Vandebril', b: 'Van-hamme', c: 'Smets', d: 'Vansteenwegen', e: 'Dehaene', f: 'Jacobs', g: 'Beernaert', 
-        h: 'De-Laet', i: 'Rijmen', j: 'Vanmeensel', k: 'Van-Puyvelde', l: 'Vander-Sloten', m: 'Geraedts'
+        b: 'Van-hamme', c: 'Smets', d: 'Vansteenwegen', e: 'Dehaene', g: 'Beernaert',
+        h: 'De-Laet', i: 'Rijmen', k: 'Van-Puyvelde', l: 'Vander-Sloten', m: 'Geraedts',
+        n: 'Everaerts', o: 'Swolfs'
     };
 
-    const validSlots = [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14];
+    const validSlots = [0, 1, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14];
 
     fetch('/pico_mapping_load').then(r => r.json()).then(data => {
         if (Array.isArray(data.songs) && Array.isArray(data.profs)) {
@@ -578,12 +579,13 @@ function loadBeginner8Data() {
 
 function saveBeginner8Data() {
     const letterToName = {
-        a: 'Vandebril', b: 'Van-hamme', c: 'Smets', d: 'Vansteenwegen', e: 'Dehaene', f: 'Jacobs', g: 'Beernaert', 
-        h: 'De-Laet', i: 'Rijmen', j: 'Vanmeensel', k: 'Van-Puyvelde', l: 'Vander-Sloten', m: 'Geraedts'
+        b: 'Van-hamme', c: 'Smets', d: 'Vansteenwegen', e: 'Dehaene', g: 'Beernaert',
+        h: 'De-Laet', i: 'Rijmen', k: 'Van-Puyvelde', l: 'Vander-Sloten', m: 'Geraedts',
+        n: 'Everaerts', o: 'Swolfs'
     };
     const nameToLetter = Object.fromEntries(Object.entries(letterToName).map(([k,v]) => [v, k]));
 
-    const validSlots = [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14];
+    const validSlots = [0, 1, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14];
     const mapping = [];
     const usedProfessors = new Set();
     
@@ -659,8 +661,8 @@ function attachBeginner8Autofill() {
     }
 
     function fillProfessors() {
-        const profs = ['Beernaert', 'De-Laet', 'Rijmen', 'Smets', 'Van-hamme', 'Van-Puyvelde', 'Vandebril', 'Vander-Sloten', 'Jacobs', 'Dehaene', 'Vansteenwegen', 'Vanmeensel', 'Geraedts'];
-        const validSlots = [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14];
+        const profs = ['Beernaert', 'De-Laet', 'Rijmen', 'Smets', 'Van-hamme', 'Van-Puyvelde', 'Everaerts', 'Vander-Sloten', 'Swolfs', 'Dehaene', 'Vansteenwegen', 'Geraedts'];
+        const validSlots = [0, 1, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14];
         
         validSlots.forEach(function(slot, index) {
             const profSelect = document.getElementById('prof_' + slot);
@@ -687,8 +689,9 @@ function attachBeginner8Autofill() {
 function initBeginner8() {
     // Professor letter/name mapping
     const letterToName = {
-        a: 'Beernaert', b: 'De-Laet', c: 'Rijmen', d: 'Smets', e: 'Van-hamme', f: 'Van-Puyvelde',
-        g: 'Vandebril', h: 'Vander-Sloten', i: 'Jacobs', j: 'Dehaene', k: 'Vansteenwegen', l: 'Vanmeensel', m: 'Geraedts'
+        b: 'Van-hamme', c: 'Smets', d: 'Vansteenwegen', e: 'Dehaene', g: 'Beernaert',
+        h: 'De-Laet', i: 'Rijmen', k: 'Van-Puyvelde', l: 'Vander-Sloten', m: 'Geraedts',
+        n: 'Everaerts', o: 'Swolfs'
     };
     const nameToLetter = Object.fromEntries(Object.entries(letterToName).map(([k,v]) => [v, k]));
 

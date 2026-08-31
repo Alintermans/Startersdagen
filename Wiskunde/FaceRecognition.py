@@ -25,7 +25,7 @@ def face_confidence(face_distance, face_match_threshold=0.6):
 
 class FaceRecognition:
     face_match_threshold = 0.6
-    known_names = ['prof. Geraedts', 'prof. Van-Hamme', 'prof. Vandepitte', 'prof. Houssa', 'prof. Blanpain',  'prof. Vanmeensel', 'prof. Beernaert', 'prof. Van-Puyvelde',   'prof. Dehaene', 'prof. Moelans', 'prof. Anton',  'prof. Vandebril', 'prof. Baelmans', 'prof. Jacobs', 'prof. De-Laet', 'prof. Van-De-Walle', 'prof. Rijmen', 'prof. Smets', 'prof. Holvoet', 'prof. Vander-Sloten', 'prof. Braem', 'prof. Vansteenwegen']
+    known_names = ['prof. Geraedts', 'prof. Van-Hamme', 'prof. Vandepitte', 'prof. Houssa', 'prof. Blanpain', 'prof. Beernaert', 'prof. Van-Puyvelde',   'prof. Dehaene', 'prof. Moelans', 'prof. Anton', 'prof. Baelmans', 'prof. De-Laet', 'prof. Van-De-Walle', 'prof. Rijmen', 'prof. Smets', 'prof. Holvoet', 'prof. Vander-Sloten', 'prof. Braem', 'prof. Vansteenwegen', 'prof. Everaerts', 'prof. Swolfs']
 
     saved_encodings_file = os.path.join(BASE_DIR, "face-recognition", "saved_encodings.npy")
     saved_encodings_names_file = os.path.join(BASE_DIR, "face-recognition", "saved_encodings_names.npy")
