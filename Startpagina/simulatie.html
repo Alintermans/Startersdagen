@@ -416,6 +416,7 @@
     .boxbinnen { fill: none; stroke: #cfc2a9; stroke-width: 0.8; }
     .kanaal { fill: rgba(120, 132, 144, 0.16); stroke: none; cursor: copy; }
     .bezig .kanaal { cursor: default; }
+    .kanaaldood { fill: rgba(255, 255, 255, 0.55); stroke: none; pointer-events: none; }
     .brugwand { fill: rgba(120, 132, 144, 0.55); stroke: #4d565f; stroke-width: 0.9; pointer-events: none; }
     .brughaak { fill: rgba(120, 132, 144, 0.55); stroke: #4d565f; stroke-width: 0.9; pointer-events: none; }
     .klemblok { fill: #a58d6f; stroke: #6f5c44; stroke-width: 0.8; pointer-events: none; }
@@ -481,10 +482,10 @@
       <h1>Simulator van de draaischijf</h1>
       <p>
         Over de schijf loopt de vaste brug: twee wanden met daartussen een kanaal van 25&nbsp;mm.
-        De capsules rusten in dat kanaal &oacute;p de schijf en worden met verschuifbare blokjes op
-        een zelfgekozen afstand van het middelpunt vastgeklemd &mdash; aan beide kanten van het midden.
-        De schijf eronder is de afsluiter: pas als een uitgesneden cirkel onder een capsule draait,
-        valt die in het kopje. Test hier jullie ontwerp v&oacute;&oacute;r het lasersnijden.
+        De capsules rusten in dat kanaal &oacute;p de schijf, tussen het middelpunt en het kopje,
+        en worden met verschuifbare blokjes op een zelfgekozen afstand van het middelpunt
+        vastgeklemd. De schijf eronder is de afsluiter: pas als een uitgesneden cirkel onder een
+        capsule draait, valt die in het kopje. Test hier jullie ontwerp v&oacute;&oacute;r het lasersnijden.
       </p>
     </div>
   </div>
@@ -493,7 +494,7 @@
     <div class="werkwijze">
       <h2>Werkwijze</h2>
       <ol>
-        <li>Leg de capsules in de brug: kies een ingredi&euml;nt en klik op een plek in het kanaal &mdash; op een ringstraal, aan de kant die je wilt.</li>
+        <li>Leg de capsules in de brug: kies een ingredi&euml;nt en klik op een plek in het kanaal, op een ringstraal tussen het middelpunt en het kopje.</li>
         <li>Kies welke cirkels jullie uitsnijden: klik cirkels op de schijf aan of uit.</li>
         <li>Programmeer de servostappen in graden (&eacute;&eacute;n stap = &eacute;&eacute;n <code>moveServo(start, eind)</code>) en voer ze uit.</li>
         <li>Kijk wat er in het kopje valt en controleer het tegen het gewenste drankje. Klopt alles? Download dan de SVG in de configurator.</li>
@@ -525,11 +526,11 @@
           <ul class="legende">
             <li><span class="staal" style="border-color:#cbd3da;border-style:dashed"></span> Dichte cirkel &mdash; niet uitgesneden. De schijf sluit hier af, er valt niets door.</li>
             <li><span class="staal" style="border-color:#00407A;background:#e9eef3"></span> Open cirkel (&Oslash;25&nbsp;mm, uitgesneden) &mdash; hierdoor kan een capsule vallen.</li>
-            <li><span class="staal blok" style="border-color:#4d565f;background:rgba(120,132,144,0.55)"></span> De vaste brug over de schijf: twee wanden met een kanaal van 25&nbsp;mm ertussen. De haken rusten op de rand van de doos (beige). De brug draait niet mee.</li>
+            <li><span class="staal blok" style="border-color:#4d565f;background:rgba(120,132,144,0.55)"></span> De vaste brug over de schijf: twee wanden met een kanaal van 25&nbsp;mm ertussen. De haken rusten op de rand van de doos (beige). De brug draait niet mee; capsules liggen alleen op de helft aan de kopjeskant (de andere helft is vervaagd).</li>
             <li><span class="staal" style="border-color:#4a3423;background:#6F4E37"></span> Capsule in het kanaal, vastgeklemd tussen twee blokjes. De kleur en letter (K, T, M of S) tonen het ingredi&euml;nt; klik met een ander ingredi&euml;nt om het te vervangen.</li>
             <li><span class="staal" style="border-color:#8b959f;border-style:dashed;background:#c6ced6"></span> Grijze positie: die capsule is al gevallen. &laquo;Reset simulatie&raquo; legt alles terug.</li>
             <li><span class="staal blok" style="border-color:#d40000;background:#d40000"></span> De rode hartlijn is het midden van het kanaal; de twee rode streepjes naast elke capsule zijn de uitlijnmarge. Komt het middelpunt van een open cirkel tussen die streepjes (&eacute;n ligt de capsule radiaal dicht genoeg bij de cirkel), dan valt ze. De marge is een booglengte, dus in graden is ze dicht bij het midden veel ruimer dan aan de rand.</li>
-            <li><span class="staal blok" style="border-color:rgba(0,64,122,0.45);background:rgba(84,188,235,0.18)"></span> Gearceerde zone: cirkels die hier liggen kunnen onder de <b>kopjeskant</b> van de brug komen; alle andere cirkels komen juist onder de <b>overkant</b>. Samen dekken de twee kanten de hele schijf, want de servo haalt 180&deg; en de brug loopt door het midden.</li>
+            <li><span class="staal blok" style="border-color:rgba(0,64,122,0.45);background:rgba(84,188,235,0.18)"></span> Gearceerde <b>bereikbare zone</b>: alleen cirkels in deze zone kunnen ooit onder de capsules komen, want de servo haalt maar 180&deg;. De zone draait mee met de schijf; cirkels erbuiten worden vager getekend.</li>
           </ul>
         </div>
       </div>
@@ -548,9 +549,9 @@
           <div class="bakjes-lijst" id="bakjesLijst"></div>
           <p class="hint">
             Kies een ingredi&euml;nt en klik op het kanaal van de brug om daar een capsule vast te
-            klemmen &mdash; aan beide kanten van het midden kan. De afstand tot het middelpunt kun je
-            hierboven per capsule bijstellen; leg haar op een ringstraal, anders kan er nooit een
-            cirkel onder komen. Hetzelfde ingredi&euml;nt mag meerdere keren.
+            klemmen. Capsules liggen altijd tussen het middelpunt en het kopje. De afstand tot het
+            middelpunt kun je hierboven per capsule bijstellen; leg haar op een ringstraal, anders
+            kan er nooit een cirkel onder komen. Hetzelfde ingredi&euml;nt mag meerdere keren.
           </p>
         </div>
 
@@ -641,7 +642,7 @@
               <div class="uitleg">
                 Hoeken worden tegen de klok in gemeten vanaf 3&nbsp;uur: 0&deg;&nbsp;=&nbsp;rechts,
                 90&deg;&nbsp;=&nbsp;boven, 180&deg;&nbsp;=&nbsp;links, 270&deg;&nbsp;=&nbsp;onder (standaard).
-                De brug loopt altijd door het midden; de overkant ligt dus 180&deg; verder.
+                De brug loopt door tot de overkant, maar de capsules liggen altijd aan de kopjeskant.
               </div>
             </div>
 
@@ -743,13 +744,15 @@
    *  doos hangen. Tussen de wanden zit dus een kanaal van 25 mm waarin
    *  de capsules op de schijf rusten. Verschuifbare klemblokjes
    *  (41 mm breed, met twee sleuven die over de wanden vallen) houden
-   *  elke capsule op een zelfgekozen afstand van het middelpunt - aan
-   *  BEIDE kanten van het centrum. De schijf eronder is een draaiende
-   *  afsluiter. Een capsule op straal s valt zodra een UITGESNEDEN
-   *  cirkel (straal R van het gatmiddelpunt) er voldoende onder staat:
+   *  elke capsule op een zelfgekozen afstand van het middelpunt.
+   *  Capsules liggen ALTIJD aan de kopjeskant van het centrum (bevestigd
+   *  door Anton); de andere helft van de brug is puur constructie.
+   *  De schijf eronder is een draaiende afsluiter. Een capsule op
+   *  straal s valt zodra een UITGESNEDEN cirkel (straal R van het
+   *  gatmiddelpunt) er voldoende onder staat:
    *
-   *      | R - s |  <=  radMm                        (radiaal)
-   *      | basishoek(gat) + schijfrotatie - kantHoek |  <=  graden(tolMm / R)
+   *      | R - s |  <=  radMm                          (radiaal)
+   *      | basishoek(gat) + schijfrotatie - valopening |  <=  graden(tolMm / R)
    *
    *  De tweede regel is een BOOGLENGTE-marge: het gatmiddelpunt mag
    *  hoogstens tolMm millimeter naast de capsule staan. De check loopt
@@ -757,8 +760,9 @@
    *  alleen op het moment van passeren - anders zou een capsule die
    *  stilvalt binnen de opening nooit vallen.
    *
-   *  Doordat de brug de hele schijf overspant en de servo 180 graden
-   *  haalt, is elke cirkel op precies een van de twee kanten bereikbaar.
+   *  De servo haalt maar 180 graden, dus alleen cirkels in de band van
+   *  +/-90 graden rond (valopening - offset) kunnen ooit onder de
+   *  capsules komen: de "bereikbare zone".
    * ============================================================
    */
 
@@ -860,7 +864,7 @@
   let I = Object.assign({}, STANDAARD);            // instellingen
 
   const geselecteerd = new Set();                  // ontwerp: welke cirkels zijn uitgesneden
-  let capsules = [];                               // ontwerp: [{kant: 1|-1, straal: mm, ing: letter}]
+  let capsules = [];                               // ontwerp: [{straal: mm, ing: letter}] aan de kopjeskant
   let capsulesRuntime = [];                        // simulatie: letter zolang de capsule nog niet gevallen is
   let kopje = [];                                  // gevallen capsules, in volgorde
   let servoHoek = 90;                              // huidige servohoek in graden
@@ -875,34 +879,25 @@
   function schijfRotatieVoor(hoek) { return I.richting * (hoek - 90) + I.offset; }
   function schijfRotatie() { return schijfRotatieVoor(servoHoek); }
 
-  // De hoek van een brugkant: +1 = de kant van het kopje, -1 = de overkant.
-  function kantHoek(kant) { return normaliseer(I.valopening + (kant === 1 ? 0 : 180)); }
-  function kantNaam(kant) { return kant === 1 ? 'kopjeskant' : 'overkant'; }
-
   // Uitlijnmarge boven een gat, omgerekend van millimeters booglengte naar graden.
   function tolGradenBij(straal) { return graden(I.tolMm / straal); }
 
-  // Bij welke servohoek staat dit gat precies onder deze kant van de brug?
+  // Bij welke servohoek staat dit gat precies onder de kopjeskant van de brug?
   // Uit rotatie = richting*(servo-90) + offset volgt servo = 90 + richting*(rotatie-offset),
-  // en de benodigde rotatie is (kantHoek - basishoek), gekozen in [offset-90, offset+90].
-  function servoVoorGat(index, kant) {
-    return 90 + I.richting * hoekVerschil(kantHoek(kant) - basisHoek[index] - I.offset);
+  // en de benodigde rotatie is (valopening - basishoek), gekozen in [offset-90, offset+90].
+  function servoVoorGat(index) {
+    return 90 + I.richting * hoekVerschil(I.valopening - basisHoek[index] - I.offset);
   }
 
-  // Hoeveel graden komt dit gat tekort om op deze kant binnen het servobereik
-  // te vallen? (0 = haalbaar)
-  function tekortVoorGat(index, kant) {
-    const s = servoVoorGat(index, kant);
+  // Hoeveel graden komt dit gat tekort om binnen het servobereik te vallen? (0 = haalbaar)
+  function tekortVoorGat(index) {
+    const s = servoVoorGat(index);
     if (s < 0) { return -s; }
     if (s > 180) { return s - 180; }
     return 0;
   }
 
-  // De brug overspant de hele schijf: elk gat is op minstens een kant haalbaar.
-  // Deze functie zegt op welke kant dat is (bij een gelijkspel: de kopjeskant).
-  function besteKantVoorGat(index) {
-    return tekortVoorGat(index, 1) <= tekortVoorGat(index, -1) ? 1 : -1;
-  }
+  function bereikbaar(index) { return tekortVoorGat(index) <= BEREIK_MARGE; }
 
   // ---------- localStorage (mag nooit fataal zijn, bv. in private mode) ----------
   function lees(sleutel) {
@@ -940,23 +935,23 @@
     const bakjes = lees('brug-bakjes');
     if (Array.isArray(bakjes)) {
       for (const c of bakjes) {
-        if (c && (c.kant === 1 || c.kant === -1) && Number.isFinite(c.straal)
-            && INGREDIENTEN[c.ing]) {
-          capsules.push({ kant: c.kant, straal: begrens(c.straal, MIN_STRAAL, MAX_STRAAL), ing: c.ing });
+        // Entries met kant -1 komen uit een korte tussenversie en bestaan
+        // fysiek niet: die vallen weg.
+        if (c && Number.isFinite(c.straal) && INGREDIENTEN[c.ing] && c.kant !== -1) {
+          capsules.push({ straal: begrens(c.straal, MIN_STRAAL, MAX_STRAAL), ing: c.ing });
         }
       }
     } else if (bakjes && typeof bakjes === 'object') {
-      // Oud formaat (ringindex -> letter): omzetten naar capsules op de
-      // ringstralen aan de kopjeskant.
+      // Oud formaat (ringindex -> letter): omzetten naar capsules op de ringstralen.
       for (const sleutel of Object.keys(bakjes)) {
         const ring = Number(sleutel);
         const letter = bakjes[sleutel];
         if (String(ring) === sleutel && ring >= 0 && ring < RINGEN.length && INGREDIENTEN[letter]) {
-          capsules.push({ kant: 1, straal: Math.round(RINGEN[ring]), ing: letter });
+          capsules.push({ straal: Math.round(RINGEN[ring]), ing: letter });
         }
       }
     }
-    capsules.sort((a, b) => (a.kant !== b.kant ? b.kant - a.kant : a.straal - b.straal));
+    capsules.sort((a, b) => a.straal - b.straal);
     // Oude sleutel uit de eerste versie (capsules in de schijfgaten) opruimen.
     verwijder('schijf-capsules');
   }
@@ -1068,6 +1063,13 @@
     kanaalEl.appendChild(maak('title', {}));
     brugGroep.appendChild(kanaalEl);
 
+    // De helft aan de overkant van het middelpunt wordt niet gebruikt:
+    // capsules liggen altijd tussen het middelpunt en het kopje.
+    brugGroep.appendChild(maak('rect', {
+      x: -BRUG_HALF, y: -KANAAL_BREEDTE / 2,
+      width: BRUG_HALF, height: KANAAL_BREEDTE, class: 'kanaaldood'
+    }));
+
     // De twee brugwanden (3 mm dik, 28 mm hart-op-hart) met de haken die
     // over de rand van de doos vallen.
     [-1, 1].forEach(zijde => {
@@ -1127,12 +1129,11 @@
   }
 
   function tekenZone() {
-    // Een gat met basishoek phi0 komt onder de KOPJESKANT van de brug als de
-    // schijfrotatie gelijk is aan (valopening - phi0). De rotatie ligt altijd
-    // in [offset-90, offset+90] (servo 0..180), dus phi0 moet in
+    // Een gat met basishoek phi0 komt onder de capsules als de schijfrotatie
+    // gelijk is aan (valopening - phi0). De rotatie ligt altijd in
+    // [offset-90, offset+90] (servo 0..180), dus phi0 moet in
     // [valopening-offset-90, valopening-offset+90] liggen. Die band ligt vast
     // t.o.v. de schijf zelf, daarom tekenen we hem in de draaiende laag.
-    // Alles buiten de band komt automatisch onder de overkant terecht.
     const halve = 90 + BEREIK_MARGE;
     const start = I.valopening - I.offset - halve;
     zonePad.setAttribute('d', ringSectorPad(ZONE_BINNEN, ZONE_BUITEN, start, 2 * halve));
@@ -1186,22 +1187,26 @@
     GATEN.forEach((_, index) => {
       const open = geselecteerd.has(index);
       const cirkel = gatEls[index];
+      const kan = bereikbaar(index);
       cirkel.setAttribute('class', open ? 'gat open' : 'gat dicht');
+      cirkel.setAttribute('opacity', kan ? 1 : 0.55);
 
-      // De brug overspant de hele schijf, dus elk gat is ergens bereikbaar.
       const ring = ringVanGat[index];
-      const kant = besteKantVoorGat(index);
-      const tekort = tekortVoorGat(index, kant);
+      const tekort = tekortVoorGat(index);
       let titel = 'Cirkel ' + index + ' op ring ' + (ring + 1)
         + ' – ' + (open ? 'uitgesneden' : 'dicht') + '. ';
       if (tekort === 0) {
-        titel += 'Komt aan de ' + kantNaam(kant) + ' onder de brug bij servo '
-          + getal(servoVoorGat(index, kant)) + '°.';
+        titel += 'Komt onder de capsules bij servo ' + getal(servoVoorGat(index)) + '°.';
+      } else if (kan) {
+        // Net buiten 0..180, maar op de uiterste servostand nog ruim binnen de uitlijnmarge.
+        titel += 'Staat op de uiterste servostand (' + (servoVoorGat(index) < 0 ? 0 : 180)
+          + '°) nog net onder de capsules: ' + getal(tekort) + '° naast het midden, binnen de marge van '
+          + getal(tolGradenBij(gatStraal[index])) + '°.';
       } else {
-        // Net buiten 0..180, maar op de uiterste servostand nog binnen de uitlijnmarge.
-        titel += 'Staat op de uiterste servostand (' + (servoVoorGat(index, kant) < 0 ? 0 : 180)
-          + '°) aan de ' + kantNaam(kant) + ' nog net onder de brug: ' + getal(tekort)
-          + '° naast het midden, binnen de marge van ' + getal(tolGradenBij(gatStraal[index])) + '°.';
+        titel += tekort < 10
+          ? getal(tekort) + '° buiten bereik – monteer de schijf een fractie'
+            + ' verdraaid of pas de offset aan.'
+          : 'Buiten servobereik (0–180°): de servo draait maar een halve slag.';
       }
       cirkel.setAttribute('aria-label', titel);
       cirkel.querySelector('title').textContent = titel;
@@ -1222,7 +1227,7 @@
 
   function capsuleTitel(c, letter) {
     const ring = ringBijStraal(c.straal);
-    let titel = 'Capsule op ' + Math.round(c.straal) + ' mm, ' + kantNaam(c.kant) + ' – ';
+    let titel = 'Capsule op ' + Math.round(c.straal) + ' mm van het middelpunt – ';
     if (letter) { titel += INGREDIENTEN[letter].naam + '.'; }
     else { titel += INGREDIENTEN[c.ing].naam + ', al gevallen.'; }
     titel += ring >= 0
@@ -1236,7 +1241,7 @@
 
     capsules.forEach((c, i) => {
       const letter = capsulesRuntime[i];
-      const cx = c.kant * c.straal;
+      const cx = c.straal;
 
       // De twee klemblokjes (41 mm breed) die de capsule op zijn plek houden.
       [-1, 1].forEach(zijde => {
@@ -1247,12 +1252,11 @@
       });
 
       // Twee margestreepjes ("poortjes") op +/- de uitlijnmarge rond deze capsule.
-      const basis = c.kant === 1 ? 0 : 180;
       const tol = tolGradenBij(c.straal);
       const poortjes = maak('g', { class: 'tolmarkering' });
       [-tol, tol].forEach(hoek => {
-        const a = punt(c.straal - GAT_RADIUS - 2.5, basis + hoek);
-        const b = punt(c.straal + GAT_RADIUS + 2.5, basis + hoek);
+        const a = punt(c.straal - GAT_RADIUS - 2.5, hoek);
+        const b = punt(c.straal + GAT_RADIUS + 2.5, hoek);
         poortjes.appendChild(maak('line', {
           x1: a.x.toFixed(2), y1: a.y.toFixed(2), x2: b.x.toFixed(2), y2: b.y.toFixed(2)
         }));
@@ -1320,8 +1324,7 @@
       rij.appendChild(chip);
 
       const naam = document.createElement('span');
-      naam.textContent = INGREDIENTEN[c.ing].naam + (letter ? '' : ' – gevallen')
-        + ', ' + kantNaam(c.kant) + ' op';
+      naam.textContent = INGREDIENTEN[c.ing].naam + (letter ? '' : ' – gevallen') + ' op';
       rij.appendChild(naam);
 
       const invoer = document.createElement('input');
@@ -1367,18 +1370,16 @@
     // Toetsenbord-vriendelijk alternatief voor klikken op het kanaal.
     const knoppen = document.createElement('div');
     knoppen.className = 'knoppen';
-    [[1, '+ capsule aan de kopjeskant'], [-1, '+ capsule aan de overkant']].forEach(([kant, tekst]) => {
-      const knop = document.createElement('button');
-      knop.className = 'secundair klein';
-      knop.type = 'button';
-      knop.textContent = tekst;
-      knop.addEventListener('click', () => {
-        // Eerste ringstraal zonder capsule in de buurt, anders de binnenste.
-        const vrij = RINGEN.find(r => !capsules.some(c => c.kant === kant && Math.abs(c.straal - r) < 26));
-        plaatsCapsule(kant, Math.round(vrij !== undefined ? vrij : RINGEN[0]));
-      });
-      knoppen.appendChild(knop);
+    const knop = document.createElement('button');
+    knop.className = 'secundair klein';
+    knop.type = 'button';
+    knop.textContent = '+ capsule op een vrije ring';
+    knop.addEventListener('click', () => {
+      // Eerste ringstraal zonder capsule in de buurt, anders de binnenste.
+      const vrij = RINGEN.find(r => !capsules.some(c => Math.abs(c.straal - r) < 26));
+      plaatsCapsule(Math.round(vrij !== undefined ? vrij : RINGEN[0]));
     });
+    knoppen.appendChild(knop);
     lijst.appendChild(knoppen);
   }
 
@@ -1448,10 +1449,13 @@
     if (bezig) { return; }
     const p = new DOMPoint(gebeurtenis.clientX, gebeurtenis.clientY)
       .matrixTransform(kanaalEl.getScreenCTM().inverse());
-    const kant = p.x >= 0 ? 1 : -1;
-    const straal = Math.abs(p.x);
+    if (p.x < 0) {
+      logRegel('Capsules liggen altijd tussen het middelpunt en het kopje; de andere helft'
+        + ' van de brug wordt niet gebruikt.', 'waarschuwing');
+      return;
+    }
     if (ingredient === 'leeg') {
-      const i = capsules.findIndex(c => c.kant === kant && Math.abs(c.straal - straal) <= GAT_RADIUS);
+      const i = capsules.findIndex(c => Math.abs(c.straal - p.x) <= GAT_RADIUS);
       if (i >= 0) {
         capsules.splice(i, 1);
         capsulesRuntime.splice(i, 1);
@@ -1460,15 +1464,15 @@
       }
       return;
     }
-    plaatsCapsule(kant, straal);
+    plaatsCapsule(p.x);
   }
 
-  function plaatsCapsule(kant, straal) {
+  function plaatsCapsule(straal) {
     if (bezig || ingredient === 'leeg') { return; }
     straal = begrens(straal, MIN_STRAAL, MAX_STRAAL);
 
     // Klik op een bestaande capsule = het ingrediënt vervangen.
-    const bestaande = capsules.findIndex(c => c.kant === kant && Math.abs(c.straal - straal) <= GAT_RADIUS);
+    const bestaande = capsules.findIndex(c => Math.abs(c.straal - straal) <= GAT_RADIUS);
     if (bestaande >= 0) {
       capsules[bestaande].ing = ingredient;
       capsulesRuntime[bestaande] = ingredient;
@@ -1487,19 +1491,17 @@
 
     // Capsules zijn 25 mm breed; naast elkaar (met een gedeeld klemblokje)
     // moet er minstens 26 mm hart-op-hart tussen zitten.
-    const buur = capsules.find(c => c.kant === kant && Math.abs(c.straal - snap) < 26);
+    const buur = capsules.find(c => Math.abs(c.straal - snap) < 26);
     if (buur) {
       logRegel('Hier is geen plaats: capsules zijn 25 mm breed en op '
         + Math.round(buur.straal) + ' mm ligt al ' + INGREDIENTEN[buur.ing].naam.toLowerCase() + '.', 'waarschuwing');
       return;
     }
 
-    capsules.push({ kant: kant, straal: Math.round(snap), ing: ingredient });
+    capsules.push({ straal: Math.round(snap), ing: ingredient });
     capsulesRuntime.push(ingredient);
     const volgorde = capsules.map((c, i) => i)
-      .sort((a, b) => (capsules[a].kant !== capsules[b].kant
-        ? capsules[b].kant - capsules[a].kant
-        : capsules[a].straal - capsules[b].straal));
+      .sort((a, b) => capsules[a].straal - capsules[b].straal);
     capsules = volgorde.map(i => capsules[i]);
     capsulesRuntime = volgorde.map(i => capsulesRuntime[i]);
     bewaarOntwerp();
@@ -1531,7 +1533,7 @@
     for (let index = 0; index < GATEN.length; index++) {
       if (!geselecteerd.has(index)) { continue; }
       if (Math.abs(gatStraal[index] - c.straal) > I.radMm) { continue; }
-      const afstand = Math.abs(hoekVerschil(basisHoek[index] + rot - kantHoek(c.kant)));
+      const afstand = Math.abs(hoekVerschil(basisHoek[index] + rot - I.valopening));
       if (afstand <= tolGradenBij(gatStraal[index]) && afstand < besteAfstand) {
         besteAfstand = afstand;
         beste = index;
@@ -1559,7 +1561,7 @@
     const ing = INGREDIENTEN[letter];
     logRegel(ing.emoji + ' ' + ing.naam + ' gevallen (servo '
       + getal(servoHoek) + '°, door cirkel ' + index
-      + ', ring ' + (ringVanGat[index] + 1) + ', ' + kantNaam(capsules[i].kant) + ')');
+      + ', ring ' + (ringVanGat[index] + 1) + ')');
     if (stilstaand) {
       logRegel('Capsule viel direct: er staat een open cirkel onder deze plek in deze stand!', 'waarschuwing');
     }
@@ -1570,7 +1572,7 @@
 
   function valEffect(c, letter) {
     const ing = INGREDIENTEN[letter];
-    const van = punt(c.straal, kantHoek(c.kant));
+    const van = punt(c.straal, I.valopening);
     const naar = punt(MOK_RADIUS, I.valopening);
     const g = maak('g', { class: 'valeffect' });
     g.style.transform = 'translate(' + van.x.toFixed(2) + 'px,' + van.y.toFixed(2) + 'px)';
