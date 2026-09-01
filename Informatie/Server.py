@@ -323,7 +323,10 @@ app = Flask(__name__)    # Create Flask app
 
 
 def run_server():
-    app.run(host='0.0.0.0', port=8080)
+    # 127.0.0.1 i.p.v. 0.0.0.0 en poort 8090 i.p.v. 8080: op beheerde
+    # (universiteits)computers wordt luisteren op alle interfaces of op een
+    # bezette poort geblokkeerd met WinError 10013.
+    app.run(host='127.0.0.1', port=8090)
 
 # Flask route to display device data
 @app.route('/')
@@ -1040,8 +1043,9 @@ if __name__ == '__main__':
 
     print("")
     print("Starting server...")
+    print("✅ Open de site op http://localhost:8090")
 
-    
+
 
     # Create and start the thread to run Flask web server
     server_thread = threading.Thread(target=run_server)

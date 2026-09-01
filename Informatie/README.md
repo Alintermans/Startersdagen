@@ -11,7 +11,7 @@ python -m pip install pyserial flask
 ```
 
 ## Gebruik
-Het enigste wat je eigenlijk moet doen is de server starten. De server zal dan automatisch de Arduino vinden en de webserver starten. De webserver is te bereiken op http://localhost/, maar het IP adres van de computer kan ook gebruikt worden en zal sneller werken dan localhost. Het IP adres verschijnt als de server gestart wordt. En je moet die kiezen die start met 10... 
+Het enigste wat je eigenlijk moet doen is de server starten. De server zal dan automatisch de Arduino vinden en de webserver starten. De webserver is te bereiken op http://localhost:8090 in de browser op dezelfde computer. (De server luistert bewust alleen op localhost: op beheerde computers wordt luisteren op alle netwerkinterfaces vaak geblokkeerd met een socket-permissiefout.)
 
 Om de server te starten zorg dat jouw terminal zich bevindt in de map waar de Server.py file zich bevindt en voer dan volgend commando uit:
 ```bash
