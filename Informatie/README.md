@@ -23,13 +23,7 @@ Voor de beginner tutorial moet op de arduino ook het juiste programma geupload w
 Om de server te stoppen moet je ctrl+c duwen in de terminal waar de server draait.
 
 
-Je kan ook een clickable file maken om de server te starten. Dit kan door de in de Start_Server.bat file de twee paden te vervangen door die van Python en die van de Server.py file zoals bijvoorbeeld:
-```bash
-@echo off
-"C:\Users\Ron\AppData\Local\Programs\Python\Python39\python.exe" "C:\Users\Ron\Desktop\Startersdagen\Informatie\Server.py"
-pause
-```
-Deze file kan je dan op je bureaublad zetten en dan kan je de server starten door erop te dubbelklikken.
+De makkelijkste manier is dubbelklikken op Start_Server.bat in deze map. Dat script werkt vanuit om het even welke locatie van de map: het zoekt zelf een geïnstalleerde Python (python.org of Anaconda), installeert Flask en PySerial als die nog ontbreken, en start dan de server. Een snelkoppeling naar Start_Server.bat op het bureaublad werkt ook.
 
 
 ## Structuur
