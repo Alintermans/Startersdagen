@@ -98,22 +98,6 @@
       padding: 28px 24px 56px;
     }
 
-    .werkwijze {
-      background: #ffffff;
-      border: 1px solid var(--rand);
-      border-top: 4px solid var(--kul-lichtblauw);
-      padding: 18px 22px;
-      margin-bottom: 18px;
-    }
-    .werkwijze h2 {
-      color: var(--kul-donkerblauw);
-      font-size: 1.05rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-    .werkwijze ol { margin: 0 0 0 20px; font-size: 0.92rem; color: var(--tekst-licht); }
-    .werkwijze li { margin-bottom: 4px; }
-
     .naar-configurator {
       display: inline-block;
       margin-bottom: 22px;
@@ -442,6 +426,22 @@
     .armnaaf { fill: #3b3b3b; stroke: #1c1c1c; stroke-width: 1; pointer-events: none; }
     .armschroef { fill: #9aa3ab; stroke: #5b6470; stroke-width: 0.6; pointer-events: none; }
     .bakje-rij select { width: auto; padding: 4px 6px; font-size: 0.85rem; }
+    h3.subkop { font-size: 0.95rem; font-weight: 600; color: var(--kul-donkerblauw); margin: 18px 0 8px; }
+
+    /* ---------- Inklapbare legende ---------- */
+    details.legende-blok {
+      background: #ffffff;
+      border: 1px solid var(--rand);
+      border-top: 4px solid var(--kul-lichtblauw);
+    }
+    details.legende-blok > summary {
+      cursor: pointer;
+      padding: 14px 18px;
+      font-weight: 600;
+      color: var(--kul-donkerblauw);
+      font-size: 1.05rem;
+    }
+    details.legende-blok .legende { padding: 0 18px 14px; }
 
     .zone { fill: url(#arcering); stroke: rgba(0, 64, 122, 0.45); stroke-width: 0.9; stroke-dasharray: 6 4; }
     .tick { stroke: #b6bfc7; stroke-width: 0.7; }
@@ -491,29 +491,15 @@
     <div class="hero-inner">
       <h1>Simulator van de draaischijf</h1>
       <p>
-        Over de schijf loopt de vaste brug met daarop vier 3D-geprinte bakjes: &eacute;&eacute;n per
-        ingredi&euml;nt, elk op een zelfgekozen afstand van het middelpunt, tussen het middelpunt en
-        het kopje. De schijf eronder is de afsluiter: pas als een uitgesneden cirkel onder een bakje
-        draait, valt de inhoud in het kopje. Het suikertje is de uitzondering: dat ligt op een
-        platformpje n&aacute;&aacute;st zijn bakje en moet er eerst door de draai-arm op de as in
-        geduwd worden. Test hier jullie ontwerp v&oacute;&oacute;r het lasersnijden.
+        Zet de vier bakjes en de draai-arm, kies welke cirkels jullie uitsnijden en test met
+        servohoeken wat er in het kopje valt. Het suikertje ligt op een platformpje naast zijn
+        bakje: de draai-arm op de as moet het er eerst in duwen.
       </p>
     </div>
   </div>
 
   <main>
-    <div class="werkwijze">
-      <h2>Werkwijze</h2>
-      <ol>
-        <li>Zet de vier bakjes op de brug: kies een ingredi&euml;nt en klik op een plek in het kanaal, op een ringstraal tussen het middelpunt en het kopje. Elk ingredi&euml;nt krijgt &eacute;&eacute;n bakje.</li>
-        <li>Kies aan welke kant van het suikerbakje het platformpje met het suikertje zit, en in welke stand de draai-arm op de as staat.</li>
-        <li>Kies welke cirkels jullie uitsnijden: klik cirkels op de schijf aan of uit.</li>
-        <li>Programmeer de servostappen in graden (&eacute;&eacute;n stap = &eacute;&eacute;n <code>moveServo(start, eind)</code>) en voer ze uit.</li>
-        <li>Kijk wat er in het kopje valt en controleer het tegen het gewenste drankje. Klopt alles? Download dan de SVG in de configurator.</li>
-      </ol>
-    </div>
-
-    <a class="naar-configurator" href="schijf">Klaar met testen? Download de lasersnij-SVG in de schijf-configurator &rarr;</a>
+    <a class="naar-configurator" href="schijf">Klaar met testen? Download de lasersnij-SVG &rarr;</a>
 
     <div class="layout">
       <!-- ================= Linkerkolom: de machine ================= -->
@@ -535,20 +521,17 @@
           </svg>
         </div>
 
-        <div class="blok">
-          <h2>Legende</h2>
+        <details class="legende-blok">
+          <summary>Legende</summary>
           <ul class="legende">
-            <li><span class="staal" style="border-color:#cbd3da;border-style:dashed"></span> Dichte cirkel &mdash; niet uitgesneden. De schijf sluit hier af, er valt niets door.</li>
-            <li><span class="staal" style="border-color:#00407A;background:#e9eef3"></span> Open cirkel (&Oslash;25&nbsp;mm, uitgesneden) &mdash; hierdoor kan de inhoud van een bakje vallen.</li>
-            <li><span class="staal blok" style="border-color:#4d565f;background:rgba(120,132,144,0.55)"></span> De vaste brug over de schijf: twee wanden met een kanaal van 25&nbsp;mm ertussen; de bakjes staan over de wanden heen. De haken rusten op de rand van de doos (beige). De brug draait niet mee; bakjes staan alleen op de helft aan de kopjeskant (de andere helft is vervaagd).</li>
-            <li><span class="staal blok" style="border-color:#4a3423;background:#6F4E37"></span> Bakje op de brug; de inhoud ligt op de schijf. De kleur en letter (K, T, M of S) tonen het ingredi&euml;nt; klik met een ander ingredi&euml;nt om het te vervangen. Elk ingredi&euml;nt heeft &eacute;&eacute;n bakje.</li>
-            <li><span class="staal blok" style="border-color:#b98d5f;background:#fff8ec"></span> Het suikertje op het platformpje naast het suikerbakje (beige). Het suikerbakje blijft leeg (gestippeld) tot de draai-arm het suikertje erin duwt; komt de arm van de verkeerde kant, dan duwt hij het van het platformpje &aacute;f en is het verloren (grijs).</li>
-            <li><span class="staal blok" style="border-color:#7a5b36;background:#dcc09a"></span> De draai-arm: de MDF-lat met het vorkje op de as, b&oacute;ven de brug. Hij draait mee met de schijf (dus met de servo) en veegt op de hoogte van het platformpje over de bakjes heen.</li>
-            <li><span class="staal blok" style="border-color:#8b959f;border-style:dashed;background:#c6ced6"></span> Grijs bakje: die inhoud is al gevallen. &laquo;Reset simulatie&raquo; legt alles terug.</li>
-            <li><span class="staal blok" style="border-color:#d40000;background:#d40000"></span> De rode hartlijn is het midden van het kanaal; de twee rode streepjes naast elk bakje zijn de uitlijnmarge. Komt het middelpunt van een open cirkel tussen die streepjes (&eacute;n ligt het bakje radiaal dicht genoeg bij de cirkel), dan valt de inhoud. De marge is een booglengte, dus in graden is ze dicht bij het midden veel ruimer dan aan de rand.</li>
-            <li><span class="staal blok" style="border-color:rgba(0,64,122,0.45);background:rgba(84,188,235,0.18)"></span> Gearceerde <b>bereikbare zone</b>: alleen cirkels in deze zone kunnen ooit onder de bakjes komen, want de servo haalt maar 180&deg;. De zone draait mee met de schijf; cirkels erbuiten worden vager getekend.</li>
+            <li><span class="staal" style="border-color:#00407A;background:#e9eef3"></span> Open cirkel: uitgesneden, hierdoor valt de inhoud van een bakje. Gestippeld = dicht, blijft MDF.</li>
+            <li><span class="staal blok" style="border-color:#4a3423;background:#6F4E37"></span> Bakje op de brug (K, T, M, S); grijs = al gevallen. Bakjes staan altijd aan de kopjeskant.</li>
+            <li><span class="staal blok" style="border-color:#b98d5f;background:#fff8ec"></span> Suikertje op het platformpje naast zijn bakje; grijs met &#10005; = van het platformpje af geduwd, verloren.</li>
+            <li><span class="staal blok" style="border-color:#7a5b36;background:#dcc09a"></span> Draai-arm op de as, b&oacute;ven de brug; draait mee met de schijf.</li>
+            <li><span class="staal blok" style="border-color:#d40000;background:#d40000"></span> Rode streepjes: uitlijnmarge. Komt het middelpunt van een open cirkel ertussen, dan valt de inhoud.</li>
+            <li><span class="staal blok" style="border-color:rgba(0,64,122,0.45);background:rgba(84,188,235,0.18)"></span> Gearceerd: alleen deze cirkels kunnen ooit onder de bakjes komen (servo haalt 180&deg;).</li>
           </ul>
-        </div>
+        </details>
       </div>
 
       <!-- ================= Rechterkolom: bediening ================= -->
@@ -560,48 +543,38 @@
             <button class="gereedschap" type="button" data-tool="T" aria-pressed="false"><span class="stip" style="background:#2E7D32;border-color:#1f5622"></span>Thee</button>
             <button class="gereedschap" type="button" data-tool="M" aria-pressed="false"><span class="stip" style="background:#F2F2F2;border-color:#8a9099"></span>Melk</button>
             <button class="gereedschap" type="button" data-tool="S" aria-pressed="false"><span class="stip" style="background:#E8C39E;border-color:#b98d5f"></span>Suiker</button>
-            <button class="gereedschap" type="button" data-tool="leeg" aria-pressed="false"><span class="stip" style="background:#ffffff;border-color:#c62828"></span>Bakje weghalen</button>
+            <button class="gereedschap" type="button" data-tool="leeg" aria-pressed="false"><span class="stip" style="background:#ffffff;border-color:#c62828"></span>Weghalen</button>
           </div>
           <div class="bakjes-lijst" id="bakjesLijst"></div>
           <p class="hint">
-            Kies een ingredi&euml;nt en klik op het kanaal van de brug om daar het bakje neer te
-            zetten. Bakjes staan altijd tussen het middelpunt en het kopje. De afstand tot het
-            middelpunt kun je hierboven per bakje bijstellen; zet het op een ringstraal, anders kan
-            er nooit een cirkel onder komen. Er zijn vier bakjes, &eacute;&eacute;n per ingredi&euml;nt:
-            kies je een ingredi&euml;nt dat al ergens staat, dan verhuist dat bakje.
+            Klik op het kanaal van de brug om het gekozen bakje neer te zetten: &eacute;&eacute;n bakje
+            per ingredi&euml;nt, altijd op een ringstraal.
           </p>
         </div>
 
         <div class="blok">
-          <h2><span class="stapnr">2</span> Draai-arm en suikertje</h2>
+          <h2><span class="stapnr">2</span> Draai-arm</h2>
           <p class="hint" style="margin-top:0">
-            Het suikertje zit niet in een bakje: het ligt op het platformpje naast het suikerbakje,
-            op de hoogte van de draai-arm. Die arm zit op de as b&oacute;ven de brug en draait mee
-            met de schijf. Pas als de arm het suikertje van het platformpje in het bakje duwt, kan
-            het door een cirkel vallen. Komt de arm van de verkeerde kant, dan duwt hij het
-            suikertje van het platformpje &aacute;f en is het verloren.
+            De arm op de as draait mee met de schijf. Beweegt hij naar het suikerbakje toe, dan duwt
+            hij het suikertje van het platformpje in het bakje; komt hij van de andere kant, dan
+            duwt hij het eraf en is het verloren.
           </p>
           <div class="rij" style="margin-top:12px">
-            <label for="armHoek">Stand van de arm bij servo 90&deg;</label>
+            <label for="armHoek">Stand bij servo 90&deg;</label>
             <input type="number" id="armHoek" min="-180" max="180" step="1" value="60">
             <span>&deg;</span>
+            <span class="hint" style="margin-top:0">0&deg; = naar het kopje, + = tegen de klok in</span>
           </div>
           <div class="rij">
             <input type="range" id="armSlider" min="-180" max="180" step="1" value="60" aria-label="Stand van de draai-arm bij servo 90 graden">
           </div>
-          <p class="hint">
-            0&deg; = de arm wijst naar het kopje; positief is tegen de klok in, negatief met de klok
-            mee. De kant van het platformpje kies je hierboven bij het suikerbakje.
-          </p>
           <div class="uitslag" id="armUitleg">Zet eerst een suikerbakje (S) op de brug.</div>
         </div>
 
         <div class="blok">
           <h2><span class="stapnr">3</span> Cirkels uitsnijden</h2>
           <p class="hint" style="margin-top:0">
-            Klik een cirkel op de schijf aan of uit. Open cirkels worden straks uitgesneden; dichte
-            cirkels blijven MDF en houden de inhoud tegen. Ligt een cirkel net onder een bakje?
-            Draai de schijf een beetje, of gebruik Tab om hem met het toetsenbord te bereiken.
+            Klik een cirkel op de schijf aan of uit. Open cirkels worden uitgesneden, dichte blijven MDF.
           </p>
           <div class="teller"><b id="aantal">0</b> van de 66 cirkels uitgesneden</div>
           <div class="knoppen">
@@ -615,22 +588,19 @@
           <div class="servo-sub" id="rotatieUitlezing">Schijfrotatie: 0&deg;</div>
 
           <div class="rij">
-            <label for="doelHoek">Doelhoek</label>
+            <label for="doelHoek">Draai naar</label>
             <input type="number" id="doelHoek" min="0" max="180" step="1" value="90">
             <span>&deg;</span>
-            <button class="primair klein" type="button" id="draaiKnop">Draai naar hoek</button>
+            <button class="primair klein" type="button" id="draaiKnop">Draai</button>
           </div>
           <div class="rij">
             <input type="range" id="doelSlider" min="0" max="180" step="1" value="90" aria-label="Doelhoek van de servo">
           </div>
-          <p class="hint" id="mappingUitleg"></p>
-        </div>
 
-        <div class="blok">
-          <h2><span class="stapnr">4</span> Programma</h2>
+          <h3 class="subkop">Programma voor het informatieteam</h3>
           <div class="stappen" id="stappen"></div>
           <div class="knoppen">
-            <button class="secundair klein" type="button" id="stapToevoegen">+ stap toevoegen</button>
+            <button class="secundair klein" type="button" id="stapToevoegen">+ stap</button>
             <button class="primair klein" type="button" id="uitvoerKnop">&#9654; Voer programma uit</button>
           </div>
           <pre id="codePreview">// nog geen stappen</pre>
@@ -638,32 +608,22 @@
             <button class="secundair klein" type="button" id="kopieerKnop">Kopieer code</button>
           </div>
           <p class="hint">
-            <code>moveServo(start, eind)</code> beweegt eerst van de huidige hoek naar <i>start</i> en daarna
-            van <i>start</i> naar <i>eind</i>. Ook dat eerste stukje kan al capsules laten vallen &mdash;
-            precies zoals op de echte machine.
+            <code>moveServo(start, eind)</code> gaat eerst van de huidige hoek naar <i>start</i> en dan
+            naar <i>eind</i>; ook dat eerste stuk kan al iets laten vallen.
           </p>
         </div>
 
         <div class="blok">
           <h2><span class="stapnr">5</span> Kopje</h2>
           <div class="kopje-lijst" id="kopjeLijst"></div>
+          <div class="rij" style="margin-top:12px">
+            <select id="drankje" aria-label="Welk drankje wilden jullie zetten?" style="width:auto;flex:1"></select>
+            <button class="primair klein" type="button" id="checkKnop">Controleer</button>
+          </div>
+          <div class="uitslag" id="uitslag">Nog niet gecontroleerd.</div>
           <div class="knoppen">
             <button class="secundair klein" type="button" id="resetKnop">Reset simulatie</button>
           </div>
-          <p class="hint">
-            Reset vult alle bakjes terug volgens jullie ontwerp, legt het suikertje terug op het
-            platformpje, maakt het kopje en het logboek leeg en zet de servo terug op 90&deg;.
-          </p>
-        </div>
-
-        <div class="blok">
-          <h2><span class="stapnr">5</span> Drankjescheck</h2>
-          <label for="drankje">Welk drankje wilden jullie zetten?</label>
-          <select id="drankje"></select>
-          <div class="knoppen">
-            <button class="primair klein" type="button" id="checkKnop">Controleer kopje</button>
-          </div>
-          <div class="uitslag" id="uitslag">Nog niet gecontroleerd.</div>
         </div>
 
         <div class="blok">
@@ -674,6 +634,8 @@
         <details class="instellingen">
           <summary>Instellingen (begeleiders)</summary>
           <div class="instellingen-inhoud">
+            <p class="uitleg" id="mappingUitleg" style="margin-bottom:16px"></p>
+
             <div class="instelling">
               <label for="setValopening">Positie van de brug (kopjeskant)</label>
               <div class="rij">
@@ -683,7 +645,6 @@
               <div class="uitleg">
                 Hoeken worden tegen de klok in gemeten vanaf 3&nbsp;uur: 0&deg;&nbsp;=&nbsp;rechts,
                 90&deg;&nbsp;=&nbsp;boven, 180&deg;&nbsp;=&nbsp;links, 270&deg;&nbsp;=&nbsp;onder (standaard).
-                De brug loopt door tot de overkant, maar de capsules liggen altijd aan de kopjeskant.
               </div>
             </div>
 
@@ -721,8 +682,8 @@
                 <span>&deg;</span>
               </div>
               <div class="uitleg">
-                Hoe de schijf verdraaid op de servo-as gemonteerd is. Staat je cirkel n&eacute;t buiten
-                bereik? Monteer de schijf een fractie verdraaid op de as, of pas hier de offset aan.
+                Hoe de schijf verdraaid op de servo-as gemonteerd is. Staat een cirkel n&eacute;t buiten
+                bereik? Monteer de schijf een fractie verdraaid, of pas hier de offset aan.
               </div>
             </div>
 
@@ -738,12 +699,12 @@
             <div class="instelling">
               <label for="setArmLengte">Lengte van de draai-arm</label>
               <div class="rij">
-                <input type="number" id="setArmLengte" min="40" max="145" step="1" value="135">
+                <input type="number" id="setArmLengte" min="40" max="145" step="1" value="70">
                 <span>mm</span>
               </div>
               <div class="uitleg">
-                Gemeten vanaf de as tot het uiteinde van het vorkje. De arm veegt over alle stralen
-                tot die lengte; een platformpje dat verder van de as ligt, wordt niet geraakt.
+                Van de as tot het uiteinde van het vorkje; iets minder dan de helft van de halve
+                brug. De arm haalt zo alleen een platformpje op ring 1 of 2.
               </div>
             </div>
 
@@ -752,7 +713,8 @@
               de simulatie wordt daarom automatisch gereset.
             </p>
             <div class="knoppen">
-              <button class="secundair klein" type="button" id="standaardKnop">Terug naar standaardinstellingen</button>
+              <button class="secundair klein" type="button" id="wisOntwerpKnop">Ontwerp wissen</button>
+              <button class="secundair klein" type="button" id="standaardKnop">Standaardinstellingen</button>
             </div>
           </div>
         </details>
@@ -931,13 +893,14 @@
   })();
 
   // ---------- Toestand ----------
-  const STANDAARD = { valopening: 270, richting: 1, offset: 0, msPerGraad: 20, tolMm: 10, radMm: 7, armLengte: 135 };
+  const STANDAARD = { valopening: 270, richting: 1, offset: 0, msPerGraad: 20, tolMm: 10, radMm: 7, armLengte: 70 };
   let I = Object.assign({}, STANDAARD);            // instellingen
 
   const geselecteerd = new Set();                  // ontwerp: welke cirkels zijn uitgesneden
-  let capsules = [];                               // ontwerp: bakjes [{straal: mm, ing: letter, (S:) platformKant: +1/-1, suikerStart: 'platform'|'bakje'}]
+  let capsules = [];                               // ontwerp: bakjes [{straal: mm, ing: letter, (S:) platformKant: +1/-1}]
   let capsulesRuntime = [];                        // simulatie: letter zolang de inhoud van het bakje nog niet gevallen is
-  let arm = { hoek: 60 };                          // ontwerp: stand van de draai-arm t.o.v. de kopjeskant bij servo 90 (tegen de klok in positief)
+  const STANDAARD_ARM_HOEK = 60;
+  let arm = { hoek: STANDAARD_ARM_HOEK };          // ontwerp: stand van de draai-arm t.o.v. de kopjeskant bij servo 90 (tegen de klok in positief)
   let suiker = null;                               // simulatie: {toestand: 'platform'|'bakje'|'verloren'|'gevallen', sigma: graden} van het suikertje
   let kopje = [];                                  // gevallen capsules, in volgorde
   let servoHoek = 90;                              // huidige servohoek in graden
@@ -1042,9 +1005,29 @@
     const b = { straal: Math.round(begrens(straal, MIN_STRAAL, MAX_STRAAL)), ing: ing };
     if (ing === 'S') {
       b.platformKant = (bron && bron.platformKant === -1) ? -1 : 1;
-      b.suikerStart = (bron && bron.suikerStart === 'bakje') ? 'bakje' : 'platform';
     }
     return b;
+  }
+
+  // Ontwerpen van vóór het bakjes/draai-arm-model (sep 2026) stammen uit een
+  // ander model en worden één keer gewist. Alleen 'schijf-gaten' van de
+  // configurator blijft staan als er nog nooit een simulatorontwerp was.
+  const ONTWERP_VERSIE = 2;
+  function ruimOudOntwerpOp() {
+    if (lees('simulatie-versie') === ONTWERP_VERSIE) { return; }
+    if (lees('brug-bakjes') !== null) {
+      ['schijf-gaten', 'brug-bakjes', 'draai-arm'].forEach(verwijder);
+    }
+    verwijder('simulatie-instellingen');
+    schrijf('simulatie-versie', ONTWERP_VERSIE);
+  }
+
+  // 'links'/'rechts' (of 'boven'/'onder') van het bakje, zoals het op het scherm staat.
+  function kantNaam(kant) {
+    const b = punt(100, I.valopening);
+    const p = punt(100, I.valopening + kant * 10);
+    if (Math.abs(p.x - b.x) > Math.abs(p.y - b.y)) { return p.x < b.x ? 'links' : 'rechts'; }
+    return p.y < b.y ? 'boven' : 'onder';
   }
 
   function bewaarOntwerp() {
@@ -1367,7 +1350,7 @@
       capsuleLaag.appendChild(poortjes);
 
       // Het platformpje naast het suikerbakje, met (zolang het er ligt) het suikertje.
-      const opPlatform = c.ing === 'S' && c.suikerStart !== 'bakje';
+      const opPlatform = c.ing === 'S';
       if (opPlatform) {
         const kant = c.platformKant;
         capsuleLaag.appendChild(maak('rect', {
@@ -1472,7 +1455,7 @@
       rij.appendChild(chip);
 
       const naam = document.createElement('span');
-      naam.textContent = INGREDIENTEN[c.ing].naam + (letter ? '' : ' – gevallen') + ' op';
+      naam.textContent = INGREDIENTEN[c.ing].naam + (letter ? '' : ' (gevallen)') + ' op';
       rij.appendChild(naam);
 
       const invoer = document.createElement('input');
@@ -1488,7 +1471,8 @@
 
       const info = document.createElement('span');
       if (ring >= 0) {
-        info.textContent = 'mm · ring ' + (ring + 1) + ' · marge ±' + getal(tolGradenBij(c.straal)) + '°';
+        info.textContent = 'mm · ring ' + (ring + 1);
+        info.title = 'Uitlijnmarge hier: ±' + getal(tolGradenBij(c.straal)) + '°';
       } else {
         info.textContent = 'mm · ⚠ geen ring binnen ' + I.radMm + ' mm';
         info.style.color = '#b03a2e';
@@ -1511,14 +1495,12 @@
 
       lijst.appendChild(rij);
 
-      // Het suikerbakje heeft twee extra keuzes: waar het suikertje begint en
-      // aan welke kant het platformpje zit.
+      // Het suikerbakje heeft een extra keuze: aan welke kant zit het platformpje?
       if (c.ing === 'S') {
         const extra = document.createElement('div');
         extra.className = 'bakje-rij';
         extra.style.paddingLeft = '33px';
 
-        // Waar het suikertje nu is (simulatietoestand).
         const waar = document.createElement('span');
         if (!letter) { waar.textContent = 'suikertje gevallen ·'; }
         else if (!suiker || suiker.toestand === 'bakje') { waar.textContent = 'suikertje in het bakje ·'; }
@@ -1526,41 +1508,25 @@
         else { waar.textContent = 'suikertje op het platformpje ·'; }
         extra.appendChild(waar);
 
-        const start = document.createElement('select');
-        start.setAttribute('aria-label', 'Waar begint het suikertje?');
-        [['platform', 'suikertje op het platformpje'], ['bakje', 'suikertje al in het bakje']].forEach(([w, t]) => {
+        const kantKeuze = document.createElement('select');
+        kantKeuze.setAttribute('aria-label', 'Aan welke kant van het bakje zit het platformpje?');
+        [1, -1].forEach(k => {
           const o = document.createElement('option');
-          o.value = w; o.textContent = t;
-          start.appendChild(o);
+          o.value = k; o.textContent = 'platformpje ' + kantNaam(k) + ' van het bakje';
+          kantKeuze.appendChild(o);
         });
-        start.value = c.suikerStart;
-        start.addEventListener('change', () => {
-          c.suikerStart = start.value === 'bakje' ? 'bakje' : 'platform';
+        kantKeuze.value = c.platformKant;
+        kantKeuze.addEventListener('change', () => {
+          c.platformKant = Number(kantKeuze.value) === -1 ? -1 : 1;
           ontwerpGewijzigd();
         });
-        extra.appendChild(start);
+        extra.appendChild(kantKeuze);
 
-        if (c.suikerStart !== 'bakje') {
-          const kantKeuze = document.createElement('select');
-          kantKeuze.setAttribute('aria-label', 'Aan welke kant van het bakje zit het platformpje?');
-          [[1, 'platformpje tegen de klok in naast het bakje'], [-1, 'platformpje met de klok mee naast het bakje']].forEach(([w, t]) => {
-            const o = document.createElement('option');
-            o.value = w; o.textContent = t;
-            kantKeuze.appendChild(o);
-          });
-          kantKeuze.value = c.platformKant;
-          kantKeuze.addEventListener('change', () => {
-            c.platformKant = Number(kantKeuze.value) === -1 ? -1 : 1;
-            ontwerpGewijzigd();
-          });
-          extra.appendChild(kantKeuze);
-
-          if (!armReiktTot(c)) {
-            const waarschuwing = document.createElement('span');
-            waarschuwing.textContent = '⚠ de draai-arm (' + I.armLengte + ' mm) reikt niet tot dit platformpje';
-            waarschuwing.style.color = '#b03a2e';
-            extra.appendChild(waarschuwing);
-          }
+        if (!armReiktTot(c)) {
+          const waarschuwing = document.createElement('span');
+          waarschuwing.textContent = '⚠ de draai-arm (' + I.armLengte + ' mm) reikt niet tot hier';
+          waarschuwing.style.color = '#b03a2e';
+          extra.appendChild(waarschuwing);
         }
         lijst.appendChild(extra);
       }
@@ -1777,7 +1743,7 @@
 
   function beginSuiker(bakje) {
     return {
-      toestand: bakje.suikerStart === 'bakje' ? 'bakje' : 'platform',
+      toestand: 'platform',
       sigma: graden(PLATFORM_MM / bakje.straal)
     };
   }
@@ -1874,30 +1840,22 @@
       vak.textContent = 'Zet eerst een suikerbakje (S) op de brug.';
       return;
     }
-    if (bakje.suikerStart === 'bakje') {
-      vak.textContent = 'Het suikertje ligt al in het bakje, dus de draai-arm doet niets: het valt zodra er'
-        + ' een open cirkel onder komt. Denk na: lukt koffie zónder suiker dan nog?';
-      return;
-    }
     if (!armReiktTot(bakje)) {
       vak.className = 'uitslag fout';
-      vak.textContent = '⚠ De draai-arm is ' + I.armLengte + ' mm lang en reikt niet tot het platformpje op '
-        + Math.round(bakje.straal) + ' mm: het suikertje kan nooit in het bakje komen.';
+      vak.textContent = '⚠ De arm (' + I.armLengte + ' mm) reikt niet tot het platformpje op '
+        + Math.round(bakje.straal) + ' mm. Zet het suikerbakje dichter bij het midden.';
       return;
     }
     const [omlaag, omhoog] = voorspelDuw(bakje);
-    function zin(doel, uitkomst) {
-      const kop = 'Servo van 90° naar ' + doel + '°: ';
-      if (!uitkomst) { return kop + 'de arm raakt het suikertje niet.'; }
-      if (uitkomst.gebeurtenis === 'bakje') {
-        return kop + 'bij ' + Math.round(uitkomst.servo) + '° duwt de arm het suikertje in het bakje.';
-      }
-      return kop + 'bij ' + Math.round(uitkomst.servo) + '° duwt de arm het suikertje van het platformpje áf (verloren!).';
+    function zin(doel, u) {
+      if (!u) { return 'naar ' + doel + '°: de arm raakt het suikertje niet'; }
+      return 'naar ' + doel + '°: bij ' + Math.round(u.servo) + '° '
+        + (u.gebeurtenis === 'bakje' ? 'in het bakje geduwd ✓' : 'van het platformpje af geduwd, verloren ✗');
     }
     const goed = [omlaag, omhoog].some(u => u && u.gebeurtenis === 'bakje');
     vak.className = goed ? 'uitslag goed' : 'uitslag fout';
-    vak.textContent = zin(0, omlaag) + ' ' + zin(180, omhoog)
-      + (goed ? '' : ' Draai de arm anders, of zet het platformpje aan de andere kant van het bakje.');
+    vak.textContent = 'Vanaf servo 90° ' + zin(0, omlaag) + '; ' + zin(180, omhoog) + '.'
+      + (goed ? '' : ' Draai de arm anders of zet het platformpje aan de andere kant.');
   }
 
   // ---------- Valfysica ----------
@@ -2364,6 +2322,19 @@
         if (r.checked) { I.richting = Number(r.value); pasInstellingenToe('reset'); }
       });
     });
+    document.getElementById('wisOntwerpKnop').addEventListener('click', () => {
+      if (bezig) { return; }
+      if (!window.confirm('Alle bakjes en cirkels wissen en de draai-arm terugzetten?')) { return; }
+      capsules = [];
+      capsulesRuntime = [];
+      geselecteerd.clear();
+      arm.hoek = STANDAARD_ARM_HOEK;
+      document.getElementById('armHoek').value = arm.hoek;
+      document.getElementById('armSlider').value = arm.hoek;
+      bewaarOntwerp();
+      tekenArm();
+      resetSimulatie();
+    });
     document.getElementById('standaardKnop').addEventListener('click', () => {
       I = Object.assign({}, STANDAARD);
       vulInstellingenFormulier();
@@ -2372,6 +2343,7 @@
   }
 
   function start() {
+    ruimOudOntwerpOp();
     laadInstellingen();
     laadOntwerp();
 
