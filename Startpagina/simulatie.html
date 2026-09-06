@@ -356,27 +356,9 @@
     }
     .legende .staal.blok { border-radius: 2px; }
 
-    /* ---------- Instellingen ---------- */
-    details.instellingen {
-      background: #ffffff;
-      border: 1px solid var(--rand);
-      border-top: 4px solid var(--kul-donkerblauw);
-      padding: 0;
-    }
-    details.instellingen > summary {
-      cursor: pointer;
-      padding: 16px 18px;
-      font-weight: 600;
-      color: var(--kul-donkerblauw);
-      font-size: 1.05rem;
-    }
-    .instellingen-inhoud { padding: 0 18px 18px; }
-    .instelling { margin-bottom: 16px; }
-    .instelling > label:first-child,
-    .instelling > .kop { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
-    .instelling .uitleg { font-size: 0.8rem; color: var(--tekst-licht); margin-top: 5px; line-height: 1.45; }
-    .radiorij { display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; }
-    .radiorij label { display: flex; align-items: center; gap: 7px; }
+    .mapping { font-size: 0.85rem; color: var(--tekst-licht); line-height: 1.45; margin-bottom: 14px; }
+    .stap { flex-wrap: wrap; }
+    .stap .schijfhoek { flex-basis: 100%; padding-left: 26px; margin-top: -3px; font-size: 0.78rem; color: #8a9099; }
 
     /* ---------- SVG-onderdelen ---------- */
     .schaduw { fill: #dfe5ea; }
@@ -529,7 +511,7 @@
             <li><span class="staal blok" style="border-color:#b98d5f;background:#fff8ec"></span> Suikertje op het platformpje naast zijn bakje; grijs met &#10005; = van het platformpje af geduwd, verloren.</li>
             <li><span class="staal blok" style="border-color:#7a5b36;background:#dcc09a"></span> Draai-arm op de as, b&oacute;ven de brug; draait mee met de schijf.</li>
             <li><span class="staal blok" style="border-color:#d40000;background:#d40000"></span> Rode streepjes: uitlijnmarge. Komt het middelpunt van een open cirkel ertussen, dan valt de inhoud.</li>
-            <li><span class="staal blok" style="border-color:rgba(0,64,122,0.45);background:rgba(84,188,235,0.18)"></span> Gearceerd: alleen deze cirkels kunnen ooit onder de bakjes komen (servo haalt 180&deg;).</li>
+            <li><span class="staal blok" style="border-color:rgba(0,64,122,0.45);background:rgba(84,188,235,0.18)"></span> Gearceerd: alleen deze cirkels kunnen ooit onder de bakjes komen. Geen arcering = de hele schijf is bereikbaar.</li>
           </ul>
         </details>
       </div>
@@ -586,6 +568,7 @@
           <h2><span class="stapnr">4</span> Servo</h2>
           <div class="servo-uitlezing" id="servoUitlezing">Servo: 90&deg;</div>
           <div class="servo-sub" id="rotatieUitlezing">Schijfrotatie: 0&deg;</div>
+          <p class="mapping" id="mappingUitleg"></p>
 
           <div class="rij">
             <label for="doelHoek">Draai naar</label>
@@ -631,93 +614,6 @@
           <div class="log" id="log"></div>
         </div>
 
-        <details class="instellingen">
-          <summary>Instellingen (begeleiders)</summary>
-          <div class="instellingen-inhoud">
-            <p class="uitleg" id="mappingUitleg" style="margin-bottom:16px"></p>
-
-            <div class="instelling">
-              <label for="setValopening">Positie van de brug (kopjeskant)</label>
-              <div class="rij">
-                <input type="number" id="setValopening" min="0" max="359" step="1" value="270">
-                <span>&deg;</span>
-              </div>
-              <div class="uitleg">
-                Hoeken worden tegen de klok in gemeten vanaf 3&nbsp;uur: 0&deg;&nbsp;=&nbsp;rechts,
-                90&deg;&nbsp;=&nbsp;boven, 180&deg;&nbsp;=&nbsp;links, 270&deg;&nbsp;=&nbsp;onder (standaard).
-              </div>
-            </div>
-
-            <div class="instelling">
-              <label for="setTol">Uitlijnmarge (booglengte)</label>
-              <div class="rij">
-                <input type="number" id="setTol" min="1" max="14" step="1" value="10">
-                <span>mm</span>
-              </div>
-              <div class="uitleg" id="tolUitleg"></div>
-            </div>
-
-            <div class="instelling">
-              <label for="setRad">Radiale marge</label>
-              <div class="rij">
-                <input type="number" id="setRad" min="1" max="12" step="1" value="7">
-                <span>mm</span>
-              </div>
-              <div class="uitleg" id="radUitleg"></div>
-            </div>
-
-            <div class="instelling">
-              <span class="kop">Draairichting bij oplopende servohoek</span>
-              <div class="radiorij">
-                <label><input type="radio" name="richting" value="1" checked> Tegen de klok in (+1)</label>
-                <label><input type="radio" name="richting" value="-1"> Met de klok mee (&minus;1)</label>
-              </div>
-              <div class="uitleg">Hangt af van hoe de servo onder de schijf gemonteerd is.</div>
-            </div>
-
-            <div class="instelling">
-              <label for="setOffset">Montage-offset</label>
-              <div class="rij">
-                <input type="number" id="setOffset" min="-180" max="180" step="1" value="0">
-                <span>&deg;</span>
-              </div>
-              <div class="uitleg">
-                Hoe de schijf verdraaid op de servo-as gemonteerd is. Staat een cirkel n&eacute;t buiten
-                bereik? Monteer de schijf een fractie verdraaid, of pas hier de offset aan.
-              </div>
-            </div>
-
-            <div class="instelling">
-              <label for="setSnelheid">Servosnelheid</label>
-              <div class="rij">
-                <input type="number" id="setSnelheid" min="0" max="200" step="1" value="20">
-                <span>ms per graad</span>
-              </div>
-              <div class="uitleg">De MG90S in de opstelling doet ongeveer 20&nbsp;ms per graad.</div>
-            </div>
-
-            <div class="instelling">
-              <label for="setArmLengte">Lengte van de draai-arm</label>
-              <div class="rij">
-                <input type="number" id="setArmLengte" min="40" max="145" step="1" value="70">
-                <span>mm</span>
-              </div>
-              <div class="uitleg">
-                Van de as tot het uiteinde van het vorkje; iets minder dan de helft van de halve
-                brug. De arm haalt zo alleen een platformpje op ring 1 of 2.
-              </div>
-            </div>
-
-            <p class="uitleg" style="margin-bottom:12px">
-              Positie, draairichting en offset wijzigen verzet de schijf in &eacute;&eacute;n keer;
-              de simulatie wordt daarom automatisch gereset.
-            </p>
-            <div class="knoppen">
-              <button class="secundair klein" type="button" id="wisOntwerpKnop">Ontwerp wissen</button>
-              <button class="secundair klein" type="button" id="standaardKnop">Standaardinstellingen</button>
-            </div>
-          </div>
-        </details>
       </div>
     </div>
   </main>
@@ -729,6 +625,7 @@
     </div>
   </footer>
 
+  <script src="static/simulatie-config.js"></script>
   <script>
   /*
    * ============================================================
@@ -787,9 +684,13 @@
    *  de bereikte hoeken - precies wat nodig is om met een servo alle
    *  acht drankjes te maken.
    *
-   *  De servo haalt maar 180 graden, dus alleen cirkels in de band van
-   *  +/-90 graden rond (valopening - offset) kunnen ooit onder de
-   *  bakjes komen: de "bereikbare zone".
+   *  De servo haalt 180 graden; via de tandwielen (overbrenging k,
+   *  standaard 3: 36 tanden op de servo, 12 op de schijf-as) draait de
+   *  schijf k*180 graden. Bij k >= 2 is dus de HELE schijf bereikbaar,
+   *  en komt een gat zelfs bij twee servohoeken (120 graden uit elkaar)
+   *  onder de bakjes. Bij een kleinere k alleen de band van +/- 90k
+   *  graden rond (valopening - offset): de "bereikbare zone".
+   *  Begeleidersinstellingen staan in static/simulatie-config.js.
    * ============================================================
    */
 
@@ -893,8 +794,25 @@
   })();
 
   // ---------- Toestand ----------
-  const STANDAARD = { valopening: 270, richting: 1, offset: 0, msPerGraad: 20, tolMm: 10, radMm: 7, armLengte: 70 };
-  let I = Object.assign({}, STANDAARD);            // instellingen
+  // Begeleidersinstellingen komen uit static/simulatie-config.js
+  // (window.SIMULATIE_CONFIG); ontbreekt dat bestand of een veld, dan
+  // gelden deze standaardwaarden.
+  const STANDAARD = { valopening: 270, richting: 1, offset: 0, msPerGraad: 20, tolMm: 10, radMm: 7, armLengte: 70, overbrenging: 3 };
+  const I = leesConfig();
+
+  function leesConfig() {
+    const c = Object.assign({}, STANDAARD, window.SIMULATIE_CONFIG || {});
+    const uit = Object.assign({}, STANDAARD);
+    if (Number.isFinite(c.valopening)) { uit.valopening = normaliseer(c.valopening); }
+    if (c.richting === 1 || c.richting === -1) { uit.richting = c.richting; }
+    if (Number.isFinite(c.offset)) { uit.offset = begrens(c.offset, -180, 180); }
+    if (Number.isFinite(c.msPerGraad)) { uit.msPerGraad = begrens(c.msPerGraad, 0, 200); }
+    if (Number.isFinite(c.tolMm)) { uit.tolMm = begrens(c.tolMm, 1, 14); }
+    if (Number.isFinite(c.radMm)) { uit.radMm = begrens(c.radMm, 1, 12); }
+    if (Number.isFinite(c.armLengte)) { uit.armLengte = begrens(c.armLengte, 40, 145); }
+    if (Number.isFinite(c.overbrenging) && c.overbrenging > 0) { uit.overbrenging = begrens(c.overbrenging, 0.1, 10); }
+    return uit;
+  }
 
   const geselecteerd = new Set();                  // ontwerp: welke cirkels zijn uitgesneden
   let capsules = [];                               // ontwerp: bakjes [{straal: mm, ing: letter, (S:) platformKant: +1/-1}]
@@ -912,28 +830,45 @@
   let laatsteUitvoerKlik = -Infinity;   // niet 0: anders slikt de guard de eerste klik na het laden
 
   // ---------- Servo -> schijf ----------
-  function schijfRotatieVoor(hoek) { return I.richting * (hoek - 90) + I.offset; }
+  // De tandwielen vermenigvuldigen de servohoek met de overbrenging.
+  function schijfRotatieVoor(hoek) { return I.richting * I.overbrenging * (hoek - 90) + I.offset; }
   function schijfRotatie() { return schijfRotatieVoor(servoHoek); }
 
   // Uitlijnmarge boven een gat, omgerekend van millimeters booglengte naar graden.
   function tolGradenBij(straal) { return graden(I.tolMm / straal); }
 
-  // Bij welke servohoek staat dit gat precies onder de kopjeskant van de brug?
-  // Uit rotatie = richting*(servo-90) + offset volgt servo = 90 + richting*(rotatie-offset),
-  // en de benodigde rotatie is (valopening - basishoek), gekozen in [offset-90, offset+90].
-  function servoVoorGat(index) {
-    return 90 + I.richting * hoekVerschil(I.valopening - basisHoek[index] - I.offset);
+  // Bij welke servohoeken staat dit gat precies onder de kopjeskant van de brug?
+  // De benodigde rotatie is (valopening - basishoek) + n*360, en uit
+  // rotatie = richting*k*(servo-90) + offset volgt servo = 90 + richting*(rotatie-offset)/k.
+  // Met k = 3 kan een gat bij twee servohoeken (120 graden uit elkaar) uitgelijnd staan.
+  // Gesorteerd van dichtst bij de neutrale stand (90) naar verst.
+  function servoKandidaten(index) {
+    const basisRot = hoekVerschil(I.valopening - basisHoek[index] - I.offset);
+    const uit = [];
+    for (let n = -2; n <= 2; n++) {
+      uit.push(90 + I.richting * (basisRot + 360 * n) / I.overbrenging);
+    }
+    return uit.sort((a, b) => Math.abs(a - 90) - Math.abs(b - 90));
   }
 
-  // Hoeveel graden komt dit gat tekort om binnen het servobereik te vallen? (0 = haalbaar)
-  function tekortVoorGat(index) {
-    const s = servoVoorGat(index);
-    if (s < 0) { return -s; }
-    if (s > 180) { return s - 180; }
+  // Hoeveel graden ligt deze servohoek buiten 0..180? (0 = haalbaar)
+  function tekortVan(servo) {
+    if (servo < 0) { return -servo; }
+    if (servo > 180) { return servo - 180; }
     return 0;
   }
 
+  function servoVoorGat(index) { return servoKandidaten(index)[0]; }
+  function tekortVoorGat(index) { return Math.min(...servoKandidaten(index).map(tekortVan)); }
   function bereikbaar(index) { return tekortVoorGat(index) <= BEREIK_MARGE; }
+
+  // Alle haalbare servohoeken (oplopend, binnen 0..180) waarbij dit gat onder de bakjes staat.
+  function haalbareServoHoeken(index) {
+    return servoKandidaten(index)
+      .filter(s => tekortVan(s) <= BEREIK_MARGE)
+      .map(s => begrens(s, 0, 180))
+      .sort((a, b) => a - b);
+  }
 
   // ---------- localStorage (mag nooit fataal zijn, bv. in private mode) ----------
   function lees(sleutel) {
@@ -1036,19 +971,6 @@
     schrijf('draai-arm', arm);
   }
 
-  function laadInstellingen() {
-    const opgeslagen = lees('simulatie-instellingen');
-    if (!opgeslagen || typeof opgeslagen !== 'object') { return; }
-    if (Number.isFinite(opgeslagen.valopening)) { I.valopening = normaliseer(opgeslagen.valopening); }
-    if (opgeslagen.richting === 1 || opgeslagen.richting === -1) { I.richting = opgeslagen.richting; }
-    if (Number.isFinite(opgeslagen.offset)) { I.offset = begrens(opgeslagen.offset, -180, 180); }
-    if (Number.isFinite(opgeslagen.msPerGraad)) { I.msPerGraad = begrens(opgeslagen.msPerGraad, 0, 200); }
-    if (Number.isFinite(opgeslagen.tolMm)) { I.tolMm = begrens(opgeslagen.tolMm, 1, 14); }
-    if (Number.isFinite(opgeslagen.radMm)) { I.radMm = begrens(opgeslagen.radMm, 1, 12); }
-    if (Number.isFinite(opgeslagen.armLengte)) { I.armLengte = begrens(opgeslagen.armLengte, 40, 145); }
-  }
-
-  function bewaarInstellingen() { schrijf('simulatie-instellingen', I); }
 
   // ---------- SVG-opbouw ----------
   const svgOnder = document.getElementById('onderlaag');
@@ -1217,7 +1139,8 @@
     // [offset-90, offset+90] (servo 0..180), dus phi0 moet in
     // [valopening-offset-90, valopening-offset+90] liggen. Die band ligt vast
     // t.o.v. de schijf zelf, daarom tekenen we hem in de draaiende laag.
-    const halve = 90 + BEREIK_MARGE;
+    const halve = (90 + BEREIK_MARGE) * I.overbrenging;
+    if (halve >= 180) { zonePad.setAttribute('d', ''); return; }   // hele schijf bereikbaar: geen arcering
     const start = I.valopening - I.offset - halve;
     zonePad.setAttribute('d', ringSectorPad(ZONE_BINNEN, ZONE_BUITEN, start, 2 * halve));
   }
@@ -1279,18 +1202,12 @@
       const tekort = tekortVoorGat(index);
       let titel = 'Cirkel ' + index + ' op ring ' + (ring + 1)
         + ' – ' + (open ? 'uitgesneden' : 'dicht') + '. ';
-      if (tekort === 0) {
-        titel += 'Komt onder de capsules bij servo ' + getal(servoVoorGat(index)) + '°.';
-      } else if (kan) {
-        // Net buiten 0..180, maar op de uiterste servostand nog ruim binnen de uitlijnmarge.
-        titel += 'Staat op de uiterste servostand (' + (servoVoorGat(index) < 0 ? 0 : 180)
-          + '°) nog net onder de capsules: ' + getal(tekort) + '° naast het midden, binnen de marge van '
-          + getal(tolGradenBij(gatStraal[index])) + '°.';
+      if (kan) {
+        titel += 'Komt onder de bakjes bij servo ' + haalbareServoHoeken(index).map(getal).join('° en bij ') + '°.';
       } else {
         titel += tekort < 10
-          ? getal(tekort) + '° buiten bereik – monteer de schijf een fractie'
-            + ' verdraaid of pas de offset aan.'
-          : 'Buiten servobereik (0–180°): de servo draait maar een halve slag.';
+          ? getal(tekort) + '° buiten bereik – monteer de schijf een fractie verdraaid.'
+          : 'Buiten servobereik: met deze overbrenging haalt de schijf dit gat niet.';
       }
       cirkel.setAttribute('aria-label', titel);
       cirkel.querySelector('title').textContent = titel;
@@ -1545,7 +1462,28 @@
       plaatsCapsule(Math.round(vrij !== undefined ? vrij : RINGEN[0]));
     });
     knoppen.appendChild(knop);
+
+    const wis = document.createElement('button');
+    wis.className = 'secundair klein';
+    wis.type = 'button';
+    wis.textContent = 'Ontwerp wissen';
+    wis.addEventListener('click', wisOntwerp);
+    knoppen.appendChild(wis);
     lijst.appendChild(knoppen);
+  }
+
+  function wisOntwerp() {
+    if (bezig) { return; }
+    if (!window.confirm('Alle bakjes en cirkels wissen en de draai-arm terugzetten?')) { return; }
+    capsules = [];
+    capsulesRuntime = [];
+    geselecteerd.clear();
+    arm.hoek = STANDAARD_ARM_HOEK;
+    document.getElementById('armHoek').value = arm.hoek;
+    document.getElementById('armSlider').value = arm.hoek;
+    bewaarOntwerp();
+    tekenArm();
+    resetSimulatie();
   }
 
   // Na elke wijziging aan het ontwerp: opslaan, het suikertje terugleggen en
@@ -1821,7 +1759,7 @@
   function voorspelDuw(bakje) {
     return [0, 180].map(doel => {
       const s = beginSuiker(bakje);
-      const stapjes = Math.abs(doel - 90);
+      const stapjes = Math.max(1, Math.ceil(Math.abs(doel - 90) * I.overbrenging));
       for (let k = 1; k <= stapjes; k++) {
         const van = 90 + (doel - 90) * (k - 1) / stapjes;
         const tot = 90 + (doel - 90) * k / stapjes;
@@ -1930,14 +1868,14 @@
   }
 
   // ---------- Servobeweging ----------
-  // Beweegt in substappen van maximaal 1 graad en controleert bij elke substap
-  // op vallende capsules, zodat een smal uitlijnvenster nooit wordt overgeslagen
-  // (ook niet bij 0 ms per graad).
+  // Beweegt in substappen van maximaal 1 graad SCHIJF (dus 1/k graad servo)
+  // en controleert bij elke substap wat er valt, zodat een smal
+  // uitlijnvenster nooit wordt overgeslagen (ook niet bij 0 ms per graad).
   function zetServoHoek(nieuweHoek) {
     nieuweHoek = begrens(nieuweHoek, 0, 180);
     const start = servoHoek;
     const totaal = nieuweHoek - start;
-    const n = Math.max(1, Math.ceil(Math.abs(totaal)));
+    const n = Math.max(1, Math.ceil(Math.abs(totaal) * I.overbrenging));
     for (let i = 1; i <= n; i++) {
       const rotVorig = schijfRotatie();
       servoHoek = start + totaal * (i / n);
@@ -1971,8 +1909,7 @@
     document.body.classList.toggle('bezig', waarde);
     document.querySelectorAll('#ingredientPalet button, #allesDichtKnop, #draaiKnop, #doelHoek,'
       + ' #doelSlider, #stapToevoegen, #resetKnop, .stap input, .stap button,'
-      + ' #bakjesLijst input, #bakjesLijst button, #bakjesLijst select, #armHoek, #armSlider,'
-      + ' .instellingen-inhoud input, .instellingen-inhoud button')
+      + ' #bakjesLijst input, #bakjesLijst button, #bakjesLijst select, #armHoek, #armSlider')
       .forEach(el => { el.disabled = waarde; });
     document.getElementById('uitvoerKnop').textContent = waarde ? '⏹ Stop' : '▶ Voer programma uit';
   }
@@ -2050,6 +1987,7 @@
       invoerStart.setAttribute('aria-label', 'Stap ' + (i + 1) + ': starthoek in graden');
       invoerStart.addEventListener('input', () => {
         stap.start = leesGetal(invoerStart, stap.start, 0, 180);
+        schijf.textContent = schijfTekst(stap);
         tekenCode();
       });
       rij.appendChild(invoerStart);
@@ -2065,6 +2003,7 @@
       invoerEind.setAttribute('aria-label', 'Stap ' + (i + 1) + ': eindhoek in graden');
       invoerEind.addEventListener('input', () => {
         stap.eind = leesGetal(invoerEind, stap.eind, 0, 180);
+        schijf.textContent = schijfTekst(stap);
         tekenCode();
       });
       rij.appendChild(invoerEind);
@@ -2072,6 +2011,11 @@
       const sluit = document.createElement('span');
       sluit.textContent = ');';
       rij.appendChild(sluit);
+
+      // Wat de schijf daarbij doet, in graden schijf (op een eigen regeltje onder de stap).
+      const schijf = document.createElement('span');
+      schijf.className = 'schijfhoek';
+      schijf.textContent = schijfTekst(stap);
 
       const weg = document.createElement('button');
       weg.className = 'verwijder';
@@ -2085,14 +2029,27 @@
         tekenCode();
       });
       rij.appendChild(weg);
+      rij.appendChild(schijf);
 
       houder.appendChild(rij);
     });
   }
 
+  // Getal zonder overbodige decimaal: 3 -> "3", 1.5 -> "1,5".
+  function kort(v) { return Number.isInteger(v) ? String(v) : getal(v); }
+
+  // Hoek met teken en echt minteken: +45°, −135°.
+  function metTeken(v) { return (v > 0 ? '+' : '') + String(v).replace('-', '−'); }
+
+  function schijfTekst(stap) {
+    return 'schijf ' + metTeken(Math.round(schijfRotatieVoor(stap.start))) + '° → '
+      + metTeken(Math.round(schijfRotatieVoor(stap.eind))) + '°';
+  }
+
   function programmaCode() {
     if (stappen.length === 0) { return '// nog geen stappen'; }
-    return stappen.map(s => 'moveServo(' + s.start + ', ' + s.eind + ');').join('\n');
+    const kop = I.overbrenging === 1 ? [] : ['// 1° servo = ' + kort(I.overbrenging) + '° schijf'];
+    return kop.concat(stappen.map(s => 'moveServo(' + s.start + ', ' + s.eind + ');')).join('\n');
   }
 
   function tekenCode() {
@@ -2161,12 +2118,12 @@
   }
 
   // ---------- Instellingen ----------
+  // Na een wijziging van I (alleen nog vanuit de console of tests): alles hertekenen.
   function pasInstellingenToe(herteken) {
     tekenVasteLaag();
     tekenZone();
     tekenArm();
     tekenMappingUitleg();
-    bewaarInstellingen();
     if (herteken === 'reset') {
       // De schijf verspringt in een klap; de simulatie opnieuw opzetten houdt
       // het model consistent (en doet meteen de continue valcheck).
@@ -2181,34 +2138,14 @@
   }
 
   function tekenMappingUitleg() {
-    const teken = I.richting > 0 ? '+' : '−';
+    const k = I.overbrenging;
+    const bereik = Math.round(180 * k);
     const richtingNaam = I.richting > 0 ? 'tegen de klok in' : 'met de klok mee';
     document.getElementById('mappingUitleg').innerHTML =
-      'Mapping servo &rarr; schijf: <b>schijfrotatie = ' + teken + '(servohoek &minus; 90) + '
-      + I.offset + '&deg;</b>. Bij servo 90&deg; staat de schijf in de neutrale stand; een hogere '
-      + 'servohoek draait de schijf ' + richtingNaam + '. Hoeken worden tegen de klok in gemeten '
-      + 'vanaf 3&nbsp;uur (270&deg; = onderaan). De kopjeskant van de brug ligt op ' + I.valopening + '&deg;.';
-    document.getElementById('tolUitleg').textContent =
-      'Hoe precies moet een uitgesneden cirkel onder het bakje staan voordat de inhoud erdoor kan?'
-      + ' Het is een booglengte, dus ' + I.tolMm + ' mm komt neer op ±'
-      + RINGEN.map(r => getal(graden(I.tolMm / r)) + '°').join(' / ')
-      + ' op ring 1 tot 4.';
-    document.getElementById('radUitleg').textContent =
-      'Hoe ver mag een bakje naast de ringstraal staan? De inhoud (capsules van maat 000, ~10 mm dik,'
-      + ' of het suikertje) is een stuk smaller dan de cirkels van 25 mm, dus er is wat radiale speling.'
-      + ' Nu: de inhoud valt zolang het bakje hoogstens ' + I.radMm + ' mm naast het gatmiddelpunt staat.';
-  }
-
-  function vulInstellingenFormulier() {
-    document.getElementById('setValopening').value = I.valopening;
-    document.getElementById('setOffset').value = I.offset;
-    document.getElementById('setSnelheid').value = I.msPerGraad;
-    document.getElementById('setTol').value = I.tolMm;
-    document.getElementById('setRad').value = I.radMm;
-    document.getElementById('setArmLengte').value = I.armLengte;
-    document.querySelectorAll('input[name="richting"]').forEach(r => {
-      r.checked = Number(r.value) === I.richting;
-    });
+      '<b>1&deg; servo = ' + kort(k) + '&deg; schijf</b> (overbrenging ' + kort(k) + '). Servo 0&ndash;180&deg;'
+      + ' draait de schijf ' + bereik + '&deg;' + (bereik >= 360 ? ' (' + getal(bereik / 360) + ' toer)' : '')
+      + ', ' + richtingNaam + ' bij een hogere servohoek. Bij 90&deg; staat de schijf in de beginstand'
+      + (I.offset ? ' (offset ' + I.offset + '&deg;)' : '') + '.';
   }
 
   // ---------- Opstarten ----------
@@ -2285,66 +2222,10 @@
     document.getElementById('resetKnop').addEventListener('click', () => resetSimulatie());
     document.getElementById('checkKnop').addEventListener('click', controleerKopje);
 
-    const setValopening = document.getElementById('setValopening');
-    setValopening.addEventListener('input', () => {
-      const v = parseInt(setValopening.value, 10);
-      if (!Number.isFinite(v)) { return; }
-      I.valopening = normaliseer(v);
-      pasInstellingenToe('reset');
-    });
-    const setOffset = document.getElementById('setOffset');
-    setOffset.addEventListener('input', () => {
-      I.offset = leesGetal(setOffset, I.offset, -180, 180);
-      pasInstellingenToe('reset');
-    });
-    const setSnelheid = document.getElementById('setSnelheid');
-    setSnelheid.addEventListener('input', () => {
-      I.msPerGraad = leesGetal(setSnelheid, I.msPerGraad, 0, 200);
-      bewaarInstellingen();
-    });
-    const setTol = document.getElementById('setTol');
-    setTol.addEventListener('input', () => {
-      I.tolMm = leesGetal(setTol, I.tolMm, 1, 14);
-      pasInstellingenToe();
-    });
-    const setRad = document.getElementById('setRad');
-    setRad.addEventListener('input', () => {
-      I.radMm = leesGetal(setRad, I.radMm, 1, 12);
-      pasInstellingenToe();
-    });
-    const setArmLengte = document.getElementById('setArmLengte');
-    setArmLengte.addEventListener('input', () => {
-      I.armLengte = leesGetal(setArmLengte, I.armLengte, 40, 145);
-      pasInstellingenToe();
-    });
-    document.querySelectorAll('input[name="richting"]').forEach(r => {
-      r.addEventListener('change', () => {
-        if (r.checked) { I.richting = Number(r.value); pasInstellingenToe('reset'); }
-      });
-    });
-    document.getElementById('wisOntwerpKnop').addEventListener('click', () => {
-      if (bezig) { return; }
-      if (!window.confirm('Alle bakjes en cirkels wissen en de draai-arm terugzetten?')) { return; }
-      capsules = [];
-      capsulesRuntime = [];
-      geselecteerd.clear();
-      arm.hoek = STANDAARD_ARM_HOEK;
-      document.getElementById('armHoek').value = arm.hoek;
-      document.getElementById('armSlider').value = arm.hoek;
-      bewaarOntwerp();
-      tekenArm();
-      resetSimulatie();
-    });
-    document.getElementById('standaardKnop').addEventListener('click', () => {
-      I = Object.assign({}, STANDAARD);
-      vulInstellingenFormulier();
-      pasInstellingenToe('reset');
-    });
   }
 
   function start() {
     ruimOudOntwerpOp();
-    laadInstellingen();
     laadOntwerp();
 
     bouwSvg();
@@ -2362,7 +2243,6 @@
       keuze.appendChild(optie);
     });
 
-    vulInstellingenFormulier();
     tekenMappingUitleg();
     koppelGebeurtenissen();
     tekenStappen();
