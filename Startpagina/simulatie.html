@@ -67,27 +67,6 @@
     }
     .terug:hover { color: var(--kul-lichtblauw); }
 
-    /* ---------- Hero ---------- */
-    .hero {
-      background: var(--kul-donkerblauw);
-      color: #ffffff;
-      border-bottom: 4px solid var(--kul-lichtblauw);
-    }
-    .hero-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px 24px;
-    }
-    .hero h1 {
-      font-size: 2.1rem;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-    .hero p {
-      font-size: 1.05rem;
-      max-width: 720px;
-      color: #d6e4f0;
-    }
 
     /* ---------- Main ---------- */
     main {
@@ -95,12 +74,12 @@
       width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 28px 24px 56px;
+      padding: 16px 24px 56px;
     }
 
     .naar-configurator {
-      display: inline-block;
-      margin-bottom: 22px;
+      display: block;
+      text-align: center;
       padding: 11px 16px;
       background: #ffffff;
       border: 1px solid var(--kul-donkerblauw);
@@ -133,9 +112,11 @@
       flex-direction: column;
       gap: 16px;
     }
-    /* Sticky alleen als het venster ook echt hoog genoeg is voor de hele schijfkolom. */
-    @media (min-width: 1000px) and (min-height: 1100px) {
+    /* Op brede schermen blijft de schijf in beeld terwijl de rechterkolom scrolt;
+       de tekening wordt op de schermhoogte geschaald zodat ze altijd helemaal past. */
+    @media (min-width: 1000px) {
       .schijf-kolom { position: sticky; top: 12px; }
+      .schijf-paneel svg { max-height: calc(100vh - 170px); }
     }
 
     .blok {
@@ -174,6 +155,24 @@
     .schijf-paneel { padding: 10px; }
     .schijf-paneel svg { width: 100%; height: auto; display: block; max-width: 700px; margin: 0 auto; }
 
+    /* Laatste melding en de inhoud van het kopje, direct onder de tekening */
+    .schijfstatus {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 8px 8px 2px;
+      min-height: 36px;
+      font-size: 0.88rem;
+      border-top: 1px solid var(--rand);
+      margin-top: 6px;
+    }
+    .schijfstatus .melding { flex: 1 1 240px; color: var(--tekst-licht); line-height: 1.4; }
+    .schijfstatus .melding.actie { color: var(--kul-donkerblauw); font-weight: 600; }
+    .schijfstatus .melding.waarschuwing { color: #a8590c; }
+    .kopjechips { display: flex; align-items: center; gap: 5px; color: var(--tekst-licht); font-size: 0.82rem; }
+    .kopjechips .capsule-chip { width: 22px; height: 22px; font-size: 0.72rem; }
+
     /* ---------- Gereedschapspalet ---------- */
     .palet { display: flex; gap: 8px; flex-wrap: wrap; }
     .gereedschap {
@@ -189,6 +188,7 @@
       gap: 7px;
     }
     .gereedschap:hover:not(:disabled) { background: var(--achtergrond); }
+    .gereedschap.geplaatst::after { content: " ✓"; font-size: 0.8rem; }
     .gereedschap[aria-pressed="true"] {
       border-color: var(--kul-donkerblauw);
       background: var(--kul-donkerblauw);
@@ -397,6 +397,10 @@
     .bakje.ing-S { fill: #E8C39E; stroke: #b98d5f; stroke-width: 1.8; }
     .bakje:hover, .bakje:focus { stroke: var(--kul-lichtblauw); stroke-width: 3; outline: none; }
     .bakjeletter { pointer-events: none; font-weight: 700; }
+    .slot { fill: rgba(255, 255, 255, 0.6); stroke: #8a9099; stroke-width: 1; stroke-dasharray: 3 3; cursor: copy; }
+    .slot:hover, .slot:focus { stroke: var(--kul-lichtblauw); stroke-width: 2; outline: none; }
+    .bezig .slot { cursor: default; }
+    .slotplus { fill: #8a9099; font-size: 15px; font-weight: 700; pointer-events: none; }
 
     /* Platformpje naast het suikerbakje, het suikertje en de draai-arm op de as */
     .platform { fill: #e9e1d2; stroke: #8a6a3f; stroke-width: 0.9; pointer-events: none; }
@@ -424,6 +428,18 @@
       font-size: 1.05rem;
     }
     details.legende-blok .legende { padding: 0 18px 14px; }
+    /* Opengeklapt schuift de legende óver de tekening in plaats van de kolom te verlengen. */
+    details.legende-blok { position: relative; }
+    details.legende-blok[open] .legende {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: calc(100% + 4px);
+      background: #ffffff;
+      border: 1px solid var(--rand);
+      box-shadow: 0 6px 20px rgba(0, 64, 122, 0.18);
+      padding: 14px 18px;
+      z-index: 5;
+    }
 
     .zone { fill: url(#arcering); stroke: rgba(0, 64, 122, 0.45); stroke-width: 0.9; stroke-dasharray: 6 4; }
     .tick { stroke: #b6bfc7; stroke-width: 0.7; }
@@ -451,7 +467,6 @@
     }
 
     @media (max-width: 560px) {
-      .hero h1 { font-size: 1.6rem; }
       .header-inner img { height: 40px; }
       main { padding: 20px 14px 40px; }
     }
@@ -462,27 +477,14 @@
     <div class="header-inner">
       <img src="static/kuleuven-logo.svg" alt="KU Leuven">
       <div class="site-title">
-        Startdagen
-        <small>Probleemoplossen en Ontwerpen</small>
+        Simulator van de draaischijf
+        <small>Startdagen &middot; Probleemoplossen en Ontwerpen</small>
       </div>
       <a class="terug" href="/">&lsaquo; Terug naar de startpagina</a>
     </div>
   </header>
 
-  <div class="hero">
-    <div class="hero-inner">
-      <h1>Simulator van de draaischijf</h1>
-      <p>
-        Zet de vier bakjes en de draai-arm, kies welke cirkels jullie uitsnijden en test met
-        servohoeken wat er in het kopje valt. Het suikertje ligt op een platformpje naast zijn
-        bakje: de draai-arm op de as moet het er eerst in duwen.
-      </p>
-    </div>
-  </div>
-
   <main>
-    <a class="naar-configurator" href="schijf">Klaar met testen? Download de lasersnij-SVG &rarr;</a>
-
     <div class="layout">
       <!-- ================= Linkerkolom: de machine ================= -->
       <div class="schijf-kolom">
@@ -501,6 +503,10 @@
             <!-- De draai-arm zit op de as boven de brug: draait mee met de schijf, maar ligt bovenop alles. -->
             <g id="armlaag"></g>
           </svg>
+          <div class="schijfstatus">
+            <span class="melding" id="laatsteMelding"></span>
+            <span class="kopjechips" id="kopjeChips"></span>
+          </div>
         </div>
 
         <details class="legende-blok">
@@ -529,8 +535,8 @@
           </div>
           <div class="bakjes-lijst" id="bakjesLijst"></div>
           <p class="hint">
-            Klik op het kanaal van de brug om het gekozen bakje neer te zetten: &eacute;&eacute;n bakje
-            per ingredi&euml;nt, altijd op een ringstraal.
+            Kies een ingredi&euml;nt en klik op een gestippeld vakje op de brug. Elk ingredi&euml;nt
+            heeft &eacute;&eacute;n bakje; de afstand tot het midden kun je hierboven nog bijstellen.
           </p>
         </div>
 
@@ -571,13 +577,13 @@
           <p class="mapping" id="mappingUitleg"></p>
 
           <div class="rij">
-            <label for="doelHoek">Draai naar</label>
-            <input type="number" id="doelHoek" min="0" max="180" step="1" value="90">
-            <span>&deg;</span>
-            <button class="primair klein" type="button" id="draaiKnop">Draai</button>
+            <input type="range" id="doelSlider" min="0" max="180" step="1" value="90" aria-label="Servohoek">
           </div>
           <div class="rij">
-            <input type="range" id="doelSlider" min="0" max="180" step="1" value="90" aria-label="Doelhoek van de servo">
+            <label for="doelHoek">Zet op</label>
+            <input type="number" id="doelHoek" min="0" max="180" step="1" value="90">
+            <span>&deg;</span>
+            <span class="hint" style="margin-top:0">Sleep de schuif zoals het knopje op de servotester: de schijf draait meteen mee.</span>
           </div>
 
           <h3 class="subkop">Programma voor het informatieteam</h3>
@@ -614,6 +620,7 @@
           <div class="log" id="log"></div>
         </div>
 
+        <a class="naar-configurator" href="schijf">Klaar met testen? Download hier de lasersnij-SVG &rarr;</a>
       </div>
     </div>
   </main>
@@ -822,7 +829,6 @@
   let suiker = null;                               // simulatie: {toestand: 'platform'|'bakje'|'verloren'|'gevallen', sigma: graden} van het suikertje
   let kopje = [];                                  // gevallen capsules, in volgorde
   let servoHoek = 90;                              // huidige servohoek in graden
-  let doelHoek = 90;
   let ingredient = 'K';                            // actief gereedschap voor de bakjes
   let stappen = [{ start: 90, eind: 180 }];
   let bezig = false;
@@ -1182,6 +1188,8 @@
     svgDraaiend.setAttribute('transform', 'rotate(' + (-rot).toFixed(3) + ')');
     svgArm.setAttribute('transform', 'rotate(' + (-rot).toFixed(3) + ')');
     document.getElementById('servoUitlezing').textContent = 'Servo: ' + Math.round(servoHoek) + '°';
+    document.getElementById('doelSlider').value = Math.round(servoHoek);
+    document.getElementById('doelHoek').value = Math.round(servoHoek);
     // Eerst afronden, dan pas normaliseren: zo staat er nooit "360°".
     const ruw = Math.round(rot);
     const gedraaid = normaliseer(ruw);
@@ -1249,6 +1257,29 @@
   function werkCapsulesBij() {
     while (capsuleLaag.firstChild) { capsuleLaag.removeChild(capsuleLaag.firstChild); }
     suikerGroep = null;
+
+    // Vrije plekken op de ringstralen: gestippelde vakjes met een plus, zodat
+    // meteen duidelijk is waar je klikt om een bakje te zetten.
+    RINGEN.forEach((r, ring) => {
+      if (capsules.some(c => Math.abs(c.straal - r) < 26)) { return; }
+      const slot = maak('rect', {
+        x: r - BAK_LENGTE / 2, y: -BAK_BREEDTE / 2, width: BAK_LENGTE, height: BAK_BREEDTE, rx: 2, class: 'slot'
+      });
+      const titel = 'Vrije plek boven ring ' + (ring + 1) + ' (' + Math.round(r)
+        + ' mm). Klik om hier het bakje van het gekozen ingrediënt te zetten.';
+      const titelEl = maak('title', {});
+      titelEl.textContent = titel;
+      slot.appendChild(titelEl);
+      slot.setAttribute('aria-label', titel);
+      maakKlikbaar(slot, () => klikOpSlot(r));
+      capsuleLaag.appendChild(slot);
+      const plus = maak('text', {
+        x: r, y: 0, class: 'slotplus', 'text-anchor': 'middle', 'dominant-baseline': 'central',
+        transform: 'rotate(' + I.valopening + ' ' + r + ' 0)'
+      });
+      plus.textContent = '+';
+      capsuleLaag.appendChild(plus);
+    });
 
     capsules.forEach((c, i) => {
       const letter = capsulesRuntime[i];
@@ -1342,13 +1373,18 @@
   }
 
   function werkCapsuleLijstBij() {
+    // Vinkje op de knoppen van ingrediënten die al een bakje hebben.
+    document.querySelectorAll('#ingredientPalet button').forEach(k => {
+      k.classList.toggle('geplaatst', capsules.some(c => c.ing === k.dataset.tool));
+    });
+
     const lijst = document.getElementById('bakjesLijst');
     lijst.innerHTML = '';
 
     if (capsules.length === 0) {
       const p = document.createElement('div');
       p.className = 'leeg-melding';
-      p.textContent = 'Nog geen bakjes op de brug. Klik op het kanaal in de tekening, of gebruik de knoppen hieronder.';
+      p.textContent = 'Nog geen bakjes. Kies hierboven een ingrediënt en klik op een gestippeld vakje in de tekening.';
       lijst.appendChild(p);
     }
 
@@ -1449,19 +1485,10 @@
       }
     });
 
-    // Toetsenbord-vriendelijk alternatief voor klikken op het kanaal.
+    // De gestippelde vakjes in de tekening zijn ook met Tab bereikbaar; hier
+    // alleen nog de knop om helemaal opnieuw te beginnen.
     const knoppen = document.createElement('div');
     knoppen.className = 'knoppen';
-    const knop = document.createElement('button');
-    knop.className = 'secundair klein';
-    knop.type = 'button';
-    knop.textContent = '+ bakje op een vrije ring';
-    knop.addEventListener('click', () => {
-      // Eerste ringstraal zonder bakje in de buurt, anders de binnenste.
-      const vrij = RINGEN.find(r => !capsules.some(c => Math.abs(c.straal - r) < 26));
-      plaatsCapsule(Math.round(vrij !== undefined ? vrij : RINGEN[0]));
-    });
-    knoppen.appendChild(knop);
 
     const wis = document.createElement('button');
     wis.className = 'secundair klein';
@@ -1523,6 +1550,23 @@
       });
     }
     mokTeller.textContent = kopje.length === 0 ? 'kopje' : 'kopje (' + kopje.length + ')';
+
+    const chips = document.getElementById('kopjeChips');
+    chips.innerHTML = '';
+    const label = document.createElement('span');
+    label.textContent = kopje.length === 0 ? 'Kopje: leeg' : 'Kopje:';
+    chips.appendChild(label);
+    kopje.forEach(letter => {
+      const ing = INGREDIENTEN[letter];
+      const chip = document.createElement('span');
+      chip.className = 'capsule-chip';
+      chip.style.background = ing.vul;
+      chip.style.borderColor = ing.rand;
+      chip.style.color = ing.letter;
+      chip.textContent = letter;
+      chip.title = ing.naam;
+      chips.appendChild(chip);
+    });
   }
 
   function logRegel(tekst, klasse) {
@@ -1534,6 +1578,14 @@
     regel.textContent = tekst;
     log.appendChild(regel);
     log.scrollTop = log.scrollHeight;
+    zetMelding(tekst, klasse);
+  }
+
+  // De laatste melding staat ook direct onder de tekening.
+  function zetMelding(tekst, klasse) {
+    const melding = document.getElementById('laatsteMelding');
+    melding.textContent = tekst;
+    melding.className = 'melding' + (klasse ? ' ' + klasse : '');
   }
 
   function wisLog() {
@@ -1543,6 +1595,9 @@
     p.className = 'logregel stil plaatshouder';
     p.textContent = 'Nog niets gebeurd.';
     log.appendChild(p);
+    zetMelding(capsules.length === 0
+      ? 'Kies een ingrediënt en klik op een gestippeld vakje op de brug.'
+      : 'Sleep de servoschuif of voer een programma uit en kijk wat er in het kopje valt.', '');
   }
 
   // ---------- Interactie ----------
@@ -1577,6 +1632,15 @@
       return;
     }
     plaatsCapsule(p.x);
+  }
+
+  function klikOpSlot(straal) {
+    if (bezig) { return; }
+    if (ingredient === 'leeg') {
+      logRegel('Kies eerst een ingrediënt (Koffie, Thee, Melk of Suiker) en klik dan op het vakje.', 'waarschuwing');
+      return;
+    }
+    plaatsCapsule(straal);
   }
 
   function plaatsCapsule(straal) {
@@ -1907,7 +1971,7 @@
   function zetBezig(waarde) {
     bezig = waarde;
     document.body.classList.toggle('bezig', waarde);
-    document.querySelectorAll('#ingredientPalet button, #allesDichtKnop, #draaiKnop, #doelHoek,'
+    document.querySelectorAll('#ingredientPalet button, #allesDichtKnop, #doelHoek,'
       + ' #doelSlider, #stapToevoegen, #resetKnop, .stap input, .stap button,'
       + ' #bakjesLijst input, #bakjesLijst button, #bakjesLijst select, #armHoek, #armSlider')
       .forEach(el => { el.disabled = waarde; });
@@ -1937,17 +2001,6 @@
     if (stopGevraagd) { logRegel('⏹ Gestopt op ' + Math.round(servoHoek) + '°', 'actie'); }
     stopGevraagd = false;
     controleerVal(false);                          // eindstand nog eens narekenen
-    zetBezig(false);
-  }
-
-  async function draaiNaarDoel() {
-    if (bezig) { return; }
-    stopGevraagd = false;
-    zetBezig(true);
-    logRegel('▸ Draaien naar ' + doelHoek + '°', 'actie');
-    await animeerNaar(doelHoek);
-    stopGevraagd = false;
-    controleerVal(false);
     zetBezig(false);
   }
 
@@ -2166,17 +2219,19 @@
       werkGatenBij();
     });
 
+    // De schuif is de servotester: slepen draait de schijf meteen mee (met
+    // de valcheck per graad). Het getalveld pas bij 'change', anders zou het
+    // intikken van "105" de schijf eerst langs 1 en 10 graden sturen.
     const doelInvoer = document.getElementById('doelHoek');
     const doelSlider = document.getElementById('doelSlider');
-    doelInvoer.addEventListener('input', () => {
-      doelHoek = leesGetal(doelInvoer, doelHoek, 0, 180);
-      doelSlider.value = doelHoek;
-    });
     doelSlider.addEventListener('input', () => {
-      doelHoek = leesGetal(doelSlider, doelHoek, 0, 180);
-      doelInvoer.value = doelHoek;
+      if (bezig) { return; }
+      zetServoHoek(leesGetal(doelSlider, servoHoek, 0, 180));
     });
-    document.getElementById('draaiKnop').addEventListener('click', draaiNaarDoel);
+    doelInvoer.addEventListener('change', () => {
+      if (bezig) { return; }
+      zetServoHoek(leesGetal(doelInvoer, servoHoek, 0, 180));
+    });
 
     const armInvoer = document.getElementById('armHoek');
     const armSlider = document.getElementById('armSlider');
