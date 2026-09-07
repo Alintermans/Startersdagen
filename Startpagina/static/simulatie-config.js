@@ -13,7 +13,11 @@ window.SIMULATIE_CONFIG = {
   // -1: met de klok mee. Hangt af van de montage en van het tandwielpaar.
   richting: 1,
 
-  // Graden waarover de schijf verdraaid op de as gemonteerd is (bij servo 90).
+  // Beginstand van de schijf op de as. Bij servo 90 wijst de pijl op de schijf
+  // (de inkeping in de rand) naar dit getal op de gradenboog van de simulator.
+  // 0 = haaks op de brug, rechts als het kopje onderaan staat. Staat de echte
+  // schijf anders gemonteerd, zet hier dan het aantal graden (tegen de klok in)
+  // dat de pijl bij servo 90 van dat punt af staat.
   offset: 0,
 
   // Positie van de kopjeskant van de brug, tegen de klok in vanaf 3 uur:

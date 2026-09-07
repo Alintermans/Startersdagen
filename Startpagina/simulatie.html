@@ -364,6 +364,8 @@
     .schaduw { fill: #dfe5ea; }
     .schijfvlak { fill: #faf6ef; stroke: var(--kul-donkerblauw); stroke-width: 1.4; }
     .vastgat { fill: none; stroke: #b6bfc7; stroke-width: 0.9; }
+    .markering { pointer-events: none; }
+    .markering path { fill: var(--kul-donkerblauw); stroke: #ffffff; stroke-width: 0.6; }
 
     .gat { cursor: pointer; }
     .gat.dicht {
@@ -490,7 +492,7 @@
       <div class="schijf-kolom">
         <div class="blok schijf-paneel">
           <svg id="schijf" viewBox="-220 -220 440 440" xmlns="http://www.w3.org/2000/svg"
-               role="group" aria-label="Bovenaanzicht: de doos met de draaischijf, daarboven de vaste brug met de bakjes en het platformpje met het suikertje, de draai-arm op de as, en het kopje">
+               role="group" aria-label="Bovenaanzicht: de doos met de draaischijf (met een pijl als herkenningspunt), daarboven de vaste brug met de bakjes en het platformpje met het suikertje, de draai-arm op de as, en het kopje">
             <defs>
               <pattern id="arcering" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
                 <rect width="7" height="7" fill="rgba(84,188,235,0.13)"></rect>
@@ -516,6 +518,7 @@
             <li><span class="staal blok" style="border-color:#4a3423;background:#6F4E37"></span> Bakje op de brug (K, T, M, S); grijs = al gevallen. Bakjes staan altijd aan de kopjeskant.</li>
             <li><span class="staal blok" style="border-color:#b98d5f;background:#fff8ec"></span> Suikertje op het platformpje naast zijn bakje; grijs met &#10005; = van het platformpje af geduwd, verloren.</li>
             <li><span class="staal blok" style="border-color:#7a5b36;background:#dcc09a"></span> Draai-arm op de as, b&oacute;ven de brug; draait mee met de schijf.</li>
+            <li><span class="staal blok" style="background:#00407A;clip-path:polygon(0 0,100% 50%,0 100%)"></span> Pijl met inkeping in de rand: het herkenningspunt van de schijf (zit ook in de lasersnij-SVG). Hij draait mee en wijst op de gradenboog de schijfrotatie aan; bij servo 90&deg; staat hij op 0&deg;.</li>
             <li><span class="staal blok" style="border-color:#d40000;background:#d40000"></span> Rode streepjes: uitlijnmarge. Komt het middelpunt van een open cirkel ertussen, dan valt de inhoud.</li>
             <li><span class="staal blok" style="border-color:rgba(0,64,122,0.45);background:rgba(84,188,235,0.18)"></span> Gearceerd: alleen deze cirkels kunnen ooit onder de bakjes komen. Geen arcering = de hele schijf is bereikbaar.</li>
           </ul>
@@ -704,6 +707,12 @@
   // ---------- Geometrie in mm, letterlijk uit de schijf-configurator ----------
   const SCHIJF_RADIUS = 147.5;
   const GAT_RADIUS = 12.5;
+  // Herkenningspunt: V-vormige inkeping in de rand van de schijf, op de nullijn
+  // van het gatenpatroon (de lijn door de vier gaten rechts). Dezelfde inkeping
+  // zit in de lasersnij-SVG van de configurator, dus ook in de echte schijf.
+  const INKEPING_HOEK = 0;           // schijfhoek van de inkeping
+  const INKEPING_BREEDTE = 8;        // mm, gemeten aan de rand
+  const INKEPING_DIEPTE = 4;         // mm, naar het midden toe
   const VASTE_GATEN = [[0.0, 0.0, 2.0], [-10.6, -10.605, 1.95], [0.0, -15.0, 2.0], [10.614, -10.605, 1.95], [15.0, 0.0, 2.0], [10.614, 10.608, 1.95], [0.0, 15.0, 2.0], [-10.6, 10.608, 1.95], [-15.0, 0.0, 2.0]];
   const GATEN = [[-26.248, -26.078], [-0.12, -37.0], [26.078, -26.248], [37.0, -0.12], [26.248, 26.078], [0.12, 37.0], [-26.078, 26.248], [-37.0, 0.12], [-57.778, -27.529], [-40.112, -49.871], [-14.501, -62.336], [13.982, -62.455], [39.695, -50.203], [57.546, -28.008], [64.0, -0.266], [57.778, 27.529], [40.112, 49.871], [14.501, 62.336], [-13.982, 62.455], [-39.695, 50.203], [-57.546, 28.008], [-64.0, 0.266], [-86.707, -27.626], [-73.926, -53.068], [-53.909, -73.315], [-28.615, -86.385], [-0.52, -91.0], [27.626, -86.707], [53.068, -73.926], [73.315, -53.909], [86.385, -28.615], [91.0, -0.52], [86.707, 27.626], [73.926, 53.068], [53.909, 73.315], [28.615, 86.385], [0.52, 91.0], [-27.626, 86.707], [-53.068, 73.926], [-73.315, 53.909], [-86.385, 28.615], [-91.0, 0.52], [-120.875, -31.85], [-108.513, -62.05], [-88.756, -88.021], [-62.95, -107.993], [-32.855, -120.606], [-0.52, -125.0], [31.85, -120.875], [62.05, -108.513], [88.021, -88.756], [107.993, -62.95], [120.606, -32.855], [125.0, -0.52], [120.875, 31.85], [108.513, 62.05], [88.756, 88.021], [62.95, 107.993], [32.855, 120.606], [0.52, 125.0], [-31.85, 120.875], [-62.05, 108.513], [-88.021, 88.756], [-107.993, 62.95], [-120.606, 32.855], [-125.0, 0.52]];
 
@@ -1036,7 +1045,7 @@
     svgOnder.appendChild(maak('circle', { r: SCHIJF_RADIUS + 4, class: 'schaduw' }));
 
     // --- draaiende laag: schijf, bereikbare zone, cirkels ---
-    svgDraaiend.appendChild(maak('circle', { r: SCHIJF_RADIUS, class: 'schijfvlak' }));
+    svgDraaiend.appendChild(maak('path', { d: schijfOmtrekPad(), class: 'schijfvlak' }));
 
     zonePad = maak('path', { class: 'zone' });
     svgDraaiend.appendChild(zonePad);
@@ -1054,6 +1063,18 @@
       svgDraaiend.appendChild(cirkel);
       gatEls[index] = cirkel;
     });
+
+    // Pijl naar de inkeping: het herkenningspunt om de schijf te orienteren.
+    // Hij draait mee en wijst op de gradenboog de schijfrotatie aan.
+    const pijl = maak('g', { class: 'markering', transform: 'rotate(' + (-INKEPING_HOEK) + ')' });
+    const tipX = SCHIJF_RADIUS - INKEPING_DIEPTE - 0.5;
+    pijl.appendChild(maak('path', {
+      d: 'M ' + tipX + ' 0 L ' + (tipX - 7.5) + ' -5 L ' + (tipX - 7.5) + ' 5 Z'
+    }));
+    const pijlTitel = maak('title', {});
+    pijlTitel.textContent = 'Herkenningspunt van de schijf: wijst de schijfrotatie aan op de gradenboog';
+    pijl.appendChild(pijlTitel);
+    svgDraaiend.appendChild(pijl);
 
     // --- bovenlaag: gradenboog, brug met capsules, kopje ---
     tickGroep = maak('g', {});
@@ -1121,6 +1142,19 @@
     mokTeller.textContent = 'kopje';
     mokGroep.appendChild(mokTeller);
     svgBoven.appendChild(mokGroep);
+  }
+
+  // Omtrek van de schijf: een cirkel met de V-vormige inkeping als herkenningspunt
+  // (dezelfde vorm als in de lasersnij-SVG van de configurator).
+  function schijfOmtrekPad() {
+    const R = SCHIJF_RADIUS;
+    const halveHoek = graden(Math.asin(INKEPING_BREEDTE / 2 / R));
+    const a = punt(R, INKEPING_HOEK + halveHoek);
+    const b = punt(R, INKEPING_HOEK - halveHoek);
+    const tip = punt(R - INKEPING_DIEPTE, INKEPING_HOEK);
+    const f = v => v.toFixed(3);
+    return 'M ' + f(a.x) + ' ' + f(a.y) + ' A ' + R + ' ' + R + ' 0 1 0 ' + f(b.x) + ' ' + f(b.y)
+      + ' L ' + f(tip.x) + ' ' + f(tip.y) + ' Z';
   }
 
   // Ringsector als polygoon (5 graden per segment; de afwijking is < 0,2 mm).
@@ -2197,8 +2231,8 @@
     document.getElementById('mappingUitleg').innerHTML =
       '<b>1&deg; servo = ' + kort(k) + '&deg; schijf</b> (overbrenging ' + kort(k) + '). Servo 0&ndash;180&deg;'
       + ' draait de schijf ' + bereik + '&deg;' + (bereik >= 360 ? ' (' + getal(bereik / 360) + ' toer)' : '')
-      + ', ' + richtingNaam + ' bij een hogere servohoek. Bij 90&deg; staat de schijf in de beginstand'
-      + (I.offset ? ' (offset ' + I.offset + '&deg;)' : '') + '.';
+      + ', ' + richtingNaam + ' bij een hogere servohoek. Bij 90&deg; staat de schijf in de beginstand:'
+      + ' de pijl op de schijf wijst naar ' + normaliseer(Math.round(I.offset)) + '&deg; op de gradenboog.';
   }
 
   // ---------- Opstarten ----------

@@ -183,6 +183,11 @@
     }
     .b-vast { border-color: var(--kul-donkerblauw); }
     .b-kandidaat { border-color: #b6bfc7; border-style: dashed; }
+    .b-markering {
+      border: none; border-radius: 0;
+      background: var(--kul-donkerblauw);
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+    }
     .b-gekozen { border-color: var(--snij-rood); background: rgba(212, 0, 0, 0.15); }
 
     .regels { font-size: 0.85rem; color: var(--tekst-licht); }
@@ -190,6 +195,7 @@
 
     /* SVG-onderdelen */
     .schijfrand { fill: none; stroke: var(--kul-donkerblauw); stroke-width: 1.2; }
+    .markering { fill: var(--kul-donkerblauw); pointer-events: none; }
     .vastgat { fill: none; stroke: var(--kul-donkerblauw); stroke-width: 1; }
     .gat {
       fill: rgba(0, 0, 0, 0);
@@ -238,7 +244,8 @@
     <h1>Schijf voor het mechanische deel</h1>
     <p class="intro">
       Klik de gaten aan die in jullie schijf gesneden moeten worden. De rand van de schijf
-      (&Oslash;295&nbsp;mm), het asgat en de acht montagegaatjes errond worden altijd meegesneden.
+      (&Oslash;295&nbsp;mm, met een kleine inkeping als herkenningspunt), het asgat en de acht
+      montagegaatjes errond worden altijd meegesneden.
       Download daarna de SVG en lever die rechtstreeks in bij het FabLab &mdash; openen in
       Inkscape is niet meer nodig.
     </p>
@@ -271,6 +278,7 @@
             <li><span class="bolletje b-vast"></span> Wordt altijd gesneden (rand, asgat, montagegaatjes)</li>
             <li><span class="bolletje b-kandidaat"></span> Mogelijk gat &mdash; klik om te selecteren</li>
             <li><span class="bolletje b-gekozen"></span> Geselecteerd &mdash; wordt gesneden (&Oslash;25&nbsp;mm)</li>
+            <li><span class="bolletje b-markering"></span> Inkeping in de rand (8&nbsp;mm): herkenningspunt om de schijf te ori&euml;nteren, op dezelfde plaats als de pijl in de simulator</li>
           </ul>
         </div>
 
@@ -299,6 +307,12 @@
     // (posities relatief t.o.v. het middelpunt van de schijf)
     const SCHIJF_RADIUS = 147.5;
     const GAT_RADIUS = 12.5;
+    // Herkenningspunt: V-vormige inkeping in de rand, op de nullijn van het
+    // gatenpatroon (de lijn door de vier gaten rechts). De simulator tekent
+    // op dezelfde plaats een pijl, zo is de echte schijf makkelijk te orienteren.
+    const INKEPING_HOEK = 0;        // graden, tegen de klok in vanaf 3 uur
+    const INKEPING_BREEDTE = 8;     // mm, gemeten aan de rand
+    const INKEPING_DIEPTE = 4;      // mm, naar het midden toe
     const VASTE_GATEN = [[0.0, 0.0, 2.0], [-10.6, -10.605, 1.95], [0.0, -15.0, 2.0], [10.614, -10.605, 1.95], [15.0, 0.0, 2.0], [10.614, 10.608, 1.95], [0.0, 15.0, 2.0], [-10.6, 10.608, 1.95], [-15.0, 0.0, 2.0]];
     const GATEN = [[-26.248, -26.078], [-0.12, -37.0], [26.078, -26.248], [37.0, -0.12], [26.248, 26.078], [0.12, 37.0], [-26.078, 26.248], [-37.0, 0.12], [-57.778, -27.529], [-40.112, -49.871], [-14.501, -62.336], [13.982, -62.455], [39.695, -50.203], [57.546, -28.008], [64.0, -0.266], [57.778, 27.529], [40.112, 49.871], [14.501, 62.336], [-13.982, 62.455], [-39.695, 50.203], [-57.546, 28.008], [-64.0, 0.266], [-86.707, -27.626], [-73.926, -53.068], [-53.909, -73.315], [-28.615, -86.385], [-0.52, -91.0], [27.626, -86.707], [53.068, -73.926], [73.315, -53.909], [86.385, -28.615], [91.0, -0.52], [86.707, 27.626], [73.926, 53.068], [53.909, 73.315], [28.615, 86.385], [0.52, 91.0], [-27.626, 86.707], [-53.068, 73.926], [-73.315, 53.909], [-86.385, 28.615], [-91.0, 0.52], [-120.875, -31.85], [-108.513, -62.05], [-88.756, -88.021], [-62.95, -107.993], [-32.855, -120.606], [-0.52, -125.0], [31.85, -120.875], [62.05, -108.513], [88.021, -88.756], [107.993, -62.95], [120.606, -32.855], [125.0, -0.52], [120.875, 31.85], [108.513, 62.05], [88.756, 88.021], [62.95, 107.993], [32.855, 120.606], [0.52, 125.0], [-31.85, 120.875], [-62.05, 108.513], [-88.021, 88.756], [-107.993, 62.95], [-120.606, 32.855], [-125.0, 0.52]];
 
@@ -337,13 +351,34 @@
       document.getElementById('aantal').textContent = geselecteerd.size;
     }
 
+    // Omtrek van de schijf als SVG-pad: een cirkel met de inkeping, rond (cx, cy).
+    function schijfOmtrekPad(cx, cy) {
+      const R = SCHIJF_RADIUS;
+      const rad = deg => deg * Math.PI / 180;
+      const punt = (r, deg) => [cx + r * Math.cos(rad(deg)), cy - r * Math.sin(rad(deg))];
+      const halveHoek = Math.asin(INKEPING_BREEDTE / 2 / R) * 180 / Math.PI;
+      const [ax, ay] = punt(R, INKEPING_HOEK + halveHoek);
+      const [bx, by] = punt(R, INKEPING_HOEK - halveHoek);
+      const [tx, ty] = punt(R - INKEPING_DIEPTE, INKEPING_HOEK);
+      const f = v => v.toFixed(3);
+      return `M ${f(ax)} ${f(ay)} A ${R} ${R} 0 1 0 ${f(bx)} ${f(by)} L ${f(tx)} ${f(ty)} Z`;
+    }
+
     function bouwSchijf() {
       const svg = document.getElementById('schijf');
 
-      const rand = document.createElementNS(SVG_NS, 'circle');
-      rand.setAttribute('r', SCHIJF_RADIUS);
+      const rand = document.createElementNS(SVG_NS, 'path');
+      rand.setAttribute('d', schijfOmtrekPad(0, 0));
       rand.setAttribute('class', 'schijfrand');
       svg.appendChild(rand);
+
+      // Pijl naar de inkeping (alleen ter herkenning, wordt niet gesneden).
+      const pijl = document.createElementNS(SVG_NS, 'path');
+      const tipX = SCHIJF_RADIUS - INKEPING_DIEPTE - 0.5;
+      pijl.setAttribute('d', `M ${tipX} 0 L ${tipX - 7.5} -5 L ${tipX - 7.5} 5 Z`);
+      pijl.setAttribute('transform', `rotate(${-INKEPING_HOEK})`);
+      pijl.setAttribute('class', 'markering');
+      svg.appendChild(pijl);
 
       for (const [x, y, r] of VASTE_GATEN) {
         const c = document.createElementNS(SVG_NS, 'circle');
@@ -397,7 +432,8 @@
       const cirkel = (cx, cy, r) =>
         `  <circle cx="${cx.toFixed(3)}" cy="${cy.toFixed(3)}" r="${r}" style="${stijl}" />`;
 
-      const regels = [cirkel(mx, my, SCHIJF_RADIUS)];
+      // De rand met de inkeping als herkenningspunt (een gesloten pad).
+      const regels = [`  <path d="${schijfOmtrekPad(mx, my)}" style="${stijl}" />`];
       for (const [x, y, r] of VASTE_GATEN) {
         regels.push(cirkel(mx + x, my + y, r));
       }
