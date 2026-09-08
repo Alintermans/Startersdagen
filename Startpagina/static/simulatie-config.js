@@ -32,8 +32,8 @@ window.SIMULATIE_CONFIG = {
   tolMm: 10,
 
   // Radiale marge: hoeveel mm een bakje naast de ringstraal mag staan.
-  radMm: 7,
-
-  // Lengte van de draai-arm in mm, van de as tot het uiteinde van het vorkje.
-  armLengte: 70
+  radMm: 7
 };
+// De maten van de draai-arm (vorkje van 57 tot 72 mm uit de as, opening 17,2 mm)
+// staan als constanten in simulatie.html: ze komen uit het lasersnijbestand
+// drawing-suikerarmpje.svg en bepalen dat het suikerbakje op ring 2 staat.

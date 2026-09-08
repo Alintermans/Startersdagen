@@ -401,6 +401,8 @@
     .bakjeletter { pointer-events: none; font-weight: 700; }
     .slot { fill: rgba(255, 255, 255, 0.6); stroke: #8a9099; stroke-width: 1; stroke-dasharray: 3 3; cursor: copy; }
     .slot:hover, .slot:focus { stroke: var(--kul-lichtblauw); stroke-width: 2; outline: none; }
+    .slot.uit { cursor: not-allowed; opacity: 0.45; }
+    .slot.uit:hover, .slot.uit:focus { stroke: #8a9099; stroke-width: 1; }
     .bezig .slot { cursor: default; }
     .slotplus { fill: #8a9099; font-size: 15px; font-weight: 700; pointer-events: none; }
 
@@ -516,8 +518,8 @@
           <ul class="legende">
             <li><span class="staal" style="border-color:#00407A;background:#e9eef3"></span> Open cirkel: uitgesneden, hierdoor valt de inhoud van een bakje. Gestippeld = dicht, blijft MDF.</li>
             <li><span class="staal blok" style="border-color:#4a3423;background:#6F4E37"></span> Bakje op de brug (K, T, M, S); grijs = al gevallen. Bakjes staan altijd aan de kopjeskant.</li>
-            <li><span class="staal blok" style="border-color:#b98d5f;background:#fff8ec"></span> Suikertje op het platformpje naast zijn bakje; grijs met &#10005; = van het platformpje af geduwd, verloren.</li>
-            <li><span class="staal blok" style="border-color:#7a5b36;background:#dcc09a"></span> Draai-arm op de as, b&oacute;ven de brug; draait mee met de schijf.</li>
+            <li><span class="staal blok" style="border-color:#b98d5f;background:#fff8ec"></span> Suikertje op het platformpje naast zijn bakje (ring 2), tussen de tanden van het vorkje; grijs met &#10005; = van het platformpje af geschoven, verloren.</li>
+            <li><span class="staal blok" style="border-color:#7a5b36;background:#dcc09a"></span> Draai-arm op de as, b&oacute;ven de brug; draait mee met de schijf en schuift het suikertje mee.</li>
             <li><span class="staal blok" style="background:#00407A;clip-path:polygon(0 0,100% 50%,0 100%)"></span> Pijl met inkeping in de rand: het herkenningspunt van de schijf (zit ook in de lasersnij-SVG). Hij draait mee en wijst op de gradenboog de schijfrotatie aan; bij servo 90&deg; staat hij op 0&deg;.</li>
             <li><span class="staal blok" style="border-color:#d40000;background:#d40000"></span> Rode streepjes: uitlijnmarge. Komt het middelpunt van een open cirkel ertussen, dan valt de inhoud.</li>
             <li><span class="staal blok" style="border-color:rgba(0,64,122,0.45);background:rgba(84,188,235,0.18)"></span> Gearceerd: alleen deze cirkels kunnen ooit onder de bakjes komen. Geen arcering = de hele schijf is bereikbaar.</li>
@@ -540,26 +542,20 @@
           <p class="hint">
             Kies een ingredi&euml;nt en klik op een gestippeld vakje op de brug. Elk ingredi&euml;nt
             heeft &eacute;&eacute;n bakje; de afstand tot het midden kun je hierboven nog bijstellen.
+            Suiker staat vast op ring&nbsp;2: daar houdt het vorkje van de draai-arm het suikertje.
           </p>
         </div>
 
         <div class="blok">
           <h2><span class="stapnr">2</span> Draai-arm</h2>
           <p class="hint" style="margin-top:0">
-            De arm op de as draait mee met de schijf. Beweegt hij naar het suikerbakje toe, dan duwt
-            hij het suikertje van het platformpje in het bakje; komt hij van de andere kant, dan
-            duwt hij het eraf en is het verloren.
+            De arm op de as draait mee met de schijf. Bij servo 90&deg; staat zijn vorkje rond het
+            suikertje op het platformpje naast het suikerbakje (ring&nbsp;2). Draait de schijf naar
+            het bakje toe, dan schuift het vorkje het suikertje erin; draait ze de andere kant op,
+            dan schuift het van het platformpje af en is het verloren. Aan welke kant het
+            platformpje zit, kies je bij het suikerbakje hierboven.
           </p>
-          <div class="rij" style="margin-top:12px">
-            <label for="armHoek">Stand bij servo 90&deg;</label>
-            <input type="number" id="armHoek" min="-180" max="180" step="1" value="60">
-            <span>&deg;</span>
-            <span class="hint" style="margin-top:0">0&deg; = naar het kopje, + = tegen de klok in</span>
-          </div>
-          <div class="rij">
-            <input type="range" id="armSlider" min="-180" max="180" step="1" value="60" aria-label="Stand van de draai-arm bij servo 90 graden">
-          </div>
-          <div class="uitslag" id="armUitleg">Zet eerst een suikerbakje (S) op de brug.</div>
+          <div class="uitslag" id="armUitleg" style="margin-top:12px">Zet eerst een suikerbakje (S) op ring 2 van de brug.</div>
         </div>
 
         <div class="blok">
@@ -728,8 +724,16 @@
   const PLATFORM_MM = 27;            // hart van het platformpje, tangentieel naast het suikerbakje
   const PLATFORM_DIEPTE = 24;        // tangentiele maat van het platformpje
   const SUIKER_HALF = 7.5;           // suikertje is ~15 mm
-  const ARM_HALF = 5;                // de draai-arm is ~10 mm breed
-  const ARM_NAAF = 14;               // straal van de naaf waarmee de arm op de as zit
+  // Draai-arm (lasercut, drawing-suikerarmpje.svg van Kathleen Geraedts, sep 2026), mm vanaf de as
+  const ARM_NAAF = 20;               // naafschijf Ø40 met het asgat en vier schroefgaten op 15 mm
+  const ARM_STEEL_HALF = 4;          // steel 8 mm breed ...
+  const ARM_STEEL_TOT = 46;          // ... tot waar hij verbreedt naar de vork
+  const VORK_RUG_VAN = 54;           // rug van de vork (3 mm dik) ...
+  const VORK_RUG_TOT = 57;           // ... waarachter de twee tanden beginnen
+  const VORK_TAND_TOT = 72;          // tanden 15 mm lang (afgeronde punt tot 74)
+  const VORK_HALF_BINNEN = 8.6;      // opening tussen de tanden: 17,2 mm, net een suikertje
+  const VORK_HALF_BUITEN = 13.6;     // tanden 5 mm dik
+  const SUIKER_STRAAL = (VORK_RUG_TOT + VORK_TAND_TOT) / 2;   // 64,5 mm: tussen de tanden, dus op ring 2
   const BOX_HALF_X = 159;            // doos buiten: 318 mm langs de brug ...
   const BOX_HALF_Y = 116;            // ... en 232 mm dwars erop (de schijf steekt eroverheen)
   const MIN_STRAAL = 28;             // dichterbij zit de naaf met de schroefkoppen in de weg
@@ -813,7 +817,7 @@
   // Begeleidersinstellingen komen uit static/simulatie-config.js
   // (window.SIMULATIE_CONFIG); ontbreekt dat bestand of een veld, dan
   // gelden deze standaardwaarden.
-  const STANDAARD = { valopening: 270, richting: 1, offset: 0, msPerGraad: 20, tolMm: 10, radMm: 7, armLengte: 70, overbrenging: 3 };
+  const STANDAARD = { valopening: 270, richting: 1, offset: 0, msPerGraad: 20, tolMm: 10, radMm: 7, overbrenging: 3 };
   const I = leesConfig();
 
   function leesConfig() {
@@ -825,7 +829,6 @@
     if (Number.isFinite(c.msPerGraad)) { uit.msPerGraad = begrens(c.msPerGraad, 0, 200); }
     if (Number.isFinite(c.tolMm)) { uit.tolMm = begrens(c.tolMm, 1, 14); }
     if (Number.isFinite(c.radMm)) { uit.radMm = begrens(c.radMm, 1, 12); }
-    if (Number.isFinite(c.armLengte)) { uit.armLengte = begrens(c.armLengte, 40, 145); }
     if (Number.isFinite(c.overbrenging) && c.overbrenging > 0) { uit.overbrenging = begrens(c.overbrenging, 0.1, 10); }
     return uit;
   }
@@ -833,8 +836,6 @@
   const geselecteerd = new Set();                  // ontwerp: welke cirkels zijn uitgesneden
   let capsules = [];                               // ontwerp: bakjes [{straal: mm, ing: letter, (S:) platformKant: +1/-1}]
   let capsulesRuntime = [];                        // simulatie: letter zolang de inhoud van het bakje nog niet gevallen is
-  const STANDAARD_ARM_HOEK = 60;
-  let arm = { hoek: STANDAARD_ARM_HOEK };          // ontwerp: stand van de draai-arm t.o.v. de kopjeskant bij servo 90 (tegen de klok in positief)
   let suiker = null;                               // simulatie: {toestand: 'platform'|'bakje'|'verloren'|'gevallen', sigma: graden} van het suikertje
   let kopje = [];                                  // gevallen capsules, in volgorde
   let servoHoek = 90;                              // huidige servohoek in graden
@@ -939,14 +940,17 @@
     }
     // Er is maar een bakje per ingredient; van oudere ontwerpen met dubbels blijft het eerste over.
     capsules = capsules.filter((c, i) => capsules.findIndex(d => d.ing === c.ing) === i);
+    // Het suikerbakje staat vast op ring 2; botst het daar met een ouder bakje, dan vervalt dat.
+    capsules = capsules.filter((c, i) => !capsules.some((d, j) => j < i && Math.abs(d.straal - c.straal) < 26));
     capsules.sort((a, b) => a.straal - b.straal);
-    // Oude sleutel uit de eerste versie (capsules in de schijfgaten) opruimen.
+    // Sleutels uit vorige versies (capsules in de schijfgaten, vrije armstand) opruimen.
     verwijder('schijf-capsules');
+    verwijder('draai-arm');
+  }
 
-    const armOpslag = lees('draai-arm');
-    if (armOpslag && Number.isFinite(armOpslag.hoek)) {
-      arm.hoek = begrens(Math.round(armOpslag.hoek), -180, 180);
-    }
+  // De ringstraal waar het vorkje van de draai-arm het suikertje vasthoudt (ring 2).
+  function suikerRing() {
+    return Math.round(RINGEN.reduce((beste, r) => Math.abs(r - SUIKER_STRAAL) < Math.abs(beste - SUIKER_STRAAL) ? r : beste, RINGEN[0]));
   }
 
   // Een bakje met genormaliseerde velden; voor suiker komen de platformkant en
@@ -954,6 +958,7 @@
   function maakBakje(straal, ing, bron) {
     const b = { straal: Math.round(begrens(straal, MIN_STRAAL, MAX_STRAAL)), ing: ing };
     if (ing === 'S') {
+      b.straal = suikerRing();        // het vorkje van de arm bepaalt waar het suikertje zit
       b.platformKant = (bron && bron.platformKant === -1) ? -1 : 1;
     }
     return b;
@@ -962,7 +967,7 @@
   // Ontwerpen van vóór het bakjes/draai-arm-model (sep 2026) stammen uit een
   // ander model en worden één keer gewist. Alleen 'schijf-gaten' van de
   // configurator blijft staan als er nog nooit een simulatorontwerp was.
-  const ONTWERP_VERSIE = 2;
+  const ONTWERP_VERSIE = 3;   // 3: vorkje van de echte arm, suiker vast op ring 2, geen vrije armstand meer
   function ruimOudOntwerpOp() {
     if (lees('simulatie-versie') === ONTWERP_VERSIE) { return; }
     if (lees('brug-bakjes') !== null) {
@@ -983,7 +988,6 @@
   function bewaarOntwerp() {
     schrijf('schijf-gaten', [...geselecteerd].sort((a, b) => a - b));
     schrijf('brug-bakjes', capsules);
-    schrijf('draai-arm', arm);
   }
 
 
@@ -1273,9 +1277,9 @@
     let titel = 'Bakje op ' + Math.round(c.straal) + ' mm van het middelpunt – ';
     if (!letter) { titel += INGREDIENTEN[c.ing].naam + ', al gevallen.'; }
     else if (c.ing === 'S' && suiker && suiker.toestand === 'platform') {
-      titel += 'Suiker; het suikertje ligt nog op het platformpje ernaast, tot de draai-arm het erin duwt.';
+      titel += 'Suiker; het suikertje ligt nog op het platformpje ernaast, in het vorkje van de draai-arm.';
     } else if (c.ing === 'S' && suiker && suiker.toestand === 'verloren') {
-      titel += 'Suiker; het suikertje is van het platformpje af geduwd en verloren.';
+      titel += 'Suiker; het suikertje is van het platformpje af geschoven en verloren.';
     } else { titel += INGREDIENTEN[letter].naam + '.'; }
     titel += ring >= 0
       ? ' Staat boven ring ' + (ring + 1) + ' (r ' + Math.round(RINGEN[ring]) + ' mm).'
@@ -1296,11 +1300,15 @@
     // meteen duidelijk is waar je klikt om een bakje te zetten.
     RINGEN.forEach((r, ring) => {
       if (capsules.some(c => Math.abs(c.straal - r) < 26)) { return; }
+      const uit = ingredient === 'S' && Math.round(r) !== suikerRing();
       const slot = maak('rect', {
-        x: r - BAK_LENGTE / 2, y: -BAK_BREEDTE / 2, width: BAK_LENGTE, height: BAK_BREEDTE, rx: 2, class: 'slot'
+        x: r - BAK_LENGTE / 2, y: -BAK_BREEDTE / 2, width: BAK_LENGTE, height: BAK_BREEDTE, rx: 2,
+        class: uit ? 'slot uit' : 'slot'
       });
-      const titel = 'Vrije plek boven ring ' + (ring + 1) + ' (' + Math.round(r)
-        + ' mm). Klik om hier het bakje van het gekozen ingrediënt te zetten.';
+      const titel = uit
+        ? 'Ring ' + (ring + 1) + ': hier kan het suikerbakje niet staan, het vorkje van de draai-arm houdt het suikertje op ring 2.'
+        : 'Vrije plek boven ring ' + (ring + 1) + ' (' + Math.round(r)
+          + ' mm). Klik om hier het bakje van het gekozen ingrediënt te zetten.';
       const titelEl = maak('title', {});
       titelEl.textContent = titel;
       slot.appendChild(titelEl);
@@ -1450,6 +1458,10 @@
       invoer.min = MIN_STRAAL; invoer.max = MAX_STRAAL; invoer.step = 1;
       invoer.value = Math.round(c.straal);
       invoer.setAttribute('aria-label', 'Afstand van bakje ' + (i + 1) + ' tot het middelpunt in millimeter');
+      if (c.ing === 'S') {
+        invoer.disabled = true;
+        invoer.title = 'Vast: het vorkje van de draai-arm houdt het suikertje op ring 2.';
+      }
       invoer.addEventListener('change', () => {
         c.straal = leesGetal(invoer, c.straal, MIN_STRAAL, MAX_STRAAL);
         ontwerpGewijzigd();
@@ -1492,7 +1504,7 @@
         if (!letter) { waar.textContent = 'suikertje gevallen ·'; }
         else if (!suiker || suiker.toestand === 'bakje') { waar.textContent = 'suikertje in het bakje ·'; }
         else if (suiker.toestand === 'verloren') { waar.textContent = 'suikertje verloren ·'; waar.style.color = '#b03a2e'; }
-        else { waar.textContent = 'suikertje op het platformpje ·'; }
+        else { waar.textContent = 'suikertje in het vorkje, op het platformpje ·'; }
         extra.appendChild(waar);
 
         const kantKeuze = document.createElement('select');
@@ -1508,13 +1520,6 @@
           ontwerpGewijzigd();
         });
         extra.appendChild(kantKeuze);
-
-        if (!armReiktTot(c)) {
-          const waarschuwing = document.createElement('span');
-          waarschuwing.textContent = '⚠ de draai-arm (' + I.armLengte + ' mm) reikt niet tot hier';
-          waarschuwing.style.color = '#b03a2e';
-          extra.appendChild(waarschuwing);
-        }
         lijst.appendChild(extra);
       }
     });
@@ -1535,13 +1540,10 @@
 
   function wisOntwerp() {
     if (bezig) { return; }
-    if (!window.confirm('Alle bakjes en cirkels wissen en de draai-arm terugzetten?')) { return; }
+    if (!window.confirm('Alle bakjes en cirkels wissen?')) { return; }
     capsules = [];
     capsulesRuntime = [];
     geselecteerd.clear();
-    arm.hoek = STANDAARD_ARM_HOEK;
-    document.getElementById('armHoek').value = arm.hoek;
-    document.getElementById('armSlider').value = arm.hoek;
     bewaarOntwerp();
     tekenArm();
     resetSimulatie();
@@ -1552,6 +1554,7 @@
   function ontwerpGewijzigd() {
     bewaarOntwerp();
     herstartSuiker();
+    tekenArm();            // de stand van de arm volgt de platformkant van het suikerbakje
     werkCapsulesBij();
     tekenArmUitleg();
     controleerVal(true);
@@ -1677,6 +1680,12 @@
     plaatsCapsule(straal);
   }
 
+  // Suiker kan alleen waar het vorkje van de arm het suikertje vasthoudt (ring 2).
+  function suikerMagOp(straal) { return Math.abs(straal - suikerRing()) <= I.radMm; }
+  function meldSuikerRing() {
+    logRegel('Het suikerbakje hoort op ring 2 (' + suikerRing() + ' mm): daar houdt het vorkje van de draai-arm het suikertje vast.', 'waarschuwing');
+  }
+
   function plaatsCapsule(straal) {
     if (bezig || ingredient === 'leeg') { return; }
     straal = begrens(straal, MIN_STRAAL, MAX_STRAAL);
@@ -1684,6 +1693,7 @@
     // Klik op een bestaand bakje = het ingrediënt vervangen.
     const bestaande = capsules.findIndex(c => Math.abs(c.straal - straal) <= BAK_LENGTE / 2);
     if (bestaande >= 0) {
+      if (ingredient === 'S' && !suikerMagOp(capsules[bestaande].straal)) { meldSuikerRing(); return; }
       zetIngredient(bestaande, ingredient);
       return;
     }
@@ -1694,6 +1704,7 @@
     for (const r of RINGEN) {
       if (Math.abs(straal - r) < besteAfstand) { besteAfstand = Math.abs(straal - r); snap = Math.round(r); }
     }
+    if (ingredient === 'S' && !suikerMagOp(snap)) { meldSuikerRing(); return; }
 
     // Bakjes zijn 24 mm lang; naast elkaar moet er minstens 26 mm hart-op-hart tussen zitten.
     const buur = capsules.find(c => Math.abs(c.straal - snap) < 26 && c.ing !== ingredient);
@@ -1766,16 +1777,22 @@
   // van het bakje, positief is de platformkant.
   function suikerBakje() { return capsules.find(c => c.ing === 'S') || null; }
 
+  // Bij servo 90 staat het vorkje van de arm rond het suikertje op het platformpje,
+  // dus de stand van de arm volgt uit de platformkant van het suikerbakje.
+  // Zonder suikerbakje tekenen we de arm waar dat platformpje standaard zou komen.
+  function armHoekOntwerp() {
+    const bakje = suikerBakje();
+    const kant = bakje ? bakje.platformKant : 1;
+    return kant * graden(PLATFORM_MM / (bakje ? bakje.straal : SUIKER_STRAAL));
+  }
+
   // Stand van de arm in het assenstelsel van de schijf (zoals basisHoek van een gat).
-  function armBasisHoek() { return normaliseer(I.valopening + arm.hoek - I.offset); }
+  function armBasisHoek() { return normaliseer(I.valopening + armHoekOntwerp() - I.offset); }
 
   // Hoek van de arm t.o.v. het suikerbakje bij een gegeven schijfrotatie.
   function armTheta(rot, bakje) {
     return bakje.platformKant * hoekVerschil(armBasisHoek() + rot - I.valopening);
   }
-
-  // Reikt de arm tot het suikertje op het platformpje?
-  function armReiktTot(bakje) { return I.armLengte >= bakje.straal - SUIKER_HALF; }
 
   function beginSuiker(bakje) {
     return {
@@ -1792,62 +1809,61 @@
     suiker = beginSuiker(capsules[i]);
   }
 
-  // Eén substap van de arm, van thetaVorig naar thetaNieuw. Duwt het suikertje
-  // voor zich uit zodra de arm het raakt. Geeft de gebeurtenis terug:
-  // 'bakje' (in het bakje geduwd), 'verloren' (van het platformpje af) of null.
+  // Eén substap van de arm, van thetaVorig naar thetaNieuw. Het suikertje zit
+  // tussen de tanden van het vorkje en schuift mee over het platformpje.
+  // Geeft de gebeurtenis terug: 'bakje' (over de rand het bakje in geschoven),
+  // 'verloren' (van het platformpje af geschoven) of null.
   function stapSuiker(s, bakje, thetaVorig, thetaNieuw) {
     if (s.toestand !== 'platform') { return null; }
     if (Math.abs(thetaNieuw - thetaVorig) > 180) { return null; }   // sprong over de overkant (+-180): daar ligt niets
     const r = bakje.straal;
-    const contact = graden((ARM_HALF + SUIKER_HALF) / r);            // hart-op-hart als arm en suikertje elkaar raken
     const bakRand = graden((BAK_BREEDTE / 2) / r);                    // hier kantelt het suikertje het bakje in
     const platformRand = graden((PLATFORM_MM + PLATFORM_DIEPTE / 2) / r);   // en hier valt het van het platformpje af
-    if (thetaNieuw < thetaVorig) {
-      // Naar het bakje toe: de arm komt van de platformkant en duwt het suikertje het bakje in.
-      if (thetaVorig > s.sigma - contact && thetaNieuw < s.sigma + contact) {
-        s.sigma = thetaNieuw - contact;
-        if (s.sigma < bakRand) { s.toestand = 'bakje'; return 'bakje'; }
-      }
-    } else if (thetaNieuw > thetaVorig) {
-      // Van het bakje weg: de arm komt van de bakjeskant en duwt het suikertje van het platformpje af.
-      if (thetaVorig < s.sigma + contact && thetaNieuw > s.sigma - contact) {
-        s.sigma = thetaNieuw + contact;
-        if (s.sigma > platformRand) { s.toestand = 'verloren'; return 'verloren'; }
-      }
-    }
+    s.sigma = thetaNieuw;
+    if (s.sigma < bakRand) { s.toestand = 'bakje'; return 'bakje'; }
+    if (s.sigma > platformRand) { s.toestand = 'verloren'; return 'verloren'; }
     return null;
   }
 
   // Wordt bij elke substap van de servo aangeroepen, vóór de valcheck.
   function werkArmBij(rotVorig, rotNieuw) {
     const bakje = suikerBakje();
-    if (!bakje || !suiker || suiker.toestand !== 'platform' || !armReiktTot(bakje)) { return; }
+    if (!bakje || !suiker || suiker.toestand !== 'platform') { return; }
     const gebeurtenis = stapSuiker(suiker, bakje, armTheta(rotVorig, bakje), armTheta(rotNieuw, bakje));
     if (gebeurtenis === 'bakje') {
-      logRegel('🍬 De draai-arm duwt het suikertje van het platformpje in het suikerbakje (servo '
+      logRegel('🍬 Het vorkje van de draai-arm schuift het suikertje van het platformpje in het suikerbakje (servo '
         + getal(servoHoek) + '°)', 'actie');
     } else if (gebeurtenis === 'verloren') {
-      logRegel('⚠ De draai-arm kwam van de bakjeskant en duwde het suikertje van het platformpje áf,'
-        + ' weg van het bakje: het suikertje is verloren (servo ' + getal(servoHoek) + '°).', 'waarschuwing');
+      logRegel('⚠ Het vorkje schoof het suikertje van het platformpje áf, weg van het bakje:'
+        + ' het is verloren en komt niet in het kopje (servo ' + getal(servoHoek) + '°).', 'waarschuwing');
     }
     if (gebeurtenis) { werkCapsulesBij(); } else { werkSuikerPositie(bakje); }
   }
 
   function tekenArm() {
     while (armGroep.firstChild) { armGroep.removeChild(armGroep.firstChild); }
-    const L = I.armLengte;
-    // De MDF-lat vanaf de naaf, met het vorkje aan het uiteinde.
-    armGroep.appendChild(maak('path', {
-      class: 'arm',
-      d: 'M ' + ARM_NAAF + ' ' + (-ARM_HALF) + ' L ' + (L - 12) + ' ' + (-ARM_HALF)
-        + ' L ' + (L - 12) + ' -9 L ' + L + ' -9 L ' + L + ' -5 L ' + (L - 7) + ' -5'
-        + ' L ' + (L - 7) + ' 5 L ' + L + ' 5 L ' + L + ' 9 L ' + (L - 12) + ' 9'
-        + ' L ' + (L - 12) + ' ' + ARM_HALF + ' L ' + ARM_NAAF + ' ' + ARM_HALF + ' Z'
-    }));
+    // De MDF-arm op ware grootte: steel, verbreding en de vork met twee tanden
+    // (x = radiaal vanaf de as, y = dwars erop; de vork is open naar buiten).
+    const s = ARM_STEEL_HALF, b = VORK_HALF_BINNEN, u = VORK_HALF_BUITEN;
+    const t = VORK_TAND_TOT, rug = VORK_RUG_TOT, van = VORK_RUG_VAN;
+    const midden = (ARM_STEEL_TOT + van) / 2;
+    const d = [
+      'M', ARM_NAAF - 1, -s, 'L', ARM_STEEL_TOT, -s,
+      'C', midden, -s, midden, -u, van, -u,
+      'L', t, -u, 'A', 2, 2, 0, 0, 1, t + 2, -u + 2, 'L', t + 2, -b - 2, 'A', 2, 2, 0, 0, 1, t, -b,
+      'L', rug, -b, 'L', rug, b, 'L', t, b,
+      'A', 2, 2, 0, 0, 1, t + 2, b + 2, 'L', t + 2, u - 2, 'A', 2, 2, 0, 0, 1, t, u,
+      'L', van, u, 'C', midden, u, midden, s, ARM_STEEL_TOT, s,
+      'L', ARM_NAAF - 1, s, 'Z'
+    ].join(' ');
+    armGroep.appendChild(maak('path', { class: 'arm', d: d }));
     armGroep.appendChild(maak('circle', { r: ARM_NAAF, class: 'armnaaf' }));
-    armGroep.appendChild(maak('circle', { r: 3, class: 'armschroef' }));
+    [[0, 0], [15, 0], [0, 15], [-15, 0], [0, -15]].forEach(([x, y]) => {
+      armGroep.appendChild(maak('circle', { cx: x, cy: y, r: 2, class: 'armschroef' }));
+    });
     const titel = maak('title', {});
-    titel.textContent = 'De draai-arm op de as, boven de brug. Draait mee met de schijf.';
+    titel.textContent = 'De draai-arm op de as, boven de brug. Draait mee met de schijf;'
+      + ' bij servo 90° staat het vorkje rond het suikertje op het platformpje.';
     armGroep.appendChild(titel);
     armGroep.setAttribute('transform', 'rotate(' + (-armBasisHoek()) + ')');
   }
@@ -1873,25 +1889,19 @@
     const bakje = suikerBakje();
     vak.className = 'uitslag';
     if (!bakje) {
-      vak.textContent = 'Zet eerst een suikerbakje (S) op de brug.';
-      return;
-    }
-    if (!armReiktTot(bakje)) {
-      vak.className = 'uitslag fout';
-      vak.textContent = '⚠ De arm (' + I.armLengte + ' mm) reikt niet tot het platformpje op '
-        + Math.round(bakje.straal) + ' mm. Zet het suikerbakje dichter bij het midden.';
+      vak.textContent = 'Zet eerst een suikerbakje (S) op ring 2 van de brug.';
       return;
     }
     const [omlaag, omhoog] = voorspelDuw(bakje);
     function zin(doel, u) {
-      if (!u) { return 'naar ' + doel + '°: de arm raakt het suikertje niet'; }
+      if (!u) { return 'naar ' + doel + '°: het suikertje blijft op het platformpje'; }
       return 'naar ' + doel + '°: bij ' + Math.round(u.servo) + '° '
-        + (u.gebeurtenis === 'bakje' ? 'in het bakje geduwd ✓' : 'van het platformpje af geduwd, verloren ✗');
+        + (u.gebeurtenis === 'bakje' ? 'in het bakje geschoven ✓' : 'van het platformpje af, verloren ✗');
     }
     const goed = [omlaag, omhoog].some(u => u && u.gebeurtenis === 'bakje');
     vak.className = goed ? 'uitslag goed' : 'uitslag fout';
     vak.textContent = 'Vanaf servo 90° ' + zin(0, omlaag) + '; ' + zin(180, omhoog) + '.'
-      + (goed ? '' : ' Draai de arm anders of zet het platformpje aan de andere kant.');
+      + (goed ? '' : ' Zet het platformpje aan de andere kant.');
   }
 
   // ---------- Valfysica ----------
@@ -2007,7 +2017,7 @@
     document.body.classList.toggle('bezig', waarde);
     document.querySelectorAll('#ingredientPalet button, #allesDichtKnop, #doelHoek,'
       + ' #doelSlider, #stapToevoegen, #resetKnop, .stap input, .stap button,'
-      + ' #bakjesLijst input, #bakjesLijst button, #bakjesLijst select, #armHoek, #armSlider')
+      + ' #bakjesLijst input:not([disabled]), #bakjesLijst button, #bakjesLijst select')
       .forEach(el => { el.disabled = waarde; });
     document.getElementById('uitvoerKnop').textContent = waarde ? '⏹ Stop' : '▶ Voer programma uit';
   }
@@ -2243,6 +2253,7 @@
         document.querySelectorAll('#ingredientPalet button').forEach(k => {
           k.setAttribute('aria-pressed', k === knop ? 'true' : 'false');
         });
+        werkCapsulesBij();   // de vrije vakjes tonen waar dit ingrediënt mag staan
       });
     });
 
@@ -2266,18 +2277,6 @@
       if (bezig) { return; }
       zetServoHoek(leesGetal(doelInvoer, servoHoek, 0, 180));
     });
-
-    const armInvoer = document.getElementById('armHoek');
-    const armSlider = document.getElementById('armSlider');
-    function armGewijzigd(bron) {
-      arm.hoek = leesGetal(bron, arm.hoek, -180, 180);
-      armInvoer.value = arm.hoek;
-      armSlider.value = arm.hoek;
-      tekenArm();
-      ontwerpGewijzigd();
-    }
-    armInvoer.addEventListener('input', () => armGewijzigd(armInvoer));
-    armSlider.addEventListener('input', () => armGewijzigd(armSlider));
 
     document.getElementById('stapToevoegen').addEventListener('click', () => {
       const vorige = stappen[stappen.length - 1];
@@ -2321,8 +2320,6 @@
     tekenVasteLaag();
     tekenZone();
     tekenArm();
-    document.getElementById('armHoek').value = arm.hoek;
-    document.getElementById('armSlider').value = arm.hoek;
 
     const keuze = document.getElementById('drankje');
     DRANKJES.forEach((d, i) => {
