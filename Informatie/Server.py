@@ -44,18 +44,20 @@ OPTION_NAMES = [
 # Map each professor letter to the option index (0..7) they select.
 # Edit this mapping as needed. Multiple letters may point to the same option.
 PROF_TO_OPTION = {
-    'b': 1,  #Van-hamme
-    'c': 3,  #Smets
-    'd': 7,  #Vansteenwegen
-    'e': 5,  #Dehaene
-    'g': 4,  #Beernaert
-    'h': 2,  #De-Laet
-    'i': 3,  #Rijmen
-    'k': 0,  #Van-Puyvelde
-    'l': 4,  #Vander-Sloten
-    'm': 5,  #Geraedts
-    'n': 6,  #Everaerts
-    'o': 1,  #Swolfs
+    # Lievelingsdrankje per professor (lijst van de begeleiders, sep 2026):
+    # K = koffie, T = thee, M = melk, S = suiker
+    'b': 1,  # Van-hamme      T
+    'c': 3,  # Smets          TS
+    'd': 7,  # Vansteenwegen  TMS
+    'e': 4,  # Dehaene        KM
+    'g': 4,  # Beernaert      KM
+    'h': 5,  # De-Laet        TM
+    'i': 2,  # Rijmen         KS
+    'k': 4,  # Van-Puyvelde   KM
+    'l': 4,  # Vander-Sloten  KM
+    'm': 6,  # Geraedts       KMS
+    'n': 0,  # Everaerts      K
+    'o': 0,  # Swolfs         K
 }
 
 # Map professor option values to letters. De letters van de vertrokken

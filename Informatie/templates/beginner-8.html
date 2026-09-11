@@ -11,17 +11,34 @@
           <br>
           <br>
           Het Energie-team gebruikt een Pico met een buzzer en een OLED‑scherm, gevoed door de zelfgemaakte batterij. De Pico kan liedjes afspelen en bijhorende tekst tonen op het scherm. 
-          Jullie koppelen elke kleurencombinatie aan de juiste professor. De Pico toont dan de naam van die professor op het scherm en speelt het liedje dat bij die professor hoort. De professorennamen komen overeen met de lijst uit Wiskunde (Tutorial 12).
+          Jullie koppelen elke kleurencombinatie aan de juiste professor. Het drankje en het liedje liggen per professor vast: de machine maakt het lievelingsdrankje uit de tabel hieronder, en de Pico toont de naam van de professor op het scherm en speelt het bijhorende liedje. De professorennamen komen overeen met de lijst uit Wiskunde (Tutorial 12).
 			<br>
 			<br>
 			Overleg met je collega's van het deel wiskunde om te bepalen welke kleurencombinatie bij welke professor hoort.
 		</p>
+        <table class="prof-drank">
+          <thead><tr><th>Professor</th><th>Drankje</th></tr></thead>
+          <tbody>
+            <tr><td>Prof. Lutgarde Beernaert</td><td>Koffie met melk</td></tr>
+            <tr><td>Prof. Tinne De Laet</td><td>Thee met melk</td></tr>
+            <tr><td>Prof. Wim Dehaene</td><td>Koffie met melk</td></tr>
+            <tr><td>Prof. Joris Everaerts</td><td>Koffie</td></tr>
+            <tr><td>Dr. Kathleen Geraedts</td><td>Koffie met melk en suiker</td></tr>
+            <tr><td>Prof. Vincent Rijmen</td><td>Koffie met suiker</td></tr>
+            <tr><td>Prof. Ilse Smets</td><td>Thee met suiker</td></tr>
+            <tr><td>Prof. Yentl Swolfs</td><td>Koffie</td></tr>
+            <tr><td>Prof. Hugo Van hamme</td><td>Thee</td></tr>
+            <tr><td>Prof. Peter Van Puyvelde</td><td>Koffie met melk</td></tr>
+            <tr><td>Prof. Jos Vander Sloten</td><td>Koffie met melk</td></tr>
+            <tr><td>Prof. Pieter Vansteenwegen</td><td>Thee met melk en suiker</td></tr>
+          </tbody>
+        </table>
 
         
       </div>
       <div class="column">
         <h3>
-          Kleurencombinatie koppelen aan professor en drank
+          Kleurencombinatie koppelen aan professor
         </h3>
         
             <div class="voltage_inputs_div">
@@ -41,17 +58,6 @@
               <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
               <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
               <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
-              </select>
-              &nbsp;&nbsp;Drank:
-              <select id="drink_0">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
               </select>
             </div>
             </div>
@@ -74,17 +80,6 @@
               <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
               <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
               </select>
-              &nbsp;&nbsp;Drank:
-              <select id="drink_1">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-              </select>
             </div>
             </div>
 
@@ -105,17 +100,6 @@
               <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
               <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
               <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
-              </select>
-              &nbsp;&nbsp;Drank:
-              <select id="drink_3">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
               </select>
             </div>
             </div>
@@ -138,17 +122,6 @@
               <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
               <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
               </select>
-              &nbsp;&nbsp;Drank:
-              <select id="drink_5">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-              </select>
             </div>
             </div>
 
@@ -169,17 +142,6 @@
               <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
               <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
               <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
-              </select>
-              &nbsp;&nbsp;Drank:
-              <select id="drink_6">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
               </select>
             </div>
             </div>
@@ -202,17 +164,6 @@
               <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
               <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
               </select>
-              &nbsp;&nbsp;Drank:
-              <select id="drink_7">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-              </select>
             </div>
             </div>
 
@@ -233,17 +184,6 @@
               <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
               <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
               <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
-              </select>
-              &nbsp;&nbsp;Drank:
-              <select id="drink_8">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
               </select>
             </div>
             </div>
@@ -266,17 +206,6 @@
               <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
               <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
               </select>
-              &nbsp;&nbsp;Drank:
-              <select id="drink_9">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-              </select>
             </div>
             </div>
 
@@ -297,17 +226,6 @@
               <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
               <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
               <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
-              </select>
-              &nbsp;&nbsp;Drank:
-              <select id="drink_11">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
               </select>
             </div>
             </div>
@@ -330,17 +248,6 @@
               <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
               <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
               </select>
-              &nbsp;&nbsp;Drank:
-              <select id="drink_12">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-              </select>
             </div>
             </div>
 
@@ -362,17 +269,6 @@
               <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
               <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
               </select>
-              &nbsp;&nbsp;Drank:
-              <select id="drink_13">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
-              </select>
             </div>
             </div>
 
@@ -393,17 +289,6 @@
               <option value="Van-Puyvelde">Prof. Peter Van Puyvelde</option>
               <option value="Vander-Sloten">Prof. Jos Vander Sloten</option>
               <option value="Vansteenwegen">Prof. Pieter Vansteenwegen</option>
-              </select>
-              &nbsp;&nbsp;Drank:
-              <select id="drink_14">
-              <option value="Koffie">Koffie</option>
-              <option value="Thee">Thee</option>
-              <option value="Koffie met suiker">Koffie met suiker</option>
-              <option value="Thee met suiker">Thee met suiker</option>
-              <option value="Koffie met melk">Koffie met melk</option>
-              <option value="Thee met melk">Thee met melk</option>
-              <option value="Koffie met melk en suiker">Koffie met melk en suiker</option>
-              <option value="Thee met melk en suiker">Thee met melk en suiker</option>
               </select>
             </div>
             </div>

@@ -496,3 +496,17 @@ select {
 .beginner-8-layout .column:last-child {
   flex: 3;
 }
+
+/* Tabel met het vaste drankje per professor (beginner-8) */
+.prof-drank {
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.prof-drank th,
+.prof-drank td {
+  text-align: left;
+  padding: 4px 14px 4px 0;
+  border-bottom: 1px solid #ddd;
+}
