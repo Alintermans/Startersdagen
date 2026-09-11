@@ -4,6 +4,8 @@ import serial
 from serial.tools import list_ports
 import time 
 import sys
+import os
+import json
 
 ################################# Global Variables ######################################
 current_state = 0
@@ -25,6 +27,31 @@ pico_voltages = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 # PROF_TO_LETTER; a/f/j zijn vervallen) per index 0..14
 pico_songs = [0 for _ in range(15)]
 pico_profs = ['Beernaert' for _ in range(15)]
+
+# De mapping van Beginner-8 wordt ook op schijf bewaard (naast Server.py), zodat
+# ze een herstart van de server overleeft. Het bestand staat in .gitignore.
+PICO_MAPPING_BESTAND = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'pico_mapping.json')
+
+def _bewaar_pico_mapping():
+    try:
+        with open(PICO_MAPPING_BESTAND, 'w', encoding='utf-8') as f:
+            json.dump({'songs': pico_songs, 'profs': pico_profs}, f)
+    except OSError as e:
+        print('Kon de Pico-mapping niet bewaren:', e)
+
+def _laad_pico_mapping():
+    try:
+        with open(PICO_MAPPING_BESTAND, encoding='utf-8') as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return
+    songs = data.get('songs') if isinstance(data, dict) else None
+    profs = data.get('profs') if isinstance(data, dict) else None
+    if isinstance(songs, list) and len(songs) == len(pico_songs) and isinstance(profs, list) and len(profs) == len(pico_profs):
+        pico_songs[:] = [s if isinstance(s, int) else 0 for s in songs]
+        pico_profs[:] = [p if isinstance(p, str) else '' for p in profs]
+
+_laad_pico_mapping()
 
 # Beginner-7: fixed options (0..7) and professor→option assignment.
 # OPTION_NAMES are the labels for each fixed option. PROF_TO_OPTION maps each
@@ -717,8 +744,8 @@ def _normalize_prof_code(prof_code_or_name):
     if not prof_code_or_name:
         return ''
     prof = str(prof_code_or_name)
-    # Already a letter a..m
-    if len(prof) == 1 and 'a' <= prof <= 'm':
+    # Al een geldige letter (b..o, zie PROF_TO_LETTER)
+    if prof in LETTER_TO_PROF:
         return prof
     # Try known names to letter
     return PROF_TO_LETTER.get(prof, '')
@@ -756,6 +783,7 @@ def pico_mapping_save():
 
     pico_songs[index] = song
     pico_profs[index] = prof
+    _bewaar_pico_mapping()
     return jsonify({'status': 'pico-mapping-saved', 'index': index, 'song': song, 'prof': prof})
 
 @app.route('/pico_mapping_save_bulk', methods=['POST'])
@@ -776,9 +804,11 @@ def pico_mapping_save_bulk():
         if not (_validate_index(index) and _validate_song(song) and prof != ''):
             continue
         pico_songs[index] = song
-        pico_profs[index] = prof    
+        pico_profs[index] = prof
         updated.append(index)
 
+    if updated:
+        _bewaar_pico_mapping()
     return jsonify({'status': 'pico-mapping-saved-bulk', 'updated': updated})
 
 @app.route('/option_prof_map')
