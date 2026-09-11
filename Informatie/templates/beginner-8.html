@@ -6,64 +6,28 @@
         </h3>
         <p>
           In deze oefening gebruiken we digitale communicatie via UART (seriële communicatie) om een Raspberry Pi Pico aan te sturen vanaf een Arduino. 
-          Via UART worden berichtjes als reeksen bits (bytes) verzonden. Zo kan de Arduino duidelijk en betrouwbaar doorgeven welk commando de Pico moet uitvoeren, bijvoorbeeld: “start liedje 3 en toon de naam van professor X op het scherm”.
+          Via UART worden berichtjes als reeksen bits (bytes) verzonden. Zo kan de Arduino duidelijk en betrouwbaar doorgeven welk commando de Pico moet uitvoeren, bijvoorbeeld: “toon professor X op het scherm en speel het bijhorende liedje”.
           De basiscode om berichten te versturen en te ontvangen hebben we al voorbereid en gekoppeld. In latere vakken leer je zelf zulke seriële communicatie opzetten, uitlezen en debuggen.
           <br>
           <br>
           Het Energie-team gebruikt een Pico met een buzzer en een OLED‑scherm, gevoed door de zelfgemaakte batterij. De Pico kan liedjes afspelen en bijhorende tekst tonen op het scherm. 
-          Jullie koppelen per kleurencombinatie twee dingen: het juiste liedje én de juiste professor. Wanneer het liedje start, verschijnt ook de naam van die professor op het scherm. De professorennamen komen overeen met de lijst uit Wiskunde (Tutorial 12).
-          <br>
-          <br>
-          Mogelijke liedjes om te selecteren:
-          <br>
-          1: Hijo de la luna - Mecano
-          <br>
-          2: Eye of the Tiger - Survivor
-          <br>
-          3: Life on Mars - David Bowie
-          <br>
-          4: No One Knows - Queens of the Stone Age
-          <br>
-          5: Where Is My Mind - Pixies
-          <br>
-          6: Sultans of Swing - Dire Straits
-          <br>
-          7: Freed from Desire - Gala
-          <br>
-          8: The Final Countdown - Europe
-          <br>
-          9: Wackelkontakt
-          <br>
-          10: Faded - Alan Walker
+          Jullie koppelen elke kleurencombinatie aan de juiste professor. De Pico toont dan de naam van die professor op het scherm en speelt het liedje dat bij die professor hoort. De professorennamen komen overeen met de lijst uit Wiskunde (Tutorial 12).
 			<br>
 			<br>
-			Overleg met je collega's van het deel wiskunde om te bepalen welke kleurencombinaties bij welk liedje én welke professor horen.
+			Overleg met je collega's van het deel wiskunde om te bepalen welke kleurencombinatie bij welke professor hoort.
 		</p>
 
         
       </div>
       <div class="column">
         <h3>
-          Kleurencombinatie koppelen aan liedje en professor
+          Kleurencombinatie koppelen aan professor en drank
         </h3>
         
             <div class="voltage_inputs_div">
             <h3>Zwart/Zwart</h3>
             <div>
-              Liedje:
-              <select id="song_0">
-              <option value="1">1: Hijo de la luna - Mecano</option>
-              <option value="2">2: Eye of the Tiger - Survivor</option>
-              <option value="3">3: Life on Mars - David Bowie</option>
-              <option value="4">4: No One Knows - Queens of the Stone Age</option>
-              <option value="5">5: Where Is My Mind - Pixies</option>
-              <option value="6">6: Sultans of Swing - Dire Straits</option>
-              <option value="7">7: Freed from Desire - Gala</option>
-              <option value="8">8: The Final Countdown - Europe</option>
-              <option value="9">9: Wackelkontakt</option>
-              <option value="10">10: Faded - Alan Walker</option>
-              </select>
-              &nbsp;&nbsp;Professor:
+              Professor:
               <select id="prof_0">
               <option value="Beernaert">Prof. Lutgarde Beernaert</option>
               <option value="De-Laet">Prof. Tinne De Laet</option>
@@ -95,20 +59,7 @@
             <div class="voltage_inputs_div">
             <h3>Zwart/Rood</h3>
             <div>
-              Liedje:
-              <select id="song_1">
-              <option value="1">1: Hijo de la luna - Mecano</option>
-              <option value="2">2: Eye of the Tiger - Survivor</option>
-              <option value="3">3: Life on Mars - David Bowie</option>
-              <option value="4">4: No One Knows - Queens of the Stone Age</option>
-              <option value="5">5: Where Is My Mind - Pixies</option>
-              <option value="6">6: Sultans of Swing - Dire Straits</option>
-              <option value="7">7: Freed from Desire - Gala</option>
-              <option value="8">8: The Final Countdown - Europe</option>
-              <option value="9">9: Wackelkontakt</option>
-              <option value="10">10: Faded - Alan Walker</option>
-              </select>
-              &nbsp;&nbsp;Professor:
+              Professor:
               <select id="prof_1">
               <option value="Beernaert">Prof. Lutgarde Beernaert</option>
               <option value="De-Laet">Prof. Tinne De Laet</option>
@@ -140,20 +91,7 @@
             <div class="voltage_inputs_div">
             <h3>Zwart/Groen</h3>
             <div>
-              Liedje:
-              <select id="song_3">
-              <option value="1">1: Hijo de la luna - Mecano</option>
-              <option value="2">2: Eye of the Tiger - Survivor</option>
-              <option value="3">3: Life on Mars - David Bowie</option>
-              <option value="4">4: No One Knows - Queens of the Stone Age</option>
-              <option value="5">5: Where Is My Mind - Pixies</option>
-              <option value="6">6: Sultans of Swing - Dire Straits</option>
-              <option value="7">7: Freed from Desire - Gala</option>
-              <option value="8">8: The Final Countdown - Europe</option>
-              <option value="9">9: Wackelkontakt</option>
-              <option value="10">10: Faded - Alan Walker</option>
-              </select>
-              &nbsp;&nbsp;Professor:
+              Professor:
               <select id="prof_3">
               <option value="Beernaert">Prof. Lutgarde Beernaert</option>
               <option value="De-Laet">Prof. Tinne De Laet</option>
@@ -185,20 +123,7 @@
             <div class="voltage_inputs_div">
             <h3>Rood/Rood</h3>
             <div>
-              Liedje:
-              <select id="song_5">
-              <option value="1">1: Hijo de la luna - Mecano</option>
-              <option value="2">2: Eye of the Tiger - Survivor</option>
-              <option value="3">3: Life on Mars - David Bowie</option>
-              <option value="4">4: No One Knows - Queens of the Stone Age</option>
-              <option value="5">5: Where Is My Mind - Pixies</option>
-              <option value="6">6: Sultans of Swing - Dire Straits</option>
-              <option value="7">7: Freed from Desire - Gala</option>
-              <option value="8">8: The Final Countdown - Europe</option>
-              <option value="9">9: Wackelkontakt</option>
-              <option value="10">10: Faded - Alan Walker</option>
-              </select>
-              &nbsp;&nbsp;Professor:
+              Professor:
               <select id="prof_5">
               <option value="Beernaert">Prof. Lutgarde Beernaert</option>
               <option value="De-Laet">Prof. Tinne De Laet</option>
@@ -230,20 +155,7 @@
             <div class="voltage_inputs_div">
             <h3>Rood/Blauw</h3>
             <div>
-              Liedje:
-              <select id="song_6">
-              <option value="1">1: Hijo de la luna - Mecano</option>
-              <option value="2">2: Eye of the Tiger - Survivor</option>
-              <option value="3">3: Life on Mars - David Bowie</option>
-              <option value="4">4: No One Knows - Queens of the Stone Age</option>
-              <option value="5">5: Where Is My Mind - Pixies</option>
-              <option value="6">6: Sultans of Swing - Dire Straits</option>
-              <option value="7">7: Freed from Desire - Gala</option>
-              <option value="8">8: The Final Countdown - Europe</option>
-              <option value="9">9: Wackelkontakt</option>
-              <option value="10">10: Faded - Alan Walker</option>
-              </select>
-              &nbsp;&nbsp;Professor:
+              Professor:
               <select id="prof_6">
               <option value="Beernaert">Prof. Lutgarde Beernaert</option>
               <option value="De-Laet">Prof. Tinne De Laet</option>
@@ -275,20 +187,7 @@
             <div class="voltage_inputs_div">
             <h3>Rood/Groen</h3>
             <div>
-              Liedje:
-              <select id="song_7">
-              <option value="1">1: Hijo de la luna - Mecano</option>
-              <option value="2">2: Eye of the Tiger - Survivor</option>
-              <option value="3">3: Life on Mars - David Bowie</option>
-              <option value="4">4: No One Knows - Queens of the Stone Age</option>
-              <option value="5">5: Where Is My Mind - Pixies</option>
-              <option value="6">6: Sultans of Swing - Dire Straits</option>
-              <option value="7">7: Freed from Desire - Gala</option>
-              <option value="8">8: The Final Countdown - Europe</option>
-              <option value="9">9: Wackelkontakt</option>
-              <option value="10">10: Faded - Alan Walker</option>
-              </select>
-              &nbsp;&nbsp;Professor:
+              Professor:
               <select id="prof_7">
               <option value="Beernaert">Prof. Lutgarde Beernaert</option>
               <option value="De-Laet">Prof. Tinne De Laet</option>
@@ -320,20 +219,7 @@
             <div class="voltage_inputs_div">
             <h3>Rood/Wit</h3>
             <div>
-              Liedje:
-              <select id="song_8">
-              <option value="1">1: Hijo de la luna - Mecano</option>
-              <option value="2">2: Eye of the Tiger - Survivor</option>
-              <option value="3">3: Life on Mars - David Bowie</option>
-              <option value="4">4: No One Knows - Queens of the Stone Age</option>
-              <option value="5">5: Where Is My Mind - Pixies</option>
-              <option value="6">6: Sultans of Swing - Dire Straits</option>
-              <option value="7">7: Freed from Desire - Gala</option>
-              <option value="8">8: The Final Countdown - Europe</option>
-              <option value="9">9: Wackelkontakt</option>
-              <option value="10">10: Faded - Alan Walker</option>
-              </select>
-              &nbsp;&nbsp;Professor:
+              Professor:
               <select id="prof_8">
               <option value="Beernaert">Prof. Lutgarde Beernaert</option>
               <option value="De-Laet">Prof. Tinne De Laet</option>
@@ -365,20 +251,7 @@
             <div class="voltage_inputs_div">
             <h3>Blauw/Blauw</h3>
             <div>
-              Liedje:
-              <select id="song_9">
-              <option value="1">1: Hijo de la luna - Mecano</option>
-              <option value="2">2: Eye of the Tiger - Survivor</option>
-              <option value="3">3: Life on Mars - David Bowie</option>
-              <option value="4">4: No One Knows - Queens of the Stone Age</option>
-              <option value="5">5: Where Is My Mind - Pixies</option>
-              <option value="6">6: Sultans of Swing - Dire Straits</option>
-              <option value="7">7: Freed from Desire - Gala</option>
-              <option value="8">8: The Final Countdown - Europe</option>
-              <option value="9">9: Wackelkontakt</option>
-              <option value="10">10: Faded - Alan Walker</option>
-              </select>
-              &nbsp;&nbsp;Professor:
+              Professor:
               <select id="prof_9">
               <option value="Beernaert">Prof. Lutgarde Beernaert</option>
               <option value="De-Laet">Prof. Tinne De Laet</option>
@@ -410,20 +283,7 @@
             <div class="voltage_inputs_div">
             <h3>Blauw/Wit</h3>
             <div>
-              Liedje:
-              <select id="song_11">
-              <option value="1">1: Hijo de la luna - Mecano</option>
-              <option value="2">2: Eye of the Tiger - Survivor</option>
-              <option value="3">3: Life on Mars - David Bowie</option>
-              <option value="4">4: No One Knows - Queens of the Stone Age</option>
-              <option value="5">5: Where Is My Mind - Pixies</option>
-              <option value="6">6: Sultans of Swing - Dire Straits</option>
-              <option value="7">7: Freed from Desire - Gala</option>
-              <option value="8">8: The Final Countdown - Europe</option>
-              <option value="9">9: Wackelkontakt</option>
-              <option value="10">10: Faded - Alan Walker</option>
-              </select>
-              &nbsp;&nbsp;Professor:
+              Professor:
               <select id="prof_11">
               <option value="Beernaert">Prof. Lutgarde Beernaert</option>
               <option value="De-Laet">Prof. Tinne De Laet</option>
@@ -455,20 +315,7 @@
             <div class="voltage_inputs_div">
             <h3>Groen/Groen</h3>
             <div>
-              Liedje:
-              <select id="song_12">
-              <option value="1">1: Hijo de la luna - Mecano</option>
-              <option value="2">2: Eye of the Tiger - Survivor</option>
-              <option value="3">3: Life on Mars - David Bowie</option>
-              <option value="4">4: No One Knows - Queens of the Stone Age</option>
-              <option value="5">5: Where Is My Mind - Pixies</option>
-              <option value="6">6: Sultans of Swing - Dire Straits</option>
-              <option value="7">7: Freed from Desire - Gala</option>
-              <option value="8">8: The Final Countdown - Europe</option>
-              <option value="9">9: Wackelkontakt</option>
-              <option value="10">10: Faded - Alan Walker</option>
-              </select>
-              &nbsp;&nbsp;Professor:
+              Professor:
               <select id="prof_12">
               <option value="Beernaert">Prof. Lutgarde Beernaert</option>
               <option value="De-Laet">Prof. Tinne De Laet</option>
@@ -500,20 +347,7 @@
             <div class="voltage_inputs_div">
             <h3>Groen/Wit</h3>
             <div>
-              Liedje:
-              <select id="song_13">
-              <option value="1">1: Hijo de la luna - Mecano</option>
-              <option value="2">2: Eye of the Tiger - Survivor</option>
-              <option value="3">3: Life on Mars - David Bowie</option>
-              <option value="4">4: No One Knows - Queens of the Stone Age</option>
-              <option value="5">5: Where Is My Mind - Pixies</option>
-              <option value="6">6: Sultans of Swing - Dire Straits</option>
-              <option value="7">7: Freed from Desire - Gala</option>
-              <option value="8">8: The Final Countdown - Europe</option>
-              <option value="9">9: Wackelkontakt</option>
-              <option value="10">10: Faded - Alan Walker</option>
-              </select>
-              &nbsp;&nbsp;Professor:
+              Professor:
               <select id="prof_13">
               <option value="Beernaert">Prof. Lutgarde Beernaert</option>
               <option value="De-Laet">Prof. Tinne De Laet</option>
@@ -545,20 +379,7 @@
             <div class="voltage_inputs_div">
             <h3>Wit/Wit</h3>
             <div>
-              Liedje:
-              <select id="song_14">
-              <option value="1">1: Hijo de la luna - Mecano</option>
-              <option value="2">2: Eye of the Tiger - Survivor</option>
-              <option value="3">3: Life on Mars - David Bowie</option>
-              <option value="4">4: No One Knows - Queens of the Stone Age</option>
-              <option value="5">5: Where Is My Mind - Pixies</option>
-              <option value="6">6: Sultans of Swing - Dire Straits</option>
-              <option value="7">7: Freed from Desire - Gala</option>
-              <option value="8">8: The Final Countdown - Europe</option>
-              <option value="9">9: Wackelkontakt</option>
-              <option value="10">10: Faded - Alan Walker</option>
-              </select>
-              &nbsp;&nbsp;Professor:
+              Professor:
               <select id="prof_14">
               <option value="Beernaert">Prof. Lutgarde Beernaert</option>
               <option value="De-Laet">Prof. Tinne De Laet</option>

@@ -592,8 +592,9 @@ function saveBeginner8Data() {
     for (let i = 0; i < 15; i++) {
         const songEl = document.getElementById('song_' + i);
         const profEl = document.getElementById('prof_' + i);
-        if (songEl && profEl) {
-            const songVal = parseInt(songEl.value, 10);
+        if (profEl) {
+            // Geen liedjeskeuze meer op de pagina: de Pico kiest het liedje zelf bij de professor.
+            const songVal = songEl ? parseInt(songEl.value, 10) : 0;
             const profSel = profEl.value;
             const profLetter = nameToLetter[profSel] || (profSel && profSel.length === 1 ? profSel : '');
             
@@ -745,8 +746,8 @@ function initBeginner8() {
         for (let i = 0; i < 15; i++) {
             const songEl = document.getElementById('song_' + i);
             const profEl = document.getElementById('prof_' + i);
-            if (songEl && profEl) {
-                const songVal = parseInt(songEl.value, 10);
+            if (profEl) {
+                const songVal = songEl ? parseInt(songEl.value, 10) : 0;
                 const profSel = profEl.value;
                 const profLetter = nameToLetter[profSel] || (profSel && profSel.length === 1 ? profSel : '');
                 mapping.push({ index: i, song: songVal, professor: profLetter });

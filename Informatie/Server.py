@@ -725,7 +725,8 @@ def _validate_index(i):
     return isinstance(i, int) and 0 <= i <= 14
 
 def _validate_song(s):
-    return isinstance(s, int) and 1 <= s <= 10
+    # 0 = geen liedje gekozen (de Pico kiest het liedje zelf bij de professor)
+    return isinstance(s, int) and 0 <= s <= 10
 
 @app.route('/pico_mapping_load')
 def pico_mapping_load():
@@ -739,7 +740,7 @@ def pico_mapping_load():
 def pico_mapping_save():
     try:
         index = int(request.args.get('index'))
-        song = int(request.args.get('song'))
+        song = int(request.args.get('song') or 0)
         prof = _normalize_prof_code(request.args.get('prof'))
     except Exception:
         return jsonify({'status': 'error', 'message': 'invalid parameters'}), 400
@@ -766,7 +767,7 @@ def pico_mapping_save_bulk():
     for entry in mappings:
         try:
             index = int(entry.get('index'))
-            song = int(entry.get('song'))
+            song = int(entry.get('song') or 0)
             prof = _normalize_prof_code(entry.get('professor'))
         except Exception:
             continue
