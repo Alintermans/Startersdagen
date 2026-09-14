@@ -1,37 +1,33 @@
-<div class="box-header">Opdracht 2: RGB-led - 2/7</div>
+<div class="box-header">Opdracht 2: Ingebouwd ledje - 2/7</div>
     <div class="columns">
       <div class="column">
         <div id="intro-div">
-          <h3>RGB-led</h3>
+          <h3>Ingebouwd ledje</h3>
         <p>
-          Een RGB-led is een led die in verschillende kleuren kan schijnen. Zo'n RGB-led bestaat eigenlijk uit drie leds met de basiskleuren, rood, groen en blauw. Door de intensiteit van deze kleuren te veranderen kan je alle kleuren van de regenboog maken.
+          Led staat voor Light Emitting Diode: een halfgeleider die licht uitzendt zodra er stroom door vloeit. Elke Arduino heeft een ingebouwd ledje dat intern verbonden is met pin 13. In de Arduino-code heet die pin LED_BUILTIN. Zet je die pin hoog (HIGH), dan brandt het ledje; zet je hem laag (LOW), dan dooft het.
         </p>
 
         <p>
-          Elke kleur in een RGB-led wordt vertegenwoordigd door een specifieke RGB-waarde, uitgedrukt als getallen tussen 0 en 255 voor rood, groen en blauw. Door deze waarden aan te passen, kan je diverse kleuren en tinten creëren. Je kan heel nauwkeurig een gewenste kleur bereiken, waardoor RGB-leds zeer veelzijdig zijn voor verlichting, visuele effecten en artistieke toepassingen.
-        </p>
-
-        <p>
-          Op het breadboard dat verbonden is aan de Arduino, zien jullie een RGB-led. Open de Arduino IDE. Download 
-          <a href="/static/arduino_code/template_RGB.zip">
-            dit bestand</a>, open het (eventueel ga je de code moeten copiëren naar een nieuw Arduino bestand) en upload vervolgens deze code naar de Arduino. 
+          Open de Arduino IDE. Download 
+          <a href="/static/arduino_code/template_led.zip">
+            dit bestand</a>, open het (eventueel ga je de code moeten kopiëren naar een nieuw Arduino-bestand) en upload vervolgens deze code naar de Arduino. 
             Vergeet niet om bij 'Select Board' de juiste Arduino te selecteren, anders is het niet mogelijk om je code te uploaden.
-            Het ledje zou nu rood licht moeten geven.  
+            Het ledje op het bordje (aangeduid met een L, naast de TX- en RX-ledjes) zou nu één keer per seconde moeten knipperen.  
         </p>
         <h3>
           Opdracht 2.1
         </h3>
         <p>
-            Maak de led groen door de RGB-waarden van dit stuk code aan te passen. 
-            Upload je code opnieuw naar de Arduino en test of het ledje groen licht geeft. Als je hiermee klaar bent, verwijder je de RGB-Led uit het bordje. Deze trekt relatief veel stroom en wordt dan ook erg warm, waardoor mogelijks de Arduino minder goed gaat presteren.
+            Laat het ledje twee keer zo snel knipperen door de wachttijden in dit stuk code aan te passen. 
+            Upload je code opnieuw naar de Arduino en controleer het resultaat.
         </p>
         <pre>
 <code class="language-arduino code-container">
 void loop() {
-  //Pas hier de RGB-waarden aan om verschillende kleuren te bekomen
-  analogWrite(pin_rood, 255);
-  analogWrite(pin_groen, 0);
-  analogWrite(pin_blauw, 0);
+  digitalWrite(LED_BUILTIN, HIGH);  // ledje aan
+  delay(1000);                      // wacht 1000 milliseconden
+  digitalWrite(LED_BUILTIN, LOW);   // ledje uit
+  delay(1000);
 }
   </code> 
         </pre>
@@ -40,13 +36,13 @@ void loop() {
           Opdracht 2.2
         </h3>
           <p>
-            Maak de led wit door de juiste RGB-waarden in te vullen.
+            Laat het ledje kort aan en lang uit gaan: 100 milliseconden aan, 900 milliseconden uit.
           </p>
           <h3>
             Opdracht 2.3
           </h3>
           <p>
-            Maak de led oranje door de juiste RGB-waarden in te vullen. 
+            Maak een eigen patroon, bijvoorbeeld drie korte flitsen gevolgd door een lange pauze. Tip: je mag in loop() zoveel regels toevoegen als je wil. 
           </p>
         </div>
       </div>

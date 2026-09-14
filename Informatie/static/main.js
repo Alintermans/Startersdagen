@@ -539,15 +539,8 @@ function updateColor() {
 
     const color = `rgb(${redValue},${greenValue},${blueValue})`;
     colorBox.style.backgroundColor = color;
-    updateRGBLED(redValue, greenValue, blueValue);
-}
-
-function updateRGBLED(red, green, blue) {
-    fetch('/rgb-led?red-value=' + red + '&green-value=' + green + '&blue-value=' + blue)
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-    });
+    // De RGB-led zit niet meer in de kits: de kleur wordt alleen op het scherm getoond,
+    // er gaat niets meer naar de Arduino.
 }
 
 // ------------------------------------------- Beginner-8 (UART mapping) -------------------------------------------//

@@ -18,7 +18,7 @@ Om de server te starten zorg dat jouw terminal zich bevindt in de map waar de Se
 python Server.py
 ```
 
-Voor de beginner tutorial moet op de arduino ook het juiste programma geupload worden. Dit kan met de Arduino IDE. Het programma is te vinden in de map Arduino/BeginnerTutorial/BeginnerTutorial.ino
+Voor de beginner tutorial moet op de arduino ook het juiste programma geupload worden. Dit kan met de Arduino IDE. Het programma is te vinden in de map arduino/Beginner/Beginner.ino
 
 Om de server te stoppen moet je ctrl+c duwen in de terminal waar de server draait.
 

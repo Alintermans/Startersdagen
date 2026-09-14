@@ -24,9 +24,10 @@ retries = 0
 pico_voltages = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 # Digital UART mapping (Beginner-8): song (1..10) and professor code (b..o, zie
-# PROF_TO_LETTER; a/f/j zijn vervallen) per index 0..14
+# PROF_TO_LETTER; a/f/j zijn vervallen) per index 0..14. Standaard 'g' (Beernaert):
+# altijd een letter, want de Arduino verwacht 'P' + één letter.
 pico_songs = [0 for _ in range(15)]
-pico_profs = ['Beernaert' for _ in range(15)]
+pico_profs = ['g' for _ in range(15)]
 
 # De mapping van Beginner-8 wordt ook op schijf bewaard (naast Server.py), zodat
 # ze een herstart van de server overleeft. Het bestand staat in .gitignore.
