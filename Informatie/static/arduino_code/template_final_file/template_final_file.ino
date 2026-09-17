@@ -322,8 +322,9 @@ int blauwwaarde() {
 }
 
 int detectColorCombination() {
-  int kleuren[10];
-  for (int i = 0; i <= 10; i++) {
+  const int aantal_metingen = 10;
+  int kleuren[aantal_metingen];
+  for (int i = 0; i < aantal_metingen; i++) {
     int rood_waarde = roodwaarde();
     int groen_waarde = groenwaarde();
     int blauw_waarde = blauwwaarde();
@@ -334,8 +335,9 @@ int detectColorCombination() {
   }
   
   // count the number of times a color is detected
+  // (0=zwart, 1=rood, 2=groen, 3=blauw, 4=wit; "geen idee" telt niet mee)
   int colorcounts[5] = {0, 0, 0, 0, 0};
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < aantal_metingen; i++) {
     if (kleuren[i] == 0) {
       colorcounts[0]++;
     }
@@ -348,7 +350,7 @@ int detectColorCombination() {
     else if (kleuren[i] == 3) {
       colorcounts[3]++;
     }
-    else {
+    else if (kleuren[i] == 4) {
       colorcounts[4]++;
     }
   }
@@ -356,12 +358,14 @@ int detectColorCombination() {
   // determine the most two detected colors
   int max1 = 0;
   int max2 = 0;
-  int color1 = 0;
-  int color2 = 0;
+  int color1 = -1;  // -1 = nog geen kleur gevonden
+  int color2 = -1;
 
   for (int i = 0; i < 5; i++) {
     if (colorcounts[i] > max1) {
+      // nieuwe koploper: de vorige koploper schuift door naar de tweede plaats
       max2 = max1;
+      color2 = color1;
       max1 = colorcounts[i];
       color1 = i;
     }
@@ -371,8 +375,22 @@ int detectColorCombination() {
     }
   }
 
+  // Een kleur telt pas mee als ze minstens 2 keer gemeten is:
+  // 1 losse meting is een toevallige fout (bv. net tijdens het wisselen van kleur).
+  const int min_metingen = 2;
+  if (max1 < min_metingen) {
+    // niets betrouwbaar gemeten
+    color1 = -1;
+    color2 = -1;
+  }
+  else if (max2 < min_metingen) {
+    // maar één kleur gemeten: twee keer dezelfde kleur, bv. Rood/Rood
+    color2 = color1;
+  }
+
   //determine color combination - 12 combinaties in gebruik (Zwart/Blauw wordt niet meer gebruikt)
-  int color_combination = 0;
+  // -1 = geen geldige combinatie: stuur_servo() meldt dan "geen idee"
+  int color_combination = -1;
 
   //Zwart/Zwart
   if (color1 == 0 && color2 == 0) {
